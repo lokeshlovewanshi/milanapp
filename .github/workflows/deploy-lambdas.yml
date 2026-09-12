@@ -229,7 +229,7 @@ jobs:
           echo "Layer attached successfully"
 
       - name: Smoke test kundali
-        if: false  # temporarily disabled - re-enable after swisseph layer issue is fixed
+        if: false # temporarily disabled - re-enable after swisseph layer issue is fixed
         run: |
           set -euo pipefail
           FN="${{ steps.names.outputs.function }}"
