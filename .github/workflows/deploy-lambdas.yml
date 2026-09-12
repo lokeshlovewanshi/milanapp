@@ -228,6 +228,16 @@ jobs:
         run: |
           set -euo pipefail
           FN="${{ steps.names.outputs.function }}"
+          # Wait for Lambda to recycle any warm containers after layer attachment
+          echo "Waiting 15s for Lambda to apply new layer configuration..."
+          sleep 15
+
+          # Verify layer is actually attached before invoking
+          ATTACHED=$(aws lambda get-function-configuration \
+            --function-name "$FN" \
+            --query 'Layers[].Arn' --output text)
+          echo "Layers attached to function: $ATTACHED"
+
           # A real invocation to verify the swisseph layer works for the right architecture.
           aws lambda invoke \
             --function-name "$FN" \
