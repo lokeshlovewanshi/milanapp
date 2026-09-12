@@ -1,0 +1,8 @@
+# Swiss Ephemeris bindings. Ships compiled - build the layer on Linux matching
+# the function's architecture, not on macOS. See ../README.md.
+#
+# No ephemeris data files are needed: the function uses the built-in Moshier
+# ephemeris, which avoids ~90 MB of .se1 files in the layer.
+# Deployed on x86_64 / Python 3.11 - this project publishes no aarch64 wheels,
+# and none for 3.12 on any platform. See terraform/lambdas.tf.
+pyswisseph==2.10.3.2

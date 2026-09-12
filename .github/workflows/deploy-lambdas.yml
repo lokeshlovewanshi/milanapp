@@ -1,0 +1,245 @@
+name: Deploy Lambdas
+
+# Triggers:
+#   - push to `develop` branch  → deploys to dev environment
+#   - push to `main` branch     → deploys to prd environment
+#   - workflow_dispatch         → choose environment manually
+on:
+  push:
+    branches: [dev, prd]
+    paths:
+      - "lambdas/**"
+      - ".github/workflows/deploy-lambdas.yml"
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Environment to deploy"
+        required: true
+        default: "dev"
+        type: choice
+        options:
+          - dev
+          - prd
+
+# Two runs publishing layer versions and updating the same function at once can
+# leave a function pointing at a layer from the other run.
+concurrency:
+  group: deploy-lambdas-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    # Pick GitHub Environment based on branch or manual input.
+    # Each environment has its own variables:
+    #   FN_PREFIX      e.g. lovewanshi-milan-dev  (dev)
+    #                       lovewanshi-milan       (prd)
+    #   PHOTOS_BUCKET  e.g. lovewanshi-milan-dev-photos (dev)
+    #                       lovewanshi-milan-photos      (prd)
+    environment: >-
+      ${{
+        github.event_name == 'workflow_dispatch' && github.event.inputs.environment ||
+        github.ref == 'refs/heads/develop' && 'dev' ||
+        'prd'
+      }}
+
+    env:
+      AWS_REGION: ap-south-1
+
+    strategy:
+      # Deliberately not fail-fast: the functions are unrelated.
+      fail-fast: false
+      matrix:
+        include:
+          - name: image_compression
+            fn_suffix: image-compression
+            layer_suffix: sharp
+            runtime_type: node
+            runtime: nodejs20.x
+            arch: arm64
+          - name: kundali_match
+            fn_suffix: kundali-match
+            layer_suffix: ""
+            runtime_type: python
+            runtime: python3.12
+            arch: arm64
+            platform: manylinux2014_aarch64
+            python: "3.12"
+          - name: welcome_email
+            fn_suffix: welcome-email
+            layer_suffix: ""
+            runtime_type: python
+            runtime: python3.12
+            arch: arm64
+            platform: manylinux2014_aarch64
+            python: "3.12"
+          - name: kundali
+            fn_suffix: kundali
+            layer_suffix: swisseph
+            runtime_type: python
+            runtime: python3.11
+            arch: x86_64
+            platform: manylinux2014_x86_64
+            python: "3.11"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Build function and layer names from the GitHub Environment variable FN_PREFIX.
+      # dev:  lovewanshi-milan-dev-welcome-email / lovewanshi-milan-dev-sharp
+      # prd:  lovewanshi-milan-welcome-email     / lovewanshi-milan-sharp
+      - name: Set function and layer names
+        id: names
+        run: |
+          PREFIX="${{ vars.FN_PREFIX }}"
+          echo "function=${PREFIX}-${{ matrix.fn_suffix }}" >> "$GITHUB_OUTPUT"
+          if [ -n "${{ matrix.layer_suffix }}" ]; then
+            echo "layer=${PREFIX}-${{ matrix.layer_suffix }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "layer=" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/setup-node@v4
+        if: matrix.runtime_type == 'node'
+        with:
+          node-version: 20
+
+      - uses: actions/setup-python@v5
+        if: matrix.runtime_type == 'python'
+        with:
+          python-version: ${{ matrix.python }}
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Build the dependency layer
+        id: layer
+        if: steps.names.outputs.layer != ''
+        run: |
+          set -euo pipefail
+          cd "lambdas/${{ matrix.name }}"
+
+          if [ "${{ matrix.runtime_type }}" = "node" ]; then
+            mkdir -p build/nodejs
+            cp package.json build/nodejs/
+            cd build/nodejs
+            npm install --omit=dev --cpu=${{ matrix.arch }} --os=linux
+            cd .. && zip -qr ../layer.zip nodejs && cd ..
+          else
+            mkdir -p build/python
+            pip install \
+              --target build/python \
+              --platform ${{ matrix.platform }} \
+              --implementation cp \
+              --python-version ${{ matrix.python }} \
+              --only-binary=:all: \
+              --upgrade \
+              -r requirements.txt
+            cd build && zip -qr ../layer.zip python && cd ..
+          fi
+          echo "size=$(du -h layer.zip | cut -f1)" >> "$GITHUB_OUTPUT"
+
+      - name: Publish the layer
+        id: publish
+        if: steps.names.outputs.layer != ''
+        run: |
+          set -euo pipefail
+          cd "lambdas/${{ matrix.name }}"
+
+          ARN=$(aws lambda publish-layer-version \
+            --layer-name "${{ steps.names.outputs.layer }}" \
+            --description "Built from ${{ github.sha }}" \
+            --zip-file fileb://layer.zip \
+            --compatible-runtimes ${{ matrix.runtime }} \
+            --compatible-architectures ${{ matrix.arch }} \
+            --query LayerVersionArn --output text)
+
+          echo "arn=$ARN" >> "$GITHUB_OUTPUT"
+          echo "Published $ARN (${{ steps.layer.outputs.size }})"
+
+      - name: Package the function
+        run: |
+          set -euo pipefail
+          cd "lambdas/${{ matrix.name }}"
+          if [ "${{ matrix.runtime_type }}" = "node" ]; then
+            zip -q function.zip index.js package.json
+          else
+            zip -q function.zip lambda_function.py
+          fi
+
+      - name: Deploy the code
+        run: |
+          set -euo pipefail
+          cd "lambdas/${{ matrix.name }}"
+          FN="${{ steps.names.outputs.function }}"
+
+          if ! ERR=$(aws lambda get-function --function-name "$FN" 2>&1 >/dev/null); then
+            case "$ERR" in
+              *ResourceNotFoundException*|*"Function not found"*)
+                echo "::error::$FN does not exist. Create the Lambda function in AWS Console first."
+                ;;
+              *AccessDenied*|*"not authorized"*)
+                echo "::error::Not permitted to read $FN. Check IAM permissions for the GitHub Actions user."
+                ;;
+              *)
+                echo "::error::Could not read $FN: $ERR"
+                ;;
+            esac
+            exit 1
+          fi
+
+          aws lambda update-function-code \
+            --function-name "$FN" \
+            --zip-file fileb://function.zip \
+            --publish >/dev/null
+
+          # Code and configuration are separate calls, and the second fails
+          # with ResourceConflictException if the first is still settling.
+          aws lambda wait function-updated --function-name "$FN"
+
+          # Update layer and runtime configuration
+          if [ -n "${{ steps.names.outputs.layer }}" ]; then
+            aws lambda update-function-configuration \
+              --function-name "$FN" \
+              --runtime "${{ matrix.runtime }}" \
+              --layers "${{ steps.publish.outputs.arn }}" >/dev/null
+
+            aws lambda wait function-updated --function-name "$FN"
+          fi
+
+      - name: Smoke test kundali
+        if: matrix.name == 'kundali'
+        run: |
+          set -euo pipefail
+          FN="${{ steps.names.outputs.function }}"
+          # A real invocation to verify the swisseph layer works for the right architecture.
+          aws lambda invoke \
+            --function-name "$FN" \
+            --payload '{"date":"1995-08-15","time":"09:30","place":"Jhansi"}' \
+            --cli-binary-format raw-in-base64-out \
+            /tmp/out.json >/dev/null
+
+          cat /tmp/out.json
+          python3 - <<'PY'
+          import json, sys
+          raw = json.load(open('/tmp/out.json'))
+          if 'errorMessage' in raw:
+              sys.exit(f"Lambda raised: {raw['errorMessage']}")
+          body = json.loads(raw['body'])
+          if raw.get('statusCode') != 200:
+              sys.exit(f"Expected 200, got {raw.get('statusCode')}: {body}")
+          assert body['ascendant']['rashi'], 'no ascendant in response'
+          assert body['svg'].startswith('<svg'), 'no chart svg'
+          print('OK:', body['ascendant']['rashi'], 'lagna,', body['nakshatra'])
+          PY
+
+      - name: Remind about the S3 trigger
+        if: matrix.name == 'image_compression'
+        run: |
+          echo "::notice::Code deployed to ${{ steps.names.outputs.function }}."
+          echo "::notice::Verify S3 trigger is configured for ${{ vars.PHOTOS_BUCKET }} in AWS Console."

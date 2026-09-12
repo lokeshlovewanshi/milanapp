@@ -1,0 +1,18 @@
+# State holds every resource attribute in plaintext, including the database
+# password. It must never be committed - use the S3 backend in main.tf.
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+crash.log
+
+# Real variable values.
+terraform.tfvars
+*.auto.tfvars
+!terraform.tfvars.example
+
+# Plan files embed variable values, secrets included. bootstrap.sh writes
+# one named exactly 'tfplan', which '*.tfplan' does not match.
+tfplan
+tfplan.*
+*.tfplan

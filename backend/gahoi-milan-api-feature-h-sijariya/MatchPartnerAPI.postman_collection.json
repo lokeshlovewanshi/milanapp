@@ -1,0 +1,3436 @@
+{
+  "info": {
+    "_postman_id": "5f29abf9-be8c-4b96-a29d-96a295b8f2c6",
+    "name": "Gahoi Milan - Complete API Collection",
+    "description": "Comprehensive, production-ready Postman collection for Gahoi Milan Backend & Chat Services.\nIncludes automated JWT token saving, realistic payloads, request parameters, and complete coverage of all User, Admin, Reference, and Chat endpoints.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.gahoimarriage.in",
+      "type": "string"
+    },
+    {
+      "key": "chatBaseUrl",
+      "value": "http://localhost:8081",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "adminToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "targetUserId",
+      "value": "JM001",
+      "type": "string"
+    },
+    {
+      "key": "ticketId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "planId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "storyId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "attachmentId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "fileName",
+      "value": "photo.jpg",
+      "type": "string"
+    },
+    {
+      "key": "conversationId",
+      "value": "conv_1_2",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Authentication & Onboarding",
+      "item": [
+        {
+          "name": "Ping / Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/ping",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "ping"
+              ]
+            },
+            "description": "Public health check for the authentication controller"
+          }
+        },
+        {
+          "name": "User Signup",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/signup",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "signup"
+              ]
+            },
+            "description": "Registers a new user account and returns the initial JWT token",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Harsh Sijariya\",\n  \"email\": \"harsh@example.com\",\n  \"mobileNo\": \"9876543210\",\n  \"password\": \"Password@123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var data = pm.response.json();",
+                  "    if (data.token) {",
+                  "        pm.collectionVariables.set(\"token\", data.token);",
+                  "        console.log(\"Token saved to collection variable 'token'\");",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "User Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Authenticates with email and password. Automatically stores returned token in {{token}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"harsh@example.com\",\n  \"password\": \"Password@123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var data = pm.response.json();",
+                  "    if (data.token) {",
+                  "        pm.collectionVariables.set(\"token\", data.token);",
+                  "        console.log(\"Token saved to collection variable 'token'\");",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Google OAuth Sign-In / Sign-Up",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/google",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "google"
+              ]
+            },
+            "description": "Verifies Google ID token and returns app JWT. Automatically stores returned token in {{token}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idToken\": \"google_id_token_from_client\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var data = pm.response.json();",
+                  "    if (data.token) {",
+                  "        pm.collectionVariables.set(\"token\", data.token);",
+                  "        console.log(\"Token saved to collection variable 'token'\");",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Restore Soft-Deleted Account (Password)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/restore",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "restore"
+              ]
+            },
+            "description": "Reactivates a previously soft-deleted account upon verifying credentials",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"harsh@example.com\",\n  \"password\": \"Password@123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var data = pm.response.json();",
+                  "    if (data.token) {",
+                  "        pm.collectionVariables.set(\"token\", data.token);",
+                  "        console.log(\"Token saved to collection variable 'token'\");",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Restore Soft-Deleted Google Account",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/google/restore",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "google",
+                "restore"
+              ]
+            },
+            "description": "Reactivates a previously soft-deleted Google-authenticated account",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idToken\": \"google_id_token_from_client\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var data = pm.response.json();",
+                  "    if (data.token) {",
+                  "        pm.collectionVariables.set(\"token\", data.token);",
+                  "        console.log(\"Token saved to collection variable 'token'\");",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "User Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/logout",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "logout"
+              ]
+            },
+            "description": "Blacklists the current JWT token on the server"
+          }
+        },
+        {
+          "name": "Request Email OTP",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/otp/request",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "otp",
+                "request"
+              ]
+            },
+            "description": "Sends a 6-digit one-time code to the given email address. Purpose: VERIFY_EMAIL or RESET_PASSWORD",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"harsh@example.com\",\n  \"purpose\": \"VERIFY_EMAIL\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Verify Email OTP",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/otp/verify",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "otp",
+                "verify"
+              ]
+            },
+            "description": "Confirms email address ownership using the 6-digit code",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"harsh@example.com\",\n  \"code\": \"123456\",\n  \"purpose\": \"VERIFY_EMAIL\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Reset Password using OTP",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/password/reset",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "password",
+                "reset"
+              ]
+            },
+            "description": "Sets a new password directly by verifying the one-time code",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"harsh@example.com\",\n  \"code\": \"123456\",\n  \"newPassword\": \"NewPassword@123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Check OTP / Email Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/otp/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "otp",
+                "status"
+              ]
+            },
+            "description": "Checks whether email delivery (SES / SMTP) is configured on the backend"
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. User Profile Management",
+      "item": [
+        {
+          "name": "Get My Full Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/user",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "user"
+              ]
+            },
+            "description": "Retrieves complete profile details for the authenticated user"
+          }
+        },
+        {
+          "name": "Register Profile (Onboarding)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/user/profile",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "user",
+                "profile"
+              ]
+            },
+            "description": "First-time profile setup after initial signup",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"gender\": \"Male\",\n  \"profileCreatedBy\": \"Self\",\n  \"name\": \"Harsh Sijariya\",\n  \"mobileNo\": \"9876543210\",\n  \"dateOfBirth\": \"1998-05-15T00:00:00\",\n  \"aakna\": \"Kankane\",\n  \"country\": \"India\",\n  \"state\": \"Madhya Pradesh\",\n  \"city\": \"Jhansi\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Update Full Profile",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/user/profile",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "user",
+                "profile"
+              ]
+            },
+            "description": "Updates any profile fields for the authenticated member",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Harsh Sijariya\",\n  \"gender\": \"Male\",\n  \"maritalStatus\": \"NEVER_MARRIED\",\n  \"dateOfBirth\": \"1998-05-15T00:00:00\",\n  \"height\": \"H_58\",\n  \"weight\": 70,\n  \"complexion\": \"Fair\",\n  \"bloodGroup\": \"O_POS\",\n  \"diet\": \"VEGETARIAN\",\n  \"disability\": \"None\",\n  \"gotra\": \"Kashyap\",\n  \"aakna\": \"Kankane\",\n  \"motherTongue\": \"Hindi\",\n  \"country\": \"India\",\n  \"state\": \"Madhya Pradesh\",\n  \"city\": \"Jhansi\",\n  \"education\": \"B_TECH\",\n  \"educationDetails\": \"Computer Science & Engineering\",\n  \"profession\": \"SOFTWARE_ENG\",\n  \"organization\": \"Tech Corp\",\n  \"annualIncome\": \"INR_15_20_LPA\",\n  \"workCity\": \"Bangalore\",\n  \"fathersName\": \"R. K. Sijariya\",\n  \"fathersOccupation\": \"Business\",\n  \"mothersName\": \"Mrs. Sijariya\",\n  \"mothersOccupation\": \"Homemaker\",\n  \"aboutMyself\": \"Software professional looking for an educated and understanding life partner.\",\n  \"partnerPreferences\": \"Educated girl from Gahoi Vaishya family.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Change Password (Logged In)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/user/password",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "user",
+                "password"
+              ]
+            },
+            "description": "Changes own password. For Google signups without an initial password, currentPassword can be omitted.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currentPassword\": \"Password@123\",\n  \"newPassword\": \"NewPassword@456\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Set Profile Visibility (Hide / Unhide)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/user/profile/visibility",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "user",
+                "profile",
+                "visibility"
+              ]
+            },
+            "description": "Hides or unhides profile from the public browse feed",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hidden\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Delete Own Profile (Soft Delete)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/user/profile",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "user",
+                "profile"
+              ]
+            },
+            "description": "Soft-deletes the caller's profile. Can be restored within the retention window."
+          }
+        },
+        {
+          "name": "Download Printable HTML Biodata",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/user/biodata",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "user",
+                "biodata"
+              ]
+            },
+            "description": "Generates an elegant print-ready HTML biodata with horoscope chart and Devanagari typography"
+          }
+        },
+        {
+          "name": "Get Daily Story Rail Profiles",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/user/stories?size=12",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "user",
+                "stories"
+              ],
+              "query": [
+                {
+                  "key": "size",
+                  "value": "12",
+                  "description": "Number of profiles to show on the story rail (max 20)"
+                }
+              ]
+            },
+            "description": "Returns a rotating slice of profiles for the home screen story rail"
+          }
+        },
+        {
+          "name": "Get / Generate My Kundali",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/user/kundali",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "user",
+                "kundali"
+              ]
+            },
+            "description": "Generates or fetches the caller's Vedic birth chart based on their birth date, time, and place"
+          }
+        },
+        {
+          "name": "Regenerate My Kundali",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/user/kundali",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "user",
+                "kundali"
+              ]
+            },
+            "description": "Forces fresh calculation of the birth chart via Kundali lambda service"
+          }
+        },
+        {
+          "name": "Match Kundali with Partner",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/user/kundali/match/{{targetUserId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "user",
+                "kundali",
+                "match",
+                "{{targetUserId}}"
+              ]
+            },
+            "description": "Calculates Ashtakoota 36 Guna Milan compatibility score between caller and target profile"
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Modular Profile Sections",
+      "item": [
+        {
+          "name": "Get Basic Info Section",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/user/profile/basic",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "user",
+                "profile",
+                "basic"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Update Basic Info Section",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/user/profile/basic",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "user",
+                "profile",
+                "basic"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Harsh Sijariya\",\n  \"gender\": \"Male\",\n  \"maritalStatus\": \"NEVER_MARRIED\",\n  \"dateOfBirth\": \"1998-05-15T00:00:00\",\n  \"height\": \"H_58\",\n  \"weight\": 70,\n  \"complexion\": \"Fair\",\n  \"bloodGroup\": \"O_POS\",\n  \"diet\": \"VEGETARIAN\",\n  \"disability\": \"None\",\n  \"profileCreatedBy\": \"Self\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Get Contact Info Section",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/user/profile/contact",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "user",
+                "profile",
+                "contact"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Update Contact Info Section",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/user/profile/contact",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "user",
+                "profile",
+                "contact"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mobileNo\": \"9876543210\",\n  \"whatsappNo\": \"9876543210\",\n  \"city\": \"Jhansi\",\n  \"state\": \"Uttar Pradesh\",\n  \"country\": \"India\",\n  \"presentAddress\": \"Civil Lines, Jhansi\",\n  \"permanentAddress\": \"Civil Lines, Jhansi\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Get Religion & Astro Section",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/user/profile/religion",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "user",
+                "profile",
+                "religion"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Update Religion & Astro Section",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/user/profile/religion",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "user",
+                "profile",
+                "religion"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"gotra\": \"Kashyap\",\n  \"aakna\": \"Kankane\",\n  \"motherTongue\": \"Hindi\",\n  \"timeOfBirth\": \"14:30\",\n  \"placeOfBirth\": \"Jhansi\",\n  \"zodiac\": \"Taurus\",\n  \"manglik\": \"NO\",\n  \"nakshatra\": \"Rohini\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Get Education & Career Section",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/user/profile/education",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "user",
+                "profile",
+                "education"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Update Education & Career Section",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/user/profile/education",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "user",
+                "profile",
+                "education"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"education\": \"B_TECH\",\n  \"educationDetails\": \"B.Tech Computer Science\",\n  \"profession\": \"SOFTWARE_ENG\",\n  \"occupationDetails\": \"Senior Software Engineer\",\n  \"employedIn\": \"Private Sector\",\n  \"organization\": \"Google India\",\n  \"workCity\": \"Bangalore\",\n  \"annualIncome\": \"INR_20_30_LPA\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Get Family & About Section",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/user/profile/family",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "user",
+                "profile",
+                "family"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Update Family & About Section",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/user/profile/family",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "user",
+                "profile",
+                "family"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fathersName\": \"R. K. Sijariya\",\n  \"fathersOccupation\": \"Businessman\",\n  \"fathersContactNo\": \"9876500000\",\n  \"mothersName\": \"Mrs. Sijariya\",\n  \"mothersOccupation\": \"Homemaker\",\n  \"marriedBrothers\": 0,\n  \"unmarriedBrothers\": 1,\n  \"marriedSisters\": 1,\n  \"unmarriedSisters\": 0,\n  \"maternalUnclesName\": \"Mr. Gupta\",\n  \"maternalUnclesAakna\": \"Kankane\",\n  \"houseStatus\": \"Own House\",\n  \"carStatus\": \"Own Car\",\n  \"aboutMyself\": \"Friendly and ambitious professional.\",\n  \"partnerPreferences\": \"Educated girl from respectable family.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Browse, Search & Matches",
+      "item": [
+        {
+          "name": "Browse / Search Profiles (Filtered Feed)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/users?page=0&size=10&oppositeGender=true",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0",
+                  "description": "Page number (0-indexed)"
+                },
+                {
+                  "key": "size",
+                  "value": "10",
+                  "description": "Page size"
+                },
+                {
+                  "key": "oppositeGender",
+                  "value": "true",
+                  "description": "True to filter for matching opposite gender"
+                },
+                {
+                  "key": "ageFrom",
+                  "value": "21",
+                  "description": "Minimum age in years"
+                },
+                {
+                  "key": "ageTo",
+                  "value": "32",
+                  "description": "Maximum age in years"
+                },
+                {
+                  "key": "maritalStatus",
+                  "value": "NEVER_MARRIED",
+                  "description": "Marital status lookup code"
+                },
+                {
+                  "key": "manglik",
+                  "value": "NO",
+                  "description": "Manglik lookup code (YES, NO, DONT_KNOW)"
+                },
+                {
+                  "key": "profession",
+                  "value": "SOFTWARE_ENG",
+                  "description": "Profession lookup code"
+                },
+                {
+                  "key": "heightFrom",
+                  "value": "H_54",
+                  "description": "Minimum height code"
+                },
+                {
+                  "key": "heightTo",
+                  "value": "H_60",
+                  "description": "Maximum height code"
+                }
+              ]
+            },
+            "description": "Main search & browse feed with rich filtering and pagination"
+          }
+        },
+        {
+          "name": "Get Profile Details by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/users/{{targetUserId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users",
+                "{{targetUserId}}"
+              ]
+            },
+            "description": "Fetches target member's profile by JM ID (e.g. JM001) or numeric ID. Contact details are automatically unmasked if the viewer has an active membership plan."
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Photos & Attachments",
+      "item": [
+        {
+          "name": "Upload Profile Photo (Multipart)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/attachment/upload",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "attachment",
+                "upload"
+              ]
+            },
+            "description": "Uploads an image file to S3 and attaches it to the user's gallery",
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"key\": \"file\",\n    \"type\": \"file\",\n    \"src\": []\n  }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Generate Presigned S3 Upload URL",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/attachment/generate-upload-url?fileType=image/jpeg&originalFileName=profile.jpg",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "attachment",
+                "generate-upload-url"
+              ],
+              "query": [
+                {
+                  "key": "fileType",
+                  "value": "image/jpeg",
+                  "description": "MIME type"
+                },
+                {
+                  "key": "originalFileName",
+                  "value": "profile.jpg",
+                  "description": "Original file name"
+                }
+              ]
+            },
+            "description": "Direct client-to-S3 upload: returns a signed PUT URL"
+          }
+        },
+        {
+          "name": "Get Presigned Download URL",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/attachment/download/{{fileName}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "attachment",
+                "download",
+                "{{fileName}}"
+              ]
+            },
+            "description": "Generates an S3 presigned GET URL for viewing an image"
+          }
+        },
+        {
+          "name": "Set Photo as Primary",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/attachment/{{attachmentId}}/set-primary",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "attachment",
+                "{{attachmentId}}",
+                "set-primary"
+              ]
+            },
+            "description": "Sets the specified attachment as the user's primary profile photo"
+          }
+        },
+        {
+          "name": "Delete Photo",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/attachment/{{attachmentId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "attachment",
+                "{{attachmentId}}"
+              ]
+            },
+            "description": "Deletes photo and automatically promotes the next photo to primary if needed"
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Likes, Matches & Shortlist",
+      "item": [
+        {
+          "name": "Send Like / Connect Request",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/likes/{{targetUserId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "likes",
+                "{{targetUserId}}"
+              ]
+            },
+            "description": "Expresses interest in target member"
+          }
+        },
+        {
+          "name": "Cancel / Remove Like",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/likes/{{targetUserId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "likes",
+                "{{targetUserId}}"
+              ]
+            },
+            "description": "Removes like sent to target member"
+          }
+        },
+        {
+          "name": "Get Received Likes",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/likes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "likes"
+              ]
+            },
+            "description": "Lists all members who have liked the caller's profile"
+          }
+        },
+        {
+          "name": "Get My Sent Likes",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/likes/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "likes",
+                "me"
+              ]
+            },
+            "description": "Lists all likes sent by the caller and their status (PENDING, ACCEPTED, REJECTED)"
+          }
+        },
+        {
+          "name": "Accept Connection Request",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/likes/accept/{{targetUserId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "likes",
+                "accept",
+                "{{targetUserId}}"
+              ]
+            },
+            "description": "Accepts an incoming like, establishing a match"
+          }
+        },
+        {
+          "name": "Reject Connection Request",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/likes/reject/{{targetUserId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "likes",
+                "reject",
+                "{{targetUserId}}"
+              ]
+            },
+            "description": "Declines an incoming like"
+          }
+        },
+        {
+          "name": "Get Shortlisted Profiles",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/shortlist",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "shortlist"
+              ]
+            },
+            "description": "Lists all profiles saved to caller's shortlist"
+          }
+        },
+        {
+          "name": "Add Profile to Shortlist",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/shortlist/{{targetUserId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "shortlist",
+                "{{targetUserId}}"
+              ]
+            },
+            "description": "Bookmarks target profile"
+          }
+        },
+        {
+          "name": "Remove Profile from Shortlist",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/shortlist/{{targetUserId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "shortlist",
+                "{{targetUserId}}"
+              ]
+            },
+            "description": "Removes target profile from shortlist"
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Profile Views",
+      "item": [
+        {
+          "name": "Record Profile View",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/views",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "views"
+              ]
+            },
+            "description": "Records that the caller viewed the target profile",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"profileId\": \"{{targetUserId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Get Who Viewed My Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/views",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "views"
+              ]
+            },
+            "description": "Lists members who recently visited caller's profile"
+          }
+        }
+      ]
+    },
+    {
+      "name": "8. Billing & Memberships",
+      "item": [
+        {
+          "name": "List Available Membership Plans",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/billing/plans",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "billing",
+                "plans"
+              ]
+            },
+            "description": "Lists all available membership plans (Bronze, Silver, Gold) with active discounts and benefits"
+          }
+        },
+        {
+          "name": "Get My Active Membership",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/billing/membership/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "billing",
+                "membership",
+                "me"
+              ]
+            },
+            "description": "Returns the caller's active subscription, tier, expiry date, and remaining contact views"
+          }
+        },
+        {
+          "name": "Create Plan Purchase Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/billing/orders",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "billing",
+                "orders"
+              ]
+            },
+            "description": "Initiates a Razorpay payment order for purchasing or upgrading a membership tier",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"planId\": \"1\",\n  \"couponCode\": \"FESTIVAL50\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "9. Push & In-App Notifications",
+      "item": [
+        {
+          "name": "Register FCM Push Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/notifications/token",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "notifications",
+                "token"
+              ]
+            },
+            "description": "Registers device token for Firebase Cloud Messaging push notifications",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"fcm_device_token_here\",\n  \"platform\": \"ANDROID\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Unregister FCM Push Token (Logout)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/notifications/token",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "notifications",
+                "token"
+              ]
+            },
+            "description": "Unregisters FCM token so subsequent users on this device do not receive alerts",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"fcm_device_token_here\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "List In-App Notifications",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/notifications?page=0&size=20",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "notifications"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0",
+                  "description": "Page number"
+                },
+                {
+                  "key": "size",
+                  "value": "20",
+                  "description": "Page size"
+                }
+              ]
+            },
+            "description": "Fetches user's in-app notification feed"
+          }
+        },
+        {
+          "name": "Get Unread Notification Count",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/notifications/unread-count",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "notifications",
+                "unread-count"
+              ]
+            },
+            "description": "Returns badge count of unread notifications"
+          }
+        },
+        {
+          "name": "Mark All Notifications as Read",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/notifications/read-all",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "notifications",
+                "read-all"
+              ]
+            },
+            "description": "Clears unread status on all notifications for the caller"
+          }
+        }
+      ]
+    },
+    {
+      "name": "10. Help & Support Tickets",
+      "item": [
+        {
+          "name": "Get Support Contact Info (Public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/support/contact",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "support",
+                "contact"
+              ]
+            },
+            "description": "Returns official support phone number and email (no auth required)"
+          }
+        },
+        {
+          "name": "List My Support Tickets",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/support/tickets",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "support",
+                "tickets"
+              ]
+            },
+            "description": "Lists all support tickets created by the logged-in user"
+          }
+        },
+        {
+          "name": "Create Support Ticket",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/support/tickets",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "support",
+                "tickets"
+              ]
+            },
+            "description": "Creates a new helpdesk ticket",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"subject\": \"Need help verifying my profile\",\n  \"message\": \"I uploaded my photos and details but the blue checkmark is not appearing.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Get Ticket Details & Thread",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/support/tickets/{{ticketId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "support",
+                "tickets",
+                "{{ticketId}}"
+              ]
+            },
+            "description": "Retrieves ticket status and all user/admin messages in the conversation"
+          }
+        },
+        {
+          "name": "Add Message to Ticket Thread",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/support/tickets/{{ticketId}}/messages",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "support",
+                "tickets",
+                "{{ticketId}}",
+                "messages"
+              ]
+            },
+            "description": "Sends a reply on an open ticket",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Thank you for the update, here is the additional info requested.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Reopen Support Ticket",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/support/tickets/{{ticketId}}/reopen",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "support",
+                "tickets",
+                "{{ticketId}}",
+                "reopen"
+              ]
+            },
+            "description": "Reopens a closed ticket if the issue persists"
+          }
+        }
+      ]
+    },
+    {
+      "name": "11. Reference Data & System",
+      "item": [
+        {
+          "name": "Get All Dropdown Options",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reference/options",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "reference",
+                "options"
+              ]
+            },
+            "description": "Returns all category dropdown codes and localized labels (Gotra, Aakna, Education, Occupation, Marital Status, etc.)"
+          }
+        },
+        {
+          "name": "Get Dropdown Options by Category",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reference/options/EDUCATION",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "reference",
+                "options",
+                "EDUCATION"
+              ]
+            },
+            "description": "Returns options for a single category (e.g. EDUCATION, OCCUPATION, MARITAL_STATUS, DIET, GOTRA)"
+          }
+        },
+        {
+          "name": "Get All States & UTs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reference/states",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "reference",
+                "states"
+              ]
+            },
+            "description": "Returns all Indian states and Union Territories"
+          }
+        },
+        {
+          "name": "Search & Browse Cities",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reference/cities?search=Jhan&limit=10",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "reference",
+                "cities"
+              ],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "Jhan",
+                  "description": "Search prefix (minimum 2 characters)"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Result limit"
+                },
+                {
+                  "key": "stateCode",
+                  "value": "MP",
+                  "description": "Filter by state code (e.g. MP, UP)"
+                },
+                {
+                  "key": "stateId",
+                  "value": "1",
+                  "description": "Filter by numeric state ID"
+                },
+                {
+                  "key": "alphabetical",
+                  "value": "false",
+                  "description": "Browse all cities alphabetically"
+                },
+                {
+                  "key": "page",
+                  "value": "0",
+                  "description": "Page number"
+                },
+                {
+                  "key": "size",
+                  "value": "50",
+                  "description": "Page size"
+                }
+              ]
+            },
+            "description": "Fast autocomplete and hierarchical lookup for Indian cities"
+          }
+        },
+        {
+          "name": "Get Top Featured Stories (Home Screen)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/stories/top",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "stories",
+                "top"
+              ]
+            },
+            "description": "Returns active success stories / testimonials curated by admin"
+          }
+        },
+        {
+          "name": "Check App Version (Force Update Gate)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/app/version?platform=android&versionCode=25",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "app",
+                "version"
+              ],
+              "query": [
+                {
+                  "key": "platform",
+                  "value": "android",
+                  "description": "Platform: android or ios"
+                },
+                {
+                  "key": "versionCode",
+                  "value": "25",
+                  "description": "Current installed build versionCode"
+                }
+              ]
+            },
+            "description": "Used at app startup to check for mandatory updates and release notes"
+          }
+        },
+        {
+          "name": "Spring Boot Actuator Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/actuator/health",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "actuator",
+                "health"
+              ]
+            },
+            "description": "Liveness probe endpoint returning UP status"
+          }
+        }
+      ]
+    },
+    {
+      "name": "12. Admin Portal & Management",
+      "item": [
+        {
+          "name": "Admin Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "login"
+              ]
+            },
+            "description": "Authenticates admin and saves JWT token to collection variable {{adminToken}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@gahoimarriage.in\",\n  \"password\": \"AdminPassword@123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var data = pm.response.json();",
+                  "    if (data.token) {",
+                  "        pm.collectionVariables.set(\"adminToken\", data.token);",
+                  "        console.log(\"Admin Token saved to collection variable 'adminToken'\");",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Admin - List Unverified Profiles Queue",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/profiles/unverified?page=0&size=20",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "profiles",
+                "unverified"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0",
+                  "description": "Page index"
+                },
+                {
+                  "key": "size",
+                  "value": "20",
+                  "description": "Batch size"
+                }
+              ]
+            },
+            "description": "Returns pending member profiles awaiting admin verification"
+          }
+        },
+        {
+          "name": "Admin - List / Search All Profiles",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/profiles?search=&page=0&size=20",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "profiles"
+              ],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "",
+                  "description": "Search query: name, email, phone, or JM ID"
+                },
+                {
+                  "key": "page",
+                  "value": "0",
+                  "description": "Page index"
+                },
+                {
+                  "key": "size",
+                  "value": "20",
+                  "description": "Batch size"
+                }
+              ]
+            },
+            "description": "Search across all active and pending user records"
+          }
+        },
+        {
+          "name": "Admin - Get Profile Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/profiles/{{targetUserId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "profiles",
+                "{{targetUserId}}"
+              ]
+            },
+            "description": "Fetches complete profile details from an admin perspective"
+          }
+        },
+        {
+          "name": "Admin - Create Profile on Behalf of Member",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/profiles",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "profiles"
+              ]
+            },
+            "description": "Allows administrator to register and create a profile manually",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"New Member\",\n  \"gender\": \"Female\",\n  \"maritalStatus\": \"NEVER_MARRIED\",\n  \"email\": \"member@example.com\",\n  \"mobileNo\": \"9999999999\",\n  \"password\": \"InitialPassword@123\",\n  \"city\": \"Bhopal\",\n  \"state\": \"Madhya Pradesh\",\n  \"country\": \"India\",\n  \"education\": \"MBA\",\n  \"profession\": \"BANKING\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Admin - Edit Member Profile",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/profiles/{{targetUserId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "profiles",
+                "{{targetUserId}}"
+              ]
+            },
+            "description": "Edits profile information. Email and password cannot be edited here.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Member Name\",\n  \"education\": \"MCA\",\n  \"profession\": \"SOFTWARE_ENG\",\n  \"verified\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Admin - Verify Profile (Blue Tick)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/profiles/{{targetUserId}}/verify",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "profiles",
+                "{{targetUserId}}",
+                "verify"
+              ]
+            },
+            "description": "Approves member verification and activates the blue verification badge"
+          }
+        },
+        {
+          "name": "Admin - Block Profile",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/profiles/{{targetUserId}}/block",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "profiles",
+                "{{targetUserId}}",
+                "block"
+              ]
+            },
+            "description": "Blocks / suspends member account"
+          }
+        },
+        {
+          "name": "Admin - Unblock Profile",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/profiles/{{targetUserId}}/unblock",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "profiles",
+                "{{targetUserId}}",
+                "unblock"
+              ]
+            },
+            "description": "Restores access to a suspended profile"
+          }
+        },
+        {
+          "name": "Admin - Upload Photo for Member",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/profiles/{{targetUserId}}/photos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "profiles",
+                "{{targetUserId}}",
+                "photos"
+              ]
+            },
+            "description": "Uploads a photo directly into a user's gallery",
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"key\": \"file\",\n    \"type\": \"file\",\n    \"src\": []\n  }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Admin - Delete Member Photo",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/profiles/{{targetUserId}}/photos/{{attachmentId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "profiles",
+                "{{targetUserId}}",
+                "photos",
+                "{{attachmentId}}"
+              ]
+            },
+            "description": "Removes inappropriate or duplicate photo from user gallery"
+          }
+        },
+        {
+          "name": "Admin - List All Membership Plans",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/plans",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "plans"
+              ]
+            },
+            "description": "Returns all plans including pricing, duration, and promotional settings"
+          }
+        },
+        {
+          "name": "Admin - Get Plan by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/plans/{{planId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "plans",
+                "{{planId}}"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Admin - Update Plan Configuration",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/plans/{{planId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "plans",
+                "{{planId}}"
+              ]
+            },
+            "description": "Modifies price, discount, duration, or active status of a membership tier",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Gold Membership\",\n  \"durationMonths\": 6,\n  \"priceRupees\": 2499.0,\n  \"discountPriceRupees\": 1499.0,\n  \"active\": true,\n  \"freeOnSignup\": false,\n  \"sortOrder\": 3,\n  \"features\": \"Unlimited Chats, 50 Contact Unlocks, Priority Placement\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Admin - Set Plan as Free Signup Promo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/plans/{{planId}}/set-free-signup",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "plans",
+                "{{planId}}",
+                "set-free-signup"
+              ]
+            },
+            "description": "Sets the selected plan to be auto-granted free to every new registration"
+          }
+        },
+        {
+          "name": "Admin - List Member Subscriptions",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/plans/memberships?page=0&size=20",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "plans",
+                "memberships"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0",
+                  "description": "Page index"
+                },
+                {
+                  "key": "size",
+                  "value": "20",
+                  "description": "Batch size"
+                }
+              ]
+            },
+            "description": "Lists all user membership subscriptions and transaction history"
+          }
+        },
+        {
+          "name": "Admin - List Featured Stories",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/featured-stories",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "featured-stories"
+              ]
+            },
+            "description": "Lists all home screen stories"
+          }
+        },
+        {
+          "name": "Admin - Add Featured Story",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/featured-stories",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "featured-stories"
+              ]
+            },
+            "description": "Curates a user profile to be highlighted on the home screen",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"profileId\": 1,\n  \"sortOrder\": 1,\n  \"note\": \"Featured Gahoi wedding match 2026\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Admin - Remove Featured Story",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/featured-stories/{{storyId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "featured-stories",
+                "{{storyId}}"
+              ]
+            },
+            "description": "Removes a profile from the home screen featured stories"
+          }
+        },
+        {
+          "name": "Admin - List Support Tickets",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/tickets?page=0&size=20",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "tickets"
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "OPEN",
+                  "description": "Filter by ticket status: OPEN, IN_PROGRESS, RESOLVED, CLOSED"
+                },
+                {
+                  "key": "page",
+                  "value": "0",
+                  "description": "Page number"
+                },
+                {
+                  "key": "size",
+                  "value": "20",
+                  "description": "Page size"
+                }
+              ]
+            },
+            "description": "Helpdesk management queue for member inquiries"
+          }
+        },
+        {
+          "name": "Admin - Get Support Ticket Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/tickets/{{ticketId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "tickets",
+                "{{ticketId}}"
+              ]
+            },
+            "description": "View full conversation thread and ticket context"
+          }
+        },
+        {
+          "name": "Admin - Reply to Support Ticket",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/tickets/{{ticketId}}/messages",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "tickets",
+                "{{ticketId}}",
+                "messages"
+              ]
+            },
+            "description": "Sends official support response to member",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Hello, we have verified your documents and approved your badge.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Admin - Close Support Ticket",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/tickets/{{ticketId}}/close",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "tickets",
+                "{{ticketId}}",
+                "close"
+              ]
+            },
+            "description": "Marks ticket as resolved and closed"
+          }
+        },
+        {
+          "name": "Admin - Broadcast Push Notification",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/notifications/broadcast",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "notifications",
+                "broadcast"
+              ]
+            },
+            "description": "Fires a high-priority FCM push broadcast to all registered devices",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Happy Diwali from Gahoi Milan!\",\n  \"body\": \"Special festive discounts are now live on all Gold and Silver plans. Check out today!\",\n  \"topic\": \"all-users\",\n  \"link\": \"/plans\",\n  \"saveToFeed\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Admin - Send Single User Push Notification",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/notifications/send-user",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "notifications",
+                "send-user"
+              ]
+            },
+            "description": "Sends a direct targeted push notification to a specific member",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 1,\n  \"title\": \"Your profile has been verified!\",\n  \"body\": \"Congratulations! Your profile has been reviewed and marked with the verified badge.\",\n  \"link\": \"/me\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "13. Chat Microservice (REST)",
+      "item": [
+        {
+          "name": "Get My Conversation Threads",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{chatBaseUrl}}/api/v1/chat/conversations",
+              "host": [
+                "{{chatBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "chat",
+                "conversations"
+              ]
+            },
+            "description": "Lists all 1-on-1 conversation threads with matched partners"
+          }
+        },
+        {
+          "name": "Initiate / Open Conversation",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{chatBaseUrl}}/api/v1/chat/conversations/initiate",
+              "host": [
+                "{{chatBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "chat",
+                "conversations",
+                "initiate"
+              ]
+            },
+            "description": "Initiates or retrieves an existing conversation thread with a matched user",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"recipientId\": 2,\n  \"recipientName\": \"Priya Gupta\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Get Chat Message History",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{chatBaseUrl}}/api/v1/chat/conversations/{{conversationId}}/messages?limit=30",
+              "host": [
+                "{{chatBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "chat",
+                "conversations",
+                "{{conversationId}}",
+                "messages"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "30",
+                  "description": "Number of messages to retrieve"
+                },
+                {
+                  "key": "beforeTimestamp",
+                  "value": "1726000000000",
+                  "description": "Optional cursor for pagination"
+                }
+              ]
+            },
+            "description": "Returns paginated chat history for a thread"
+          }
+        },
+        {
+          "name": "Send Message (REST API Fallback)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{chatBaseUrl}}/api/v1/chat/messages/send",
+              "host": [
+                "{{chatBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "chat",
+                "messages",
+                "send"
+              ]
+            },
+            "description": "Sends a message via HTTP REST when WebSocket is reconnecting",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"conversationId\": \"{{conversationId}}\",\n  \"recipientId\": 2,\n  \"content\": \"Namaste, I saw your profile on Gahoi Milan.\",\n  \"type\": \"TEXT\",\n  \"mediaUrl\": \"\",\n  \"tempId\": \"client_msg_101\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Mark Conversation as Read",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{chatBaseUrl}}/api/v1/chat/conversations/{{conversationId}}/read",
+              "host": [
+                "{{chatBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "chat",
+                "conversations",
+                "{{conversationId}}",
+                "read"
+              ]
+            },
+            "description": "Updates read status for all unread incoming messages in the thread"
+          }
+        },
+        {
+          "name": "Check User Online Status",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{chatBaseUrl}}/api/v1/chat/presence/user/2",
+              "host": [
+                "{{chatBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "chat",
+                "presence",
+                "user",
+                "2"
+              ]
+            },
+            "description": "Checks whether the given member is currently online via WebSocket heartbeat"
+          }
+        },
+        {
+          "name": "Get Total Online Users Count",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{chatBaseUrl}}/api/v1/chat/presence/online-count",
+              "host": [
+                "{{chatBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "chat",
+                "presence",
+                "online-count"
+              ]
+            },
+            "description": "Returns total number of concurrent active chat connections"
+          }
+        }
+      ]
+    }
+  ]
+}

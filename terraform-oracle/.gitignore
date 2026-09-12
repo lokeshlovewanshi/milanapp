@@ -1,0 +1,19 @@
+# State holds every resource attribute in plaintext, including the DB
+# password. Local backend on purpose (single-dev box) - never commit it.
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+crash.log
+
+# Real variable values, including the OCI API key path and DB password.
+terraform.tfvars
+*.auto.tfvars
+!terraform.tfvars.example
+
+tfplan
+tfplan.*
+*.tfplan
+
+# OCI API signing key, if you generate it into this directory rather than ~/.oci/
+*.pem

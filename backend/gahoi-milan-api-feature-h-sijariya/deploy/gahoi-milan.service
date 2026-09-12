@@ -1,0 +1,67 @@
+[Unit]
+Description=Gahoi Milan API
+Documentation=https://github.com/harshsijariya/milanapp
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=gahoi
+Group=gahoi
+
+# Secrets live here, root-owned and chmod 600. Keeping them out of this unit
+# file matters because systemd unit files are world-readable, and `systemctl
+# cat` would otherwise print every password to anyone with shell access.
+EnvironmentFile=/etc/gahoi-milan/gahoi-milan.env
+
+WorkingDirectory=/opt/gahoi-milan
+
+# Sized for a t3.small (2 GB). 1 GB of heap leaves roughly 700 MB for the OS,
+# nginx and the JVM's own off-heap memory - metaspace, thread stacks, code
+# cache - which is the part people forget and then get OOM-killed by.
+#
+# G1 rather than SerialGC: at a 1 GB heap its concurrent collection keeps pause
+# times low enough not to show up as request latency. On the old 512 MB heap it
+# was pure overhead.
+ExecStart=/usr/bin/java \
+  -Xms512m \
+  -Xmx1g \
+  -XX:+UseG1GC \
+  -XX:MaxMetaspaceSize=192m \
+  -Djava.security.egd=file:/dev/urandom \
+  -Duser.timezone=Asia/Kolkata \
+  -jar /opt/gahoi-milan/app.jar \
+  --spring.profiles.active=prod
+
+SuccessExitStatus=143
+Restart=on-failure
+RestartSec=10
+
+# Give a cold JVM plus Hibernate schema validation time to finish before
+# systemd decides the start failed.
+TimeoutStartSec=120
+TimeoutStopSec=30
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=gahoi-milan
+
+# --- Hardening ------------------------------------------------------------
+# The app reads uploads and writes logs; it has no business touching anything
+# else on the box. If it is ever compromised through a deserialisation bug or
+# a bad dependency, these limit what the attacker inherits.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+ReadWritePaths=/var/log/gahoi-milan /opt/gahoi-milan
+ProtectKernelTunables=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+
+# Hard ceiling below total RAM: without it a runaway request swaps the machine
+# to a halt instead of failing one request.
+MemoryMax=1600M
+
+[Install]
+WantedBy=multi-user.target

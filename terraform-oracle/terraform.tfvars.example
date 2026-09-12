@@ -1,0 +1,43 @@
+# Copy to terraform.tfvars and fill in. terraform.tfvars is gitignored -
+# never commit the filled-in version.
+
+tenancy_ocid         = "ocid1.tenancy.oc1..xxxxxxxx"
+user_ocid            = "ocid1.user.oc1..xxxxxxxx"
+fingerprint          = "xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx"
+oci_private_key_path = "~/.oci/oci_api_key.pem"
+region               = "ap-mumbai-1"
+compartment_ocid     = "ocid1.tenancy.oc1..xxxxxxxx" # root compartment = tenancy_ocid
+ssh_public_key_path  = "~/.ssh/gahoi_milan_dev.pub"
+
+# Set the real password via: export TF_VAR_db_password='...'
+# db_password = "..."
+
+# ---------------------------------------------------------------------------
+# SSL Certificate (Let's Encrypt 90-day)
+# Generate using DNS challenge (no port 80 needed on your Mac):
+#
+#   brew install certbot
+#   sudo certbot certonly --manual --preferred-challenges dns \
+#     -d api.gahoimarriage.in
+#
+# Then paste the file contents below (heredoc syntax preserves newlines):
+# ---------------------------------------------------------------------------
+ssl_certificate_pem = <<-EOT
+  -----BEGIN CERTIFICATE-----
+  (paste contents of /etc/letsencrypt/live/api.gahoimarriage.in/fullchain.pem)
+  -----END CERTIFICATE-----
+EOT
+
+ssl_private_key_pem = <<-EOT
+  -----BEGIN PRIVATE KEY-----
+  (paste contents of /etc/letsencrypt/live/api.gahoimarriage.in/privkey.pem)
+  -----END PRIVATE KEY-----
+EOT
+
+domain_name = "api.gahoimarriage.in"
+
+# ---------------------------------------------------------------------------
+# Bastion SSH Access (Port 22)
+# Restrict SSH on the Bastion VM to your PC's IP, or run ./allow-my-ip.sh
+# ---------------------------------------------------------------------------
+# bastion_ssh_allowed_cidrs = ["0.0.0.0/0"] # default allows all, or set ["<MY_IP>/32"]

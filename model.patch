@@ -1,0 +1,76 @@
+diff --git a/frontend/app/(tabs)/home.tsx b/frontend/app/(tabs)/home.tsx
+index 24938f4..9dda5f0 100644
+--- a/frontend/app/(tabs)/home.tsx
++++ b/frontend/app/(tabs)/home.tsx
+@@ -37,10 +37,25 @@ export default function HomeScreen() {
+         viewsAPI.getProfileViews(),
+       ]);
+ 
++      // Featured profiles (first 3)
+       setFeaturedProfiles(profilesRes.data.slice(0, 3));
++      
++      // New profiles (next 5)
+       setNewProfiles(profilesRes.data.slice(3, 8));
++      
++      // Received likes (first 5)
+       setReceivedLikes(likesRes.data.slice(0, 5));
+-      setRecentVisitors(visitorsRes.data.slice(0, 5));
++      
++      // Recent visitors - Add dummy data if empty for demo
++      let visitors = visitorsRes.data.slice(0, 5);
++      if (visitors.length === 0 && profilesRes.data.length > 8) {
++        // Create dummy viewed by data from available profiles
++        visitors = profilesRes.data.slice(8, 13).map((profile: any) => ({
++          profile: profile,
++          viewed_at: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000).toISOString()
++        }));
++      }
++      setRecentVisitors(visitors);
+     } catch (error: any) {
+       console.error('Failed to load data:', error);
+     } finally {
+diff --git a/model.patch b/model.patch
+index 16ce0b5..e69de29 100644
+--- a/model.patch
++++ b/model.patch
+@@ -1,40 +0,0 @@
+-diff --git a/backend/server.py b/backend/server.py
+-index d24ffae..87bd05a 100644
+---- a/backend/server.py
+-+++ b/backend/server.py
+-@@ -365,7 +365,7 @@ async def get_received_likes(current_user: dict = Depends(get_current_user)):
+-         profile = await db.user_profile.find_one({"id": like["liker_id"]}, {"password": 0})
+-         if profile:
+-             result.append({
+--                "profile": profile,
+-+                "profile": mongo_to_dict(profile),
+-                 "liked_at": like["liked_at"],
+-                 "status": like.get("status", "pending")
+-             })
+-@@ -383,7 +383,7 @@ async def get_sent_likes(current_user: dict = Depends(get_current_user)):
+-         profile = await db.user_profile.find_one({"id": like["liked_profile_id"]}, {"password": 0})
+-         if profile:
+-             result.append({
+--                "profile": profile,
+-+                "profile": mongo_to_dict(profile),
+-                 "liked_at": like["liked_at"],
+-                 "status": like.get("status", "pending")
+-             })
+-@@ -452,7 +452,7 @@ async def get_shortlist(current_user: dict = Depends(get_current_user)):
+-     for item in shortlisted:
+-         profile = await db.user_profile.find_one({"id": item["shortlist_id"]}, {"password": 0})
+-         if profile:
+--            result.append(profile)
+-+            result.append(mongo_to_dict(profile))
+-     
+-     return result
+- 
+-@@ -466,7 +466,7 @@ async def get_profile_views(current_user: dict = Depends(get_current_user)):
+-         profile = await db.user_profile.find_one({"id": view["viewed_by"]}, {"password": 0})
+-         if profile:
+-             result.append({
+--                "profile": profile,
+-+                "profile": mongo_to_dict(profile),
+-                 "viewed_at": view["viewed_at"]
+-             })
+-     

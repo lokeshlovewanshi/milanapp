@@ -1,0 +1,54 @@
+version: 0.0
+os: linux
+
+files:
+  - source: app.jar
+    destination: /opt/gahoi-milan
+  - source: gahoi-milan.service
+    destination: /etc/systemd/system
+
+# The agent runs as root and would otherwise leave the jar root-owned, which
+# the unprivileged service account then cannot read.
+permissions:
+  - object: /opt/gahoi-milan/app.jar
+    owner: gahoi
+    group: gahoi
+    mode: 644
+    type:
+      - file
+
+hooks:
+  # Order per deployment:
+  #   ApplicationStop -> BeforeInstall -> Install -> AfterInstall
+  #     -> ApplicationStart -> ValidateService
+  #
+  # ApplicationStop runs from the PREVIOUS revision's bundle, so on the very
+  # first deployment it does not run at all. Every script must therefore
+  # tolerate being the first thing that ever ran.
+
+  ApplicationStop:
+    - location: scripts/stop.sh
+      timeout: 60
+      runas: root
+
+  BeforeInstall:
+    - location: scripts/before_install.sh
+      timeout: 120
+      runas: root
+
+  AfterInstall:
+    - location: scripts/after_install.sh
+      timeout: 60
+      runas: root
+
+  ApplicationStart:
+    - location: scripts/start.sh
+      timeout: 120
+      runas: root
+
+  # Fails the deployment if the app does not report healthy, which triggers
+  # the automatic rollback configured on the deployment group.
+  ValidateService:
+    - location: scripts/validate.sh
+      timeout: 180
+      runas: root

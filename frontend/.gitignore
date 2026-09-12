@@ -1,0 +1,56 @@
+# Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
+
+# dependencies
+node_modules/
+
+# Expo
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+
+# Native
+.kotlin/
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# Metro
+.metro-health-check*
+.metro-cache/
+
+# Native build output (generated; ~83 MB, and churns the file watcher)
+android/build/
+android/app/build/
+android/.gradle/
+ios/Pods/
+ios/build/
+
+# Editor swap files - these are what an interrupted vim session leaves behind
+*.swp
+*.swo
+.*.swp
+
+# debug
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# macOS
+.DS_Store
+*.pem
+
+# local env files
+.env*.local
+
+# typescript
+*.tsbuildinfo
+
+app-example
+
+# Firebase Android config. Not secret in the way a service-account key is, but
+# it identifies your project - keep it out of a public repo.
+google-services.json

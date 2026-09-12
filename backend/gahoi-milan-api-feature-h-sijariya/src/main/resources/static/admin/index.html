@@ -1,0 +1,474 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Gahoi Milan — Admin</title>
+<style>
+  :root {
+    --crimson: #A5122F;
+    --crimson-light: #C4204A;
+    --bg: #FAFAFA;
+    --card: #FFFFFF;
+    --text: #262626;
+    --muted: #8E8E8E;
+    --border: #E5E5E5;
+    --danger: #ED4956;
+    --ok: #16A34A;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+  }
+  header {
+    background: var(--crimson);
+    color: #fff;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  header h1 { font-size: 18px; margin: 0; font-weight: 700; }
+  header .who { font-size: 13px; opacity: 0.9; display: flex; align-items: center; gap: 12px; }
+  header button {
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.4);
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  main { max-width: 880px; margin: 0 auto; padding: 24px; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  .card h2 { margin: 0 0 4px; font-size: 17px; }
+  .card .sub { color: var(--muted); font-size: 13px; margin: 0 0 16px; }
+  label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: #4B5563; }
+  input {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    font-size: 14px;
+    margin-bottom: 14px;
+  }
+  input:focus { outline: none; border-color: var(--crimson); }
+  button.primary {
+    background: var(--crimson);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 11px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  button.primary:disabled { opacity: 0.5; cursor: default; }
+  button.ghost {
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 7px 12px;
+    font-size: 13px;
+    cursor: pointer;
+    color: var(--text);
+  }
+  button.danger { border-color: var(--danger); color: var(--danger); }
+  .error { color: var(--danger); font-size: 13px; margin: -6px 0 14px; }
+  .row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .row:last-child { border-bottom: none; }
+  .avatar {
+    width: 44px; height: 44px; border-radius: 22px;
+    background: #EEE; object-fit: cover; flex-shrink: 0;
+  }
+  .row .info { flex: 1; min-width: 0; }
+  .row .name { font-weight: 600; font-size: 14px; }
+  .row .meta { color: var(--muted); font-size: 12px; margin-top: 2px; }
+  .empty { color: var(--muted); font-size: 14px; padding: 20px 0; text-align: center; }
+  .add-row { display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; }
+  .add-row > div { flex: 1; min-width: 140px; }
+  .add-row input { margin-bottom: 0; }
+  #login-screen {
+    max-width: 360px;
+    margin: 12vh auto 0;
+  }
+  #login-screen h1 { text-align: center; font-size: 22px; margin-bottom: 4px; }
+  #login-screen .sub { text-align: center; color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+  .hidden { display: none !important; }
+  .badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: #FEF3C7;
+    color: #92400E;
+    margin-left: 8px;
+  }
+  .toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1F2937;
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-size: 13px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+  }
+  .toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<div id="login-screen">
+  <h1>Gahoi Milan</h1>
+  <p class="sub">Admin panel</p>
+  <div class="card">
+    <label for="email">Email</label>
+    <input id="email" type="email" autocomplete="username" />
+    <label for="password">Password</label>
+    <input id="password" type="password" autocomplete="current-password" />
+    <p class="error hidden" id="login-error"></p>
+    <button class="primary" id="login-btn" style="width:100%">Sign in</button>
+  </div>
+</div>
+
+<div id="app-screen" class="hidden">
+  <header>
+    <h1>Gahoi Milan — Admin</h1>
+    <div class="who">
+      <span id="who-name"></span>
+      <button id="logout-btn">Sign out</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>Unverified profiles</h2>
+      <p class="sub">Newest signups needing a look, oldest first.</p>
+      <div id="unverified-list"></div>
+    </section>
+
+    <section class="card">
+      <h2>Top Stories</h2>
+      <p class="sub">Who shows up in the featured rail on home, and in what order.</p>
+
+      <div class="add-row">
+        <div>
+          <label for="feature-id">Profile ID</label>
+          <input id="feature-id" placeholder="e.g. GSJM00234" />
+        </div>
+        <div style="flex: 0 0 100px;">
+          <label for="feature-order">Order</label>
+          <input id="feature-order" placeholder="auto" inputmode="numeric" />
+        </div>
+        <div>
+          <label for="feature-note">Note (internal)</label>
+          <input id="feature-note" placeholder="optional" />
+        </div>
+        <button class="primary" id="feature-add-btn">Add</button>
+      </div>
+      <p class="error hidden" id="feature-error"></p>
+
+      <div id="featured-list" style="margin-top: 8px;"></div>
+    </section>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const TOKEN_KEY = 'gm_admin_token';
+const NAME_KEY = 'gm_admin_name';
+
+const $ = (id) => document.getElementById(id);
+
+function showToast(msg) {
+  const el = $('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2200);
+}
+
+function token() { return sessionStorage.getItem(TOKEN_KEY); }
+
+async function api(path, options = {}) {
+  const res = await fetch(path, {
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token() ? { Authorization: `Bearer ${token()}` } : {}),
+      ...(options.headers || {}),
+    },
+  });
+
+  if (res.status === 401) {
+    signOut();
+    throw new Error('Session expired - please sign in again');
+  }
+
+  if (!res.ok) {
+    const text = await res.text().catch(() => '');
+    let message = text;
+    try { message = JSON.parse(text).detail || JSON.parse(text).message || text; } catch (e) {}
+    throw new Error(message || `Request failed (${res.status})`);
+  }
+
+  const ct = res.headers.get('content-type') || '';
+  return ct.includes('application/json') ? res.json() : null;
+}
+
+function signOut() {
+  sessionStorage.removeItem(TOKEN_KEY);
+  sessionStorage.removeItem(NAME_KEY);
+  $('app-screen').classList.add('hidden');
+  $('login-screen').classList.remove('hidden');
+}
+
+function showApp() {
+  $('login-screen').classList.add('hidden');
+  $('app-screen').classList.remove('hidden');
+  $('who-name').textContent = sessionStorage.getItem(NAME_KEY) || '';
+  loadUnverified();
+  loadFeatured();
+}
+
+// Same trick the app itself uses for a pasted profile ID: keep only the
+// digits, so "GSJM00234", "JM00234" or a bare "234" all work the same way.
+function parseProfileId(input) {
+  const digits = String(input || '').replace(/\D/g, '');
+  if (!digits) return null;
+  const id = Number(digits);
+  return Number.isFinite(id) && id > 0 ? id : null;
+}
+
+function avatarImg(url) {
+  const img = document.createElement('img');
+  img.className = 'avatar';
+  img.src = url || 'data:image/svg+xml;utf8,' + encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 44"><rect width="44" height="44" rx="22" fill="%23EEE"/></svg>'
+  );
+  return img;
+}
+
+// ---------------------------------------------------------------------------
+// Login
+// ---------------------------------------------------------------------------
+
+$('login-btn').addEventListener('click', async () => {
+  const email = $('email').value.trim();
+  const password = $('password').value;
+  const errorEl = $('login-error');
+  errorEl.classList.add('hidden');
+
+  if (!email || !password) {
+    errorEl.textContent = 'Enter an email and password.';
+    errorEl.classList.remove('hidden');
+    return;
+  }
+
+  $('login-btn').disabled = true;
+  try {
+    const res = await api('/api/v1/admin/login', {
+      method: 'POST',
+      body: JSON.stringify({ email, password }),
+    });
+    sessionStorage.setItem(TOKEN_KEY, res.token);
+    sessionStorage.setItem(NAME_KEY, res.name || res.email || '');
+    $('password').value = '';
+    showApp();
+  } catch (e) {
+    errorEl.textContent = e.message || 'Sign in failed.';
+    errorEl.classList.remove('hidden');
+  } finally {
+    $('login-btn').disabled = false;
+  }
+});
+
+$('logout-btn').addEventListener('click', signOut);
+
+// ---------------------------------------------------------------------------
+// Unverified profiles
+// ---------------------------------------------------------------------------
+
+async function loadUnverified() {
+  const list = $('unverified-list');
+  list.innerHTML = '<p class="empty">Loading…</p>';
+  try {
+    const page = await api('/api/v1/admin/profiles/unverified?page=0&size=50');
+    const rows = page.content || [];
+    if (rows.length === 0) {
+      list.innerHTML = '<p class="empty">Nothing waiting on review.</p>';
+      return;
+    }
+    list.innerHTML = '';
+    rows.forEach((p) => list.appendChild(unverifiedRow(p)));
+  } catch (e) {
+    list.innerHTML = `<p class="error">${e.message}</p>`;
+  }
+}
+
+function unverifiedRow(profile) {
+  const row = document.createElement('div');
+  row.className = 'row';
+
+  row.appendChild(avatarImg(profile.profileImage));
+
+  const info = document.createElement('div');
+  info.className = 'info';
+  const name = document.createElement('div');
+  name.className = 'name';
+  name.textContent = profile.name || 'Unnamed';
+  const meta = document.createElement('div');
+  meta.className = 'meta';
+  meta.textContent = [profile.displayId, profile.gender, profile.email].filter(Boolean).join(' · ');
+  info.appendChild(name);
+  info.appendChild(meta);
+  row.appendChild(info);
+
+  const btn = document.createElement('button');
+  btn.className = 'primary';
+  btn.textContent = 'Verify';
+  btn.addEventListener('click', async () => {
+    btn.disabled = true;
+    btn.textContent = 'Verifying…';
+    try {
+      await api(`/api/v1/admin/profiles/${profile.id}/verify`, { method: 'POST' });
+      row.remove();
+      showToast(`${profile.name || 'Profile'} verified`);
+      const list = $('unverified-list');
+      if (!list.querySelector('.row')) list.innerHTML = '<p class="empty">Nothing waiting on review.</p>';
+    } catch (e) {
+      showToast(e.message || 'Could not verify');
+      btn.disabled = false;
+      btn.textContent = 'Verify';
+    }
+  });
+  row.appendChild(btn);
+
+  return row;
+}
+
+// ---------------------------------------------------------------------------
+// Featured stories
+// ---------------------------------------------------------------------------
+
+async function loadFeatured() {
+  const list = $('featured-list');
+  list.innerHTML = '<p class="empty">Loading…</p>';
+  try {
+    const rows = await api('/api/v1/admin/featured-stories');
+    if (!rows || rows.length === 0) {
+      list.innerHTML = '<p class="empty">Nobody featured yet.</p>';
+      return;
+    }
+    list.innerHTML = '';
+    rows.forEach((s) => list.appendChild(featuredRow(s)));
+  } catch (e) {
+    list.innerHTML = `<p class="error">${e.message}</p>`;
+  }
+}
+
+function featuredRow(story) {
+  const row = document.createElement('div');
+  row.className = 'row';
+
+  row.appendChild(avatarImg(story.profileImage));
+
+  const info = document.createElement('div');
+  info.className = 'info';
+  const name = document.createElement('div');
+  name.className = 'name';
+  name.textContent = story.name || 'Unnamed';
+  const meta = document.createElement('div');
+  meta.className = 'meta';
+  meta.textContent = [story.displayId, `order ${story.sortOrder}`, story.note].filter(Boolean).join(' · ');
+  info.appendChild(name);
+  info.appendChild(meta);
+  row.appendChild(info);
+
+  const btn = document.createElement('button');
+  btn.className = 'ghost danger';
+  btn.textContent = 'Remove';
+  btn.addEventListener('click', async () => {
+    if (!confirm(`Remove ${story.name || 'this profile'} from Top Stories?`)) return;
+    btn.disabled = true;
+    try {
+      await api(`/api/v1/admin/featured-stories/${story.id}`, { method: 'DELETE' });
+      row.remove();
+      showToast('Removed from Top Stories');
+      const list = $('featured-list');
+      if (!list.querySelector('.row')) list.innerHTML = '<p class="empty">Nobody featured yet.</p>';
+    } catch (e) {
+      showToast(e.message || 'Could not remove');
+      btn.disabled = false;
+    }
+  });
+  row.appendChild(btn);
+
+  return row;
+}
+
+$('feature-add-btn').addEventListener('click', async () => {
+  const errorEl = $('feature-error');
+  errorEl.classList.add('hidden');
+
+  const profileId = parseProfileId($('feature-id').value);
+  if (!profileId) {
+    errorEl.textContent = 'Enter a profile ID, e.g. GSJM00234.';
+    errorEl.classList.remove('hidden');
+    return;
+  }
+
+  const orderRaw = $('feature-order').value.trim();
+  const sortOrder = orderRaw ? Number(orderRaw) : undefined;
+  const note = $('feature-note').value.trim() || undefined;
+
+  $('feature-add-btn').disabled = true;
+  try {
+    await api('/api/v1/admin/featured-stories', {
+      method: 'POST',
+      body: JSON.stringify({ profileId, sortOrder, note }),
+    });
+    $('feature-id').value = '';
+    $('feature-order').value = '';
+    $('feature-note').value = '';
+    showToast('Added to Top Stories');
+    loadFeatured();
+  } catch (e) {
+    errorEl.textContent = e.message || 'Could not add that profile.';
+    errorEl.classList.remove('hidden');
+  } finally {
+    $('feature-add-btn').disabled = false;
+  }
+});
+
+// ---------------------------------------------------------------------------
+// Boot
+// ---------------------------------------------------------------------------
+
+if (token()) showApp();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,18 @@
+# Cloudflare Tunnel config for local development.
+#
+# Routes api.gahoimarriage.in traffic to the Spring Boot server running on
+# this machine (application-local.properties, port 8080). See LOCAL_DEV.md
+# for the one-time setup this file depends on.
+#
+# tunnel/credentials-file get filled in by `cloudflared tunnel create` -
+# see step 2 in LOCAL_DEV.md. Placeholders below on purpose: a tunnel ID is
+# per-machine and per-login, so committing a real one would just be dead
+# weight for anyone else who clones this repo.
+
+tunnel: REPLACE_WITH_TUNNEL_ID
+credentials-file: REPLACE_WITH_PATH_TO_CREDENTIALS_JSON
+
+ingress:
+  - hostname: api.gahoimarriage.in
+    service: http://localhost:8080
+  - service: http_status:404

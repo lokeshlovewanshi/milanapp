@@ -1,0 +1,85 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.4.0'
+	id 'io.spring.dependency-management' version '1.1.6'
+}
+
+group = 'com.match'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+	maven {
+		url 'https://maven.google.com'
+	}
+}
+
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-cache'
+	implementation 'com.github.ben-manes.caffeine:caffeine:3.1.8'
+	// Serves /actuator/health, which the deployment scripts and any uptime
+	// monitor poll to decide whether the app came back up after a restart.
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	compileOnly 'org.projectlombok:lombok'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	runtimeOnly 'com.mysql:mysql-connector-j'
+	// Back, now that there is real sending code behind it (OTP for address
+	// verification and password reset).
+	//
+	// It was removed once because it registers a health indicator that opens an
+	// SMTP connection on every /actuator/health call, and with no valid
+	// credentials that reported DOWN and failed the deploy's health gate for an
+	// app that was working perfectly. That has not stopped being true, so
+	// management.health.mail.enabled=false is set in application.properties and
+	// must stay set. Whether mail works is not a question about whether the API
+	// is alive.
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+	testImplementation 'org.springframework.security:spring-security-test'
+	implementation group: 'com.google.api-client', name: 'google-api-client', version: '2.7.1'
+	implementation 'software.amazon.awssdk:s3:2.20.13'
+	// Invokes the kundali function. The app never calls Lambda directly - its
+	// inputs are exact birth date, time and place, which is about as identifying
+	// as personal data gets, so it stays behind an authenticated endpoint.
+	implementation 'software.amazon.awssdk:lambda:2.20.13'
+	// Production config comes from Secrets Manager. Pinned to the same SDK
+	// version as s3 above - mixing AWS SDK versions pulls in two copies of the
+	// shared core and fails at runtime with NoSuchMethodError.
+	implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.8.4'
+
+	// Push notifications (FCM). Free at any volume; supports per-device
+	// multicast and topic broadcast for festival announcements.
+	implementation 'com.google.firebase:firebase-admin:9.10.0'
+
+	// Chat transport. Raw WebSocket, no STOMP broker - React Native has a
+	// WebSocket client built in, so this needs no extra client dependency.
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
+
+
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

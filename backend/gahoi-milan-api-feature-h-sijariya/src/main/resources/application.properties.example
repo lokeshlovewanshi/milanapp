@@ -1,0 +1,68 @@
+# ---------------------------------------------------------------------------
+# Template for src/main/resources/application.properties
+#
+# The real file is gitignored, because it holds live credentials. Copy this to
+# application.properties and fill in the blanks, or set the environment
+# variables below and leave the placeholders alone - the ${VAR:default} syntax
+# takes the env var when present and the default otherwise.
+#
+#   cp application.properties.example application.properties
+#
+# Never commit the filled-in copy.
+# ---------------------------------------------------------------------------
+
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.datasource.url=${DB_URL:jdbc:mysql://localhost:3306/marriage_portal}
+spring.datasource.username=${DB_USERNAME:}
+spring.datasource.password=${DB_PASSWORD:}
+
+# Gmail requires an App Password, not your account password.
+# https://myaccount.google.com/apppasswords
+spring.mail.host=smtp.gmail.com
+spring.mail.port=587
+spring.mail.username=${MAIL_USERNAME:}
+spring.mail.password=${MAIL_PASSWORD:}
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true
+spring.mail.properties.mail.smtp.starttls.required=true
+
+# JWT. Must be at least 32 characters. Generate one with:
+#   openssl rand -base64 48
+security.jwt.secret-key=${JWT_SECRET:}
+security.jwt.expiration-time=86400000
+
+# AWS S3, for profile photos. Prefer an IAM role in production and leave these
+# blank - the SDK picks up instance credentials automatically.
+aws.access.key.id=${AWS_ACCESS_KEY_ID:}
+aws.secret.access.key=${AWS_SECRET_ACCESS_KEY:}
+aws.region=${AWS_REGION:ap-south-1}
+aws.s3.bucket.name=${AWS_S3_BUCKET:lovewanshi-milan-photos}
+
+# Every Google OAuth client ID allowed to sign in, comma-separated. An ID
+# token's "aud" claim must match one of these, or a token minted for a
+# different app would be accepted. Include both the Web and Android IDs.
+# These are public identifiers that ship inside the APK, not secrets.
+google.oauth.client-ids=${GOOGLE_OAUTH_CLIENT_IDS:}
+spring.security.oauth2.client.registration.google.client-id=dummyClientId
+spring.security.oauth2.client.registration.google.redirect-uri=http://localhost:8080/api/v1/auth/grantcode
+
+# Push notifications (Firebase Cloud Messaging).
+#
+# Absolute path to the Firebase service-account JSON. Leave blank to run
+# without push: notifications are still written to the database and appear in
+# the app's bell, only delivery is skipped. That keeps local development
+# working with no Firebase project.
+#
+# Firebase console -> Project settings -> Service accounts -> Generate new
+# private key. Keep the JSON out of git.
+firebase.service-account-path=${FIREBASE_SERVICE_ACCOUNT_PATH:}
+firebase.enabled=${FIREBASE_ENABLED:false}
+
+# Welcome email Lambda dispatch
+welcome-email.function-name=${WELCOME_EMAIL_FUNCTION_NAME:lovewanshi-milan-welcome-email}
+welcome-email.enabled=${WELCOME_EMAIL_ENABLED:true}
+
+# Shared secret for POST /api/v1/notifications/broadcast, sent as the
+# X-Admin-Secret header. Broadcast reaches every user at once, so it must not
+# be callable with an ordinary user's JWT. Blank disables the endpoint.
+notifications.admin-secret=${NOTIFICATIONS_ADMIN_SECRET:}

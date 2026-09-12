@@ -1,0 +1,31 @@
+# Copy to terraform.tfvars and fill in. That file is gitignored.
+#
+# db_password is NOT here on purpose - pass it through the environment so it
+# never lands in a file at all:
+#
+#   export TF_VAR_db_password='...'
+#   terraform apply
+
+key_pair_name    = "gahoi-milan"
+ssh_allowed_cidr = "YOUR.IP.HERE/32"   # curl -s https://checkip.amazonaws.com
+
+api_domain  = "api.gahoimarriage.in"
+region      = "ap-south-1"
+project     = "gahoi-milan"
+environment = "prod"
+
+# db.t3.micro is the only free-tier-eligible database size.
+db_instance_class = "db.t3.micro"
+
+# t3.small (2 GB) is NOT free-tier eligible - the free tier covers t3.micro
+# only. Set "t3.micro" to stay inside the free allowance, at the cost of a
+# tighter JVM heap.
+instance_type = "t3.small"
+
+
+s3_photo_bucket   = "gahoi-milan-photos"
+github_repository = "harshsijariya/milanapp"
+github_branch     = "main"
+
+# Set false if this AWS account already has a GitHub OIDC provider.
+create_github_oidc_provider = true
