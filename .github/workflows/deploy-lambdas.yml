@@ -1,12 +1,12 @@
 name: Deploy Lambdas
 
 # Triggers:
-#   - push to `develop` branch  → deploys to dev environment
+#   - push to `dev` branch      → deploys to dev environment
 #   - push to `main` branch     → deploys to prd environment
 #   - workflow_dispatch         → choose environment manually
 on:
   push:
-    branches: [dev, prd]
+    branches: [main, dev]
     paths:
       - "lambdas/**"
       - ".github/workflows/deploy-lambdas.yml"
@@ -40,7 +40,7 @@ jobs:
     environment: >-
       ${{
         github.event_name == 'workflow_dispatch' && github.event.inputs.environment ||
-        github.ref == 'refs/heads/develop' && 'dev' ||
+        github.ref == 'refs/heads/dev' && 'dev' ||
         'prd'
       }}
 
