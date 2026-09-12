@@ -198,19 +198,30 @@ jobs:
             --zip-file fileb://function.zip \
             --publish >/dev/null
 
-          # Code and configuration are separate calls, and the second fails
-          # with ResourceConflictException if the first is still settling.
+          # Code and configuration are separate calls; wait for code to settle first.
           aws lambda wait function-updated --function-name "$FN"
 
-          # Update layer and runtime configuration
-          if [ -n "${{ steps.names.outputs.layer }}" ]; then
-            aws lambda update-function-configuration \
-              --function-name "$FN" \
-              --runtime "${{ matrix.runtime }}" \
-              --layers "${{ steps.publish.outputs.arn }}" >/dev/null
+      - name: Attach the layer
+        if: steps.names.outputs.layer != ''
+        run: |
+          set -euo pipefail
+          FN="${{ steps.names.outputs.function }}"
+          LAYER_ARN="${{ steps.publish.outputs.arn }}"
 
-            aws lambda wait function-updated --function-name "$FN"
+          echo "Attaching layer: $LAYER_ARN to $FN"
+
+          if [ -z "$LAYER_ARN" ]; then
+            echo "::error::Layer ARN is empty - layer publish may have failed"
+            exit 1
           fi
+
+          aws lambda update-function-configuration \
+            --function-name "$FN" \
+            --runtime "${{ matrix.runtime }}" \
+            --layers "$LAYER_ARN"
+
+          aws lambda wait function-updated --function-name "$FN"
+          echo "Layer attached successfully"
 
       - name: Smoke test kundali
         if: matrix.name == 'kundali'
