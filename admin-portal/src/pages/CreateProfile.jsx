@@ -1,4 +1,4 @@
-﻿import React, { useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { api } from "../api";
 import {
@@ -64,7 +64,6 @@ export default function CreateProfile() {
 
   // Religion & Astrology
   const [gotra, setGotra] = useState("Katheriya");
-  const [aakna, setAakna] = useState("");
   const [manglik, setManglik] = useState("NO");
   const [timeOfBirth, setTimeOfBirth] = useState("");
   const [placeOfBirth, setPlaceOfBirth] = useState("");
@@ -81,7 +80,7 @@ export default function CreateProfile() {
   const [marriedSisters, setMarriedSisters] = useState("");
   const [unmarriedSisters, setUnmarriedSisters] = useState("");
   const [maternalUnclesName, setMaternalUnclesName] = useState("");
-  const [maternalUnclesAakna, setMaternalUnclesAakna] = useState("");
+  const [maternalUnclesGotra, setMaternalUnclesGotra] = useState("");
 
   // Education & Career
   const [education, setEducation] = useState("BE_BTECH");
@@ -164,7 +163,6 @@ export default function CreateProfile() {
       whatsappNo: whatsappNo.trim() || null,
       fathersContactNo: fathersContactNo.trim() || null,
       gotra,
-      aakna: aakna.trim() || null,
       manglik,
       timeOfBirth: timeOfBirth.trim() || null,
       placeOfBirth: placeOfBirth.trim() || null,
@@ -179,7 +177,7 @@ export default function CreateProfile() {
       marriedSisters: marriedSisters ? Number(marriedSisters) : null,
       unmarriedSisters: unmarriedSisters ? Number(unmarriedSisters) : null,
       maternalUnclesName: maternalUnclesName.trim() || null,
-      maternalUnclesAakna: maternalUnclesAakna.trim() || null,
+      maternalUnclesGotra: maternalUnclesGotra.trim() || null,
       education,
       educationDetails: educationDetails.trim() || null,
       profession,
@@ -226,20 +224,39 @@ export default function CreateProfile() {
       </div>
 
       <div className="card" style={{ padding: "2rem" }}>
-        <div style={{ borderBottom: "1px solid #E5E7EB", paddingBottom: "1rem", marginBottom: "1.5rem" }}>
-          <h1 style={{ margin: "0 0 0.4rem 0" }}>➕ Create Profile on Behalf of User</h1>
+        <div
+          style={{
+            borderBottom: "1px solid #E5E7EB",
+            paddingBottom: "1rem",
+            marginBottom: "1.5rem",
+          }}
+        >
+          <h1 style={{ margin: "0 0 0.4rem 0" }}>
+            ➕ Create Profile on Behalf of User
+          </h1>
           <p className="muted" style={{ margin: 0 }}>
-            Create and verify a new matrimonial candidate profile. All dropdown values are standardized with the member portal.
+            Create and verify a new matrimonial candidate profile. All dropdown
+            values are standardized with the member portal.
           </p>
         </div>
 
-        {error && <div className="error-banner" style={{ marginBottom: "1.5rem" }}>{error}</div>}
+        {error && (
+          <div className="error-banner" style={{ marginBottom: "1.5rem" }}>
+            {error}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit}>
           {/* Section 1: Account / Credentials */}
           <fieldset className="edit-section" style={{ marginBottom: "1.5rem" }}>
             <legend>1. Account &amp; Identity</legend>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: "1rem",
+              }}
+            >
               <label>
                 Full Name <span style={{ color: "#DC2626" }}>*</span>
                 <input
@@ -284,9 +301,14 @@ export default function CreateProfile() {
 
               <label>
                 Profile Created By
-                <select value={profileCreatedBy} onChange={(e) => setProfileCreatedBy(e.target.value)}>
+                <select
+                  value={profileCreatedBy}
+                  onChange={(e) => setProfileCreatedBy(e.target.value)}
+                >
                   {list("profile_created_by").map((opt) => (
-                    <option key={opt.code} value={opt.code}>{opt.label}</option>
+                    <option key={opt.code} value={opt.code}>
+                      {opt.label}
+                    </option>
                   ))}
                 </select>
               </label>
@@ -297,7 +319,8 @@ export default function CreateProfile() {
           <fieldset className="edit-section" style={{ marginBottom: "1.5rem" }}>
             <legend>2. Candidate Photos</legend>
             <p className="muted small" style={{ margin: "0 0 0.75rem 0" }}>
-              Select one or multiple photos. The first photo will be automatically set as the primary profile photo.
+              Select one or multiple photos. The first photo will be
+              automatically set as the primary profile photo.
             </p>
 
             <input
@@ -309,13 +332,26 @@ export default function CreateProfile() {
             />
 
             {photoPreviews.length > 0 && (
-              <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap", marginTop: "0.5rem" }}>
+              <div
+                style={{
+                  display: "flex",
+                  gap: "0.75rem",
+                  flexWrap: "wrap",
+                  marginTop: "0.5rem",
+                }}
+              >
                 {photoPreviews.map((src, i) => (
                   <div key={i} style={{ position: "relative" }}>
                     <img
                       src={src}
                       alt=""
-                      style={{ width: "90px", height: "90px", objectFit: "cover", borderRadius: "8px", border: "1px solid #D1D5DB" }}
+                      style={{
+                        width: "90px",
+                        height: "90px",
+                        objectFit: "cover",
+                        borderRadius: "8px",
+                        border: "1px solid #D1D5DB",
+                      }}
                     />
                     {i === 0 && (
                       <span
@@ -365,49 +401,84 @@ export default function CreateProfile() {
           {/* Section 3: Personal Details */}
           <fieldset className="edit-section" style={{ marginBottom: "1.5rem" }}>
             <legend>3. Personal Details</legend>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: "1rem",
+              }}
+            >
               <label>
                 Gender <span style={{ color: "#DC2626" }}>*</span>
-                <select value={gender} onChange={(e) => setGender(e.target.value)}>
+                <select
+                  value={gender}
+                  onChange={(e) => setGender(e.target.value)}
+                >
                   {list("gender").map((opt) => (
-                    <option key={opt.code} value={opt.code}>{opt.label}</option>
+                    <option key={opt.code} value={opt.code}>
+                      {opt.label}
+                    </option>
                   ))}
                 </select>
               </label>
 
               <label>
                 Marital Status <span style={{ color: "#DC2626" }}>*</span>
-                <select value={maritalStatus} onChange={(e) => setMaritalStatus(e.target.value)}>
+                <select
+                  value={maritalStatus}
+                  onChange={(e) => setMaritalStatus(e.target.value)}
+                >
                   {list("marital_status").map((opt) => (
-                    <option key={opt.code} value={opt.code}>{opt.label}</option>
+                    <option key={opt.code} value={opt.code}>
+                      {opt.label}
+                    </option>
                   ))}
                 </select>
               </label>
 
               <label>
                 Date of Birth
-                <input type="date" value={dateOfBirth} onChange={(e) => setDateOfBirth(e.target.value)} />
+                <input
+                  type="date"
+                  value={dateOfBirth}
+                  onChange={(e) => setDateOfBirth(e.target.value)}
+                />
               </label>
 
               <label>
                 Height (Decoded)
-                <select value={height} onChange={(e) => setHeight(e.target.value)}>
+                <select
+                  value={height}
+                  onChange={(e) => setHeight(e.target.value)}
+                >
                   {list("height").map((opt) => (
-                    <option key={opt.code} value={opt.code}>{opt.label}</option>
+                    <option key={opt.code} value={opt.code}>
+                      {opt.label}
+                    </option>
                   ))}
                 </select>
               </label>
 
               <label>
                 Weight (kg)
-                <input type="number" placeholder="e.g. 65" value={weight} onChange={(e) => setWeight(e.target.value)} />
+                <input
+                  type="number"
+                  placeholder="e.g. 65"
+                  value={weight}
+                  onChange={(e) => setWeight(e.target.value)}
+                />
               </label>
 
               <label>
                 Complexion
-                <select value={complexion} onChange={(e) => setComplexion(e.target.value)}>
+                <select
+                  value={complexion}
+                  onChange={(e) => setComplexion(e.target.value)}
+                >
                   {list("complexion").map((opt) => (
-                    <option key={opt.code} value={opt.code}>{opt.label}</option>
+                    <option key={opt.code} value={opt.code}>
+                      {opt.label}
+                    </option>
                   ))}
                 </select>
               </label>
@@ -416,35 +487,52 @@ export default function CreateProfile() {
                 Diet
                 <select value={diet} onChange={(e) => setDiet(e.target.value)}>
                   {list("diet").map((opt) => (
-                    <option key={opt.code} value={opt.code}>{opt.label}</option>
+                    <option key={opt.code} value={opt.code}>
+                      {opt.label}
+                    </option>
                   ))}
                 </select>
               </label>
 
               <label>
                 Blood Group
-                <select value={bloodGroup} onChange={(e) => setBloodGroup(e.target.value)}>
+                <select
+                  value={bloodGroup}
+                  onChange={(e) => setBloodGroup(e.target.value)}
+                >
                   <option value="">-- Select Blood Group --</option>
                   {list("blood_group").map((opt) => (
-                    <option key={opt.code} value={opt.code}>{opt.label}</option>
+                    <option key={opt.code} value={opt.code}>
+                      {opt.label}
+                    </option>
                   ))}
                 </select>
               </label>
 
               <label>
                 Mother Tongue
-                <select value={motherTongue} onChange={(e) => setMotherTongue(e.target.value)}>
+                <select
+                  value={motherTongue}
+                  onChange={(e) => setMotherTongue(e.target.value)}
+                >
                   {list("mother_tongue").map((opt) => (
-                    <option key={opt.code} value={opt.code}>{opt.label}</option>
+                    <option key={opt.code} value={opt.code}>
+                      {opt.label}
+                    </option>
                   ))}
                 </select>
               </label>
 
               <label>
                 Disability / Special Needs
-                <select value={disability} onChange={(e) => setDisability(e.target.value)}>
+                <select
+                  value={disability}
+                  onChange={(e) => setDisability(e.target.value)}
+                >
                   {list("disability").map((opt) => (
-                    <option key={opt.code} value={opt.code}>{opt.label}</option>
+                    <option key={opt.code} value={opt.code}>
+                      {opt.label}
+                    </option>
                   ))}
                 </select>
               </label>
@@ -454,51 +542,96 @@ export default function CreateProfile() {
           {/* Section 4: Location & Contact */}
           <fieldset className="edit-section" style={{ marginBottom: "1.5rem" }}>
             <legend>4. Location &amp; Contact</legend>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: "1rem",
+              }}
+            >
               <label>
                 State
-                <select value={state} onChange={(e) => setState(e.target.value)}>
+                <select
+                  value={state}
+                  onChange={(e) => setState(e.target.value)}
+                >
                   {states.map((opt) => {
                     const code = opt.code || opt.name;
                     const label = opt.label || opt.name;
-                    return <option key={code} value={code}>{label}</option>;
+                    return (
+                      <option key={code} value={code}>
+                        {label}
+                      </option>
+                    );
                   })}
                 </select>
               </label>
 
               <label>
                 City
-                <input type="text" placeholder="e.g. Jhansi" value={city} onChange={(e) => setCity(e.target.value)} />
+                <input
+                  type="text"
+                  placeholder="e.g. Jhansi"
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                />
               </label>
 
               <label>
                 Town / Native Place (मूल निवास)
-                <input type="text" placeholder="e.g. Mauranipur" value={town} onChange={(e) => setTown(e.target.value)} />
+                <input
+                  type="text"
+                  placeholder="e.g. Mauranipur"
+                  value={town}
+                  onChange={(e) => setTown(e.target.value)}
+                />
               </label>
 
               <label>
                 Country
-                <input type="text" value={country} onChange={(e) => setCountry(e.target.value)} />
+                <input
+                  type="text"
+                  value={country}
+                  onChange={(e) => setCountry(e.target.value)}
+                />
               </label>
 
               <label>
                 WhatsApp Number
-                <input type="tel" placeholder="WhatsApp No" value={whatsappNo} onChange={(e) => setWhatsappNo(e.target.value)} />
+                <input
+                  type="tel"
+                  placeholder="WhatsApp No"
+                  value={whatsappNo}
+                  onChange={(e) => setWhatsappNo(e.target.value)}
+                />
               </label>
 
               <label>
                 Father's / Guardian Contact No
-                <input type="tel" placeholder="Father's Contact" value={fathersContactNo} onChange={(e) => setFathersContactNo(e.target.value)} />
+                <input
+                  type="tel"
+                  placeholder="Father's Contact"
+                  value={fathersContactNo}
+                  onChange={(e) => setFathersContactNo(e.target.value)}
+                />
               </label>
 
               <label style={{ gridColumn: "1 / -1" }}>
                 Present Address
-                <textarea rows={2} value={presentAddress} onChange={(e) => setPresentAddress(e.target.value)} />
+                <textarea
+                  rows={2}
+                  value={presentAddress}
+                  onChange={(e) => setPresentAddress(e.target.value)}
+                />
               </label>
 
               <label style={{ gridColumn: "1 / -1" }}>
                 Permanent Address
-                <textarea rows={2} value={permanentAddress} onChange={(e) => setPermanentAddress(e.target.value)} />
+                <textarea
+                  rows={2}
+                  value={permanentAddress}
+                  onChange={(e) => setPermanentAddress(e.target.value)}
+                />
               </label>
             </div>
           </fieldset>
@@ -506,58 +639,88 @@ export default function CreateProfile() {
           {/* Section 5: Religion & Astrology */}
           <fieldset className="edit-section" style={{ marginBottom: "1.5rem" }}>
             <legend>5. Religion &amp; Astrology</legend>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: "1rem",
+              }}
+            >
               <label>
                 Gotra
-                <select value={gotra} onChange={(e) => setGotra(e.target.value)}>
+                <select
+                  value={gotra}
+                  onChange={(e) => setGotra(e.target.value)}
+                >
                   {list("gotra").map((opt) => (
-                    <option key={opt.code} value={opt.code}>{opt.label}</option>
+                    <option key={opt.code} value={opt.code}>
+                      {opt.label}
+                    </option>
                   ))}
                 </select>
               </label>
 
               <label>
-                Aakna (आकना)
-                <input type="text" placeholder="Aakna" value={aakna} onChange={(e) => setAakna(e.target.value)} />
-              </label>
-
-              <label>
                 Manglik Status
-                <select value={manglik} onChange={(e) => setManglik(e.target.value)}>
+                <select
+                  value={manglik}
+                  onChange={(e) => setManglik(e.target.value)}
+                >
                   {list("manglik").map((opt) => (
-                    <option key={opt.code} value={opt.code}>{opt.label}</option>
+                    <option key={opt.code} value={opt.code}>
+                      {opt.label}
+                    </option>
                   ))}
                 </select>
               </label>
 
               <label>
                 Zodiac / Rashi (राशि)
-                <select value={zodiac} onChange={(e) => setZodiac(e.target.value)}>
+                <select
+                  value={zodiac}
+                  onChange={(e) => setZodiac(e.target.value)}
+                >
                   <option value="">-- Select Rashi --</option>
                   {list("rashi").map((opt) => (
-                    <option key={opt.code} value={opt.code}>{opt.label}</option>
+                    <option key={opt.code} value={opt.code}>
+                      {opt.label}
+                    </option>
                   ))}
                 </select>
               </label>
 
               <label>
                 Nakshatra (नक्षत्र)
-                <select value={nakshatra} onChange={(e) => setNakshatra(e.target.value)}>
+                <select
+                  value={nakshatra}
+                  onChange={(e) => setNakshatra(e.target.value)}
+                >
                   <option value="">-- Select Nakshatra --</option>
                   {list("nakshatra").map((opt) => (
-                    <option key={opt.code} value={opt.code}>{opt.label}</option>
+                    <option key={opt.code} value={opt.code}>
+                      {opt.label}
+                    </option>
                   ))}
                 </select>
               </label>
 
               <label>
                 Time of Birth
-                <input type="time" value={timeOfBirth} onChange={(e) => setTimeOfBirth(e.target.value)} />
+                <input
+                  type="time"
+                  value={timeOfBirth}
+                  onChange={(e) => setTimeOfBirth(e.target.value)}
+                />
               </label>
 
               <label>
                 Place of Birth (City)
-                <input type="text" placeholder="Birth City" value={placeOfBirth} onChange={(e) => setPlaceOfBirth(e.target.value)} />
+                <input
+                  type="text"
+                  placeholder="Birth City"
+                  value={placeOfBirth}
+                  onChange={(e) => setPlaceOfBirth(e.target.value)}
+                />
               </label>
             </div>
           </fieldset>
@@ -565,56 +728,97 @@ export default function CreateProfile() {
           {/* Section 6: Education & Career */}
           <fieldset className="edit-section" style={{ marginBottom: "1.5rem" }}>
             <legend>6. Education &amp; Career</legend>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: "1rem",
+              }}
+            >
               <label>
                 Highest Education
-                <select value={education} onChange={(e) => setEducation(e.target.value)}>
+                <select
+                  value={education}
+                  onChange={(e) => setEducation(e.target.value)}
+                >
                   {list("education").map((opt) => (
-                    <option key={opt.code} value={opt.code}>{opt.label}</option>
+                    <option key={opt.code} value={opt.code}>
+                      {opt.label}
+                    </option>
                   ))}
                 </select>
               </label>
 
               <label>
                 Education Details (College / Stream)
-                <input type="text" placeholder="e.g. B.Tech in CS" value={educationDetails} onChange={(e) => setEducationDetails(e.target.value)} />
+                <input
+                  type="text"
+                  placeholder="e.g. B.Tech in CS"
+                  value={educationDetails}
+                  onChange={(e) => setEducationDetails(e.target.value)}
+                />
               </label>
 
               <label>
                 Profession
-                <select value={profession} onChange={(e) => setProfession(e.target.value)}>
+                <select
+                  value={profession}
+                  onChange={(e) => setProfession(e.target.value)}
+                >
                   {list("profession").map((opt) => (
-                    <option key={opt.code} value={opt.code}>{opt.label}</option>
+                    <option key={opt.code} value={opt.code}>
+                      {opt.label}
+                    </option>
                   ))}
                 </select>
               </label>
 
               <label>
                 Employed In
-                <select value={employedIn} onChange={(e) => setEmployedIn(e.target.value)}>
+                <select
+                  value={employedIn}
+                  onChange={(e) => setEmployedIn(e.target.value)}
+                >
                   {list("employed_in").map((opt) => (
-                    <option key={opt.code} value={opt.code}>{opt.label}</option>
+                    <option key={opt.code} value={opt.code}>
+                      {opt.label}
+                    </option>
                   ))}
                 </select>
               </label>
 
               <label>
                 Organization / Company
-                <input type="text" placeholder="e.g. TCS" value={organization} onChange={(e) => setOrganization(e.target.value)} />
+                <input
+                  type="text"
+                  placeholder="e.g. TCS"
+                  value={organization}
+                  onChange={(e) => setOrganization(e.target.value)}
+                />
               </label>
 
               <label>
                 Annual Income
-                <select value={annualIncome} onChange={(e) => setAnnualIncome(e.target.value)}>
+                <select
+                  value={annualIncome}
+                  onChange={(e) => setAnnualIncome(e.target.value)}
+                >
                   {list("annual_income").map((opt) => (
-                    <option key={opt.code} value={opt.code}>{opt.label}</option>
+                    <option key={opt.code} value={opt.code}>
+                      {opt.label}
+                    </option>
                   ))}
                 </select>
               </label>
 
               <label>
                 Work Location / City
-                <input type="text" placeholder="e.g. Bengaluru" value={workCity} onChange={(e) => setWorkCity(e.target.value)} />
+                <input
+                  type="text"
+                  placeholder="e.g. Bengaluru"
+                  value={workCity}
+                  onChange={(e) => setWorkCity(e.target.value)}
+                />
               </label>
             </div>
           </fieldset>
@@ -622,81 +826,143 @@ export default function CreateProfile() {
           {/* Section 7: Family Details & Assets */}
           <fieldset className="edit-section" style={{ marginBottom: "1.5rem" }}>
             <legend>7. Family &amp; Assets</legend>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: "1rem",
+              }}
+            >
               <label>
                 Father's Name
-                <input type="text" value={fathersName} onChange={(e) => setFathersName(e.target.value)} />
+                <input
+                  type="text"
+                  value={fathersName}
+                  onChange={(e) => setFathersName(e.target.value)}
+                />
               </label>
 
               <label>
                 Father's Occupation
-                <select value={fathersOccupation} onChange={(e) => setFathersOccupation(e.target.value)}>
+                <select
+                  value={fathersOccupation}
+                  onChange={(e) => setFathersOccupation(e.target.value)}
+                >
                   <option value="">-- Select Father's Occupation --</option>
                   {list("profession").map((opt) => (
-                    <option key={opt.code} value={opt.code}>{opt.label}</option>
+                    <option key={opt.code} value={opt.code}>
+                      {opt.label}
+                    </option>
                   ))}
                 </select>
               </label>
 
               <label>
                 Mother's Name
-                <input type="text" value={mothersName} onChange={(e) => setMothersName(e.target.value)} />
+                <input
+                  type="text"
+                  value={mothersName}
+                  onChange={(e) => setMothersName(e.target.value)}
+                />
               </label>
 
               <label>
                 Mother's Occupation
-                <select value={mothersOccupation} onChange={(e) => setMothersOccupation(e.target.value)}>
+                <select
+                  value={mothersOccupation}
+                  onChange={(e) => setMothersOccupation(e.target.value)}
+                >
                   <option value="">-- Select Mother's Occupation --</option>
                   {list("profession").map((opt) => (
-                    <option key={opt.code} value={opt.code}>{opt.label}</option>
+                    <option key={opt.code} value={opt.code}>
+                      {opt.label}
+                    </option>
                   ))}
                 </select>
               </label>
 
               <label>
                 Married Brothers
-                <input type="number" min="0" value={marriedBrothers} onChange={(e) => setMarriedBrothers(e.target.value)} />
+                <input
+                  type="number"
+                  min="0"
+                  value={marriedBrothers}
+                  onChange={(e) => setMarriedBrothers(e.target.value)}
+                />
               </label>
 
               <label>
                 Unmarried Brothers
-                <input type="number" min="0" value={unmarriedBrothers} onChange={(e) => setUnmarriedBrothers(e.target.value)} />
+                <input
+                  type="number"
+                  min="0"
+                  value={unmarriedBrothers}
+                  onChange={(e) => setUnmarriedBrothers(e.target.value)}
+                />
               </label>
 
               <label>
                 Married Sisters
-                <input type="number" min="0" value={marriedSisters} onChange={(e) => setMarriedSisters(e.target.value)} />
+                <input
+                  type="number"
+                  min="0"
+                  value={marriedSisters}
+                  onChange={(e) => setMarriedSisters(e.target.value)}
+                />
               </label>
 
               <label>
                 Unmarried Sisters
-                <input type="number" min="0" value={unmarriedSisters} onChange={(e) => setUnmarriedSisters(e.target.value)} />
+                <input
+                  type="number"
+                  min="0"
+                  value={unmarriedSisters}
+                  onChange={(e) => setUnmarriedSisters(e.target.value)}
+                />
               </label>
 
               <label>
                 Maternal Uncle's Name (मामाजी)
-                <input type="text" value={maternalUnclesName} onChange={(e) => setMaternalUnclesName(e.target.value)} />
+                <input
+                  type="text"
+                  value={maternalUnclesName}
+                  onChange={(e) => setMaternalUnclesName(e.target.value)}
+                />
               </label>
 
               <label>
-                Uncle's Aakna
-                <input type="text" value={maternalUnclesAakna} onChange={(e) => setMaternalUnclesAakna(e.target.value)} />
+                Uncle's Gotra
+                <input
+                  type="text"
+                  value={maternalUnclesGotra}
+                  onChange={(e) => setMaternalUnclesGotra(e.target.value)}
+                />
               </label>
 
               <label>
                 House Status
-                <select value={houseStatus} onChange={(e) => setHouseStatus(e.target.value)}>
+                <select
+                  value={houseStatus}
+                  onChange={(e) => setHouseStatus(e.target.value)}
+                >
                   {list("house_status").map((opt) => (
-                    <option key={opt.code} value={opt.code}>{opt.label}</option>
+                    <option key={opt.code} value={opt.code}>
+                      {opt.label}
+                    </option>
                   ))}
                 </select>
               </label>
 
               <label>
                 Car Status
-                <select value={carStatus} onChange={(e) => setCarStatus(e.target.value)}>
+                <select
+                  value={carStatus}
+                  onChange={(e) => setCarStatus(e.target.value)}
+                >
                   {list("car_status").map((opt) => (
-                    <option key={opt.code} value={opt.code}>{opt.label}</option>
+                    <option key={opt.code} value={opt.code}>
+                      {opt.label}
+                    </option>
                   ))}
                 </select>
               </label>
@@ -706,7 +972,9 @@ export default function CreateProfile() {
           {/* Section 8: About & Expectations */}
           <fieldset className="edit-section" style={{ marginBottom: "2rem" }}>
             <legend>8. About &amp; Expectations</legend>
-            <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
+            >
               <label>
                 About Myself
                 <textarea
@@ -729,7 +997,9 @@ export default function CreateProfile() {
             </div>
           </fieldset>
 
-          <div style={{ display: "flex", gap: "1rem", justifyContent: "flex-end" }}>
+          <div
+            style={{ display: "flex", gap: "1rem", justifyContent: "flex-end" }}
+          >
             <Link to="/queue">
               <button type="button" className="secondary" disabled={loading}>
                 Cancel
@@ -741,7 +1011,9 @@ export default function CreateProfile() {
               disabled={loading || !name.trim() || !mobileNo.trim()}
               style={{ padding: "0.75rem 2rem", fontSize: "1rem" }}
             >
-              {loading ? "Creating Profile & Uploading Photos..." : "🚀 Create Profile Now"}
+              {loading
+                ? "Creating Profile & Uploading Photos..."
+                : "🚀 Create Profile Now"}
             </button>
           </div>
         </form>

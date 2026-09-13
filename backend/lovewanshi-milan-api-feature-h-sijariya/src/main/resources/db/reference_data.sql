@@ -1,4 +1,4 @@
-﻿-- ===========================================================================
+-- ===========================================================================
 --  Reference data for profile fields.
 --
 --  Purpose: every dropdown in the app is currently a hardcoded array in
@@ -676,8 +676,7 @@ INSERT IGNORE INTO profile_completion_weight (field_name, weight, section) VALUE
   ('annualIncome',      5, 'EDUCATION'),
   ('employedIn',        3, 'EDUCATION'),
   ('organization',      2, 'EDUCATION'),
-  ('gotra',             4, 'RELIGION'),
-  ('aakna',             3, 'RELIGION'),
+  ('gotra',             7, 'RELIGION'),
   -- Must be the Java field name on UserProfile, not the lookup_option category.
   -- The dropdown is called 'rashi'; the entity field it writes to is 'zodiac'.
   ('zodiac',            2, 'RELIGION'),

@@ -181,8 +181,8 @@ public class UserProfileServiceImpl implements UserProfileServiceInterface {
         if (dto.getMaternalUnclesName() != null) {
             userProfile.setMaternalUnclesName(dto.getMaternalUnclesName());
         }
-        if (dto.getMaternalUnclesAakna() != null) {
-            userProfile.setMaternalUnclesAakna(dto.getMaternalUnclesAakna());
+        if (dto.getMaternalUnclesGotra() != null) {
+            userProfile.setMaternalUnclesGotra(dto.getMaternalUnclesGotra());
         }
         if (dto.getHouseStatus() != null) {
             userProfile.setHouseStatus(dto.getHouseStatus());
@@ -701,7 +701,7 @@ public class UserProfileServiceImpl implements UserProfileServiceInterface {
         if (dto.getMarriedSisters() != null) userProfile.setNoOfMarriedSisters(dto.getMarriedSisters());
         if (dto.getUnmarriedSisters() != null) userProfile.setNoOfUnmarriedSisters(dto.getUnmarriedSisters());
         if (dto.getMaternalUnclesName() != null) userProfile.setMaternalUnclesName(dto.getMaternalUnclesName());
-        if (dto.getMaternalUnclesAakna() != null) userProfile.setMaternalUnclesAakna(dto.getMaternalUnclesAakna());
+        if (dto.getMaternalUnclesGotra() != null) userProfile.setMaternalUnclesGotra(dto.getMaternalUnclesGotra());
         if (dto.getHouseStatus() != null) userProfile.setHouseStatus(dto.getHouseStatus());
         if (dto.getCarStatus() != null) userProfile.setCarStatus(dto.getCarStatus());
         if (dto.getPartnerPreferences() != null) userProfile.setPartnerPreferences(dto.getPartnerPreferences());

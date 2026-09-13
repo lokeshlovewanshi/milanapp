@@ -1,7 +1,18 @@
-﻿import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
-import { profileAPI, likeAPI, shortlistAPI, viewsAPI, isLoggedIn } from "../api";
-import { VerifiedBadge, HeartIcon, BookmarkIcon, Icon } from "../components/Icons";
+import {
+  profileAPI,
+  likeAPI,
+  shortlistAPI,
+  viewsAPI,
+  isLoggedIn,
+} from "../api";
+import {
+  VerifiedBadge,
+  HeartIcon,
+  BookmarkIcon,
+  Icon,
+} from "../components/Icons";
 import AvatarFallback from "../components/AvatarFallback";
 import KundaliMatchCard from "../components/KundaliMatchCard";
 import DetailCard from "../components/DetailCard";
@@ -29,7 +40,10 @@ function calculateAge(dob) {
 function formatProfileCode(id) {
   if (!id) return "";
   const raw = String(id);
-  const digits = raw.startsWith("JM") || raw.startsWith("GM") ? raw.slice(2) : raw.padStart(5, "0");
+  const digits =
+    raw.startsWith("JM") || raw.startsWith("GM")
+      ? raw.slice(2)
+      : raw.padStart(5, "0");
   return `GM${digits}`;
 }
 
@@ -88,9 +102,16 @@ export default function ProfileDetail() {
     } catch (err) {
       console.error("Failed to connect:", err);
       if (err?.message?.includes("already liked")) {
-        setProfile((prev) => ({ ...prev, isLiked: true, likeStatus: "PENDING" }));
+        setProfile((prev) => ({
+          ...prev,
+          isLiked: true,
+          likeStatus: "PENDING",
+        }));
       } else {
-        alert(err?.message || "Could not send connection request. Please try again.");
+        alert(
+          err?.message ||
+            "Could not send connection request. Please try again.",
+        );
       }
     } finally {
       setBusy(false);
@@ -139,13 +160,16 @@ export default function ProfileDetail() {
     if (!profile) return;
     const candidateName = profile.name || "Member";
     const heightFormatted = formatHeight(profile.height);
-    const primaryImg = photos[0] || profile.profileImage || profile.profileImageFull;
+    const primaryImg =
+      photos[0] || profile.profileImage || profile.profileImageFull;
 
     document.title = `${candidateName} (${code}) - Lovewanshi Parinay Matrimony`;
 
     const updateMeta = (prop, content) => {
       if (!content) return;
-      let el = document.querySelector(`meta[property="${prop}"]`) || document.querySelector(`meta[name="${prop}"]`);
+      let el =
+        document.querySelector(`meta[property="${prop}"]`) ||
+        document.querySelector(`meta[name="${prop}"]`);
       if (!el) {
         el = document.createElement("meta");
         if (prop.startsWith("og:")) el.setAttribute("property", prop);
@@ -155,8 +179,21 @@ export default function ProfileDetail() {
       el.setAttribute("content", content);
     };
 
-    updateMeta("og:title", `${candidateName} (${code})${age ? ` - ${age} Yrs` : ""}${heightFormatted ? `, ${heightFormatted}` : ""} | Lovewanshi Parinay`);
-    updateMeta("og:description", [profile.profession, profile.education, profile.city, profile.gotra ? `Gotra: ${profile.gotra}` : ""].filter(Boolean).join(" • "));
+    updateMeta(
+      "og:title",
+      `${candidateName} (${code})${age ? ` - ${age} Yrs` : ""}${heightFormatted ? `, ${heightFormatted}` : ""} | Lovewanshi Parinay`,
+    );
+    updateMeta(
+      "og:description",
+      [
+        profile.profession,
+        profile.education,
+        profile.city,
+        profile.gotra ? `Gotra: ${profile.gotra}` : "",
+      ]
+        .filter(Boolean)
+        .join(" • "),
+    );
     if (primaryImg) {
       updateMeta("og:image", primaryImg);
       updateMeta("og:image:secure_url", primaryImg);
@@ -169,20 +206,47 @@ export default function ProfileDetail() {
   if (loading) {
     return (
       <div style={{ textAlign: "center", padding: "5rem 1rem" }}>
-        <div style={{ width: 44, height: 44, border: "3px solid #F3E8EC", borderTopColor: "#8A1538", borderRadius: "50%", animation: "spin 0.8s linear infinite", margin: "0 auto 1rem" }} />
-        <p className="muted" style={{ fontWeight: 600 }}>Loading verified matrimonial biodata...</p>
+        <div
+          style={{
+            width: 44,
+            height: 44,
+            border: "3px solid #F3E8EC",
+            borderTopColor: "#8A1538",
+            borderRadius: "50%",
+            animation: "spin 0.8s linear infinite",
+            margin: "0 auto 1rem",
+          }}
+        />
+        <p className="muted" style={{ fontWeight: 600 }}>
+          Loading verified matrimonial biodata...
+        </p>
       </div>
     );
   }
 
   if (error || !profile) {
     return (
-      <div className="card" style={{ maxWidth: 540, margin: "4rem auto", textAlign: "center", padding: "3rem 2rem" }}>
+      <div
+        className="card"
+        style={{
+          maxWidth: 540,
+          margin: "4rem auto",
+          textAlign: "center",
+          padding: "3rem 2rem",
+        }}
+      >
         <Icon name="user" size={44} color="#9CA3AF" />
-        <h3 style={{ marginTop: "1rem", color: "var(--auth-maroon)" }}>{error || "Profile Unavailable"}</h3>
-        <p className="muted small">This profile may have been deactivated or is temporarily unavailable.</p>
+        <h3 style={{ marginTop: "1rem", color: "var(--auth-maroon)" }}>
+          {error || "Profile Unavailable"}
+        </h3>
+        <p className="muted small">
+          This profile may have been deactivated or is temporarily unavailable.
+        </p>
         <Link to="/browse">
-          <button className="secondary" style={{ marginTop: "1rem", borderRadius: "var(--radius-pill)" }}>
+          <button
+            className="secondary"
+            style={{ marginTop: "1rem", borderRadius: "var(--radius-pill)" }}
+          >
             &larr; Return to Matches
           </button>
         </Link>
@@ -219,11 +283,26 @@ export default function ProfileDetail() {
     <div className="biodata-detail-page">
       {/* Top Breadcrumb navigation */}
       <div className="biodata-breadcrumb-bar">
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "0.5rem", width: "100%" }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            flexWrap: "wrap",
+            gap: "0.5rem",
+            width: "100%",
+          }}
+        >
           <Link
             to="/browse"
             className="muted small"
-            style={{ display: "inline-flex", alignItems: "center", gap: "0.4rem", fontWeight: 600, color: "var(--auth-maroon)" }}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.4rem",
+              fontWeight: 600,
+              color: "var(--auth-maroon)",
+            }}
           >
             <Icon name="arrow-left" size={14} /> Back to Search & Matches
           </Link>
@@ -263,7 +342,12 @@ export default function ProfileDetail() {
                   }}
                 />
               ) : (
-                <AvatarFallback profile={profile} name={profile.name} size={360} glyphSize={90} />
+                <AvatarFallback
+                  profile={profile}
+                  name={profile.name}
+                  size={360}
+                  glyphSize={90}
+                />
               )}
 
               {/* Code & Verification Badge */}
@@ -312,7 +396,11 @@ export default function ProfileDetail() {
                     className={`biodata-thumb-item ${i === activePhotoIdx ? "active" : ""}`}
                     onClick={() => setActivePhotoIdx(i)}
                   >
-                    <img src={src} alt={`Thumbnail ${i + 1}`} crossOrigin="anonymous" />
+                    <img
+                      src={src}
+                      alt={`Thumbnail ${i + 1}`}
+                      crossOrigin="anonymous"
+                    />
                   </button>
                 ))}
               </div>
@@ -327,12 +415,19 @@ export default function ProfileDetail() {
                     <button
                       type="button"
                       className="btn-connect-primary"
-                      style={{ width: "100%", justifyContent: "center", padding: "0.85rem 1rem", fontSize: "0.95rem" }}
+                      style={{
+                        width: "100%",
+                        justifyContent: "center",
+                        padding: "0.85rem 1rem",
+                        fontSize: "0.95rem",
+                      }}
                       disabled={busy}
                       onClick={sendLike}
                     >
                       <HeartIcon size={18} />
-                      <span>{busy ? "Sending..." : "Send Proposal / Connect"}</span>
+                      <span>
+                        {busy ? "Sending..." : "Send Proposal / Connect"}
+                      </span>
                     </button>
                   )}
 
@@ -340,11 +435,17 @@ export default function ProfileDetail() {
                     <button
                       type="button"
                       className="secondary"
-                      style={{ width: "100%", justifyContent: "center", padding: "0.75rem 1rem" }}
+                      style={{
+                        width: "100%",
+                        justifyContent: "center",
+                        padding: "0.75rem 1rem",
+                      }}
                       disabled={busy}
                       onClick={withdrawLike}
                     >
-                      <span>{busy ? "Withdrawing..." : "Withdraw Proposal"}</span>
+                      <span>
+                        {busy ? "Withdrawing..." : "Withdraw Proposal"}
+                      </span>
                     </button>
                   )}
 
@@ -373,7 +474,11 @@ export default function ProfileDetail() {
                   <button
                     type="button"
                     className="secondary"
-                    style={{ width: "100%", justifyContent: "center", padding: "0.7rem 1rem" }}
+                    style={{
+                      width: "100%",
+                      justifyContent: "center",
+                      padding: "0.7rem 1rem",
+                    }}
                     disabled={busy}
                     onClick={toggleShortlist}
                   >
@@ -382,14 +487,21 @@ export default function ProfileDetail() {
                       size={18}
                       color={profile.isShortlisted ? "#ED4956" : "currentColor"}
                     />
-                    <span>{profile.isShortlisted ? "Shortlisted in your list" : "Add to Shortlist"}</span>
+                    <span>
+                      {profile.isShortlisted
+                        ? "Shortlisted in your list"
+                        : "Add to Shortlist"}
+                    </span>
                   </button>
                 </>
               )}
 
               {isMine && (
                 <Link to="/my-profile" style={{ width: "100%" }}>
-                  <button className="secondary" style={{ width: "100%", justifyContent: "center" }}>
+                  <button
+                    className="secondary"
+                    style={{ width: "100%", justifyContent: "center" }}
+                  >
                     <Icon name="pencil" size={16} />
                     <span>Edit Your Biodata</span>
                   </button>
@@ -417,7 +529,8 @@ export default function ProfileDetail() {
                   <div className="biodata-meta-item">
                     <Icon name="user" size={14} color="#8A1538" />
                     <span>
-                      Profile created by: <strong>{profile.profileCreatedBy}</strong>
+                      Profile created by:{" "}
+                      <strong>{profile.profileCreatedBy}</strong>
                     </span>
                   </div>
                 )}
@@ -458,13 +571,17 @@ export default function ProfileDetail() {
               {profile.gotra && (
                 <>
                   <span className="bullet-dot">•</span>
-                  <strong style={{ color: "var(--auth-maroon)" }}>{profile.gotra} Gotra</strong>
+                  <strong style={{ color: "var(--auth-maroon)" }}>
+                    {profile.gotra} Gotra
+                  </strong>
                 </>
               )}
               {(profile.city || profile.state) && (
                 <>
                   <span className="bullet-dot">•</span>
-                  <span>{[profile.city, profile.state].filter(Boolean).join(", ")}</span>
+                  <span>
+                    {[profile.city, profile.state].filter(Boolean).join(", ")}
+                  </span>
                 </>
               )}
             </div>
@@ -477,7 +594,9 @@ export default function ProfileDetail() {
                 </div>
                 <div className="matrix-pill-info">
                   <span className="matrix-pill-label">Gotra (गोत्र)</span>
-                  <span className="matrix-pill-val">{profile.gotra || "Not specified"}</span>
+                  <span className="matrix-pill-val">
+                    {profile.gotra || "Not specified"}
+                  </span>
                 </div>
               </div>
 
@@ -487,8 +606,18 @@ export default function ProfileDetail() {
                 </div>
                 <div className="matrix-pill-info">
                   <span className="matrix-pill-label">Age & DOB</span>
-                  <span className="matrix-pill-val" title={profile.dateOfBirth ? String(profile.dateOfBirth).slice(0, 10) : ""}>
-                    {age ? `${age} Yrs` : "Not specified"}{profile.dateOfBirth ? ` (${String(profile.dateOfBirth).slice(0, 4)})` : ""}
+                  <span
+                    className="matrix-pill-val"
+                    title={
+                      profile.dateOfBirth
+                        ? String(profile.dateOfBirth).slice(0, 10)
+                        : ""
+                    }
+                  >
+                    {age ? `${age} Yrs` : "Not specified"}
+                    {profile.dateOfBirth
+                      ? ` (${String(profile.dateOfBirth).slice(0, 4)})`
+                      : ""}
                   </span>
                 </div>
               </div>
@@ -499,7 +628,9 @@ export default function ProfileDetail() {
                 </div>
                 <div className="matrix-pill-info">
                   <span className="matrix-pill-label">Height</span>
-                  <span className="matrix-pill-val">{formatHeight(profile.height) || "Not specified"}</span>
+                  <span className="matrix-pill-val">
+                    {formatHeight(profile.height) || "Not specified"}
+                  </span>
                 </div>
               </div>
 
@@ -509,7 +640,9 @@ export default function ProfileDetail() {
                 </div>
                 <div className="matrix-pill-info">
                   <span className="matrix-pill-label">Education</span>
-                  <span className="matrix-pill-val">{formatEducation(profile.education) || "Graduate"}</span>
+                  <span className="matrix-pill-val">
+                    {formatEducation(profile.education) || "Graduate"}
+                  </span>
                 </div>
               </div>
 
@@ -519,7 +652,9 @@ export default function ProfileDetail() {
                 </div>
                 <div className="matrix-pill-info">
                   <span className="matrix-pill-label">Profession</span>
-                  <span className="matrix-pill-val">{formatProfession(profile.profession) || "Not specified"}</span>
+                  <span className="matrix-pill-val">
+                    {formatProfession(profile.profession) || "Not specified"}
+                  </span>
                 </div>
               </div>
 
@@ -529,7 +664,10 @@ export default function ProfileDetail() {
                 </div>
                 <div className="matrix-pill-info">
                   <span className="matrix-pill-label">Annual Income</span>
-                  <span className="matrix-pill-val">{formatAnnualIncome(profile.annualIncome) || "Not disclosed"}</span>
+                  <span className="matrix-pill-val">
+                    {formatAnnualIncome(profile.annualIncome) ||
+                      "Not disclosed"}
+                  </span>
                 </div>
               </div>
 
@@ -539,7 +677,9 @@ export default function ProfileDetail() {
                 </div>
                 <div className="matrix-pill-info">
                   <span className="matrix-pill-label">Manglik (मांगलिक)</span>
-                  <span className="matrix-pill-val">{formatManglik(profile.manglik) || "Not specified"}</span>
+                  <span className="matrix-pill-val">
+                    {formatManglik(profile.manglik) || "Not specified"}
+                  </span>
                 </div>
               </div>
 
@@ -549,7 +689,9 @@ export default function ProfileDetail() {
                 </div>
                 <div className="matrix-pill-info">
                   <span className="matrix-pill-label">Location</span>
-                  <span className="matrix-pill-val">{profile.city || profile.state || "India"}</span>
+                  <span className="matrix-pill-val">
+                    {profile.city || profile.state || "India"}
+                  </span>
                 </div>
               </div>
             </div>
@@ -563,11 +705,11 @@ export default function ProfileDetail() {
                   <Icon name="user" size={18} color="#8A1538" />
                   About {profile.name || "Member"}
                 </h3>
-                <span className="biodata-section-subtitle">In their own words</span>
+                <span className="biodata-section-subtitle">
+                  In their own words
+                </span>
               </div>
-              <div className="biodata-quote-box">
-                "{profile.aboutMyself}"
-              </div>
+              <div className="biodata-quote-box">"{profile.aboutMyself}"</div>
             </div>
           )}
 
@@ -578,17 +720,34 @@ export default function ProfileDetail() {
                 <Icon name="sparkles" size={18} color="#8A1538" />
                 Gotra & Astrology
               </h3>
-              <span className="biodata-section-subtitle">Astro and cultural lineage</span>
+              <span className="biodata-section-subtitle">
+                Astro and cultural lineage
+              </span>
             </div>
 
             <div className="biodata-attributes-grid">
               {renderAttr("sparkles", "Gotra (गोत्र)", profile.gotra)}
-              {renderAttr("sparkles", "Aakna (आकना)", profile.aakna)}
-              {renderAttr("sparkles", "Manglik (मांगलिक)", formatManglik(profile.manglik))}
+              {renderAttr(
+                "sparkles",
+                "Manglik (मांगलिक)",
+                formatManglik(profile.manglik),
+              )}
               {renderAttr("sparkles", "Zodiac / Rashi (राशि)", profile.zodiac)}
               {renderAttr("sparkles", "Nakshatra (नक्षत्र)", profile.nakshatra)}
-              {renderAttr("clock", "Time of Birth (जन्म समय)", profile.timeOfBirth)}
-              {renderAttr("location", "Birth City / Place of Birth (जन्म शहर)", profile.placeOfBirth || profile.birthCity || profile.cityOfBirth || profile.place_of_birth || "Not Specified")}
+              {renderAttr(
+                "clock",
+                "Time of Birth (जन्म समय)",
+                profile.timeOfBirth,
+              )}
+              {renderAttr(
+                "location",
+                "Birth City / Place of Birth (जन्म शहर)",
+                profile.placeOfBirth ||
+                  profile.birthCity ||
+                  profile.cityOfBirth ||
+                  profile.place_of_birth ||
+                  "Not Specified",
+              )}
             </div>
           </div>
 
@@ -599,17 +758,47 @@ export default function ProfileDetail() {
                 <Icon name="education" size={18} color="#8A1538" />
                 Education & Career
               </h3>
-              <span className="biodata-section-subtitle">Qualifications and occupation</span>
+              <span className="biodata-section-subtitle">
+                Qualifications and occupation
+              </span>
             </div>
 
             <div className="biodata-attributes-grid">
-              {renderAttr("education", "Highest Education", formatEducation(profile.education))}
-              {renderAttr("education", "Education Details (College / Stream)", profile.educationDetails)}
-              {renderAttr("profession", "Profession", formatProfession(profile.profession))}
-              {renderAttr("profession", "Occupation Details", profile.occupationDetails)}
-              {renderAttr("profession", "Employed In", formatEmployedIn(profile.employedIn))}
-              {renderAttr("profession", "Organization / Company", profile.organization)}
-              {renderAttr("cash", "Annual Income", formatAnnualIncome(profile.annualIncome))}
+              {renderAttr(
+                "education",
+                "Highest Education",
+                formatEducation(profile.education),
+              )}
+              {renderAttr(
+                "education",
+                "Education Details (College / Stream)",
+                profile.educationDetails,
+              )}
+              {renderAttr(
+                "profession",
+                "Profession",
+                formatProfession(profile.profession),
+              )}
+              {renderAttr(
+                "profession",
+                "Occupation Details",
+                profile.occupationDetails,
+              )}
+              {renderAttr(
+                "profession",
+                "Employed In",
+                formatEmployedIn(profile.employedIn),
+              )}
+              {renderAttr(
+                "profession",
+                "Organization / Company",
+                profile.organization,
+              )}
+              {renderAttr(
+                "cash",
+                "Annual Income",
+                formatAnnualIncome(profile.annualIncome),
+              )}
               {renderAttr("location", "Work City", profile.workCity)}
             </div>
           </div>
@@ -622,20 +811,50 @@ export default function ProfileDetail() {
                   <Icon name="users" size={18} color="#8A1538" />
                   Family Details
                 </h3>
-                <span className="biodata-section-subtitle">Parents, siblings and maternal relatives</span>
+                <span className="biodata-section-subtitle">
+                  Parents, siblings and maternal relatives
+                </span>
               </div>
 
               <div className="biodata-attributes-grid">
                 {renderAttr("users", "Father's Name", profile.fathersName)}
-                {renderAttr("profession", "Father's Occupation", profile.fathersOccupation)}
+                {renderAttr(
+                  "profession",
+                  "Father's Occupation",
+                  profile.fathersOccupation,
+                )}
                 {renderAttr("users", "Mother's Name", profile.mothersName)}
-                {renderAttr("profession", "Mother's Occupation", profile.mothersOccupation)}
-                {renderAttr("users", "Married Brothers", profile.marriedBrothers)}
-                {renderAttr("users", "Unmarried Brothers", profile.unmarriedBrothers)}
+                {renderAttr(
+                  "profession",
+                  "Mother's Occupation",
+                  profile.mothersOccupation,
+                )}
+                {renderAttr(
+                  "users",
+                  "Married Brothers",
+                  profile.marriedBrothers,
+                )}
+                {renderAttr(
+                  "users",
+                  "Unmarried Brothers",
+                  profile.unmarriedBrothers,
+                )}
                 {renderAttr("users", "Married Sisters", profile.marriedSisters)}
-                {renderAttr("users", "Unmarried Sisters", profile.unmarriedSisters)}
-                {renderAttr("users", "Maternal Uncle's Name (मामाजी)", profile.maternalUnclesName)}
-                {renderAttr("sparkles", "Maternal Uncle's Aakna", profile.maternalUnclesAakna)}
+                {renderAttr(
+                  "users",
+                  "Unmarried Sisters",
+                  profile.unmarriedSisters,
+                )}
+                {renderAttr(
+                  "users",
+                  "Maternal Uncle's Name (मामाजी)",
+                  profile.maternalUnclesName,
+                )}
+                {renderAttr(
+                  "sparkles",
+                  "Maternal Uncle's Gotra",
+                  profile.maternalUnclesGotra || profile.maternalUnclesAakna,
+                )}
               </div>
             </div>
           ) : null}
@@ -647,16 +866,38 @@ export default function ProfileDetail() {
                 <Icon name="user" size={18} color="#8A1538" />
                 Physical & Lifestyle
               </h3>
-              <span className="biodata-section-subtitle">Habits and personal traits</span>
+              <span className="biodata-section-subtitle">
+                Habits and personal traits
+              </span>
             </div>
 
             <div className="biodata-attributes-grid">
-              {renderAttr("user", "Marital Status", formatMaritalStatus(profile.maritalStatus))}
+              {renderAttr(
+                "user",
+                "Marital Status",
+                formatMaritalStatus(profile.maritalStatus),
+              )}
               {renderAttr("user", "Diet Preference", formatDiet(profile.diet))}
               {renderAttr("user", "Height", formatHeight(profile.height))}
-              {renderAttr("user", "Weight", profile.weight ? `${profile.weight} kg` : null)}
-              {renderAttr("user", "Complexion", profile.complexion ? formatComplexion(profile.complexion) : null)}
-              {renderAttr("user", "Blood Group", profile.bloodGroup ? formatBloodGroup(profile.bloodGroup) : null)}
+              {renderAttr(
+                "user",
+                "Weight",
+                profile.weight ? `${profile.weight} kg` : null,
+              )}
+              {renderAttr(
+                "user",
+                "Complexion",
+                profile.complexion
+                  ? formatComplexion(profile.complexion)
+                  : null,
+              )}
+              {renderAttr(
+                "user",
+                "Blood Group",
+                profile.bloodGroup
+                  ? formatBloodGroup(profile.bloodGroup)
+                  : null,
+              )}
               {renderAttr("user", "Mother Tongue", profile.motherTongue)}
             </div>
           </div>
@@ -669,7 +910,9 @@ export default function ProfileDetail() {
                   <Icon name="heart" size={18} color="#8A1538" />
                   Partner Expectations
                 </h3>
-                <span className="biodata-section-subtitle">Desired attributes in a life partner</span>
+                <span className="biodata-section-subtitle">
+                  Desired attributes in a life partner
+                </span>
               </div>
               <div className="biodata-quote-box">
                 {profile.partnerPreferences}
@@ -686,28 +929,50 @@ export default function ProfileDetail() {
                   Contact & Residence
                 </h3>
                 <span className="biodata-section-subtitle">
-                  {isConnected || isMine ? "Visible because you are connected" : "Protected for privacy"}
+                  {isConnected || isMine
+                    ? "Visible because you are connected"
+                    : "Protected for privacy"}
                 </span>
               </div>
 
               {isConnected || isMine ? (
                 <div className="biodata-attributes-grid">
-                  {renderAttr("phone", "Father's / Guardian Contact", profile.fathersContactNo)}
+                  {renderAttr(
+                    "phone",
+                    "Father's / Guardian Contact",
+                    profile.fathersContactNo,
+                  )}
                   {renderAttr("mail", "Email Address", profile.email)}
                   {renderAttr("location", "Current City", profile.city)}
                   {renderAttr("location", "State", profile.state)}
-                  {renderAttr("location", "Present Address", profile.presentAddress)}
-                  {renderAttr("location", "Permanent Address", profile.permanentAddress)}
+                  {renderAttr(
+                    "location",
+                    "Present Address",
+                    profile.presentAddress,
+                  )}
+                  {renderAttr(
+                    "location",
+                    "Permanent Address",
+                    profile.permanentAddress,
+                  )}
                 </div>
               ) : (
                 <div className="biodata-locked-box">
                   <Icon name="lock" size={24} color="#8A1538" />
                   <div>
-                    <strong style={{ color: "var(--auth-maroon)", display: "block", marginBottom: 2 }}>
+                    <strong
+                      style={{
+                        color: "var(--auth-maroon)",
+                        display: "block",
+                        marginBottom: 2,
+                      }}
+                    >
                       Contact information is private
                     </strong>
                     <span>
-                      Direct phone numbers, email, and home address are revealed once your proposal / connection request is accepted by {profile.name || "the family"}.
+                      Direct phone numbers, email, and home address are revealed
+                      once your proposal / connection request is accepted by{" "}
+                      {profile.name || "the family"}.
                     </span>
                   </div>
                 </div>
@@ -741,16 +1006,36 @@ export default function ProfileDetail() {
                 Connect with {profile.name || "this LOVEWANSHI Member"}
               </h3>
               <p className="biodata-guest-sub">
-                Create a free profile on Lovewanshi Parinay to unlock full family details, match Kundali with 36 Gunas, and send marriage proposals.
+                Create a free profile on Lovewanshi Parinay to unlock full
+                family details, match Kundali with 36 Gunas, and send marriage
+                proposals.
               </p>
-              <div style={{ display: "flex", gap: "0.85rem", justifyContent: "center", flexWrap: "wrap" }}>
+              <div
+                style={{
+                  display: "flex",
+                  gap: "0.85rem",
+                  justifyContent: "center",
+                  flexWrap: "wrap",
+                }}
+              >
                 <Link to="/login" state={{ from: location.pathname }}>
-                  <button className="btn-connect-primary" style={{ padding: "0.75rem 2rem", fontSize: "0.95rem" }}>
+                  <button
+                    className="btn-connect-primary"
+                    style={{ padding: "0.75rem 2rem", fontSize: "0.95rem" }}
+                  >
                     Log In to Connect
                   </button>
                 </Link>
                 <Link to="/signup" state={{ from: location.pathname }}>
-                  <button className="secondary" style={{ padding: "0.75rem 2rem", fontSize: "0.95rem", borderRadius: "var(--radius-pill)", fontWeight: 700 }}>
+                  <button
+                    className="secondary"
+                    style={{
+                      padding: "0.75rem 2rem",
+                      fontSize: "0.95rem",
+                      borderRadius: "var(--radius-pill)",
+                      fontWeight: 700,
+                    }}
+                  >
                     Register Free
                   </button>
                 </Link>

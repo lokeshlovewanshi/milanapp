@@ -36,7 +36,7 @@ CREATE TABLE `user_profile` (
   `no_of_married_sisters` int DEFAULT NULL,
   `no_of_unmarried_sisters` int DEFAULT NULL,
   `maternal_uncles_name` varchar(100) DEFAULT NULL,
-  `maternal_uncles_aakna` varchar(100) DEFAULT NULL,
+  `maternal_uncles_gotra` varchar(100) DEFAULT NULL,
   `house_status` varchar(50) DEFAULT NULL,
   `car_status` varchar(50) DEFAULT NULL,
   `education` varchar(45) DEFAULT NULL,

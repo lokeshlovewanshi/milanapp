@@ -76,7 +76,8 @@ public class UserProfile implements UserDetails {
     private Integer noOfMarriedSisters;
     private Integer noOfUnmarriedSisters;
     private String maternalUnclesName;
-    private String maternalUnclesAakna;
+    @Column(name = "maternal_uncles_gotra")
+    private String maternalUnclesGotra;
     private String houseStatus;
     private String carStatus;
     private String education;
@@ -231,5 +232,13 @@ public class UserProfile implements UserDetails {
         if (this.createdAt == null) {
             this.createdAt = LocalDateTime.now();
         }
+    }
+
+    public String getMaternalUnclesAakna() {
+        return this.maternalUnclesGotra;
+    }
+
+    public void setMaternalUnclesAakna(String aakna) {
+        this.maternalUnclesGotra = aakna;
     }
 }

@@ -32,17 +32,71 @@ const SECTIONS = [
     title: "👤 Personal",
     fields: [
       { key: "name", label: "Full Name", required: true },
-      { key: "gender", label: "Gender", type: "select", category: "gender", options: GENDER_OPTIONS },
-      { key: "maritalStatus", label: "Marital Status", type: "select", category: "marital_status", options: MARITAL_STATUS_OPTIONS },
+      {
+        key: "gender",
+        label: "Gender",
+        type: "select",
+        category: "gender",
+        options: GENDER_OPTIONS,
+      },
+      {
+        key: "maritalStatus",
+        label: "Marital Status",
+        type: "select",
+        category: "marital_status",
+        options: MARITAL_STATUS_OPTIONS,
+      },
       { key: "dateOfBirth", label: "Date of Birth", type: "date" },
-      { key: "height", label: "Height", type: "select", category: "height", options: HEIGHT_OPTIONS },
+      {
+        key: "height",
+        label: "Height",
+        type: "select",
+        category: "height",
+        options: HEIGHT_OPTIONS,
+      },
       { key: "weight", label: "Weight (kg)", type: "number" },
-      { key: "complexion", label: "Complexion", type: "select", category: "complexion", options: COMPLEXION_OPTIONS },
-      { key: "diet", label: "Diet", type: "select", category: "diet", options: DIET_OPTIONS },
-      { key: "bloodGroup", label: "Blood Group", type: "select", category: "blood_group", options: BLOOD_GROUP_OPTIONS },
-      { key: "motherTongue", label: "Mother Tongue", type: "select", category: "mother_tongue", options: MOTHER_TONGUE_OPTIONS },
-      { key: "profileCreatedBy", label: "Profile Created By", type: "select", category: "profile_created_by", options: PROFILE_CREATED_BY_OPTIONS },
-      { key: "disability", label: "Disability / Special Needs", type: "select", category: "disability", options: DISABILITY_OPTIONS },
+      {
+        key: "complexion",
+        label: "Complexion",
+        type: "select",
+        category: "complexion",
+        options: COMPLEXION_OPTIONS,
+      },
+      {
+        key: "diet",
+        label: "Diet",
+        type: "select",
+        category: "diet",
+        options: DIET_OPTIONS,
+      },
+      {
+        key: "bloodGroup",
+        label: "Blood Group",
+        type: "select",
+        category: "blood_group",
+        options: BLOOD_GROUP_OPTIONS,
+      },
+      {
+        key: "motherTongue",
+        label: "Mother Tongue",
+        type: "select",
+        category: "mother_tongue",
+        options: MOTHER_TONGUE_OPTIONS,
+      },
+      {
+        key: "profileCreatedBy",
+        label: "Profile Created By",
+        type: "select",
+        category: "profile_created_by",
+        options: PROFILE_CREATED_BY_OPTIONS,
+      },
+      {
+        key: "disability",
+        label: "Disability / Special Needs",
+        type: "select",
+        category: "disability",
+        options: DISABILITY_OPTIONS,
+      },
     ],
   },
   {
@@ -50,7 +104,13 @@ const SECTIONS = [
     title: "📍 Location & Address",
     fields: [
       { key: "country", label: "Country" },
-      { key: "state", label: "State", type: "select", category: "states", options: STATE_OPTIONS },
+      {
+        key: "state",
+        label: "State",
+        type: "select",
+        category: "states",
+        options: STATE_OPTIONS,
+      },
       { key: "city", label: "City" },
       { key: "town", label: "Town / Native Place (मूल निवास)" },
       { key: "presentAddress", label: "Present Address", type: "textarea" },
@@ -69,13 +129,36 @@ const SECTIONS = [
     id: "astrology",
     title: "🕉️ Religion & Astrology",
     fields: [
-      { key: "gotra", label: "Gotra", type: "select", category: "gotra", options: GOTRA_OPTIONS },
-      { key: "aakna", label: "Aakna" },
-      { key: "manglik", label: "Manglik Status", type: "select", category: "manglik", options: MANGLIK_OPTIONS },
+      {
+        key: "gotra",
+        label: "Gotra",
+        type: "select",
+        category: "gotra",
+        options: GOTRA_OPTIONS,
+      },
+      {
+        key: "manglik",
+        label: "Manglik Status",
+        type: "select",
+        category: "manglik",
+        options: MANGLIK_OPTIONS,
+      },
       { key: "timeOfBirth", label: "Time of Birth" },
       { key: "placeOfBirth", label: "Place of Birth (City)" },
-      { key: "zodiac", label: "Zodiac / Rashi", type: "select", category: "rashi", options: ZODIAC_OPTIONS },
-      { key: "nakshatra", label: "Nakshatra", type: "select", category: "nakshatra", options: NAKSHATRA_OPTIONS },
+      {
+        key: "zodiac",
+        label: "Zodiac / Rashi",
+        type: "select",
+        category: "rashi",
+        options: ZODIAC_OPTIONS,
+      },
+      {
+        key: "nakshatra",
+        label: "Nakshatra",
+        type: "select",
+        category: "nakshatra",
+        options: NAKSHATRA_OPTIONS,
+      },
     ],
   },
   {
@@ -83,27 +166,66 @@ const SECTIONS = [
     title: "👨‍👩‍👧‍👦 Family Details",
     fields: [
       { key: "fathersName", label: "Father's Name" },
-      { key: "fathersOccupation", label: "Father's Occupation", type: "select", category: "profession", options: PROFESSION_OPTIONS },
+      {
+        key: "fathersOccupation",
+        label: "Father's Occupation",
+        type: "select",
+        category: "profession",
+        options: PROFESSION_OPTIONS,
+      },
       { key: "mothersName", label: "Mother's Name" },
-      { key: "mothersOccupation", label: "Mother's Occupation", type: "select", category: "profession", options: PROFESSION_OPTIONS },
+      {
+        key: "mothersOccupation",
+        label: "Mother's Occupation",
+        type: "select",
+        category: "profession",
+        options: PROFESSION_OPTIONS,
+      },
       { key: "marriedBrothers", label: "Married Brothers", type: "number" },
       { key: "unmarriedBrothers", label: "Unmarried Brothers", type: "number" },
       { key: "marriedSisters", label: "Married Sisters", type: "number" },
       { key: "unmarriedSisters", label: "Unmarried Sisters", type: "number" },
       { key: "maternalUnclesName", label: "Maternal Uncle's Name (मामाजी)" },
-      { key: "maternalUnclesAakna", label: "Maternal Uncle's Aakna" },
+      { key: "maternalUnclesGotra", label: "Maternal Uncle's Gotra" },
     ],
   },
   {
     id: "education",
     title: "🎓 Education & Career",
     fields: [
-      { key: "education", label: "Highest Education", type: "select", category: "education", options: EDUCATION_OPTIONS },
-      { key: "educationDetails", label: "Education Details (College / Stream)" },
-      { key: "profession", label: "Profession", type: "select", category: "profession", options: PROFESSION_OPTIONS },
-      { key: "employedIn", label: "Employed In", type: "select", category: "employed_in", options: EMPLOYED_IN_OPTIONS },
+      {
+        key: "education",
+        label: "Highest Education",
+        type: "select",
+        category: "education",
+        options: EDUCATION_OPTIONS,
+      },
+      {
+        key: "educationDetails",
+        label: "Education Details (College / Stream)",
+      },
+      {
+        key: "profession",
+        label: "Profession",
+        type: "select",
+        category: "profession",
+        options: PROFESSION_OPTIONS,
+      },
+      {
+        key: "employedIn",
+        label: "Employed In",
+        type: "select",
+        category: "employed_in",
+        options: EMPLOYED_IN_OPTIONS,
+      },
       { key: "organization", label: "Company / Organization" },
-      { key: "annualIncome", label: "Annual Income", type: "select", category: "annual_income", options: INCOME_OPTIONS },
+      {
+        key: "annualIncome",
+        label: "Annual Income",
+        type: "select",
+        category: "annual_income",
+        options: INCOME_OPTIONS,
+      },
       { key: "workCity", label: "Work City / Location" },
     ],
   },
@@ -111,8 +233,20 @@ const SECTIONS = [
     id: "assets",
     title: "🏠 Assets",
     fields: [
-      { key: "houseStatus", label: "House Status", type: "select", category: "house_status", options: HOUSE_STATUS_OPTIONS },
-      { key: "carStatus", label: "Car Status", type: "select", category: "car_status", options: CAR_STATUS_OPTIONS },
+      {
+        key: "houseStatus",
+        label: "House Status",
+        type: "select",
+        category: "house_status",
+        options: HOUSE_STATUS_OPTIONS,
+      },
+      {
+        key: "carStatus",
+        label: "Car Status",
+        type: "select",
+        category: "car_status",
+        options: CAR_STATUS_OPTIONS,
+      },
     ],
   },
   {
@@ -120,7 +254,11 @@ const SECTIONS = [
     title: "📝 Bio & Preferences",
     fields: [
       { key: "aboutMyself", label: "About Myself", type: "textarea" },
-      { key: "partnerPreferences", label: "Partner Preferences", type: "textarea" },
+      {
+        key: "partnerPreferences",
+        label: "Partner Preferences",
+        type: "textarea",
+      },
     ],
   },
 ];
@@ -202,13 +340,16 @@ export default function EditProfileModal({ profileId, onClose, onSaved }) {
       }, 900);
     } catch (err) {
       console.error("Failed to save profile changes:", err);
-      setError(err?.message || "Failed to update profile. Please verify your inputs.");
+      setError(
+        err?.message || "Failed to update profile. Please verify your inputs.",
+      );
     } finally {
       setSaving(false);
     }
   }
 
-  const visibleSections = activeTab === "all" ? SECTIONS : SECTIONS.filter((s) => s.id === activeTab);
+  const visibleSections =
+    activeTab === "all" ? SECTIONS : SECTIONS.filter((s) => s.id === activeTab);
 
   return (
     <div
@@ -234,7 +375,8 @@ export default function EditProfileModal({ profileId, onClose, onSaved }) {
           maxHeight: "92vh",
           display: "flex",
           flexDirection: "column",
-          boxShadow: "0 20px 25px -5px rgba(0,0,0,0.15), 0 8px 10px -6px rgba(0,0,0,0.1)",
+          boxShadow:
+            "0 20px 25px -5px rgba(0,0,0,0.15), 0 8px 10px -6px rgba(0,0,0,0.1)",
           overflow: "hidden",
         }}
         onClick={(e) => e.stopPropagation()}
@@ -251,9 +393,19 @@ export default function EditProfileModal({ profileId, onClose, onSaved }) {
           }}
         >
           <div>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
-              <h2 style={{ margin: 0, fontSize: "1.25rem", color: "#111827", fontWeight: 700 }}>
-                ✏️ Edit Profile: {profile?.name || (loading ? "Loading..." : "Member")}
+            <div
+              style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}
+            >
+              <h2
+                style={{
+                  margin: 0,
+                  fontSize: "1.25rem",
+                  color: "#111827",
+                  fontWeight: 700,
+                }}
+              >
+                ✏️ Edit Profile:{" "}
+                {profile?.name || (loading ? "Loading..." : "Member")}
               </h2>
               {profile?.displayId && (
                 <span
@@ -270,12 +422,21 @@ export default function EditProfileModal({ profileId, onClose, onSaved }) {
                 </span>
               )}
             </div>
-            <p style={{ margin: "0.2rem 0 0 0", fontSize: "0.82rem", color: "#6B7280" }}>
-              Update verified member information directly. Changes sync immediately to the database.
+            <p
+              style={{
+                margin: "0.2rem 0 0 0",
+                fontSize: "0.82rem",
+                color: "#6B7280",
+              }}
+            >
+              Update verified member information directly. Changes sync
+              immediately to the database.
             </p>
           </div>
 
-          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+          <div
+            style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}
+          >
             <Link
               to={`/profiles/${profileId}`}
               target="_blank"
@@ -389,7 +550,9 @@ export default function EditProfileModal({ profileId, onClose, onSaved }) {
           )}
 
           {loading ? (
-            <div style={{ textAlign: "center", padding: "3rem", color: "#6B7280" }}>
+            <div
+              style={{ textAlign: "center", padding: "3rem", color: "#6B7280" }}
+            >
               <p>Loading profile details...</p>
             </div>
           ) : (
@@ -421,7 +584,8 @@ export default function EditProfileModal({ profileId, onClose, onSaved }) {
                   <div
                     style={{
                       display: "grid",
-                      gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+                      gridTemplateColumns:
+                        "repeat(auto-fit, minmax(240px, 1fr))",
                       gap: "0.85rem",
                     }}
                   >
@@ -430,8 +594,8 @@ export default function EditProfileModal({ profileId, onClose, onSaved }) {
                         field.category === "states"
                           ? states.map((s) => ({ code: s.name, label: s.name }))
                           : field.category
-                          ? list(field.category, field.options)
-                          : field.options;
+                            ? list(field.category, field.options)
+                            : field.options;
 
                       const isFullWidth = field.type === "textarea";
 
@@ -451,13 +615,18 @@ export default function EditProfileModal({ profileId, onClose, onSaved }) {
                               marginBottom: "0.25rem",
                             }}
                           >
-                            {field.label} {field.required && <span style={{ color: "#DC2626" }}>*</span>}
+                            {field.label}{" "}
+                            {field.required && (
+                              <span style={{ color: "#DC2626" }}>*</span>
+                            )}
                           </label>
 
                           {field.type === "select" ? (
                             <select
                               value={form[field.key] ?? ""}
-                              onChange={(e) => handleChange(field.key, e.target.value)}
+                              onChange={(e) =>
+                                handleChange(field.key, e.target.value)
+                              }
                               style={{
                                 width: "100%",
                                 padding: "0.45rem 0.6rem",
@@ -478,7 +647,9 @@ export default function EditProfileModal({ profileId, onClose, onSaved }) {
                             <textarea
                               rows={3}
                               value={form[field.key] ?? ""}
-                              onChange={(e) => handleChange(field.key, e.target.value)}
+                              onChange={(e) =>
+                                handleChange(field.key, e.target.value)
+                              }
                               placeholder={`Enter ${field.label.toLowerCase()}...`}
                               style={{
                                 width: "100%",
@@ -494,7 +665,9 @@ export default function EditProfileModal({ profileId, onClose, onSaved }) {
                               type={field.type || "text"}
                               required={field.required}
                               value={form[field.key] ?? ""}
-                              onChange={(e) => handleChange(field.key, e.target.value)}
+                              onChange={(e) =>
+                                handleChange(field.key, e.target.value)
+                              }
                               placeholder={`Enter ${field.label.toLowerCase()}...`}
                               style={{
                                 width: "100%",

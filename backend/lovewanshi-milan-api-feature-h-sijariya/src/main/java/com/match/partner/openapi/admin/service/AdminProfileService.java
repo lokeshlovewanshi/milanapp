@@ -1,4 +1,4 @@
-﻿package com.match.partner.openapi.admin.service;
+package com.match.partner.openapi.admin.service;
 
 import com.match.partner.common.configuration.ClientException;
 import com.match.partner.openapi.admin.model.dto.AdminCreateProfileDTO;
@@ -261,7 +261,7 @@ public class AdminProfileService {
         dto.setMarriedSisters(profile.getNoOfMarriedSisters());
         dto.setUnmarriedSisters(profile.getNoOfUnmarriedSisters());
         dto.setMaternalUnclesName(profile.getMaternalUnclesName());
-        dto.setMaternalUnclesAakna(profile.getMaternalUnclesAakna());
+        dto.setMaternalUnclesGotra(profile.getMaternalUnclesGotra());
         dto.setHouseStatus(profile.getHouseStatus());
         dto.setCarStatus(profile.getCarStatus());
         dto.setEducationDetails(profile.getEducationDetail());

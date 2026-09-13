@@ -1,5 +1,6 @@
 package com.match.partner.openapi.admin.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.match.partner.common.configuration.JacksonConfig;
 import lombok.AllArgsConstructor;
@@ -77,7 +78,8 @@ public class AdminProfileDetailDTO {
     private Integer marriedSisters;
     private Integer unmarriedSisters;
     private String maternalUnclesName;
-    private String maternalUnclesAakna;
+    @JsonAlias({"maternalUnclesAakna", "maternalUnclesGotra"})
+    private String maternalUnclesGotra;
     private String houseStatus;
     private String carStatus;
     private String educationDetails;
@@ -89,4 +91,12 @@ public class AdminProfileDetailDTO {
     private String workCity;
     private String employedIn;
     private String organization;
+
+    public String getMaternalUnclesAakna() {
+        return this.maternalUnclesGotra;
+    }
+
+    public void setMaternalUnclesAakna(String aakna) {
+        this.maternalUnclesGotra = aakna;
+    }
 }

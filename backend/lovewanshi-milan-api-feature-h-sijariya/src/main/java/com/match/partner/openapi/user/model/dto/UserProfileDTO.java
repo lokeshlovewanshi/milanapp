@@ -3,6 +3,7 @@ package com.match.partner.openapi.user.model.dto;
 import jakarta.persistence.Entity;
 import lombok.Data;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.match.partner.common.configuration.JacksonConfig;
 
@@ -50,7 +51,8 @@ public class UserProfileDTO {
     private Integer marriedSisters;
     private Integer unmarriedSisters;
     private String maternalUnclesName;
-    private String maternalUnclesAakna;
+    @JsonAlias({"maternalUnclesAakna", "maternalUnclesGotra"})
+    private String maternalUnclesGotra;
     private String houseStatus;
     private String carStatus;
     private String education;
@@ -109,4 +111,12 @@ public class UserProfileDTO {
     private Boolean isShortlisted;
     private Boolean isOnline;
     private Boolean online;
+
+    public String getMaternalUnclesAakna() {
+        return this.maternalUnclesGotra;
+    }
+
+    public void setMaternalUnclesAakna(String aakna) {
+        this.maternalUnclesGotra = aakna;
+    }
 }

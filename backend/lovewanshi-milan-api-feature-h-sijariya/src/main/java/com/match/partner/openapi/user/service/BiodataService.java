@@ -214,7 +214,6 @@ public class BiodataService {
         rows.append(row("Height", formatHeight(p.getHeight())));
         rows.append(row("Complexion", resolveLookup("complexion", p.getComplexion())));
         rows.append(row("Gotra", p.getGotra()));
-        rows.append(row("Aakna", p.getAakna()));
         rows.append(row("Mother Tongue", resolveLookup("mother_tongue", p.getMotherTongue())));
         rows.append(row("Diet", resolveLookup("diet", p.getDiet())));
         rows.append(row("Education", resolveLookup("education", p.getEducation())));
@@ -238,7 +237,7 @@ public class BiodataService {
         rows.append(row("Mother's Occupation", resolveLookup("mother_occupation", p.getMothersOccupation())));
         rows.append(row("Siblings", siblings(p)));
         rows.append(row("Maternal Uncle", p.getMaternalUnclesName()));
-        rows.append(row("Maternal Uncle's Aakna", p.getMaternalUnclesAakna()));
+        rows.append(row("Maternal Uncle's Gotra", p.getMaternalUnclesGotra()));
         rows.append(row("Family Residence", familyResidence(p)));
 
         return section("FAMILY DETAILS", iconFamily())

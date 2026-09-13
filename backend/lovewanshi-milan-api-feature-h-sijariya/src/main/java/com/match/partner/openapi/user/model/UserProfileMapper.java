@@ -74,7 +74,7 @@ public class UserProfileMapper {
         userProfileDTO.setMarriedSisters(userProfile.getNoOfMarriedSisters());
         userProfileDTO.setUnmarriedSisters(userProfile.getNoOfUnmarriedSisters());
         userProfileDTO.setMaternalUnclesName(userProfile.getMaternalUnclesName());
-        userProfileDTO.setMaternalUnclesAakna(userProfile.getMaternalUnclesAakna());
+        userProfileDTO.setMaternalUnclesGotra(userProfile.getMaternalUnclesGotra());
         userProfileDTO.setHouseStatus(userProfile.getHouseStatus());
         userProfileDTO.setCarStatus(userProfile.getCarStatus());
         userProfileDTO.setEducation(userProfile.getEducation());
@@ -245,7 +245,7 @@ public class UserProfileMapper {
         dto.setMarriedSisters(userProfile.getNoOfMarriedSisters());
         dto.setUnmarriedSisters(userProfile.getNoOfUnmarriedSisters());
         dto.setMaternalUnclesName(userProfile.getMaternalUnclesName());
-        dto.setMaternalUnclesAakna(userProfile.getMaternalUnclesAakna());
+        dto.setMaternalUnclesGotra(userProfile.getMaternalUnclesGotra());
         dto.setHouseStatus(userProfile.getHouseStatus());
         dto.setCarStatus(userProfile.getCarStatus());
         dto.setPartnerPreferences(userProfile.getPartnerPreferences());

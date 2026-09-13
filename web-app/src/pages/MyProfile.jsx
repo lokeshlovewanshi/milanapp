@@ -1,6 +1,12 @@
-﻿import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { profileAPI, referenceAPI, attachmentAPI, biodataAPI, clearSession } from "../api";
+import {
+  profileAPI,
+  referenceAPI,
+  attachmentAPI,
+  biodataAPI,
+  clearSession,
+} from "../api";
 import { VerifiedBadge, Icon } from "../components/Icons";
 import KundaliCard from "../components/KundaliCard";
 import {
@@ -30,9 +36,16 @@ const GENDER_OPTIONS = [
   { code: "FEMALE", label: "Female" },
 ];
 
-const HEIGHT_OPTIONS = Object.entries(HEIGHT_MAP).map(([code, label]) => ({ code, label }));
-const INCOME_OPTIONS = Object.entries(ANNUAL_INCOME_MAP).map(([code, label]) => ({ code, label }));
-const MARITAL_STATUS_OPTIONS = Object.entries(MARITAL_STATUS_MAP).map(([code, label]) => ({ code, label }));
+const HEIGHT_OPTIONS = Object.entries(HEIGHT_MAP).map(([code, label]) => ({
+  code,
+  label,
+}));
+const INCOME_OPTIONS = Object.entries(ANNUAL_INCOME_MAP).map(
+  ([code, label]) => ({ code, label }),
+);
+const MARITAL_STATUS_OPTIONS = Object.entries(MARITAL_STATUS_MAP).map(
+  ([code, label]) => ({ code, label }),
+);
 const DIET_OPTIONS = [
   { code: "VEG", label: "Vegetarian" },
   { code: "NON_VEG", label: "Non-Vegetarian" },
@@ -40,12 +53,25 @@ const DIET_OPTIONS = [
   { code: "VEGAN", label: "Vegan" },
   { code: "JAIN", label: "Jain Vegetarian" },
 ];
-const MANGLIK_OPTIONS = Object.entries(MANGLIK_MAP).map(([code, label]) => ({ code, label }));
-const COMPLEXION_OPTIONS = Object.entries(COMPLEXION_MAP).map(([code, label]) => ({ code, label }));
-const BLOOD_GROUP_OPTIONS = Object.entries(BLOOD_GROUP_MAP).map(([code, label]) => ({ code, label }));
-const EMPLOYED_IN_OPTIONS = Object.entries(EMPLOYED_IN_MAP).map(([code, label]) => ({ code, label }));
-const EDUCATION_OPTIONS = Object.entries(EDUCATION_MAP).map(([code, label]) => ({ code, label }));
-const PROFESSION_OPTIONS = Object.entries(PROFESSION_MAP).map(([code, label]) => ({ code, label }));
+const MANGLIK_OPTIONS = Object.entries(MANGLIK_MAP).map(([code, label]) => ({
+  code,
+  label,
+}));
+const COMPLEXION_OPTIONS = Object.entries(COMPLEXION_MAP).map(
+  ([code, label]) => ({ code, label }),
+);
+const BLOOD_GROUP_OPTIONS = Object.entries(BLOOD_GROUP_MAP).map(
+  ([code, label]) => ({ code, label }),
+);
+const EMPLOYED_IN_OPTIONS = Object.entries(EMPLOYED_IN_MAP).map(
+  ([code, label]) => ({ code, label }),
+);
+const EDUCATION_OPTIONS = Object.entries(EDUCATION_MAP).map(
+  ([code, label]) => ({ code, label }),
+);
+const PROFESSION_OPTIONS = Object.entries(PROFESSION_MAP).map(
+  ([code, label]) => ({ code, label }),
+);
 
 const MOTHER_TONGUE_OPTIONS = [
   { code: "Hindi", label: "Hindi (हिन्दी)" },
@@ -158,16 +184,63 @@ const EDIT_SECTIONS = [
     icon: "user",
     fields: [
       { key: "name", label: "Full Name", required: true },
-      { key: "gender", label: "Gender", type: "pills", options: GENDER_OPTIONS },
-      { key: "maritalStatus", label: "Marital Status", type: "pills", options: MARITAL_STATUS_OPTIONS, category: "marital_status" },
+      {
+        key: "gender",
+        label: "Gender",
+        type: "pills",
+        options: GENDER_OPTIONS,
+      },
+      {
+        key: "maritalStatus",
+        label: "Marital Status",
+        type: "pills",
+        options: MARITAL_STATUS_OPTIONS,
+        category: "marital_status",
+      },
       { key: "dateOfBirth", label: "Date of Birth", type: "date" },
-      { key: "height", label: "Height", type: "select", options: HEIGHT_OPTIONS, category: "height" },
+      {
+        key: "height",
+        label: "Height",
+        type: "select",
+        options: HEIGHT_OPTIONS,
+        category: "height",
+      },
       { key: "weight", label: "Weight (kg)", type: "number" },
-      { key: "motherTongue", label: "Mother Tongue (मातृभाषा)", type: "select", options: MOTHER_TONGUE_OPTIONS, category: "mother_tongue" },
-      { key: "diet", label: "Diet Preference", type: "pills", options: DIET_OPTIONS, category: "diet" },
-      { key: "bloodGroup", label: "Blood Group", type: "select", options: BLOOD_GROUP_OPTIONS, category: "blood_group" },
-      { key: "complexion", label: "Complexion", type: "select", options: COMPLEXION_OPTIONS, category: "complexion" },
-      { key: "profileCreatedBy", label: "Profile Created By", type: "pills", options: PROFILE_CREATED_BY_OPTIONS, category: "profile_created_by" },
+      {
+        key: "motherTongue",
+        label: "Mother Tongue (मातृभाषा)",
+        type: "select",
+        options: MOTHER_TONGUE_OPTIONS,
+        category: "mother_tongue",
+      },
+      {
+        key: "diet",
+        label: "Diet Preference",
+        type: "pills",
+        options: DIET_OPTIONS,
+        category: "diet",
+      },
+      {
+        key: "bloodGroup",
+        label: "Blood Group",
+        type: "select",
+        options: BLOOD_GROUP_OPTIONS,
+        category: "blood_group",
+      },
+      {
+        key: "complexion",
+        label: "Complexion",
+        type: "select",
+        options: COMPLEXION_OPTIONS,
+        category: "complexion",
+      },
+      {
+        key: "profileCreatedBy",
+        label: "Profile Created By",
+        type: "pills",
+        options: PROFILE_CREATED_BY_OPTIONS,
+        category: "profile_created_by",
+      },
     ],
   },
   {
@@ -176,7 +249,13 @@ const EDIT_SECTIONS = [
     subtitle: "Describe yourself in a few words",
     icon: "heart",
     fields: [
-      { key: "aboutMyself", label: "About Myself", type: "textarea", placeholder: "Write a short paragraph about your personality, hobbies, goals, and values..." },
+      {
+        key: "aboutMyself",
+        label: "About Myself",
+        type: "textarea",
+        placeholder:
+          "Write a short paragraph about your personality, hobbies, goals, and values...",
+      },
     ],
   },
   {
@@ -186,7 +265,12 @@ const EDIT_SECTIONS = [
     icon: "map-pin",
     fields: [
       { key: "city", label: "Current City (शहर)", type: "city_search" },
-      { key: "state", label: "State (राज्य)", type: "select", options: STATE_OPTIONS },
+      {
+        key: "state",
+        label: "State (राज्य)",
+        type: "select",
+        options: STATE_OPTIONS,
+      },
       { key: "town", label: "Town / Native Place (मूल निवास)" },
       { key: "country", label: "Country", placeholder: "India" },
       { key: "presentAddress", label: "Present Address", type: "textarea" },
@@ -209,12 +293,36 @@ const EDIT_SECTIONS = [
     subtitle: "Qualifications, employment and earnings",
     icon: "briefcase",
     fields: [
-      { key: "education", label: "Highest Degree", type: "select", options: EDUCATION_OPTIONS, category: "education" },
+      {
+        key: "education",
+        label: "Highest Degree",
+        type: "select",
+        options: EDUCATION_OPTIONS,
+        category: "education",
+      },
       { key: "educationDetails", label: "College / University / Stream" },
-      { key: "profession", label: "Profession / Designation", type: "select", options: PROFESSION_OPTIONS, category: "profession" },
-      { key: "employedIn", label: "Employed In", type: "pills", options: EMPLOYED_IN_OPTIONS, category: "employed_in" },
+      {
+        key: "profession",
+        label: "Profession / Designation",
+        type: "select",
+        options: PROFESSION_OPTIONS,
+        category: "profession",
+      },
+      {
+        key: "employedIn",
+        label: "Employed In",
+        type: "pills",
+        options: EMPLOYED_IN_OPTIONS,
+        category: "employed_in",
+      },
       { key: "organization", label: "Organization / Company" },
-      { key: "annualIncome", label: "Annual Income", type: "select", options: INCOME_OPTIONS, category: "annual_income" },
+      {
+        key: "annualIncome",
+        label: "Annual Income",
+        type: "select",
+        options: INCOME_OPTIONS,
+        category: "annual_income",
+      },
       { key: "workCity", label: "Work Location / City" },
     ],
   },
@@ -233,7 +341,7 @@ const EDIT_SECTIONS = [
       { key: "marriedSisters", label: "Married Sisters", type: "number" },
       { key: "unmarriedSisters", label: "Unmarried Sisters", type: "number" },
       { key: "maternalUnclesName", label: "Maternal Uncle's Name (मामाजी)" },
-      { key: "maternalUnclesAakna", label: "Maternal Uncle's Aakna" },
+      { key: "maternalUnclesGotra", label: "Maternal Uncle's Gotra" },
     ],
   },
   {
@@ -242,13 +350,40 @@ const EDIT_SECTIONS = [
     subtitle: "Community, Gotra and birth timing coordinates",
     icon: "sparkles",
     fields: [
-      { key: "gotra", label: "Gotra (गोत्र)", type: "select", options: GOTRA_OPTIONS, category: "gotra" },
-      { key: "aakna", label: "Aakna (आकना)" },
-      { key: "placeOfBirth", label: "Birth City / Place of Birth (जन्म स्थान / शहर)", type: "city_search" },
+      {
+        key: "gotra",
+        label: "Gotra (गोत्र)",
+        type: "select",
+        options: GOTRA_OPTIONS,
+        category: "gotra",
+      },
+      {
+        key: "placeOfBirth",
+        label: "Birth City / Place of Birth (जन्म स्थान / शहर)",
+        type: "city_search",
+      },
       { key: "timeOfBirth", label: "Time of Birth (जन्म समय)", type: "time" },
-      { key: "manglik", label: "Manglik Status", type: "pills", options: MANGLIK_OPTIONS, category: "manglik" },
-      { key: "zodiac", label: "Zodiac / Rashi (राशि)", type: "select", options: ZODIAC_OPTIONS, category: "rashi" },
-      { key: "nakshatra", label: "Nakshatra (नक्षत्र)", type: "select", options: NAKSHATRA_OPTIONS, category: "nakshatra" },
+      {
+        key: "manglik",
+        label: "Manglik Status",
+        type: "pills",
+        options: MANGLIK_OPTIONS,
+        category: "manglik",
+      },
+      {
+        key: "zodiac",
+        label: "Zodiac / Rashi (राशि)",
+        type: "select",
+        options: ZODIAC_OPTIONS,
+        category: "rashi",
+      },
+      {
+        key: "nakshatra",
+        label: "Nakshatra (नक्षत्र)",
+        type: "select",
+        options: NAKSHATRA_OPTIONS,
+        category: "nakshatra",
+      },
     ],
   },
   {
@@ -257,13 +392,23 @@ const EDIT_SECTIONS = [
     subtitle: "Desired preferences in a life partner",
     icon: "heart",
     fields: [
-      { key: "partnerPreferences", label: "Partner Preferences & Expectations", type: "textarea", placeholder: "Describe what you are looking for in terms of education, family values, lifestyle, and location..." },
+      {
+        key: "partnerPreferences",
+        label: "Partner Preferences & Expectations",
+        type: "textarea",
+        placeholder:
+          "Describe what you are looking for in terms of education, family values, lifestyle, and location...",
+      },
     ],
   },
 ];
 
 // Searchable database city selector component
-function CitySearchInput({ value, onChange, placeholder = "Search database city (e.g. Jhansi, Gwalior, Kanpur)..." }) {
+function CitySearchInput({
+  value,
+  onChange,
+  placeholder = "Search database city (e.g. Jhansi, Gwalior, Kanpur)...",
+}) {
   const [query, setQuery] = useState(value || "");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -305,12 +450,16 @@ function CitySearchInput({ value, onChange, placeholder = "Search database city 
 
   return (
     <div className="city-search-box">
-      <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
+      <div
+        style={{ position: "relative", display: "flex", alignItems: "center" }}
+      >
         <input
           type="text"
           value={query}
           onChange={(e) => handleSearch(e.target.value)}
-          onFocus={() => { if (results.length > 0) setOpen(true); }}
+          onFocus={() => {
+            if (results.length > 0) setOpen(true);
+          }}
           placeholder={placeholder}
           className="city-search-input"
           style={{ paddingRight: selectedCity ? "2.5rem" : "1rem" }}
@@ -334,10 +483,21 @@ function CitySearchInput({ value, onChange, placeholder = "Search database city 
 
       {open && (
         <div className="city-dropdown-list">
-          {loading && <div className="city-dropdown-item" style={{ color: "var(--secondary-text)" }}>Searching cities database...</div>}
+          {loading && (
+            <div
+              className="city-dropdown-item"
+              style={{ color: "var(--secondary-text)" }}
+            >
+              Searching cities database...
+            </div>
+          )}
           {!loading && results.length === 0 && (
-            <div className="city-dropdown-item" style={{ color: "var(--secondary-text)", fontSize: "0.82rem" }}>
-              No recognized city found for "{query}". Please pick your nearest major city.
+            <div
+              className="city-dropdown-item"
+              style={{ color: "var(--secondary-text)", fontSize: "0.82rem" }}
+            >
+              No recognized city found for "{query}". Please pick your nearest
+              major city.
             </div>
           )}
           {!loading &&
@@ -348,7 +508,9 @@ function CitySearchInput({ value, onChange, placeholder = "Search database city 
                 onClick={() => handleSelect(c)}
               >
                 <span style={{ fontWeight: 600 }}>{c.name}</span>
-                {c.state && <span className="city-dropdown-state">{c.state}</span>}
+                {c.state && (
+                  <span className="city-dropdown-state">{c.state}</span>
+                )}
               </div>
             ))}
         </div>
@@ -387,15 +549,24 @@ function TimePickerInput({ value, onChange }) {
     onChange(`${updated.hour}:${updated.minute} ${updated.ampm}`);
   };
 
-  const hours = Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, "0"));
-  const minutes = Array.from({ length: 60 }, (_, i) => String(i).padStart(2, "0"));
+  const hours = Array.from({ length: 12 }, (_, i) =>
+    String(i + 1).padStart(2, "0"),
+  );
+  const minutes = Array.from({ length: 60 }, (_, i) =>
+    String(i).padStart(2, "0"),
+  );
 
   return (
     <div style={{ display: "flex", gap: "0.4rem", alignItems: "center" }}>
       <select
         value={current.hour}
         onChange={(e) => handleChange("hour", e.target.value)}
-        style={{ flex: 1, padding: "0.65rem 0.5rem", borderRadius: 8, border: "1px solid var(--border)" }}
+        style={{
+          flex: 1,
+          padding: "0.65rem 0.5rem",
+          borderRadius: 8,
+          border: "1px solid var(--border)",
+        }}
         title="Hour"
       >
         {hours.map((h) => (
@@ -405,12 +576,19 @@ function TimePickerInput({ value, onChange }) {
         ))}
       </select>
 
-      <span style={{ fontWeight: "bold", color: "var(--secondary-text)" }}>:</span>
+      <span style={{ fontWeight: "bold", color: "var(--secondary-text)" }}>
+        :
+      </span>
 
       <select
         value={current.minute}
         onChange={(e) => handleChange("minute", e.target.value)}
-        style={{ flex: 1, padding: "0.65rem 0.5rem", borderRadius: 8, border: "1px solid var(--border)" }}
+        style={{
+          flex: 1,
+          padding: "0.65rem 0.5rem",
+          borderRadius: 8,
+          border: "1px solid var(--border)",
+        }}
         title="Minute"
       >
         {minutes.map((m) => (
@@ -423,7 +601,12 @@ function TimePickerInput({ value, onChange }) {
       <select
         value={current.ampm}
         onChange={(e) => handleChange("ampm", e.target.value)}
-        style={{ width: "80px", padding: "0.65rem 0.5rem", borderRadius: 8, border: "1px solid var(--border)" }}
+        style={{
+          width: "80px",
+          padding: "0.65rem 0.5rem",
+          borderRadius: 8,
+          border: "1px solid var(--border)",
+        }}
         title="AM/PM"
       >
         <option value="AM">AM</option>
@@ -439,7 +622,11 @@ function toFormState(profile) {
     for (const field of section.fields) {
       let value = profile[field.key];
       if (field.key === "placeOfBirth" && !value) {
-        value = profile.birthCity || profile.cityOfBirth || profile.place_of_birth || "";
+        value =
+          profile.birthCity ||
+          profile.cityOfBirth ||
+          profile.place_of_birth ||
+          "";
       }
       if (field.type === "date" && value) {
         state[field.key] = String(value).slice(0, 10);
@@ -456,7 +643,12 @@ function toPayload(form) {
   for (const section of EDIT_SECTIONS) {
     for (const field of section.fields) {
       const raw = form[field.key];
-      if (field.type === "number" || field.key === "weight" || field.key.toLowerCase().includes("brothers") || field.key.toLowerCase().includes("sisters")) {
+      if (
+        field.type === "number" ||
+        field.key === "weight" ||
+        field.key.toLowerCase().includes("brothers") ||
+        field.key.toLowerCase().includes("sisters")
+      ) {
         payload[field.key] = raw === "" || raw == null ? null : Number(raw);
       } else if (field.type === "date") {
         if (!raw) {
@@ -527,7 +719,9 @@ export default function MyProfile() {
       const html = await biodataAPI.fetchHtml();
       const win = window.open("", "_blank");
       if (!win) {
-        setBiodataError("Please allow pop-ups for this site to download your biodata");
+        setBiodataError(
+          "Please allow pop-ups for this site to download your biodata",
+        );
         return;
       }
       win.document.write(html);
@@ -551,7 +745,9 @@ export default function MyProfile() {
       await attachmentAPI.uploadFile(file);
       await reloadProfile();
     } catch {
-      setPhotoError("Could not upload this photo. Please try a different image.");
+      setPhotoError(
+        "Could not upload this photo. Please try a different image.",
+      );
     } finally {
       setUploading(false);
     }
@@ -571,7 +767,12 @@ export default function MyProfile() {
   }
 
   async function handleDeletePhoto(id) {
-    if (!window.confirm("Are you sure you want to delete this photo?\nThis cannot be undone.")) return;
+    if (
+      !window.confirm(
+        "Are you sure you want to delete this photo?\nThis cannot be undone.",
+      )
+    )
+      return;
     setPhotoBusyId(id);
     setPhotoError("");
     try {
@@ -602,7 +803,9 @@ export default function MyProfile() {
         setEditingSectionId(null);
       }, 700);
     } catch (err) {
-      setError(err?.message || "Could not save details. Please check your inputs.");
+      setError(
+        err?.message || "Could not save details. Please check your inputs.",
+      );
     } finally {
       setSaving(false);
     }
@@ -628,43 +831,72 @@ export default function MyProfile() {
     return (
       <div style={{ textAlign: "center", padding: "5rem 2rem" }}>
         <div className="loading-spinner-ring" />
-        <p style={{ color: "var(--secondary-text)", fontWeight: 600 }}>Loading your profile...</p>
+        <p style={{ color: "var(--secondary-text)", fontWeight: 600 }}>
+          Loading your profile...
+        </p>
       </div>
     );
   }
 
   const rawId = String(profile.id || "");
   const digits = rawId.replace(/\D/g, "");
-  const code = digits ? `GM${digits}` : (rawId ? `GM${rawId}` : "");
+  const code = digits ? `GM${digits}` : rawId ? `GM${rawId}` : "";
   const photos = profile.profileImageDetails || [];
-  const activeEditingSection = EDIT_SECTIONS.find((s) => s.id === editingSectionId);
+  const activeEditingSection = EDIT_SECTIONS.find(
+    (s) => s.id === editingSectionId,
+  );
 
   return (
-    <div className="profile-editor-container" style={{ maxWidth: 880, margin: "0 auto", padding: "0.5rem 0.5rem 5rem" }}>
-      
+    <div
+      className="profile-editor-container"
+      style={{ maxWidth: 880, margin: "0 auto", padding: "0.5rem 0.5rem 5rem" }}
+    >
       {/* 1. Header Greeting (No maroon background, only 'Hi, {name}') */}
       <div className="profile-greeting-header">
         <div className="profile-greeting-left">
           <div className="profile-greeting-name-row">
-            <h1 className="profile-greeting-title">Hi, {profile.name || "Member"}</h1>
+            <h1 className="profile-greeting-title">
+              Hi, {profile.name || "Member"}
+            </h1>
             {profile.verified !== false && <VerifiedBadge size={19} />}
             <span className="profile-code-pill">{code}</span>
-            <span className={`profile-visibility-status ${profile.hidden ? "hidden" : "visible"}`}>
+            <span
+              className={`profile-visibility-status ${profile.hidden ? "hidden" : "visible"}`}
+            >
               {profile.hidden ? "Profile Hidden" : "Profile Visible"}
             </span>
           </div>
           <p className="profile-greeting-sub">
-            {profile.email || profile.mobileNo || "Lovewanshi Parinay Community Member"}
+            {profile.email ||
+              profile.mobileNo ||
+              "Lovewanshi Parinay Community Member"}
           </p>
         </div>
       </div>
 
       {/* 2. Photo Studio (Upload photos, no helper paragraph text) */}
       <div className="photo-studio-card" style={{ marginBottom: "1.25rem" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.75rem", marginBottom: "0.5rem" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            flexWrap: "wrap",
+            gap: "0.75rem",
+            marginBottom: "0.5rem",
+          }}
+        >
           <div>
-            <h3 style={{ margin: "0 0 0.15rem", fontSize: "1.15rem", color: "var(--dark-navy)", fontWeight: 800 }}>
-              Photo Studio ({photos.length} Photo{photos.length !== 1 ? "s" : ""})
+            <h3
+              style={{
+                margin: "0 0 0.15rem",
+                fontSize: "1.15rem",
+                color: "var(--dark-navy)",
+                fontWeight: 800,
+              }}
+            >
+              Photo Studio ({photos.length} Photo
+              {photos.length !== 1 ? "s" : ""})
             </h3>
           </div>
           <button
@@ -686,13 +918,33 @@ export default function MyProfile() {
           />
         </div>
 
-        {photoError && <div className="error" style={{ marginBottom: "0.75rem" }}>{photoError}</div>}
+        {photoError && (
+          <div className="error" style={{ marginBottom: "0.75rem" }}>
+            {photoError}
+          </div>
+        )}
 
         {photos.length === 0 && (
-          <div style={{ background: "#FAF8F8", padding: "1.75rem", borderRadius: 12, textAlign: "center", border: "1.5px dashed var(--border)", marginTop: "0.5rem" }}>
+          <div
+            style={{
+              background: "#FAF8F8",
+              padding: "1.75rem",
+              borderRadius: 12,
+              textAlign: "center",
+              border: "1.5px dashed var(--border)",
+              marginTop: "0.5rem",
+            }}
+          >
             <Icon name="camera" size={32} color="#9CA3AF" />
-            <p style={{ margin: "0.5rem 0 0", fontSize: "0.88rem", color: "var(--secondary-text)" }}>
-              No photos uploaded yet. Add a portrait photo to receive more proposals.
+            <p
+              style={{
+                margin: "0.5rem 0 0",
+                fontSize: "0.88rem",
+                color: "var(--secondary-text)",
+              }}
+            >
+              No photos uploaded yet. Add a portrait photo to receive more
+              proposals.
             </p>
           </div>
         )}
@@ -712,7 +964,8 @@ export default function MyProfile() {
                     left: 0,
                     right: 0,
                     padding: "0.45rem",
-                    background: "linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 100%)",
+                    background:
+                      "linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 100%)",
                     display: "flex",
                     flexDirection: "column",
                     gap: "0.3rem",
@@ -722,7 +975,13 @@ export default function MyProfile() {
                     <button
                       type="button"
                       className="small secondary"
-                      style={{ padding: "0.3rem 0.5rem", fontSize: "0.72rem", background: "rgba(255,255,255,0.95)", border: "none", fontWeight: 700 }}
+                      style={{
+                        padding: "0.3rem 0.5rem",
+                        fontSize: "0.72rem",
+                        background: "rgba(255,255,255,0.95)",
+                        border: "none",
+                        fontWeight: 700,
+                      }}
                       disabled={photoBusyId === photo.id}
                       onClick={() => handleSetPrimary(photo.id)}
                     >
@@ -732,7 +991,11 @@ export default function MyProfile() {
                   <button
                     type="button"
                     className="small danger"
-                    style={{ padding: "0.3rem 0.5rem", fontSize: "0.72rem", fontWeight: 700 }}
+                    style={{
+                      padding: "0.3rem 0.5rem",
+                      fontSize: "0.72rem",
+                      fontWeight: 700,
+                    }}
                     disabled={photoBusyId === photo.id}
                     onClick={() => handleDeletePhoto(photo.id)}
                   >
@@ -808,7 +1071,9 @@ export default function MyProfile() {
           </div>
           <div className="action-card-text">
             <strong>Account Settings</strong>
-            <span>{profile.hidden ? "Hidden from search" : "Visible in search"}</span>
+            <span>
+              {profile.hidden ? "Hidden from search" : "Visible in search"}
+            </span>
           </div>
         </button>
 
@@ -829,7 +1094,11 @@ export default function MyProfile() {
         </button>
       </div>
 
-      {biodataError && <div className="error" style={{ marginBottom: "1rem" }}>{biodataError}</div>}
+      {biodataError && (
+        <div className="error" style={{ marginBottom: "1rem" }}>
+          {biodataError}
+        </div>
+      )}
 
       {/* 4. EDIT MODE: Slide-over / Sheet Edit View (Reference 5) */}
       {activeEditingSection && (
@@ -839,7 +1108,11 @@ export default function MyProfile() {
             <button
               type="button"
               className="edit-back-btn"
-              onClick={() => { setEditingSectionId(null); setError(""); setSavedMessage(""); }}
+              onClick={() => {
+                setEditingSectionId(null);
+                setError("");
+                setSavedMessage("");
+              }}
               title="Back to profile overview"
             >
               <Icon name="arrow-left" size={18} />
@@ -850,40 +1123,77 @@ export default function MyProfile() {
             </div>
           </div>
 
-          {error && <div className="error" style={{ marginBottom: "1rem" }}>{error}</div>}
+          {error && (
+            <div className="error" style={{ marginBottom: "1rem" }}>
+              {error}
+            </div>
+          )}
           {savedMessage && (
-            <div style={{ marginBottom: "1rem", color: "#065F46", background: "#ECFDF5", border: "1px solid #A7F3D0", padding: "0.75rem 1rem", borderRadius: 8, fontWeight: 700 }}>
+            <div
+              style={{
+                marginBottom: "1rem",
+                color: "#065F46",
+                background: "#ECFDF5",
+                border: "1px solid #A7F3D0",
+                padding: "0.75rem 1rem",
+                borderRadius: 8,
+                fontWeight: 700,
+              }}
+            >
               {savedMessage}
             </div>
           )}
 
           {/* Section Edit Fields */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "1.25rem" }}>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+              gap: "1.25rem",
+            }}
+          >
             {activeEditingSection.fields.map((field) => {
-              const dynamicOpts = field.category && refOptions[field.category]?.length
-                ? refOptions[field.category]
-                : field.options;
+              const dynamicOpts =
+                field.category && refOptions[field.category]?.length
+                  ? refOptions[field.category]
+                  : field.options;
 
               // 1. Choice Pills (Marital Status, Manglik, Diet, Gender, Profile Created By, Employed In)
               if (field.type === "pills") {
                 const currentVal = form[field.key] || "";
                 return (
                   <div key={field.key} style={{ gridColumn: "1 / -1" }}>
-                    <label style={{ fontWeight: 700, fontSize: "0.88rem", color: "var(--dark-navy)", display: "block", marginBottom: "0.3rem" }}>
-                      {field.label} {field.required && <strong style={{ color: "#ED4956" }}>*</strong>}
+                    <label
+                      style={{
+                        fontWeight: 700,
+                        fontSize: "0.88rem",
+                        color: "var(--dark-navy)",
+                        display: "block",
+                        marginBottom: "0.3rem",
+                      }}
+                    >
+                      {field.label}{" "}
+                      {field.required && (
+                        <strong style={{ color: "#ED4956" }}>*</strong>
+                      )}
                     </label>
                     <div className="pill-select-group">
                       {(dynamicOpts || []).map((opt) => {
-                        const codeVal = typeof opt === "object" ? opt.code : opt;
-                        const labelVal = typeof opt === "object" ? opt.label : opt;
-                        const isSelected = String(currentVal) === String(codeVal);
+                        const codeVal =
+                          typeof opt === "object" ? opt.code : opt;
+                        const labelVal =
+                          typeof opt === "object" ? opt.label : opt;
+                        const isSelected =
+                          String(currentVal) === String(codeVal);
 
                         return (
                           <button
                             type="button"
                             key={codeVal}
                             className={`choice-pill ${isSelected ? "active" : ""}`}
-                            onClick={() => handleFieldChange(field.key, codeVal)}
+                            onClick={() =>
+                              handleFieldChange(field.key, codeVal)
+                            }
                           >
                             {labelVal}
                           </button>
@@ -897,9 +1207,26 @@ export default function MyProfile() {
               // 2. Database City Search Autocomplete (placeOfBirth & city)
               if (field.type === "city_search") {
                 return (
-                  <div key={field.key} style={{ gridColumn: field.key === "placeOfBirth" ? "1 / -1" : "auto" }}>
-                    <label style={{ fontWeight: 700, fontSize: "0.88rem", color: "var(--dark-navy)", display: "block", marginBottom: "0.35rem" }}>
-                      {field.label} {field.required && <strong style={{ color: "#ED4956" }}>*</strong>}
+                  <div
+                    key={field.key}
+                    style={{
+                      gridColumn:
+                        field.key === "placeOfBirth" ? "1 / -1" : "auto",
+                    }}
+                  >
+                    <label
+                      style={{
+                        fontWeight: 700,
+                        fontSize: "0.88rem",
+                        color: "var(--dark-navy)",
+                        display: "block",
+                        marginBottom: "0.35rem",
+                      }}
+                    >
+                      {field.label}{" "}
+                      {field.required && (
+                        <strong style={{ color: "#ED4956" }}>*</strong>
+                      )}
                     </label>
                     <CitySearchInput
                       value={form[field.key] || ""}
@@ -912,8 +1239,16 @@ export default function MyProfile() {
                       placeholder="Search database city (e.g. Jhansi, Gwalior, Kanpur)..."
                     />
                     {field.key === "placeOfBirth" && (
-                      <span style={{ fontSize: "0.76rem", color: "var(--secondary-text)", marginTop: 4, display: "block" }}>
-                        Coordinates for Vedic Kundali calculation are automatically verified against the city database.
+                      <span
+                        style={{
+                          fontSize: "0.76rem",
+                          color: "var(--secondary-text)",
+                          marginTop: 4,
+                          display: "block",
+                        }}
+                      >
+                        Coordinates for Vedic Kundali calculation are
+                        automatically verified against the city database.
                       </span>
                     )}
                   </div>
@@ -924,15 +1259,35 @@ export default function MyProfile() {
               if (field.type === "textarea") {
                 return (
                   <label key={field.key} style={{ gridColumn: "1 / -1" }}>
-                    <span style={{ fontWeight: 700, fontSize: "0.88rem", color: "var(--dark-navy)", display: "block", marginBottom: "0.35rem" }}>
-                      {field.label} {field.required && <strong style={{ color: "#ED4956" }}>*</strong>}
+                    <span
+                      style={{
+                        fontWeight: 700,
+                        fontSize: "0.88rem",
+                        color: "var(--dark-navy)",
+                        display: "block",
+                        marginBottom: "0.35rem",
+                      }}
+                    >
+                      {field.label}{" "}
+                      {field.required && (
+                        <strong style={{ color: "#ED4956" }}>*</strong>
+                      )}
                     </span>
                     <textarea
                       rows={4}
                       value={form[field.key] || ""}
                       placeholder={field.placeholder || ""}
-                      onChange={(e) => handleFieldChange(field.key, e.target.value)}
-                      style={{ width: "100%", borderRadius: 8, padding: "0.75rem 0.85rem", border: "1px solid var(--border)", fontFamily: "inherit", fontSize: "0.9rem" }}
+                      onChange={(e) =>
+                        handleFieldChange(field.key, e.target.value)
+                      }
+                      style={{
+                        width: "100%",
+                        borderRadius: 8,
+                        padding: "0.75rem 0.85rem",
+                        border: "1px solid var(--border)",
+                        fontFamily: "inherit",
+                        fontSize: "0.9rem",
+                      }}
                     />
                   </label>
                 );
@@ -942,8 +1297,19 @@ export default function MyProfile() {
               if (field.type === "time") {
                 return (
                   <label key={field.key}>
-                    <span style={{ fontWeight: 700, fontSize: "0.88rem", color: "var(--dark-navy)", display: "block", marginBottom: "0.35rem" }}>
-                      {field.label} {field.required && <strong style={{ color: "#ED4956" }}>*</strong>}
+                    <span
+                      style={{
+                        fontWeight: 700,
+                        fontSize: "0.88rem",
+                        color: "var(--dark-navy)",
+                        display: "block",
+                        marginBottom: "0.35rem",
+                      }}
+                    >
+                      {field.label}{" "}
+                      {field.required && (
+                        <strong style={{ color: "#ED4956" }}>*</strong>
+                      )}
                     </span>
                     <TimePickerInput
                       value={form[field.key] || ""}
@@ -957,13 +1323,32 @@ export default function MyProfile() {
               if (field.type === "select") {
                 return (
                   <label key={field.key}>
-                    <span style={{ fontWeight: 700, fontSize: "0.88rem", color: "var(--dark-navy)", display: "block", marginBottom: "0.35rem" }}>
-                      {field.label} {field.required && <strong style={{ color: "#ED4956" }}>*</strong>}
+                    <span
+                      style={{
+                        fontWeight: 700,
+                        fontSize: "0.88rem",
+                        color: "var(--dark-navy)",
+                        display: "block",
+                        marginBottom: "0.35rem",
+                      }}
+                    >
+                      {field.label}{" "}
+                      {field.required && (
+                        <strong style={{ color: "#ED4956" }}>*</strong>
+                      )}
                     </span>
                     <select
                       value={form[field.key] || ""}
-                      onChange={(e) => handleFieldChange(field.key, e.target.value)}
-                      style={{ width: "100%", borderRadius: 8, padding: "0.65rem 0.85rem", border: "1px solid var(--border)", fontSize: "0.9rem" }}
+                      onChange={(e) =>
+                        handleFieldChange(field.key, e.target.value)
+                      }
+                      style={{
+                        width: "100%",
+                        borderRadius: 8,
+                        padding: "0.65rem 0.85rem",
+                        border: "1px solid var(--border)",
+                        fontSize: "0.9rem",
+                      }}
                     >
                       <option value="">-- Select {field.label} --</option>
                       {(dynamicOpts || []).map((opt) => (
@@ -982,15 +1367,40 @@ export default function MyProfile() {
               // 6. Regular text / number / date inputs
               return (
                 <label key={field.key}>
-                  <span style={{ fontWeight: 700, fontSize: "0.88rem", color: "var(--dark-navy)", display: "block", marginBottom: "0.35rem" }}>
-                    {field.label} {field.required && <strong style={{ color: "#ED4956" }}>*</strong>}
+                  <span
+                    style={{
+                      fontWeight: 700,
+                      fontSize: "0.88rem",
+                      color: "var(--dark-navy)",
+                      display: "block",
+                      marginBottom: "0.35rem",
+                    }}
+                  >
+                    {field.label}{" "}
+                    {field.required && (
+                      <strong style={{ color: "#ED4956" }}>*</strong>
+                    )}
                   </span>
                   <input
-                    type={field.type === "number" ? "number" : field.type === "date" ? "date" : "text"}
+                    type={
+                      field.type === "number"
+                        ? "number"
+                        : field.type === "date"
+                          ? "date"
+                          : "text"
+                    }
                     placeholder={field.placeholder || ""}
                     value={form[field.key] || ""}
-                    onChange={(e) => handleFieldChange(field.key, e.target.value)}
-                    style={{ width: "100%", borderRadius: 8, padding: "0.65rem 0.85rem", border: "1px solid var(--border)", fontSize: "0.9rem" }}
+                    onChange={(e) =>
+                      handleFieldChange(field.key, e.target.value)
+                    }
+                    style={{
+                      width: "100%",
+                      borderRadius: 8,
+                      padding: "0.65rem 0.85rem",
+                      border: "1px solid var(--border)",
+                      fontSize: "0.9rem",
+                    }}
                   />
                 </label>
               );
@@ -1002,8 +1412,15 @@ export default function MyProfile() {
             <button
               type="button"
               className="secondary"
-              style={{ borderRadius: "var(--radius-pill)", padding: "0.85rem 1.5rem", fontWeight: 600 }}
-              onClick={() => { setEditingSectionId(null); setError(""); }}
+              style={{
+                borderRadius: "var(--radius-pill)",
+                padding: "0.85rem 1.5rem",
+                fontWeight: 600,
+              }}
+              onClick={() => {
+                setEditingSectionId(null);
+                setError("");
+              }}
             >
               Cancel
             </button>
@@ -1049,46 +1466,81 @@ export default function MyProfile() {
                 {sec.id === "basic" && (
                   <>
                     <div className="jeevansathi-attr-row">
-                      <div className="jeevansathi-attr-icon"><Icon name="user" size={16} /></div>
+                      <div className="jeevansathi-attr-icon">
+                        <Icon name="user" size={16} />
+                      </div>
                       <div className="jeevansathi-attr-content">
                         <span className="jeevansathi-attr-label">Height</span>
-                        <span className="jeevansathi-attr-val">{formatHeight(profile.height) || "Not specified"}</span>
+                        <span className="jeevansathi-attr-val">
+                          {formatHeight(profile.height) || "Not specified"}
+                        </span>
                       </div>
                     </div>
                     <div className="jeevansathi-attr-row">
-                      <div className="jeevansathi-attr-icon"><Icon name="sparkles" size={16} /></div>
+                      <div className="jeevansathi-attr-icon">
+                        <Icon name="sparkles" size={16} />
+                      </div>
                       <div className="jeevansathi-attr-content">
-                        <span className="jeevansathi-attr-label">Community / Religion</span>
-                        <span className="jeevansathi-attr-val">LOVEWANSHI Vaishya</span>
+                        <span className="jeevansathi-attr-label">
+                          Community / Religion
+                        </span>
+                        <span className="jeevansathi-attr-val">
+                          LOVEWANSHI Vaishya
+                        </span>
                       </div>
                     </div>
                     <div className="jeevansathi-attr-row">
-                      <div className="jeevansathi-attr-icon"><Icon name="globe" size={16} /></div>
+                      <div className="jeevansathi-attr-icon">
+                        <Icon name="globe" size={16} />
+                      </div>
                       <div className="jeevansathi-attr-content">
-                        <span className="jeevansathi-attr-label">Mother Tongue</span>
-                        <span className="jeevansathi-attr-val">{profile.motherTongue || "Hindi"}</span>
+                        <span className="jeevansathi-attr-label">
+                          Mother Tongue
+                        </span>
+                        <span className="jeevansathi-attr-val">
+                          {profile.motherTongue || "Hindi"}
+                        </span>
                       </div>
                     </div>
                     <div className="jeevansathi-attr-row">
-                      <div className="jeevansathi-attr-icon"><Icon name="calendar" size={16} /></div>
+                      <div className="jeevansathi-attr-icon">
+                        <Icon name="calendar" size={16} />
+                      </div>
                       <div className="jeevansathi-attr-content">
-                        <span className="jeevansathi-attr-label">Date of Birth</span>
-                        <span className="jeevansathi-attr-val">{profile.dateOfBirth ? String(profile.dateOfBirth).slice(0, 10) : "Not specified"}</span>
+                        <span className="jeevansathi-attr-label">
+                          Date of Birth
+                        </span>
+                        <span className="jeevansathi-attr-val">
+                          {profile.dateOfBirth
+                            ? String(profile.dateOfBirth).slice(0, 10)
+                            : "Not specified"}
+                        </span>
                       </div>
                     </div>
                     <div className="jeevansathi-attr-row">
-                      <div className="jeevansathi-attr-icon"><Icon name="heart" size={16} /></div>
+                      <div className="jeevansathi-attr-icon">
+                        <Icon name="heart" size={16} />
+                      </div>
                       <div className="jeevansathi-attr-content">
-                        <span className="jeevansathi-attr-label">Marital Status</span>
-                        <span className="jeevansathi-attr-val">{formatMaritalStatus(profile.maritalStatus) || "Never Married"}</span>
+                        <span className="jeevansathi-attr-label">
+                          Marital Status
+                        </span>
+                        <span className="jeevansathi-attr-val">
+                          {formatMaritalStatus(profile.maritalStatus) ||
+                            "Never Married"}
+                        </span>
                       </div>
                     </div>
                     {profile.diet && (
                       <div className="jeevansathi-attr-row">
-                        <div className="jeevansathi-attr-icon"><Icon name="check" size={16} /></div>
+                        <div className="jeevansathi-attr-icon">
+                          <Icon name="check" size={16} />
+                        </div>
                         <div className="jeevansathi-attr-content">
                           <span className="jeevansathi-attr-label">Diet</span>
-                          <span className="jeevansathi-attr-val">{formatDiet(profile.diet)}</span>
+                          <span className="jeevansathi-attr-val">
+                            {formatDiet(profile.diet)}
+                          </span>
                         </div>
                       </div>
                     )}
@@ -1096,11 +1548,22 @@ export default function MyProfile() {
                 )}
 
                 {sec.id === "about" && (
-                  <div style={{ fontSize: "0.92rem", color: "var(--dark-navy)", lineHeight: 1.6 }}>
+                  <div
+                    style={{
+                      fontSize: "0.92rem",
+                      color: "var(--dark-navy)",
+                      lineHeight: 1.6,
+                    }}
+                  >
                     {profile.aboutMyself ? (
-                      <p style={{ margin: 0, fontStyle: "italic" }}>"{profile.aboutMyself}"</p>
+                      <p style={{ margin: 0, fontStyle: "italic" }}>
+                        "{profile.aboutMyself}"
+                      </p>
                     ) : (
-                      <p style={{ margin: 0, color: "var(--secondary-text)" }}>No description added yet. Tap the edit pencil above to add a few words about yourself.</p>
+                      <p style={{ margin: 0, color: "var(--secondary-text)" }}>
+                        No description added yet. Tap the edit pencil above to
+                        add a few words about yourself.
+                      </p>
                     )}
                   </div>
                 )}
@@ -1108,27 +1571,51 @@ export default function MyProfile() {
                 {sec.id === "location" && (
                   <>
                     <div className="jeevansathi-attr-row">
-                      <div className="jeevansathi-attr-icon"><Icon name="map-pin" size={16} /></div>
+                      <div className="jeevansathi-attr-icon">
+                        <Icon name="map-pin" size={16} />
+                      </div>
                       <div className="jeevansathi-attr-content">
-                        <span className="jeevansathi-attr-label">Current City & State</span>
-                        <span className="jeevansathi-attr-val">{[profile.city, profile.state, profile.country || "India"].filter(Boolean).join(", ") || "Not specified"}</span>
+                        <span className="jeevansathi-attr-label">
+                          Current City & State
+                        </span>
+                        <span className="jeevansathi-attr-val">
+                          {[
+                            profile.city,
+                            profile.state,
+                            profile.country || "India",
+                          ]
+                            .filter(Boolean)
+                            .join(", ") || "Not specified"}
+                        </span>
                       </div>
                     </div>
                     {profile.town && (
                       <div className="jeevansathi-attr-row">
-                        <div className="jeevansathi-attr-icon"><Icon name="location" size={16} /></div>
+                        <div className="jeevansathi-attr-icon">
+                          <Icon name="location" size={16} />
+                        </div>
                         <div className="jeevansathi-attr-content">
-                          <span className="jeevansathi-attr-label">Town / Native Place</span>
-                          <span className="jeevansathi-attr-val">{profile.town}</span>
+                          <span className="jeevansathi-attr-label">
+                            Town / Native Place
+                          </span>
+                          <span className="jeevansathi-attr-val">
+                            {profile.town}
+                          </span>
                         </div>
                       </div>
                     )}
                     {profile.presentAddress && (
                       <div className="jeevansathi-attr-row">
-                        <div className="jeevansathi-attr-icon"><Icon name="map-pin" size={16} /></div>
+                        <div className="jeevansathi-attr-icon">
+                          <Icon name="map-pin" size={16} />
+                        </div>
                         <div className="jeevansathi-attr-content">
-                          <span className="jeevansathi-attr-label">Present Address</span>
-                          <span className="jeevansathi-attr-val">{profile.presentAddress}</span>
+                          <span className="jeevansathi-attr-label">
+                            Present Address
+                          </span>
+                          <span className="jeevansathi-attr-val">
+                            {profile.presentAddress}
+                          </span>
                         </div>
                       </div>
                     )}
@@ -1138,25 +1625,43 @@ export default function MyProfile() {
                 {sec.id === "contact" && (
                   <>
                     <div className="jeevansathi-attr-row">
-                      <div className="jeevansathi-attr-icon"><Icon name="phone" size={16} /></div>
+                      <div className="jeevansathi-attr-icon">
+                        <Icon name="phone" size={16} />
+                      </div>
                       <div className="jeevansathi-attr-content">
-                        <span className="jeevansathi-attr-label">Mobile Number</span>
-                        <span className="jeevansathi-attr-val">{profile.mobileNo || "Not specified"}</span>
+                        <span className="jeevansathi-attr-label">
+                          Mobile Number
+                        </span>
+                        <span className="jeevansathi-attr-val">
+                          {profile.mobileNo || "Not specified"}
+                        </span>
                       </div>
                     </div>
                     <div className="jeevansathi-attr-row">
-                      <div className="jeevansathi-attr-icon"><Icon name="phone" size={16} /></div>
+                      <div className="jeevansathi-attr-icon">
+                        <Icon name="phone" size={16} />
+                      </div>
                       <div className="jeevansathi-attr-content">
-                        <span className="jeevansathi-attr-label">WhatsApp Number</span>
-                        <span className="jeevansathi-attr-val">{profile.whatsappNo || "Not specified"}</span>
+                        <span className="jeevansathi-attr-label">
+                          WhatsApp Number
+                        </span>
+                        <span className="jeevansathi-attr-val">
+                          {profile.whatsappNo || "Not specified"}
+                        </span>
                       </div>
                     </div>
                     {profile.fathersContactNo && (
                       <div className="jeevansathi-attr-row">
-                        <div className="jeevansathi-attr-icon"><Icon name="phone" size={16} /></div>
+                        <div className="jeevansathi-attr-icon">
+                          <Icon name="phone" size={16} />
+                        </div>
                         <div className="jeevansathi-attr-content">
-                          <span className="jeevansathi-attr-label">Father's / Guardian Contact</span>
-                          <span className="jeevansathi-attr-val">{profile.fathersContactNo}</span>
+                          <span className="jeevansathi-attr-label">
+                            Father's / Guardian Contact
+                          </span>
+                          <span className="jeevansathi-attr-val">
+                            {profile.fathersContactNo}
+                          </span>
                         </div>
                       </div>
                     )}
@@ -1166,34 +1671,60 @@ export default function MyProfile() {
                 {sec.id === "education" && (
                   <>
                     <div className="jeevansathi-attr-row">
-                      <div className="jeevansathi-attr-icon"><Icon name="education" size={16} /></div>
+                      <div className="jeevansathi-attr-icon">
+                        <Icon name="education" size={16} />
+                      </div>
                       <div className="jeevansathi-attr-content">
-                        <span className="jeevansathi-attr-label">Highest Education</span>
-                        <span className="jeevansathi-attr-val">{formatEducation(profile.education) || "Not specified"}</span>
+                        <span className="jeevansathi-attr-label">
+                          Highest Education
+                        </span>
+                        <span className="jeevansathi-attr-val">
+                          {formatEducation(profile.education) ||
+                            "Not specified"}
+                        </span>
                       </div>
                     </div>
                     <div className="jeevansathi-attr-row">
-                      <div className="jeevansathi-attr-icon"><Icon name="briefcase" size={16} /></div>
+                      <div className="jeevansathi-attr-icon">
+                        <Icon name="briefcase" size={16} />
+                      </div>
                       <div className="jeevansathi-attr-content">
-                        <span className="jeevansathi-attr-label">Profession</span>
-                        <span className="jeevansathi-attr-val">{formatProfession(profile.profession) || "Not specified"}</span>
+                        <span className="jeevansathi-attr-label">
+                          Profession
+                        </span>
+                        <span className="jeevansathi-attr-val">
+                          {formatProfession(profile.profession) ||
+                            "Not specified"}
+                        </span>
                       </div>
                     </div>
                     {profile.annualIncome && (
                       <div className="jeevansathi-attr-row">
-                        <div className="jeevansathi-attr-icon"><Icon name="cash" size={16} /></div>
+                        <div className="jeevansathi-attr-icon">
+                          <Icon name="cash" size={16} />
+                        </div>
                         <div className="jeevansathi-attr-content">
-                          <span className="jeevansathi-attr-label">Annual Income</span>
-                          <span className="jeevansathi-attr-val">{formatAnnualIncome(profile.annualIncome)}</span>
+                          <span className="jeevansathi-attr-label">
+                            Annual Income
+                          </span>
+                          <span className="jeevansathi-attr-val">
+                            {formatAnnualIncome(profile.annualIncome)}
+                          </span>
                         </div>
                       </div>
                     )}
                     {profile.organization && (
                       <div className="jeevansathi-attr-row">
-                        <div className="jeevansathi-attr-icon"><Icon name="briefcase" size={16} /></div>
+                        <div className="jeevansathi-attr-icon">
+                          <Icon name="briefcase" size={16} />
+                        </div>
                         <div className="jeevansathi-attr-content">
-                          <span className="jeevansathi-attr-label">Company / Organization</span>
-                          <span className="jeevansathi-attr-val">{profile.organization}</span>
+                          <span className="jeevansathi-attr-label">
+                            Company / Organization
+                          </span>
+                          <span className="jeevansathi-attr-val">
+                            {profile.organization}
+                          </span>
                         </div>
                       </div>
                     )}
@@ -1203,32 +1734,75 @@ export default function MyProfile() {
                 {sec.id === "family" && (
                   <>
                     <div className="jeevansathi-attr-row">
-                      <div className="jeevansathi-attr-icon"><Icon name="users" size={16} /></div>
+                      <div className="jeevansathi-attr-icon">
+                        <Icon name="users" size={16} />
+                      </div>
                       <div className="jeevansathi-attr-content">
                         <span className="jeevansathi-attr-label">Father</span>
-                        <span className="jeevansathi-attr-val">{[profile.fathersName, profile.fathersOccupation ? `(${profile.fathersOccupation})` : ""].filter(Boolean).join(" ") || "Not specified"}</span>
+                        <span className="jeevansathi-attr-val">
+                          {[
+                            profile.fathersName,
+                            profile.fathersOccupation
+                              ? `(${profile.fathersOccupation})`
+                              : "",
+                          ]
+                            .filter(Boolean)
+                            .join(" ") || "Not specified"}
+                        </span>
                       </div>
                     </div>
                     <div className="jeevansathi-attr-row">
-                      <div className="jeevansathi-attr-icon"><Icon name="users" size={16} /></div>
+                      <div className="jeevansathi-attr-icon">
+                        <Icon name="users" size={16} />
+                      </div>
                       <div className="jeevansathi-attr-content">
                         <span className="jeevansathi-attr-label">Mother</span>
-                        <span className="jeevansathi-attr-val">{[profile.mothersName, profile.mothersOccupation ? `(${profile.mothersOccupation})` : ""].filter(Boolean).join(" ") || "Not specified"}</span>
+                        <span className="jeevansathi-attr-val">
+                          {[
+                            profile.mothersName,
+                            profile.mothersOccupation
+                              ? `(${profile.mothersOccupation})`
+                              : "",
+                          ]
+                            .filter(Boolean)
+                            .join(" ") || "Not specified"}
+                        </span>
                       </div>
                     </div>
                     <div className="jeevansathi-attr-row">
-                      <div className="jeevansathi-attr-icon"><Icon name="users" size={16} /></div>
+                      <div className="jeevansathi-attr-icon">
+                        <Icon name="users" size={16} />
+                      </div>
                       <div className="jeevansathi-attr-content">
                         <span className="jeevansathi-attr-label">Siblings</span>
-                        <span className="jeevansathi-attr-val">{profile.marriedBrothers || 0} Married Bro, {profile.unmarriedBrothers || 0} Unmarried Bro • {profile.marriedSisters || 0} Married Sis, {profile.unmarriedSisters || 0} Unmarried Sis</span>
+                        <span className="jeevansathi-attr-val">
+                          {profile.marriedBrothers || 0} Married Bro,{" "}
+                          {profile.unmarriedBrothers || 0} Unmarried Bro •{" "}
+                          {profile.marriedSisters || 0} Married Sis,{" "}
+                          {profile.unmarriedSisters || 0} Unmarried Sis
+                        </span>
                       </div>
                     </div>
                     {profile.maternalUnclesName && (
                       <div className="jeevansathi-attr-row">
-                        <div className="jeevansathi-attr-icon"><Icon name="sparkles" size={16} /></div>
+                        <div className="jeevansathi-attr-icon">
+                          <Icon name="sparkles" size={16} />
+                        </div>
                         <div className="jeevansathi-attr-content">
-                          <span className="jeevansathi-attr-label">Maternal Uncle (मामाजी)</span>
-                          <span className="jeevansathi-attr-val">{[profile.maternalUnclesName, profile.maternalUnclesAakna ? `(${profile.maternalUnclesAakna})` : ""].filter(Boolean).join(" ")}</span>
+                          <span className="jeevansathi-attr-label">
+                            Maternal Uncle (मामाजी)
+                          </span>
+                          <span className="jeevansathi-attr-val">
+                            {[
+                              profile.maternalUnclesName,
+                              profile.maternalUnclesGotra ||
+                              profile.maternalUnclesAakna
+                                ? `(${profile.maternalUnclesGotra || profile.maternalUnclesAakna})`
+                                : "",
+                            ]
+                              .filter(Boolean)
+                              .join(" ")}
+                          </span>
                         </div>
                       </div>
                     )}
@@ -1238,49 +1812,75 @@ export default function MyProfile() {
                 {sec.id === "religion" && (
                   <>
                     <div className="jeevansathi-attr-row">
-                      <div className="jeevansathi-attr-icon"><Icon name="sparkles" size={16} /></div>
+                      <div className="jeevansathi-attr-icon">
+                        <Icon name="sparkles" size={16} />
+                      </div>
                       <div className="jeevansathi-attr-content">
-                        <span className="jeevansathi-attr-label">Gotra (गोत्र)</span>
-                        <span className="jeevansathi-attr-val">{profile.gotra || "Not specified"}</span>
+                        <span className="jeevansathi-attr-label">
+                          Gotra (गोत्र)
+                        </span>
+                        <span className="jeevansathi-attr-val">
+                          {profile.gotra || "Not specified"}
+                        </span>
                       </div>
                     </div>
                     <div className="jeevansathi-attr-row">
-                      <div className="jeevansathi-attr-icon"><Icon name="sparkles" size={16} /></div>
+                      <div className="jeevansathi-attr-icon">
+                        <Icon name="map-pin" size={16} />
+                      </div>
                       <div className="jeevansathi-attr-content">
-                        <span className="jeevansathi-attr-label">Aakna (आकना)</span>
-                        <span className="jeevansathi-attr-val">{profile.aakna || "Not specified"}</span>
+                        <span className="jeevansathi-attr-label">
+                          Birth City / Place of Birth (जन्म शहर)
+                        </span>
+                        <span className="jeevansathi-attr-val">
+                          {profile.placeOfBirth ||
+                            profile.birthCity ||
+                            "Not specified"}
+                        </span>
                       </div>
                     </div>
                     <div className="jeevansathi-attr-row">
-                      <div className="jeevansathi-attr-icon"><Icon name="map-pin" size={16} /></div>
+                      <div className="jeevansathi-attr-icon">
+                        <Icon name="clock" size={16} />
+                      </div>
                       <div className="jeevansathi-attr-content">
-                        <span className="jeevansathi-attr-label">Birth City / Place of Birth (जन्म शहर)</span>
-                        <span className="jeevansathi-attr-val">{profile.placeOfBirth || profile.birthCity || "Not specified"}</span>
+                        <span className="jeevansathi-attr-label">
+                          Time of Birth (जन्म समय)
+                        </span>
+                        <span className="jeevansathi-attr-val">
+                          {profile.timeOfBirth || "Not specified"}
+                        </span>
                       </div>
                     </div>
                     <div className="jeevansathi-attr-row">
-                      <div className="jeevansathi-attr-icon"><Icon name="clock" size={16} /></div>
-                      <div className="jeevansathi-attr-content">
-                        <span className="jeevansathi-attr-label">Time of Birth (जन्म समय)</span>
-                        <span className="jeevansathi-attr-val">{profile.timeOfBirth || "Not specified"}</span>
+                      <div className="jeevansathi-attr-icon">
+                        <Icon name="sparkles" size={16} />
                       </div>
-                    </div>
-                    <div className="jeevansathi-attr-row">
-                      <div className="jeevansathi-attr-icon"><Icon name="sparkles" size={16} /></div>
                       <div className="jeevansathi-attr-content">
                         <span className="jeevansathi-attr-label">Manglik</span>
-                        <span className="jeevansathi-attr-val">{formatManglik(profile.manglik) || "Non-Manglik"}</span>
+                        <span className="jeevansathi-attr-val">
+                          {formatManglik(profile.manglik) || "Non-Manglik"}
+                        </span>
                       </div>
                     </div>
                   </>
                 )}
 
                 {sec.id === "partner" && (
-                  <div style={{ fontSize: "0.92rem", color: "var(--dark-navy)", lineHeight: 1.6 }}>
+                  <div
+                    style={{
+                      fontSize: "0.92rem",
+                      color: "var(--dark-navy)",
+                      lineHeight: 1.6,
+                    }}
+                  >
                     {profile.partnerPreferences ? (
                       <p style={{ margin: 0 }}>{profile.partnerPreferences}</p>
                     ) : (
-                      <p style={{ margin: 0, color: "var(--secondary-text)" }}>No partner expectations listed. Tap the edit pencil above to add details.</p>
+                      <p style={{ margin: 0, color: "var(--secondary-text)" }}>
+                        No partner expectations listed. Tap the edit pencil
+                        above to add details.
+                      </p>
                     )}
                   </div>
                 )}
@@ -1299,7 +1899,10 @@ export default function MyProfile() {
 
       {/* 6. Account Settings Modal (Profile Visibility Toggle) */}
       {showSettingsModal && (
-        <div className="modal-overlay" onClick={() => setShowSettingsModal(false)}>
+        <div
+          className="modal-overlay"
+          onClick={() => setShowSettingsModal(false)}
+        >
           <div className="modal-card" onClick={(e) => e.stopPropagation()}>
             <button
               type="button"
@@ -1308,19 +1911,46 @@ export default function MyProfile() {
             >
               ✕
             </button>
-            <h3 style={{ margin: "0 0 0.25rem", fontSize: "1.25rem", color: "var(--dark-navy)", fontWeight: 800 }}>
+            <h3
+              style={{
+                margin: "0 0 0.25rem",
+                fontSize: "1.25rem",
+                color: "var(--dark-navy)",
+                fontWeight: 800,
+              }}
+            >
               Account Settings
             </h3>
-            <p style={{ margin: "0 0 1.25rem", fontSize: "0.85rem", color: "var(--secondary-text)" }}>
+            <p
+              style={{
+                margin: "0 0 1.25rem",
+                fontSize: "0.85rem",
+                color: "var(--secondary-text)",
+              }}
+            >
               Manage your profile privacy and search visibility
             </p>
 
             <div className="visibility-toggle-box">
               <div>
-                <strong style={{ fontSize: "0.92rem", color: "var(--dark-navy)", display: "block", marginBottom: 3 }}>
+                <strong
+                  style={{
+                    fontSize: "0.92rem",
+                    color: "var(--dark-navy)",
+                    display: "block",
+                    marginBottom: 3,
+                  }}
+                >
                   Profile Visibility
                 </strong>
-                <span style={{ fontSize: "0.78rem", color: "var(--secondary-text)", lineHeight: 1.4, display: "block" }}>
+                <span
+                  style={{
+                    fontSize: "0.78rem",
+                    color: "var(--secondary-text)",
+                    lineHeight: 1.4,
+                    display: "block",
+                  }}
+                >
                   {profile.hidden
                     ? "Your profile is currently hidden from search listings."
                     : "Your profile is visible to all verified LOVEWANSHI members."}
@@ -1335,21 +1965,76 @@ export default function MyProfile() {
               </button>
             </div>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", borderTop: "1px solid #F3F4F6", paddingTop: "1.25rem" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "0.88rem" }}>
-                <span style={{ color: "var(--secondary-text)" }}>Member ID</span>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "0.75rem",
+                borderTop: "1px solid #F3F4F6",
+                paddingTop: "1.25rem",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  fontSize: "0.88rem",
+                }}
+              >
+                <span style={{ color: "var(--secondary-text)" }}>
+                  Member ID
+                </span>
                 <strong style={{ color: "var(--dark-navy)" }}>{code}</strong>
               </div>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "0.88rem" }}>
-                <span style={{ color: "var(--secondary-text)" }}>Registered Email</span>
-                <span style={{ color: "var(--dark-navy)", fontWeight: 600 }}>{profile.email || "--"}</span>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  fontSize: "0.88rem",
+                }}
+              >
+                <span style={{ color: "var(--secondary-text)" }}>
+                  Registered Email
+                </span>
+                <span style={{ color: "var(--dark-navy)", fontWeight: 600 }}>
+                  {profile.email || "--"}
+                </span>
               </div>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "0.88rem" }}>
-                <span style={{ color: "var(--secondary-text)" }}>Registered Phone</span>
-                <span style={{ color: "var(--dark-navy)", fontWeight: 600 }}>{profile.mobileNo || "--"}</span>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  fontSize: "0.88rem",
+                }}
+              >
+                <span style={{ color: "var(--secondary-text)" }}>
+                  Registered Phone
+                </span>
+                <span style={{ color: "var(--dark-navy)", fontWeight: 600 }}>
+                  {profile.mobileNo || "--"}
+                </span>
               </div>
-              <div style={{ borderTop: "1px solid #F3F4F6", paddingTop: "0.75rem", marginTop: "0.5rem", display: "flex", justifyContent: "space-between" }}>
-                <Link to="/delete-account" style={{ color: "#DC2626", fontSize: "0.82rem", textDecoration: "none", fontWeight: 600 }}>
+              <div
+                style={{
+                  borderTop: "1px solid #F3F4F6",
+                  paddingTop: "0.75rem",
+                  marginTop: "0.5rem",
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Link
+                  to="/delete-account"
+                  style={{
+                    color: "#DC2626",
+                    fontSize: "0.82rem",
+                    textDecoration: "none",
+                    fontWeight: 600,
+                  }}
+                >
                   Delete Account
                 </Link>
                 <button
@@ -1368,7 +2053,10 @@ export default function MyProfile() {
 
       {/* 7. Membership Plan Modal */}
       {showMembershipModal && (
-        <div className="modal-overlay" onClick={() => setShowMembershipModal(false)}>
+        <div
+          className="modal-overlay"
+          onClick={() => setShowMembershipModal(false)}
+        >
           <div className="modal-card" onClick={(e) => e.stopPropagation()}>
             <button
               type="button"
@@ -1378,35 +2066,113 @@ export default function MyProfile() {
               ✕
             </button>
             <div style={{ textAlign: "center", marginBottom: "1.25rem" }}>
-              <div style={{ width: 52, height: 52, borderRadius: "50%", background: "#FEF3C7", color: "#D97706", display: "inline-flex", alignItems: "center", justifyContent: "center", marginBottom: "0.75rem" }}>
+              <div
+                style={{
+                  width: 52,
+                  height: 52,
+                  borderRadius: "50%",
+                  background: "#FEF3C7",
+                  color: "#D97706",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  marginBottom: "0.75rem",
+                }}
+              >
                 <Icon name="award" size={28} />
               </div>
-              <h3 style={{ margin: "0 0 0.25rem", fontSize: "1.3rem", color: "var(--dark-navy)", fontWeight: 800 }}>
+              <h3
+                style={{
+                  margin: "0 0 0.25rem",
+                  fontSize: "1.3rem",
+                  color: "var(--dark-navy)",
+                  fontWeight: 800,
+                }}
+              >
                 Lovewanshi Parinay Community Membership
               </h3>
-              <span style={{ background: "#ECFDF5", color: "#065F46", border: "1px solid #A7F3D0", padding: "2px 10px", borderRadius: "var(--radius-pill)", fontSize: "0.78rem", fontWeight: 700 }}>
+              <span
+                style={{
+                  background: "#ECFDF5",
+                  color: "#065F46",
+                  border: "1px solid #A7F3D0",
+                  padding: "2px 10px",
+                  borderRadius: "var(--radius-pill)",
+                  fontSize: "0.78rem",
+                  fontWeight: 700,
+                }}
+              >
                 100% Free Lifetime Community Service ★
               </span>
             </div>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", marginBottom: "1.5rem" }}>
-              <div style={{ display: "flex", gap: "0.6rem", alignItems: "flex-start", fontSize: "0.88rem" }}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "0.75rem",
+                marginBottom: "1.5rem",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  gap: "0.6rem",
+                  alignItems: "flex-start",
+                  fontSize: "0.88rem",
+                }}
+              >
                 <span style={{ color: "#166534", fontWeight: 800 }}>✓</span>
-                <span>Unlimited profile browsing across all 20 LOVEWANSHI Gotras</span>
+                <span>
+                  Unlimited profile browsing across all 20 LOVEWANSHI Gotras
+                </span>
               </div>
-              <div style={{ display: "flex", gap: "0.6rem", alignItems: "flex-start", fontSize: "0.88rem" }}>
+              <div
+                style={{
+                  display: "flex",
+                  gap: "0.6rem",
+                  alignItems: "flex-start",
+                  fontSize: "0.88rem",
+                }}
+              >
                 <span style={{ color: "#166534", fontWeight: 800 }}>✓</span>
                 <span>Free Vedic Kundali Milan and 36 Guna scoring</span>
               </div>
-              <div style={{ display: "flex", gap: "0.6rem", alignItems: "flex-start", fontSize: "0.88rem" }}>
+              <div
+                style={{
+                  display: "flex",
+                  gap: "0.6rem",
+                  alignItems: "flex-start",
+                  fontSize: "0.88rem",
+                }}
+              >
                 <span style={{ color: "#166534", fontWeight: 800 }}>✓</span>
-                <span>Direct phone & family contact access upon connection acceptance</span>
+                <span>
+                  Direct phone & family contact access upon connection
+                  acceptance
+                </span>
               </div>
-              <div style={{ display: "flex", gap: "0.6rem", alignItems: "flex-start", fontSize: "0.88rem" }}>
+              <div
+                style={{
+                  display: "flex",
+                  gap: "0.6rem",
+                  alignItems: "flex-start",
+                  fontSize: "0.88rem",
+                }}
+              >
                 <span style={{ color: "#166534", fontWeight: 800 }}>✓</span>
-                <span>Unlimited printable matrimonial biodata PDF downloads</span>
+                <span>
+                  Unlimited printable matrimonial biodata PDF downloads
+                </span>
               </div>
-              <div style={{ display: "flex", gap: "0.6rem", alignItems: "flex-start", fontSize: "0.88rem" }}>
+              <div
+                style={{
+                  display: "flex",
+                  gap: "0.6rem",
+                  alignItems: "flex-start",
+                  fontSize: "0.88rem",
+                }}
+              >
                 <span style={{ color: "#166534", fontWeight: 800 }}>✓</span>
                 <span>Photo studio with high-resolution image uploads</span>
               </div>
@@ -1415,7 +2181,11 @@ export default function MyProfile() {
             <button
               type="button"
               className="btn-connect-primary"
-              style={{ width: "100%", justifyContent: "center", padding: "0.75rem 1rem" }}
+              style={{
+                width: "100%",
+                justifyContent: "center",
+                padding: "0.75rem 1rem",
+              }}
               onClick={() => setShowMembershipModal(false)}
             >
               Great, Got It!
@@ -1423,7 +2193,6 @@ export default function MyProfile() {
           </div>
         </div>
       )}
-
     </div>
   );
 }

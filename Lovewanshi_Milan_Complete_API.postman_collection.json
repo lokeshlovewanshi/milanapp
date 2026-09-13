@@ -1,4 +1,4 @@
-﻿{
+{
   "info": {
     "_postman_id": "5f29abf9-be8c-4b96-a29d-96a295b8f2c6",
     "name": "LOVEWANSHI Milan - Complete API Collection",
@@ -73,15 +73,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/v1/auth/ping",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "auth",
-                "ping"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "ping"]
             },
             "description": "Public health check for the authentication controller"
           }
@@ -98,15 +91,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/auth/signup",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "auth",
-                "signup"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "signup"]
             },
             "description": "Registers a new user account and returns the initial JWT token",
             "body": {
@@ -149,15 +135,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/auth/login",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "auth",
-                "login"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "login"]
             },
             "description": "Authenticates with email and password. Automatically stores returned token in {{token}}",
             "body": {
@@ -200,15 +179,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/auth/google",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "auth",
-                "google"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "google"]
             },
             "description": "Verifies Google ID token and returns app JWT. Automatically stores returned token in {{token}}",
             "body": {
@@ -251,15 +223,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/auth/restore",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "auth",
-                "restore"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "restore"]
             },
             "description": "Reactivates a previously soft-deleted account upon verifying credentials",
             "body": {
@@ -302,16 +267,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/auth/google/restore",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "auth",
-                "google",
-                "restore"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "google", "restore"]
             },
             "description": "Reactivates a previously soft-deleted Google-authenticated account",
             "body": {
@@ -354,15 +311,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/auth/logout",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "auth",
-                "logout"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "logout"]
             },
             "description": "Blacklists the current JWT token on the server"
           }
@@ -379,16 +329,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/auth/otp/request",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "auth",
-                "otp",
-                "request"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "otp", "request"]
             },
             "description": "Sends a 6-digit one-time code to the given email address. Purpose: VERIFY_EMAIL or RESET_PASSWORD",
             "body": {
@@ -414,16 +356,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/auth/otp/verify",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "auth",
-                "otp",
-                "verify"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "otp", "verify"]
             },
             "description": "Confirms email address ownership using the 6-digit code",
             "body": {
@@ -449,16 +383,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/auth/password/reset",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "auth",
-                "password",
-                "reset"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "password", "reset"]
             },
             "description": "Sets a new password directly by verifying the one-time code",
             "body": {
@@ -479,16 +405,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/v1/auth/otp/status",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "auth",
-                "otp",
-                "status"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "otp", "status"]
             },
             "description": "Checks whether email delivery (SES / SMTP) is configured on the backend"
           }
@@ -510,14 +428,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/user",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "user"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "user"]
             },
             "description": "Retrieves complete profile details for the authenticated user"
           }
@@ -538,15 +450,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/user/profile",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "user",
-                "profile"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "user", "profile"]
             },
             "description": "First-time profile setup after initial signup",
             "body": {
@@ -576,15 +481,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/user/profile",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "user",
-                "profile"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "user", "profile"]
             },
             "description": "Updates any profile fields for the authenticated member",
             "body": {
@@ -614,15 +512,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/user/password",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "user",
-                "password"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "user", "password"]
             },
             "description": "Changes own password. For Google signups without an initial password, currentPassword can be omitted.",
             "body": {
@@ -652,16 +543,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/user/profile/visibility",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "user",
-                "profile",
-                "visibility"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "user", "profile", "visibility"]
             },
             "description": "Hides or unhides profile from the public browse feed",
             "body": {
@@ -687,15 +570,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/user/profile",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "user",
-                "profile"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "user", "profile"]
             },
             "description": "Soft-deletes the caller's profile. Can be restored within the retention window."
           }
@@ -712,15 +588,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/user/biodata",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "user",
-                "biodata"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "user", "biodata"]
             },
             "description": "Generates an elegant print-ready HTML biodata with horoscope chart and Devanagari typography"
           }
@@ -737,15 +606,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/user/stories?size=12",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "user",
-                "stories"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "user", "stories"],
               "query": [
                 {
                   "key": "size",
@@ -769,15 +631,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/user/kundali",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "user",
-                "kundali"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "user", "kundali"]
             },
             "description": "Generates or fetches the caller's Vedic birth chart based on their birth date, time, and place"
           }
@@ -794,15 +649,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/user/kundali",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "user",
-                "kundali"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "user", "kundali"]
             },
             "description": "Forces fresh calculation of the birth chart via Kundali lambda service"
           }
@@ -819,9 +667,7 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/user/kundali/match/{{targetUserId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "host": ["{{baseUrl}}"],
               "path": [
                 "api",
                 "v1",
@@ -851,16 +697,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/user/profile/basic",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "user",
-                "profile",
-                "basic"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "user", "profile", "basic"]
             },
             "description": ""
           }
@@ -881,16 +719,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/user/profile/basic",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "user",
-                "profile",
-                "basic"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "user", "profile", "basic"]
             },
             "description": "",
             "body": {
@@ -916,16 +746,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/user/profile/contact",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "user",
-                "profile",
-                "contact"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "user", "profile", "contact"]
             },
             "description": ""
           }
@@ -946,16 +768,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/user/profile/contact",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "user",
-                "profile",
-                "contact"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "user", "profile", "contact"]
             },
             "description": "",
             "body": {
@@ -981,16 +795,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/user/profile/religion",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "user",
-                "profile",
-                "religion"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "user", "profile", "religion"]
             },
             "description": ""
           }
@@ -1011,16 +817,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/user/profile/religion",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "user",
-                "profile",
-                "religion"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "user", "profile", "religion"]
             },
             "description": "",
             "body": {
@@ -1046,16 +844,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/user/profile/education",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "user",
-                "profile",
-                "education"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "user", "profile", "education"]
             },
             "description": ""
           }
@@ -1076,16 +866,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/user/profile/education",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "user",
-                "profile",
-                "education"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "user", "profile", "education"]
             },
             "description": "",
             "body": {
@@ -1111,16 +893,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/user/profile/family",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "user",
-                "profile",
-                "family"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "user", "profile", "family"]
             },
             "description": ""
           }
@@ -1141,21 +915,13 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/user/profile/family",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "user",
-                "profile",
-                "family"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "user", "profile", "family"]
             },
             "description": "",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"fathersName\": \"R. K. Sijariya\",\n  \"fathersOccupation\": \"Businessman\",\n  \"fathersContactNo\": \"9876500000\",\n  \"mothersName\": \"Mrs. Sijariya\",\n  \"mothersOccupation\": \"Homemaker\",\n  \"marriedBrothers\": 0,\n  \"unmarriedBrothers\": 1,\n  \"marriedSisters\": 1,\n  \"unmarriedSisters\": 0,\n  \"maternalUnclesName\": \"Mr. Gupta\",\n  \"maternalUnclesAakna\": \"Kankane\",\n  \"houseStatus\": \"Own House\",\n  \"carStatus\": \"Own Car\",\n  \"aboutMyself\": \"Friendly and ambitious professional.\",\n  \"partnerPreferences\": \"Educated girl from respectable family.\"\n}",
+              "raw": "{\n  \"fathersName\": \"R. K. Sijariya\",\n  \"fathersOccupation\": \"Businessman\",\n  \"fathersContactNo\": \"9876500000\",\n  \"mothersName\": \"Mrs. Sijariya\",\n  \"mothersOccupation\": \"Homemaker\",\n  \"marriedBrothers\": 0,\n  \"unmarriedBrothers\": 1,\n  \"marriedSisters\": 1,\n  \"unmarriedSisters\": 0,\n  \"maternalUnclesName\": \"Mr. Gupta\",\n  \"maternalUnclesGotra\": \"Kankane\",\n  \"houseStatus\": \"Own House\",\n  \"carStatus\": \"Own Car\",\n  \"aboutMyself\": \"Friendly and ambitious professional.\",\n  \"partnerPreferences\": \"Educated girl from respectable family.\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1181,14 +947,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/users?page=0&size=10&oppositeGender=true",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "users"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "users"],
               "query": [
                 {
                   "key": "page",
@@ -1257,15 +1017,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/users/{{targetUserId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "users",
-                "{{targetUserId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "users", "{{targetUserId}}"]
             },
             "description": "Fetches target member's profile by JM ID (e.g. JM001) or numeric ID. Contact details are automatically unmasked if the viewer has an active membership plan."
           }
@@ -1291,15 +1044,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/attachment/upload",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "attachment",
-                "upload"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "attachment", "upload"]
             },
             "description": "Uploads an image file to S3 and attaches it to the user's gallery",
             "body": {
@@ -1325,15 +1071,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/attachment/generate-upload-url?fileType=image/jpeg&originalFileName=profile.jpg",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "attachment",
-                "generate-upload-url"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "attachment", "generate-upload-url"],
               "query": [
                 {
                   "key": "fileType",
@@ -1362,16 +1101,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/attachment/download/{{fileName}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "attachment",
-                "download",
-                "{{fileName}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "attachment", "download", "{{fileName}}"]
             },
             "description": "Generates an S3 presigned GET URL for viewing an image"
           }
@@ -1388,9 +1119,7 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/attachment/{{attachmentId}}/set-primary",
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "host": ["{{baseUrl}}"],
               "path": [
                 "api",
                 "v1",
@@ -1414,15 +1143,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/attachment/{{attachmentId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "attachment",
-                "{{attachmentId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "attachment", "{{attachmentId}}"]
             },
             "description": "Deletes photo and automatically promotes the next photo to primary if needed"
           }
@@ -1444,15 +1166,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/likes/{{targetUserId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "likes",
-                "{{targetUserId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "likes", "{{targetUserId}}"]
             },
             "description": "Expresses interest in target member"
           }
@@ -1469,15 +1184,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/likes/{{targetUserId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "likes",
-                "{{targetUserId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "likes", "{{targetUserId}}"]
             },
             "description": "Removes like sent to target member"
           }
@@ -1494,14 +1202,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/likes",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "likes"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "likes"]
             },
             "description": "Lists all members who have liked the caller's profile"
           }
@@ -1518,15 +1220,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/likes/me",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "likes",
-                "me"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "likes", "me"]
             },
             "description": "Lists all likes sent by the caller and their status (PENDING, ACCEPTED, REJECTED)"
           }
@@ -1543,16 +1238,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/likes/accept/{{targetUserId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "likes",
-                "accept",
-                "{{targetUserId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "likes", "accept", "{{targetUserId}}"]
             },
             "description": "Accepts an incoming like, establishing a match"
           }
@@ -1569,16 +1256,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/likes/reject/{{targetUserId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "likes",
-                "reject",
-                "{{targetUserId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "likes", "reject", "{{targetUserId}}"]
             },
             "description": "Declines an incoming like"
           }
@@ -1595,14 +1274,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/shortlist",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "shortlist"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "shortlist"]
             },
             "description": "Lists all profiles saved to caller's shortlist"
           }
@@ -1619,15 +1292,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/shortlist/{{targetUserId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "shortlist",
-                "{{targetUserId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "shortlist", "{{targetUserId}}"]
             },
             "description": "Bookmarks target profile"
           }
@@ -1644,15 +1310,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/shortlist/{{targetUserId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "shortlist",
-                "{{targetUserId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "shortlist", "{{targetUserId}}"]
             },
             "description": "Removes target profile from shortlist"
           }
@@ -1678,14 +1337,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/views",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "views"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "views"]
             },
             "description": "Records that the caller viewed the target profile",
             "body": {
@@ -1711,14 +1364,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/views",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "views"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "views"]
             },
             "description": "Lists members who recently visited caller's profile"
           }
@@ -1740,15 +1387,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/billing/plans",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "billing",
-                "plans"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "billing", "plans"]
             },
             "description": "Lists all available membership plans (Bronze, Silver, Gold) with active discounts and benefits"
           }
@@ -1765,16 +1405,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/billing/membership/me",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "billing",
-                "membership",
-                "me"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "billing", "membership", "me"]
             },
             "description": "Returns the caller's active subscription, tier, expiry date, and remaining contact views"
           }
@@ -1795,15 +1427,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/billing/orders",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "billing",
-                "orders"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "billing", "orders"]
             },
             "description": "Initiates a Razorpay payment order for purchasing or upgrading a membership tier",
             "body": {
@@ -1838,15 +1463,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/notifications/token",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "notifications",
-                "token"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "notifications", "token"]
             },
             "description": "Registers device token for Firebase Cloud Messaging push notifications",
             "body": {
@@ -1876,15 +1494,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/notifications/token",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "notifications",
-                "token"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "notifications", "token"]
             },
             "description": "Unregisters FCM token so subsequent users on this device do not receive alerts",
             "body": {
@@ -1910,14 +1521,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/notifications?page=0&size=20",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "notifications"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "notifications"],
               "query": [
                 {
                   "key": "page",
@@ -1946,15 +1551,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/notifications/unread-count",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "notifications",
-                "unread-count"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "notifications", "unread-count"]
             },
             "description": "Returns badge count of unread notifications"
           }
@@ -1971,15 +1569,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/notifications/read-all",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "notifications",
-                "read-all"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "notifications", "read-all"]
             },
             "description": "Clears unread status on all notifications for the caller"
           }
@@ -1996,15 +1587,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/v1/support/contact",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "support",
-                "contact"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "support", "contact"]
             },
             "description": "Returns official support phone number and email (no auth required)"
           }
@@ -2021,15 +1605,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/support/tickets",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "support",
-                "tickets"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "support", "tickets"]
             },
             "description": "Lists all support tickets created by the logged-in user"
           }
@@ -2050,15 +1627,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/support/tickets",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "support",
-                "tickets"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "support", "tickets"]
             },
             "description": "Creates a new helpdesk ticket",
             "body": {
@@ -2084,16 +1654,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/support/tickets/{{ticketId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "support",
-                "tickets",
-                "{{ticketId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "support", "tickets", "{{ticketId}}"]
             },
             "description": "Retrieves ticket status and all user/admin messages in the conversation"
           }
@@ -2114,9 +1676,7 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/support/tickets/{{ticketId}}/messages",
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "host": ["{{baseUrl}}"],
               "path": [
                 "api",
                 "v1",
@@ -2150,9 +1710,7 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/support/tickets/{{ticketId}}/reopen",
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "host": ["{{baseUrl}}"],
               "path": [
                 "api",
                 "v1",
@@ -2177,15 +1735,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/v1/reference/options",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "reference",
-                "options"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "reference", "options"]
             },
             "description": "Returns all category dropdown codes and localized labels (Gotra, Aakna, Education, Occupation, Marital Status, etc.)"
           }
@@ -2197,16 +1748,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/v1/reference/options/EDUCATION",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "reference",
-                "options",
-                "EDUCATION"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "reference", "options", "EDUCATION"]
             },
             "description": "Returns options for a single category (e.g. EDUCATION, OCCUPATION, MARITAL_STATUS, DIET, GOTRA)"
           }
@@ -2218,15 +1761,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/v1/reference/states",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "reference",
-                "states"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "reference", "states"]
             },
             "description": "Returns all Indian states and Union Territories"
           }
@@ -2238,15 +1774,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/v1/reference/cities?search=Jhan&limit=10",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "reference",
-                "cities"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "reference", "cities"],
               "query": [
                 {
                   "key": "search",
@@ -2295,15 +1824,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/v1/stories/top",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "stories",
-                "top"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "stories", "top"]
             },
             "description": "Returns active success stories / testimonials curated by admin"
           }
@@ -2315,15 +1837,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/v1/app/version?platform=android&versionCode=25",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "app",
-                "version"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "app", "version"],
               "query": [
                 {
                   "key": "platform",
@@ -2347,13 +1862,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/actuator/health",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "actuator",
-                "health"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["actuator", "health"]
             },
             "description": "Liveness probe endpoint returning UP status"
           }
@@ -2375,15 +1885,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/admin/login",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "admin",
-                "login"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "admin", "login"]
             },
             "description": "Authenticates admin and saves JWT token to collection variable {{adminToken}}",
             "body": {
@@ -2426,16 +1929,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/admin/profiles/unverified?page=0&size=20",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "admin",
-                "profiles",
-                "unverified"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "admin", "profiles", "unverified"],
               "query": [
                 {
                   "key": "page",
@@ -2464,15 +1959,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/admin/profiles?search=&page=0&size=20",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "admin",
-                "profiles"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "admin", "profiles"],
               "query": [
                 {
                   "key": "search",
@@ -2506,16 +1994,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/admin/profiles/{{targetUserId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "admin",
-                "profiles",
-                "{{targetUserId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "admin", "profiles", "{{targetUserId}}"]
             },
             "description": "Fetches complete profile details from an admin perspective"
           }
@@ -2536,15 +2016,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/admin/profiles",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "admin",
-                "profiles"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "admin", "profiles"]
             },
             "description": "Allows administrator to register and create a profile manually",
             "body": {
@@ -2574,16 +2047,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/admin/profiles/{{targetUserId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "admin",
-                "profiles",
-                "{{targetUserId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "admin", "profiles", "{{targetUserId}}"]
             },
             "description": "Edits profile information. Email and password cannot be edited here.",
             "body": {
@@ -2609,9 +2074,7 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/admin/profiles/{{targetUserId}}/verify",
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "host": ["{{baseUrl}}"],
               "path": [
                 "api",
                 "v1",
@@ -2636,9 +2099,7 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/admin/profiles/{{targetUserId}}/block",
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "host": ["{{baseUrl}}"],
               "path": [
                 "api",
                 "v1",
@@ -2663,9 +2124,7 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/admin/profiles/{{targetUserId}}/unblock",
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "host": ["{{baseUrl}}"],
               "path": [
                 "api",
                 "v1",
@@ -2694,9 +2153,7 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/admin/profiles/{{targetUserId}}/photos",
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "host": ["{{baseUrl}}"],
               "path": [
                 "api",
                 "v1",
@@ -2730,9 +2187,7 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/admin/profiles/{{targetUserId}}/photos/{{attachmentId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "host": ["{{baseUrl}}"],
               "path": [
                 "api",
                 "v1",
@@ -2758,15 +2213,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/admin/plans",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "admin",
-                "plans"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "admin", "plans"]
             },
             "description": "Returns all plans including pricing, duration, and promotional settings"
           }
@@ -2783,16 +2231,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/admin/plans/{{planId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "admin",
-                "plans",
-                "{{planId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "admin", "plans", "{{planId}}"]
             },
             "description": ""
           }
@@ -2813,16 +2253,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/admin/plans/{{planId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "admin",
-                "plans",
-                "{{planId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "admin", "plans", "{{planId}}"]
             },
             "description": "Modifies price, discount, duration, or active status of a membership tier",
             "body": {
@@ -2848,9 +2280,7 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/admin/plans/{{planId}}/set-free-signup",
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "host": ["{{baseUrl}}"],
               "path": [
                 "api",
                 "v1",
@@ -2875,16 +2305,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/admin/plans/memberships?page=0&size=20",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "admin",
-                "plans",
-                "memberships"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "admin", "plans", "memberships"],
               "query": [
                 {
                   "key": "page",
@@ -2913,15 +2335,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/admin/featured-stories",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "admin",
-                "featured-stories"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "admin", "featured-stories"]
             },
             "description": "Lists all home screen stories"
           }
@@ -2942,15 +2357,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/admin/featured-stories",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "admin",
-                "featured-stories"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "admin", "featured-stories"]
             },
             "description": "Curates a user profile to be highlighted on the home screen",
             "body": {
@@ -2976,16 +2384,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/admin/featured-stories/{{storyId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "admin",
-                "featured-stories",
-                "{{storyId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "admin", "featured-stories", "{{storyId}}"]
             },
             "description": "Removes a profile from the home screen featured stories"
           }
@@ -3002,15 +2402,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/admin/tickets?page=0&size=20",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "admin",
-                "tickets"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "admin", "tickets"],
               "query": [
                 {
                   "key": "status",
@@ -3044,16 +2437,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/admin/tickets/{{ticketId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "admin",
-                "tickets",
-                "{{ticketId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "admin", "tickets", "{{ticketId}}"]
             },
             "description": "View full conversation thread and ticket context"
           }
@@ -3074,9 +2459,7 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/admin/tickets/{{ticketId}}/messages",
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "host": ["{{baseUrl}}"],
               "path": [
                 "api",
                 "v1",
@@ -3110,17 +2493,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/admin/tickets/{{ticketId}}/close",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "admin",
-                "tickets",
-                "{{ticketId}}",
-                "close"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "admin", "tickets", "{{ticketId}}", "close"]
             },
             "description": "Marks ticket as resolved and closed"
           }
@@ -3141,16 +2515,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/admin/notifications/broadcast",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "admin",
-                "notifications",
-                "broadcast"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "admin", "notifications", "broadcast"]
             },
             "description": "Fires a high-priority FCM push broadcast to all registered devices",
             "body": {
@@ -3180,16 +2546,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/admin/notifications/send-user",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "admin",
-                "notifications",
-                "send-user"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "admin", "notifications", "send-user"]
             },
             "description": "Sends a direct targeted push notification to a specific member",
             "body": {
@@ -3220,15 +2578,8 @@
             ],
             "url": {
               "raw": "{{chatBaseUrl}}/api/v1/chat/conversations",
-              "host": [
-                "{{chatBaseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "chat",
-                "conversations"
-              ]
+              "host": ["{{chatBaseUrl}}"],
+              "path": ["api", "v1", "chat", "conversations"]
             },
             "description": "Lists all 1-on-1 conversation threads with matched partners"
           }
@@ -3249,16 +2600,8 @@
             ],
             "url": {
               "raw": "{{chatBaseUrl}}/api/v1/chat/conversations/initiate",
-              "host": [
-                "{{chatBaseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "chat",
-                "conversations",
-                "initiate"
-              ]
+              "host": ["{{chatBaseUrl}}"],
+              "path": ["api", "v1", "chat", "conversations", "initiate"]
             },
             "description": "Initiates or retrieves an existing conversation thread with a matched user",
             "body": {
@@ -3284,9 +2627,7 @@
             ],
             "url": {
               "raw": "{{chatBaseUrl}}/api/v1/chat/conversations/{{conversationId}}/messages?limit=30",
-              "host": [
-                "{{chatBaseUrl}}"
-              ],
+              "host": ["{{chatBaseUrl}}"],
               "path": [
                 "api",
                 "v1",
@@ -3327,16 +2668,8 @@
             ],
             "url": {
               "raw": "{{chatBaseUrl}}/api/v1/chat/messages/send",
-              "host": [
-                "{{chatBaseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "chat",
-                "messages",
-                "send"
-              ]
+              "host": ["{{chatBaseUrl}}"],
+              "path": ["api", "v1", "chat", "messages", "send"]
             },
             "description": "Sends a message via HTTP REST when WebSocket is reconnecting",
             "body": {
@@ -3362,9 +2695,7 @@
             ],
             "url": {
               "raw": "{{chatBaseUrl}}/api/v1/chat/conversations/{{conversationId}}/read",
-              "host": [
-                "{{chatBaseUrl}}"
-              ],
+              "host": ["{{chatBaseUrl}}"],
               "path": [
                 "api",
                 "v1",
@@ -3389,17 +2720,8 @@
             ],
             "url": {
               "raw": "{{chatBaseUrl}}/api/v1/chat/presence/user/2",
-              "host": [
-                "{{chatBaseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "chat",
-                "presence",
-                "user",
-                "2"
-              ]
+              "host": ["{{chatBaseUrl}}"],
+              "path": ["api", "v1", "chat", "presence", "user", "2"]
             },
             "description": "Checks whether the given member is currently online via WebSocket heartbeat"
           }
@@ -3416,16 +2738,8 @@
             ],
             "url": {
               "raw": "{{chatBaseUrl}}/api/v1/chat/presence/online-count",
-              "host": [
-                "{{chatBaseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "chat",
-                "presence",
-                "online-count"
-              ]
+              "host": ["{{chatBaseUrl}}"],
+              "path": ["api", "v1", "chat", "presence", "online-count"]
             },
             "description": "Returns total number of concurrent active chat connections"
           }

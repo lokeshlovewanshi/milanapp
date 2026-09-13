@@ -1,5 +1,10 @@
-﻿import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import {
+  Link,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { api } from "../api";
 import ContactMessageModal from "../components/ContactMessageModal";
 import {
@@ -41,24 +46,84 @@ const EDIT_SECTIONS = [
     title: "Personal",
     fields: [
       { key: "name", label: "Full Name", required: true },
-      { key: "gender", label: "Gender", type: "select", category: "gender", options: GENDER_OPTIONS },
-      { key: "maritalStatus", label: "Marital Status", type: "select", category: "marital_status", options: MARITAL_STATUS_OPTIONS },
+      {
+        key: "gender",
+        label: "Gender",
+        type: "select",
+        category: "gender",
+        options: GENDER_OPTIONS,
+      },
+      {
+        key: "maritalStatus",
+        label: "Marital Status",
+        type: "select",
+        category: "marital_status",
+        options: MARITAL_STATUS_OPTIONS,
+      },
       { key: "dateOfBirth", label: "Date of Birth", type: "date" },
-      { key: "height", label: "Height", type: "select", category: "height", options: HEIGHT_OPTIONS },
+      {
+        key: "height",
+        label: "Height",
+        type: "select",
+        category: "height",
+        options: HEIGHT_OPTIONS,
+      },
       { key: "weight", label: "Weight (kg)", type: "number" },
-      { key: "complexion", label: "Complexion", type: "select", category: "complexion", options: COMPLEXION_OPTIONS },
-      { key: "diet", label: "Diet", type: "select", category: "diet", options: DIET_OPTIONS },
-      { key: "bloodGroup", label: "Blood Group", type: "select", category: "blood_group", options: BLOOD_GROUP_OPTIONS },
-      { key: "motherTongue", label: "Mother Tongue", type: "select", category: "mother_tongue", options: MOTHER_TONGUE_OPTIONS },
-      { key: "profileCreatedBy", label: "Profile Created By", type: "select", category: "profile_created_by", options: PROFILE_CREATED_BY_OPTIONS },
-      { key: "disability", label: "Disability / Special Needs", type: "select", category: "disability", options: DISABILITY_OPTIONS },
+      {
+        key: "complexion",
+        label: "Complexion",
+        type: "select",
+        category: "complexion",
+        options: COMPLEXION_OPTIONS,
+      },
+      {
+        key: "diet",
+        label: "Diet",
+        type: "select",
+        category: "diet",
+        options: DIET_OPTIONS,
+      },
+      {
+        key: "bloodGroup",
+        label: "Blood Group",
+        type: "select",
+        category: "blood_group",
+        options: BLOOD_GROUP_OPTIONS,
+      },
+      {
+        key: "motherTongue",
+        label: "Mother Tongue",
+        type: "select",
+        category: "mother_tongue",
+        options: MOTHER_TONGUE_OPTIONS,
+      },
+      {
+        key: "profileCreatedBy",
+        label: "Profile Created By",
+        type: "select",
+        category: "profile_created_by",
+        options: PROFILE_CREATED_BY_OPTIONS,
+      },
+      {
+        key: "disability",
+        label: "Disability / Special Needs",
+        type: "select",
+        category: "disability",
+        options: DISABILITY_OPTIONS,
+      },
     ],
   },
   {
     title: "Location & Address",
     fields: [
       { key: "country", label: "Country" },
-      { key: "state", label: "State", type: "select", category: "states", options: STATE_OPTIONS },
+      {
+        key: "state",
+        label: "State",
+        type: "select",
+        category: "states",
+        options: STATE_OPTIONS,
+      },
       { key: "city", label: "City" },
       { key: "town", label: "Town / Native Place (मूल निवास)" },
       { key: "presentAddress", label: "Present Address", type: "textarea" },
@@ -75,54 +140,134 @@ const EDIT_SECTIONS = [
   {
     title: "Religion & Astrology",
     fields: [
-      { key: "gotra", label: "Gotra", type: "select", category: "gotra", options: GOTRA_OPTIONS },
+      {
+        key: "gotra",
+        label: "Gotra",
+        type: "select",
+        category: "gotra",
+        options: GOTRA_OPTIONS,
+      },
       { key: "aakna", label: "Aakna" },
-      { key: "manglik", label: "Manglik Status", type: "select", category: "manglik", options: MANGLIK_OPTIONS },
+      {
+        key: "manglik",
+        label: "Manglik Status",
+        type: "select",
+        category: "manglik",
+        options: MANGLIK_OPTIONS,
+      },
       { key: "timeOfBirth", label: "Time of Birth" },
       { key: "placeOfBirth", label: "Place of Birth (City)" },
-      { key: "zodiac", label: "Zodiac / Rashi", type: "select", category: "rashi", options: ZODIAC_OPTIONS },
-      { key: "nakshatra", label: "Nakshatra", type: "select", category: "nakshatra", options: NAKSHATRA_OPTIONS },
+      {
+        key: "zodiac",
+        label: "Zodiac / Rashi",
+        type: "select",
+        category: "rashi",
+        options: ZODIAC_OPTIONS,
+      },
+      {
+        key: "nakshatra",
+        label: "Nakshatra",
+        type: "select",
+        category: "nakshatra",
+        options: NAKSHATRA_OPTIONS,
+      },
     ],
   },
   {
     title: "Family Details",
     fields: [
       { key: "fathersName", label: "Father's Name" },
-      { key: "fathersOccupation", label: "Father's Occupation", type: "select", category: "profession", options: PROFESSION_OPTIONS },
+      {
+        key: "fathersOccupation",
+        label: "Father's Occupation",
+        type: "select",
+        category: "profession",
+        options: PROFESSION_OPTIONS,
+      },
       { key: "mothersName", label: "Mother's Name" },
-      { key: "mothersOccupation", label: "Mother's Occupation", type: "select", category: "profession", options: PROFESSION_OPTIONS },
+      {
+        key: "mothersOccupation",
+        label: "Mother's Occupation",
+        type: "select",
+        category: "profession",
+        options: PROFESSION_OPTIONS,
+      },
       { key: "marriedBrothers", label: "Married Brothers", type: "number" },
       { key: "unmarriedBrothers", label: "Unmarried Brothers", type: "number" },
       { key: "marriedSisters", label: "Married Sisters", type: "number" },
       { key: "unmarriedSisters", label: "Unmarried Sisters", type: "number" },
       { key: "maternalUnclesName", label: "Maternal Uncle's Name (मामाजी)" },
       { key: "maternalUnclesAakna", label: "Maternal Uncle's Aakna" },
+      { key: "maternalUnclesGotra", label: "Maternal Uncle's Gotra" },
     ],
   },
   {
     title: "Education & Career",
     fields: [
-      { key: "education", label: "Highest Education", type: "select", category: "education", options: EDUCATION_OPTIONS },
-      { key: "educationDetails", label: "Education Details (College / Stream)" },
-      { key: "profession", label: "Profession", type: "select", category: "profession", options: PROFESSION_OPTIONS },
-      { key: "employedIn", label: "Employed In", type: "select", category: "employed_in", options: EMPLOYED_IN_OPTIONS },
+      {
+        key: "education",
+        label: "Highest Education",
+        type: "select",
+        category: "education",
+        options: EDUCATION_OPTIONS,
+      },
+      {
+        key: "educationDetails",
+        label: "Education Details (College / Stream)",
+      },
+      {
+        key: "profession",
+        label: "Profession",
+        type: "select",
+        category: "profession",
+        options: PROFESSION_OPTIONS,
+      },
+      {
+        key: "employedIn",
+        label: "Employed In",
+        type: "select",
+        category: "employed_in",
+        options: EMPLOYED_IN_OPTIONS,
+      },
       { key: "organization", label: "Company / Organization" },
-      { key: "annualIncome", label: "Annual Income", type: "select", category: "annual_income", options: INCOME_OPTIONS },
+      {
+        key: "annualIncome",
+        label: "Annual Income",
+        type: "select",
+        category: "annual_income",
+        options: INCOME_OPTIONS,
+      },
       { key: "workCity", label: "Work City / Location" },
     ],
   },
   {
     title: "Assets",
     fields: [
-      { key: "houseStatus", label: "House Status", type: "select", category: "house_status", options: HOUSE_STATUS_OPTIONS },
-      { key: "carStatus", label: "Car Status", type: "select", category: "car_status", options: CAR_STATUS_OPTIONS },
+      {
+        key: "houseStatus",
+        label: "House Status",
+        type: "select",
+        category: "house_status",
+        options: HOUSE_STATUS_OPTIONS,
+      },
+      {
+        key: "carStatus",
+        label: "Car Status",
+        type: "select",
+        category: "car_status",
+        options: CAR_STATUS_OPTIONS,
+      },
     ],
   },
   {
     title: "About & Expectations",
     fields: [
       { key: "aboutMyself", label: "About Myself", type: "textarea" },
-      { key: "partnerPreferences", label: "Partner Preferences", type: "textarea" },
+      {
+        key: "partnerPreferences",
+        label: "Partner Preferences",
+        type: "textarea",
+      },
     ],
   },
 ];
@@ -294,7 +439,7 @@ export default function ProfileDetail() {
       setError(
         err.message.includes("409")
           ? "Already highlighted"
-          : "Could not add to highlighted profiles"
+          : "Could not add to highlighted profiles",
       );
     } finally {
       setFeaturing(false);
@@ -373,7 +518,11 @@ export default function ProfileDetail() {
     try {
       const updated = await api.setProfileVisibility(id, nextHidden);
       setProfile((prev) => ({ ...prev, hidden: updated.hidden }));
-      setSuccess(nextHidden ? "Profile is now hidden from member feeds." : "Profile is now unhidden and visible to members.");
+      setSuccess(
+        nextHidden
+          ? "Profile is now hidden from member feeds."
+          : "Profile is now unhidden and visible to members.",
+      );
     } catch (err) {
       setError(err?.message || "Failed to update profile visibility");
     } finally {
@@ -430,11 +579,25 @@ export default function ProfileDetail() {
 
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "1rem",
+        }}
+      >
         <Link to="/queue" className="back-link">
           &larr; Back to Verification Queue
         </Link>
-        <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", alignItems: "center" }}>
+        <div
+          style={{
+            display: "flex",
+            gap: "0.5rem",
+            flexWrap: "wrap",
+            alignItems: "center",
+          }}
+        >
           <button
             type="button"
             onClick={() => setShowContactModal(true)}
@@ -460,7 +623,11 @@ export default function ProfileDetail() {
             type="button"
             className="secondary"
             onClick={() => setShowNotifModal(true)}
-            style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem" }}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.35rem",
+            }}
           >
             <span>🔔</span> Send Notification
           </button>
@@ -470,10 +637,19 @@ export default function ProfileDetail() {
             className="secondary"
             onClick={handleToggleVisibility}
             disabled={togglingVisibility}
-            style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem" }}
-            title={profile.hidden ? "Unhide profile so members can view it" : "Hide profile from member search and feeds"}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.35rem",
+            }}
+            title={
+              profile.hidden
+                ? "Unhide profile so members can view it"
+                : "Hide profile from member search and feeds"
+            }
           >
-            <span>{profile.hidden ? "👁️" : "🙈"}</span> {profile.hidden ? "Unhide Profile" : "Hide Profile"}
+            <span>{profile.hidden ? "👁️" : "🙈"}</span>{" "}
+            {profile.hidden ? "Unhide Profile" : "Hide Profile"}
           </button>
 
           <button
@@ -494,13 +670,28 @@ export default function ProfileDetail() {
         </div>
       </div>
 
-      {success && <div className="success-banner" style={{ marginBottom: "1rem" }}>{success}</div>}
-      {error && <div className="error-banner" style={{ marginBottom: "1rem" }}>{error}</div>}
+      {success && (
+        <div className="success-banner" style={{ marginBottom: "1rem" }}>
+          {success}
+        </div>
+      )}
+      {error && (
+        <div className="error-banner" style={{ marginBottom: "1rem" }}>
+          {error}
+        </div>
+      )}
 
       <div className="card detail-card">
         {/* Photo Gallery & Upload Section */}
         <div style={{ marginBottom: "1.5rem" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: "0.75rem",
+            }}
+          >
             <h3 style={{ margin: 0, fontSize: "1.05rem" }}>
               Profile Photos ({photos.length})
             </h3>
@@ -523,8 +714,17 @@ export default function ProfileDetail() {
             </div>
           </div>
 
-          <div className="photo-row" style={{ display: "flex", gap: "1rem", flexWrap: "wrap", alignItems: "flex-start" }}>
-            {photos.length === 0 && (!profile.photoDetails || profile.photoDetails.length === 0) ? (
+          <div
+            className="photo-row"
+            style={{
+              display: "flex",
+              gap: "1rem",
+              flexWrap: "wrap",
+              alignItems: "flex-start",
+            }}
+          >
+            {photos.length === 0 &&
+            (!profile.photoDetails || profile.photoDetails.length === 0) ? (
               <div
                 style={{
                   padding: "1.5rem",
@@ -536,15 +736,22 @@ export default function ProfileDetail() {
                   width: "100%",
                 }}
               >
-                No photos uploaded yet. Use "Upload Photo" above to add one on behalf of this user.
+                No photos uploaded yet. Use "Upload Photo" above to add one on
+                behalf of this user.
               </div>
             ) : (
               (profile.photoDetails && profile.photoDetails.length > 0
                 ? profile.photoDetails
-                : photos.map((src, i) => ({ id: null, url: src, isPrimary: i === 0 }))
+                : photos.map((src, i) => ({
+                    id: null,
+                    url: src,
+                    isPrimary: i === 0,
+                  }))
               ).map((item, i) => {
                 const src = item.url || item;
-                const isPrimary = Boolean(item.isPrimary || (i === 0 && !profile.photoDetails?.length));
+                const isPrimary = Boolean(
+                  item.isPrimary || (i === 0 && !profile.photoDetails?.length),
+                );
                 return (
                   <div
                     key={item.id || i}
@@ -556,7 +763,9 @@ export default function ProfileDetail() {
                       background: "#F9FAFB",
                       padding: "6px",
                       borderRadius: "8px",
-                      border: isPrimary ? "2px solid #10B981" : "1px solid #E5E7EB",
+                      border: isPrimary
+                        ? "2px solid #10B981"
+                        : "1px solid #E5E7EB",
                     }}
                   >
                     <div style={{ position: "relative" }}>
@@ -564,7 +773,12 @@ export default function ProfileDetail() {
                         src={src}
                         alt=""
                         className="detail-photo"
-                        style={{ borderRadius: "6px", width: "120px", height: "120px", objectFit: "cover" }}
+                        style={{
+                          borderRadius: "6px",
+                          width: "120px",
+                          height: "120px",
+                          objectFit: "cover",
+                        }}
                       />
                       {isPrimary && (
                         <span
@@ -586,7 +800,14 @@ export default function ProfileDetail() {
                       )}
                     </div>
                     {item.id && (
-                      <div style={{ display: "flex", gap: "0.3rem", width: "100%", justifyContent: "center" }}>
+                      <div
+                        style={{
+                          display: "flex",
+                          gap: "0.3rem",
+                          width: "100%",
+                          justifyContent: "center",
+                        }}
+                      >
                         {!isPrimary && (
                           <button
                             type="button"
@@ -602,7 +823,11 @@ export default function ProfileDetail() {
                         <button
                           type="button"
                           className="secondary small"
-                          style={{ fontSize: "11px", padding: "2px 6px", color: "#DC2626" }}
+                          style={{
+                            fontSize: "11px",
+                            padding: "2px 6px",
+                            color: "#DC2626",
+                          }}
                           onClick={() => handleDeletePhoto(item.id)}
                           disabled={deletingPhotoId === item.id}
                           title="Delete this photo"
@@ -621,13 +846,24 @@ export default function ProfileDetail() {
         {/* Profile Header */}
         <div className="detail-header">
           <div>
-            <h1 style={{ margin: "0 0 0.25rem 0" }}>{profile.name || "(No name)"}</h1>
+            <h1 style={{ margin: "0 0 0.25rem 0" }}>
+              {profile.name || "(No name)"}
+            </h1>
             <div className="muted" style={{ fontSize: "0.95rem" }}>
               ID: <strong>{profile.displayId}</strong> (Raw ID: {profile.id})
             </div>
           </div>
-          <div style={{ display: "flex", gap: "0.5rem", alignItems: "center", flexWrap: "wrap" }}>
-            <span className={`badge ${profile.verified ? "badge-verified" : "badge-pending"}`}>
+          <div
+            style={{
+              display: "flex",
+              gap: "0.5rem",
+              alignItems: "center",
+              flexWrap: "wrap",
+            }}
+          >
+            <span
+              className={`badge ${profile.verified ? "badge-verified" : "badge-pending"}`}
+            >
               {profile.verified ? "✓ Verified" : "⏳ Not verified"}
             </span>
             {profile.hidden && (
@@ -645,7 +881,9 @@ export default function ProfileDetail() {
                 🙈 Profile Hidden
               </span>
             )}
-            {profile.blocked && <span className="badge badge-blocked">Blocked</span>}
+            {profile.blocked && (
+              <span className="badge badge-blocked">Blocked</span>
+            )}
           </div>
         </div>
 
@@ -653,20 +891,43 @@ export default function ProfileDetail() {
         {!editing && (
           <>
             <div style={{ marginTop: "1.5rem" }}>
-              <h3 style={{ borderBottom: "1px solid #E5E7EB", paddingBottom: "0.4rem", marginBottom: "0.75rem", fontSize: "1.05rem" }}>
+              <h3
+                style={{
+                  borderBottom: "1px solid #E5E7EB",
+                  paddingBottom: "0.4rem",
+                  marginBottom: "0.75rem",
+                  fontSize: "1.05rem",
+                }}
+              >
                 Personal Details
               </h3>
               <dl className="detail-grid">
                 <dt>Gender</dt>
                 <dd>{formatCode("gender", profile.gender)}</dd>
                 <dt>Age</dt>
-                <dd>{age(profile.dateOfBirth) ? `${age(profile.dateOfBirth)} yrs` : "-"}</dd>
+                <dd>
+                  {age(profile.dateOfBirth)
+                    ? `${age(profile.dateOfBirth)} yrs`
+                    : "-"}
+                </dd>
                 <dt>Date of Birth</dt>
-                <dd>{profile.dateOfBirth ? String(profile.dateOfBirth).slice(0, 10) : "-"}</dd>
+                <dd>
+                  {profile.dateOfBirth
+                    ? String(profile.dateOfBirth).slice(0, 10)
+                    : "-"}
+                </dd>
                 <dt>Marital status</dt>
-                <dd><strong>{formatCode("marital_status", profile.maritalStatus)}</strong></dd>
+                <dd>
+                  <strong>
+                    {formatCode("marital_status", profile.maritalStatus)}
+                  </strong>
+                </dd>
                 <dt>Height</dt>
-                <dd><strong style={{ color: "#1E3A8A" }}>{formatCode("height", profile.height)}</strong></dd>
+                <dd>
+                  <strong style={{ color: "#1E3A8A" }}>
+                    {formatCode("height", profile.height)}
+                  </strong>
+                </dd>
                 <dt>Weight</dt>
                 <dd>{profile.weight ? `${profile.weight} kg` : "-"}</dd>
                 <dt>Complexion</dt>
@@ -678,14 +939,23 @@ export default function ProfileDetail() {
                 <dt>Mother Tongue</dt>
                 <dd>{formatCode("mother_tongue", profile.motherTongue)}</dd>
                 <dt>Profile Created By</dt>
-                <dd>{formatCode("profile_created_by", profile.profileCreatedBy)}</dd>
+                <dd>
+                  {formatCode("profile_created_by", profile.profileCreatedBy)}
+                </dd>
                 <dt>Disability</dt>
                 <dd>{formatCode("disability", profile.disability)}</dd>
               </dl>
             </div>
 
             <div style={{ marginTop: "1.5rem" }}>
-              <h3 style={{ borderBottom: "1px solid #E5E7EB", paddingBottom: "0.4rem", marginBottom: "0.75rem", fontSize: "1.05rem" }}>
+              <h3
+                style={{
+                  borderBottom: "1px solid #E5E7EB",
+                  paddingBottom: "0.4rem",
+                  marginBottom: "0.75rem",
+                  fontSize: "1.05rem",
+                }}
+              >
                 Location & Contact
               </h3>
               <dl className="detail-grid">
@@ -698,7 +968,9 @@ export default function ProfileDetail() {
                 <dt>Town / Native</dt>
                 <dd>{profile.town || "-"}</dd>
                 <dt>Mobile No</dt>
-                <dd><strong>{profile.mobileNo || "-"}</strong></dd>
+                <dd>
+                  <strong>{profile.mobileNo || "-"}</strong>
+                </dd>
                 <dt>Email</dt>
                 <dd>{profile.email || "-"}</dd>
                 <dt>WhatsApp No</dt>
@@ -713,12 +985,21 @@ export default function ProfileDetail() {
             </div>
 
             <div style={{ marginTop: "1.5rem" }}>
-              <h3 style={{ borderBottom: "1px solid #E5E7EB", paddingBottom: "0.4rem", marginBottom: "0.75rem", fontSize: "1.05rem" }}>
+              <h3
+                style={{
+                  borderBottom: "1px solid #E5E7EB",
+                  paddingBottom: "0.4rem",
+                  marginBottom: "0.75rem",
+                  fontSize: "1.05rem",
+                }}
+              >
                 Religion & Astrology
               </h3>
               <dl className="detail-grid">
                 <dt>Gotra</dt>
-                <dd><strong>{formatCode("gotra", profile.gotra)}</strong></dd>
+                <dd>
+                  <strong>{formatCode("gotra", profile.gotra)}</strong>
+                </dd>
                 <dt>Aakna</dt>
                 <dd>{profile.aakna || "-"}</dd>
                 <dt>Manglik</dt>
@@ -735,29 +1016,53 @@ export default function ProfileDetail() {
             </div>
 
             <div style={{ marginTop: "1.5rem" }}>
-              <h3 style={{ borderBottom: "1px solid #E5E7EB", paddingBottom: "0.4rem", marginBottom: "0.75rem", fontSize: "1.05rem" }}>
+              <h3
+                style={{
+                  borderBottom: "1px solid #E5E7EB",
+                  paddingBottom: "0.4rem",
+                  marginBottom: "0.75rem",
+                  fontSize: "1.05rem",
+                }}
+              >
                 Education & Career
               </h3>
               <dl className="detail-grid">
                 <dt>Highest Education</dt>
-                <dd><strong>{formatCode("education", profile.education)}</strong></dd>
+                <dd>
+                  <strong>{formatCode("education", profile.education)}</strong>
+                </dd>
                 <dt>Education Details</dt>
                 <dd>{profile.educationDetails || "-"}</dd>
                 <dt>Profession</dt>
-                <dd><strong>{formatCode("profession", profile.profession)}</strong></dd>
+                <dd>
+                  <strong>
+                    {formatCode("profession", profile.profession)}
+                  </strong>
+                </dd>
                 <dt>Employed In</dt>
                 <dd>{formatCode("employed_in", profile.employedIn)}</dd>
                 <dt>Company / Org</dt>
                 <dd>{profile.organization || "-"}</dd>
                 <dt>Annual Income</dt>
-                <dd><strong style={{ color: "#047857" }}>{formatCode("annual_income", profile.annualIncome)}</strong></dd>
+                <dd>
+                  <strong style={{ color: "#047857" }}>
+                    {formatCode("annual_income", profile.annualIncome)}
+                  </strong>
+                </dd>
                 <dt>Work Location</dt>
                 <dd>{profile.workCity || "-"}</dd>
               </dl>
             </div>
 
             <div style={{ marginTop: "1.5rem" }}>
-              <h3 style={{ borderBottom: "1px solid #E5E7EB", paddingBottom: "0.4rem", marginBottom: "0.75rem", fontSize: "1.05rem" }}>
+              <h3
+                style={{
+                  borderBottom: "1px solid #E5E7EB",
+                  paddingBottom: "0.4rem",
+                  marginBottom: "0.75rem",
+                  fontSize: "1.05rem",
+                }}
+              >
                 Family & Assets
               </h3>
               <dl className="detail-grid">
@@ -771,16 +1076,24 @@ export default function ProfileDetail() {
                 <dd>{formatCode("profession", profile.mothersOccupation)}</dd>
                 <dt>Brothers</dt>
                 <dd>
-                  Married: {profile.marriedBrothers ?? "-"} | Unmarried: {profile.unmarriedBrothers ?? "-"}
+                  Married: {profile.marriedBrothers ?? "-"} | Unmarried:{" "}
+                  {profile.unmarriedBrothers ?? "-"}
                 </dd>
                 <dt>Sisters</dt>
                 <dd>
-                  Married: {profile.marriedSisters ?? "-"} | Unmarried: {profile.unmarriedSisters ?? "-"}
+                  Married: {profile.marriedSisters ?? "-"} | Unmarried:{" "}
+                  {profile.unmarriedSisters ?? "-"}
                 </dd>
                 <dt>Maternal Uncle</dt>
                 <dd>{profile.maternalUnclesName || "-"}</dd>
                 <dt>Uncle's Aakna</dt>
                 <dd>{profile.maternalUnclesAakna || "-"}</dd>
+                <dt>Uncle's Gotra</dt>
+                <dd>
+                  {profile.maternalUnclesGotra ||
+                    profile.maternalUnclesAakna ||
+                    "-"}
+                </dd>
                 <dt>House Status</dt>
                 <dd>{formatCode("house_status", profile.houseStatus)}</dd>
                 <dt>Car Status</dt>
@@ -790,19 +1103,40 @@ export default function ProfileDetail() {
 
             {(profile.aboutMyself || profile.partnerPreferences) && (
               <div style={{ marginTop: "1.5rem" }}>
-                <h3 style={{ borderBottom: "1px solid #E5E7EB", paddingBottom: "0.4rem", marginBottom: "0.75rem", fontSize: "1.05rem" }}>
+                <h3
+                  style={{
+                    borderBottom: "1px solid #E5E7EB",
+                    paddingBottom: "0.4rem",
+                    marginBottom: "0.75rem",
+                    fontSize: "1.05rem",
+                  }}
+                >
                   About & Expectations
                 </h3>
                 {profile.aboutMyself && (
                   <div style={{ marginBottom: "1rem" }}>
-                    <div className="muted" style={{ fontWeight: 600, fontSize: "0.85rem" }}>ABOUT MYSELF</div>
-                    <p style={{ marginTop: "0.25rem", whiteSpace: "pre-wrap" }}>{profile.aboutMyself}</p>
+                    <div
+                      className="muted"
+                      style={{ fontWeight: 600, fontSize: "0.85rem" }}
+                    >
+                      ABOUT MYSELF
+                    </div>
+                    <p style={{ marginTop: "0.25rem", whiteSpace: "pre-wrap" }}>
+                      {profile.aboutMyself}
+                    </p>
                   </div>
                 )}
                 {profile.partnerPreferences && (
                   <div>
-                    <div className="muted" style={{ fontWeight: 600, fontSize: "0.85rem" }}>PARTNER PREFERENCES</div>
-                    <p style={{ marginTop: "0.25rem", whiteSpace: "pre-wrap" }}>{profile.partnerPreferences}</p>
+                    <div
+                      className="muted"
+                      style={{ fontWeight: 600, fontSize: "0.85rem" }}
+                    >
+                      PARTNER PREFERENCES
+                    </div>
+                    <p style={{ marginTop: "0.25rem", whiteSpace: "pre-wrap" }}>
+                      {profile.partnerPreferences}
+                    </p>
                   </div>
                 )}
               </div>
@@ -818,35 +1152,56 @@ export default function ProfileDetail() {
                 <legend>{section.title}</legend>
                 {section.fields.map((field) => (
                   <label key={field.key}>
-                    {field.label} {field.required && <span style={{ color: "#DC2626" }}>*</span>}
+                    {field.label}{" "}
+                    {field.required && (
+                      <span style={{ color: "#DC2626" }}>*</span>
+                    )}
                     {field.type === "textarea" ? (
                       <textarea
                         rows={3}
                         value={form[field.key]}
-                        onChange={(e) => handleFieldChange(field.key, e.target.value)}
+                        onChange={(e) =>
+                          handleFieldChange(field.key, e.target.value)
+                        }
                       />
                     ) : field.type === "select" ? (
                       (() => {
-                        const rawOpts = field.key === "state"
-                          ? states
-                          : (field.category ? list(field.category) : (field.options || []));
+                        const rawOpts =
+                          field.key === "state"
+                            ? states
+                            : field.category
+                              ? list(field.category)
+                              : field.options || [];
                         const currentVal = form[field.key];
-                        const hasCurrent = !currentVal || rawOpts.some((o) => (typeof o === "object" ? o.code : o) === currentVal);
+                        const hasCurrent =
+                          !currentVal ||
+                          rawOpts.some(
+                            (o) =>
+                              (typeof o === "object" ? o.code : o) ===
+                              currentVal,
+                          );
 
                         return (
                           <select
                             value={currentVal ?? ""}
-                            onChange={(e) => handleFieldChange(field.key, e.target.value)}
+                            onChange={(e) =>
+                              handleFieldChange(field.key, e.target.value)
+                            }
                           >
                             <option value="">-- Select {field.label} --</option>
                             {!hasCurrent && (
-                              <option value={currentVal} key={`cur-${currentVal}`}>
+                              <option
+                                value={currentVal}
+                                key={`cur-${currentVal}`}
+                              >
                                 {currentVal} (Current)
                               </option>
                             )}
                             {rawOpts.map((opt) => {
-                              const val = typeof opt === "object" ? opt.code : opt;
-                              const txt = typeof opt === "object" ? opt.label : opt;
+                              const val =
+                                typeof opt === "object" ? opt.code : opt;
+                              const txt =
+                                typeof opt === "object" ? opt.label : opt;
                               return (
                                 <option value={val} key={val}>
                                   {txt}
@@ -862,11 +1217,13 @@ export default function ProfileDetail() {
                           field.type === "number"
                             ? "number"
                             : field.type === "date"
-                            ? "date"
-                            : "text"
+                              ? "date"
+                              : "text"
                         }
                         value={form[field.key]}
-                        onChange={(e) => handleFieldChange(field.key, e.target.value)}
+                        onChange={(e) =>
+                          handleFieldChange(field.key, e.target.value)
+                        }
                       />
                     )}
                   </label>
@@ -879,7 +1236,11 @@ export default function ProfileDetail() {
         {/* Action Buttons */}
         <div className="detail-actions" style={{ marginTop: "2rem" }}>
           {!editing && !profile.verified && (
-            <button onClick={handleVerify} disabled={verifying} className="primary">
+            <button
+              onClick={handleVerify}
+              disabled={verifying}
+              className="primary"
+            >
               {verifying ? "Verifying..." : "✓ Verify this profile"}
             </button>
           )}
@@ -889,16 +1250,24 @@ export default function ProfileDetail() {
               onClick={handleFeature}
               disabled={featuring || featured}
             >
-              {featured ? "★ Highlighted" : featuring ? "Adding..." : "Add to Highlighted"}
+              {featured
+                ? "★ Highlighted"
+                : featuring
+                  ? "Adding..."
+                  : "Add to Highlighted"}
             </button>
           )}
           {!editing && (
-            <button className="danger" onClick={handleToggleBlock} disabled={blocking}>
+            <button
+              className="danger"
+              onClick={handleToggleBlock}
+              disabled={blocking}
+            >
               {blocking
                 ? "Updating..."
                 : profile.blocked
-                ? "Unblock this profile"
-                : "Block this profile"}
+                  ? "Unblock this profile"
+                  : "Block this profile"}
             </button>
           )}
           {!editing && (
@@ -908,7 +1277,11 @@ export default function ProfileDetail() {
           )}
           {editing && (
             <>
-              <button onClick={handleSaveEdit} disabled={saving} className="primary">
+              <button
+                onClick={handleSaveEdit}
+                disabled={saving}
+                className="primary"
+              >
                 {saving ? "Saving changes..." : "Save changes"}
               </button>
               <button
@@ -941,8 +1314,18 @@ export default function ProfileDetail() {
             padding: "1rem",
           }}
         >
-          <div className="card" style={{ maxWidth: "520px", width: "100%", padding: "1.5rem" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
+          <div
+            className="card"
+            style={{ maxWidth: "520px", width: "100%", padding: "1.5rem" }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: "1rem",
+              }}
+            >
               <h3 style={{ margin: 0 }}>🔔 Send Push Notification</h3>
               <button
                 type="button"
@@ -954,13 +1337,26 @@ export default function ProfileDetail() {
               </button>
             </div>
 
-            <p style={{ fontSize: "0.88rem", color: "#4B5563", marginBottom: "1.2rem" }}>
-              Sending directly to <strong>{profile.name}</strong> ({profile.displayId} | {profile.mobileNo})
+            <p
+              style={{
+                fontSize: "0.88rem",
+                color: "#4B5563",
+                marginBottom: "1.2rem",
+              }}
+            >
+              Sending directly to <strong>{profile.name}</strong> (
+              {profile.displayId} | {profile.mobileNo})
             </p>
 
             <form onSubmit={handleSendDirectNotification}>
               <div className="form-group" style={{ marginBottom: "1rem" }}>
-                <label style={{ display: "block", fontWeight: 600, marginBottom: "0.3rem" }}>
+                <label
+                  style={{
+                    display: "block",
+                    fontWeight: 600,
+                    marginBottom: "0.3rem",
+                  }}
+                >
                   Title <span style={{ color: "#DC2626" }}>*</span>
                 </label>
                 <input
@@ -975,7 +1371,13 @@ export default function ProfileDetail() {
               </div>
 
               <div className="form-group" style={{ marginBottom: "1rem" }}>
-                <label style={{ display: "block", fontWeight: 600, marginBottom: "0.3rem" }}>
+                <label
+                  style={{
+                    display: "block",
+                    fontWeight: 600,
+                    marginBottom: "0.3rem",
+                  }}
+                >
                   Message Body <span style={{ color: "#DC2626" }}>*</span>
                 </label>
                 <textarea
@@ -990,7 +1392,13 @@ export default function ProfileDetail() {
               </div>
 
               <div className="form-group" style={{ marginBottom: "1.2rem" }}>
-                <label style={{ display: "block", fontWeight: 600, marginBottom: "0.3rem" }}>
+                <label
+                  style={{
+                    display: "block",
+                    fontWeight: 600,
+                    marginBottom: "0.3rem",
+                  }}
+                >
                   In-App Deep Link (Optional)
                 </label>
                 <input
@@ -1003,7 +1411,13 @@ export default function ProfileDetail() {
                 />
               </div>
 
-              <div style={{ display: "flex", gap: "0.75rem", justifyContent: "flex-end" }}>
+              <div
+                style={{
+                  display: "flex",
+                  gap: "0.75rem",
+                  justifyContent: "flex-end",
+                }}
+              >
                 <button
                   type="button"
                   className="secondary"
@@ -1015,9 +1429,13 @@ export default function ProfileDetail() {
                 <button
                   type="submit"
                   className="primary"
-                  disabled={sendingNotif || !notifTitle.trim() || !notifBody.trim()}
+                  disabled={
+                    sendingNotif || !notifTitle.trim() || !notifBody.trim()
+                  }
                 >
-                  {sendingNotif ? "Sending Push..." : "🚀 Send Push Notification"}
+                  {sendingNotif
+                    ? "Sending Push..."
+                    : "🚀 Send Push Notification"}
                 </button>
               </div>
             </form>
@@ -1047,15 +1465,42 @@ export default function ProfileDetail() {
             padding: "1rem",
           }}
         >
-          <div className="card" style={{ maxWidth: "480px", width: "100%", padding: "1.5rem" }}>
-            <h3 style={{ margin: "0 0 0.5rem 0", color: "#DC2626" }}>⚠️ Delete Member Account</h3>
-            <p style={{ fontSize: "0.9rem", color: "#374151", lineHeight: "1.4" }}>
-              Are you sure you want to delete the account for <strong>{profile.name}</strong> ({profile.displayId})?
+          <div
+            className="card"
+            style={{ maxWidth: "480px", width: "100%", padding: "1.5rem" }}
+          >
+            <h3 style={{ margin: "0 0 0.5rem 0", color: "#DC2626" }}>
+              ⚠️ Delete Member Account
+            </h3>
+            <p
+              style={{
+                fontSize: "0.9rem",
+                color: "#374151",
+                lineHeight: "1.4",
+              }}
+            >
+              Are you sure you want to delete the account for{" "}
+              <strong>{profile.name}</strong> ({profile.displayId})?
             </p>
-            <p style={{ fontSize: "0.85rem", color: "#6B7280", lineHeight: "1.4" }}>
-              This will soft-delete the profile and remove it permanently from all member feeds and searches. Member history (likes, shortlists, views) will remain safely intact in the database.
+            <p
+              style={{
+                fontSize: "0.85rem",
+                color: "#6B7280",
+                lineHeight: "1.4",
+              }}
+            >
+              This will soft-delete the profile and remove it permanently from
+              all member feeds and searches. Member history (likes, shortlists,
+              views) will remain safely intact in the database.
             </p>
-            <div style={{ display: "flex", justifyContent: "flex-end", gap: "0.5rem", marginTop: "1.25rem" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                gap: "0.5rem",
+                marginTop: "1.25rem",
+              }}
+            >
               <button
                 type="button"
                 className="secondary"
