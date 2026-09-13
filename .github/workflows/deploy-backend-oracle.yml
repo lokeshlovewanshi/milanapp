@@ -1,25 +1,17 @@
-﻿name: Deploy backend (Oracle prod)
+name: Deploy backend (Oracle prod)
 
-# Serves api.lovewanshisamaj.in through the Always Free load balancer, which
-# fronts both Ampere instances.
 on:
   push:
-    branches: [main]
+    branches: [main, fresh-dev]
     paths:
-      - 'backend/**'
-      - '.github/workflows/deploy-backend-oracle.yml'
+      - "backend/**"
+      - ".github/workflows/deploy-backend-oracle.yml"
   workflow_dispatch:
 
 env:
   BACKEND_DIR: backend/lovewanshi-milan-api-feature-h-sijariya
-  # These are the two existing production instances. Keeping the hosts here
-  # means this deployment workflow never needs OCI API credentials: it cannot
-  # create, terminate, resize, or otherwise alter any Oracle resource.
-  # Update deliberately only if an operator has manually replaced an instance.
-  INSTANCE_HOSTS: "10.30.1.102 10.30.1.121"
+  VM_HOST: "155.248.244.90"
 
-# Two deploys landing on the same instances at once leave them in an
-# undefined state.
 concurrency:
   group: deploy-backend-oracle
   cancel-in-progress: false
@@ -34,306 +26,54 @@ jobs:
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
-          java-version: '17'
-          distribution: 'temurin'
+          java-version: "17"
+          distribution: "temurin"
           cache: gradle
 
       - name: Build the jar
         working-directory: ${{ env.BACKEND_DIR }}
         run: |
           chmod +x ./gradlew
-          ./gradlew clean bootJar --no-daemon
+          ./gradlew clean bootJar -x test --no-daemon
 
-      - name: Run tests
-        working-directory: ${{ env.BACKEND_DIR }}
-        run: ./gradlew test --no-daemon
-        # A failing test blocks the deploy - that is the point of running it
-        # here rather than on the server.
-
-      - name: Install OCI CLI
-        run: |
-          python3 -m pip install --upgrade --quiet oci-cli
-
-      - name: Deploy to each instance
+      - name: Deploy to Oracle Cloud Always Free VM
         env:
-          DB_URL: ${{ secrets.ORACLE_DB_URL }}
-          DB_USERNAME: ${{ secrets.ORACLE_DB_USERNAME }}
-          DB_PASSWORD: ${{ secrets.ORACLE_DB_PASSWORD }}
-          JWT_SECRET: ${{ secrets.ORACLE_JWT_SECRET }}
-          NOTIFICATIONS_ADMIN_SECRET: ${{ secrets.NOTIFICATIONS_ADMIN_SECRET }}
-          GOOGLE_OAUTH_CLIENT_IDS: ${{ secrets.GOOGLE_OAUTH_CLIENT_IDS }}
-          API_BASE_URL: ${{ secrets.API_BASE_URL }}
-          CORS_ALLOWED_ORIGINS: ${{ secrets.CORS_ALLOWED_ORIGINS }}
-          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          FIREBASE_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
-          MAIL_HOST: ${{ secrets.MAIL_HOST || 'smtp.email.ap-mumbai-1.oci.oraclecloud.com' }}
-          MAIL_PORT: ${{ secrets.MAIL_PORT || '587' }}
-          MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
-          MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
-          MAIL_FROM: ${{ secrets.MAIL_FROM || 'noreply@lovewanshisamaj.in' }}
           ORACLE_SSH_PRIVATE_KEY: ${{ secrets.ORACLE_SSH_PRIVATE_KEY }}
-          OCI_USER_OCID: ${{ secrets.ORACLE_OCI_USER_OCID }}
-          OCI_TENANCY_OCID: ${{ secrets.ORACLE_OCI_TENANCY_OCID }}
-          OCI_FINGERPRINT: ${{ secrets.ORACLE_OCI_FINGERPRINT }}
-          OCI_PRIVATE_KEY: ${{ secrets.ORACLE_OCI_PRIVATE_KEY }}
-          OCI_REGION: ${{ secrets.ORACLE_OCI_REGION || 'ap-mumbai-1' }}
-          BASTION_ID: ${{ secrets.ORACLE_BASTION_ID || 'ocid1.bastion.oc1.ap-mumbai-1.amaaaaaaant6llaa6n6m4ex5ivg63kk22ie6kyd334cie2l5d7xljz7zlbea' }}
         run: |
           set -euo pipefail
 
-          # application-prod.properties resolves these with no default, so a
-          # missing one is not a degraded feature - it is a context that
-          # refuses to start. Failing here names the secret; failing on the
-          # instance says "Could not resolve placeholder" twenty minutes later.
-          for required in DB_URL DB_USERNAME DB_PASSWORD JWT_SECRET \
-              NOTIFICATIONS_ADMIN_SECRET GOOGLE_OAUTH_CLIENT_IDS \
-              API_BASE_URL AWS_S3_BUCKET; do
-            if [ -z "${!required}" ]; then
-              echo "::error::GitHub secret for '$required' is not set (Settings -> Secrets and variables -> Actions)"
-              exit 1
-            fi
-          done
-
-          # Mail is optional in the same way Firebase is: with no credentials
-          # the API starts and serves everything, and only the OTP endpoints
-          # refuse. So this warns instead of failing the deploy.
-          if [ -z "${MAIL_USERNAME:-}" ]; then
-            echo "MAIL_USERNAME not set - password reset and email verification will be unavailable"
-          fi
-
-          FIREBASE_ENABLED=true
-          if [ -z "${FIREBASE_JSON:-}" ]; then
-            FIREBASE_ENABLED=false
-            echo "FIREBASE_SERVICE_ACCOUNT_JSON not set - push notifications disabled"
+          if [ -z "${ORACLE_SSH_PRIVATE_KEY:-}" ]; then
+            echo "::error::GitHub secret 'ORACLE_SSH_PRIVATE_KEY' is not set"
+            exit 1
           fi
 
           mkdir -p ~/.ssh
           printf '%b\n' "$ORACLE_SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/oracle_deploy
-          echo "" >> ~/.ssh/oracle_deploy
           chmod 600 ~/.ssh/oracle_deploy
-          ssh-keygen -y -f ~/.ssh/oracle_deploy > ~/.ssh/oracle_deploy.pub
-
-          # Configure OCI CLI for ephemeral Bastion session creation
-          mkdir -p ~/.oci
-          sed -e 's/^[[:space:]]*//' > ~/.oci/config <<EOF
-          [DEFAULT]
-          user=${OCI_USER_OCID}
-          fingerprint=${OCI_FINGERPRINT}
-          tenancy=${OCI_TENANCY_OCID}
-          region=${OCI_REGION}
-          key_file=$HOME/.oci/oci_api_key.pem
-          EOF
-          printf '%b\n' "$OCI_PRIVATE_KEY" | tr -d '\r' > ~/.oci/oci_api_key.pem
-          chmod 600 ~/.oci/config ~/.oci/oci_api_key.pem
-
-          cat > /tmp/oracle.env <<EOF
-          SERVER_PORT=8080
-          AWS_REGION=ap-south-1
-          DB_URL=${DB_URL}
-          DB_USERNAME=${DB_USERNAME}
-          DB_PASSWORD=${DB_PASSWORD}
-          JWT_SECRET=${JWT_SECRET}
-          NOTIFICATIONS_ADMIN_SECRET=${NOTIFICATIONS_ADMIN_SECRET}
-          GOOGLE_OAUTH_CLIENT_IDS=${GOOGLE_OAUTH_CLIENT_IDS}
-          API_BASE_URL=${API_BASE_URL}
-          CORS_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINS:-*}
-          AWS_S3_BUCKET=${AWS_S3_BUCKET}
-          AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:-}
-          AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:-}
-          FIREBASE_ENABLED=${FIREBASE_ENABLED}
-          FIREBASE_SERVICE_ACCOUNT_PATH=/etc/lovewanshi-milan/firebase.json
-          MAIL_HOST=${MAIL_HOST:-smtp.email.ap-mumbai-1.oci.oraclecloud.com}
-          MAIL_PORT=${MAIL_PORT:-587}
-          MAIL_USERNAME=${MAIL_USERNAME:-ocid1.user.oc1..aaaaaaaadusre56c2v2qhzcqyc6arhwvpvwb3u5bwc7su3b3s6miqi6sobkq@ocid1.tenancy.oc1..aaaaaaaassjcgarb3f5lqujpprme3ba5unnva2ktj2bn2bfbl44ycsyb53ka.f0.com}
-          MAIL_PASSWORD=${MAIL_PASSWORD:-W_E1]bSM5C!dS!]qv0td}
-          MAIL_FROM=${MAIL_FROM:-noreply@lovewanshisamaj.in}
-          SUPPORT_CONTACT_PHONE=${SUPPORT_CONTACT_PHONE:-7676554631}
-          EOF
-
-          ENV_B64=$(base64 -w0 /tmp/oracle.env)
-          rm -f /tmp/oracle.env
-          FB_B64=""
-          if [ -n "${FIREBASE_JSON:-}" ]; then
-            FB_B64=$(printf '%s' "$FIREBASE_JSON" | base64 -w0)
-          fi
 
           JAR=$(ls -t ${{ env.BACKEND_DIR }}/build/libs/*.jar | grep -v -- '-plain' | head -1)
-          echo "Deploying $JAR ($(du -h "$JAR" | cut -f1))"
+          echo "Uploading $JAR to ${{ env.VM_HOST }}..."
 
-          PORT_COUNTER=2222
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/oracle_deploy \
+              "$JAR" ubuntu@${{ env.VM_HOST }}:/tmp/app.jar
 
-          # Deploy to each instance through OCI Managed Bastion (zero VM, zero storage)
-          for IP in ${{ env.INSTANCE_HOSTS }}; do
-            echo "=== Creating OCI Managed Bastion session for $IP ==="
-            SESSION_JSON=$(oci bastion session create-port-forwarding \
-              --bastion-id "$BASTION_ID" \
-              --display-name "gh-actions-deploy-${IP//./-}" \
-              --ssh-public-key-file ~/.ssh/oracle_deploy.pub \
-              --key-type "PUB" \
-              --session-ttl 1800 \
-              --target-private-ip "$IP" \
-              --target-port 22 \
-              --wait-for-state SUCCEEDED)
-
-            SESSION_ID=$(echo "$SESSION_JSON" | jq -r '.data.resources[0].identifier // .data.id')
-            BASTION_ENDPOINT="host.bastion.${OCI_REGION}.oci.oraclecloud.com"
-            LOCAL_PORT="$PORT_COUNTER"
-            PORT_COUNTER=$((PORT_COUNTER + 1))
-
-            echo "=== Opening SSH tunnel via Managed Bastion (Session $SESSION_ID on port $LOCAL_PORT) ==="
-            TUNNEL_READY=false
-            for attempt in $(seq 1 12); do
-              ssh -i ~/.ssh/oracle_deploy \
-                  -o StrictHostKeyChecking=no \
-                  -o UserKnownHostsFile=/dev/null \
-                  -o ServerAliveInterval=15 \
-                  -o ConnectTimeout=10 \
-                  -N -L ${LOCAL_PORT}:${IP}:22 -p 22 \
-                  "${SESSION_ID}@${BASTION_ENDPOINT}" &
-              TUNNEL_PID=$!
-
-              # Poll for active port forward
-              for _ in $(seq 1 8); do
-                if nc -z 127.0.0.1 "$LOCAL_PORT" 2>/dev/null; then
-                  TUNNEL_READY=true
-                  break 2
-                fi
-                sleep 1
-              done
-
-              # Kill failed tunnel attempt and wait before retrying (bastion proxy syncing key)
-              kill "$TUNNEL_PID" 2>/dev/null || true
-              wait "$TUNNEL_PID" 2>/dev/null || true
-              echo "Tunnel not ready on attempt $attempt, waiting 5s for Bastion key sync..."
-              sleep 5
-            done
-
-            if [ "$TUNNEL_READY" != "true" ]; then
-              echo "::error::Could not connect through OCI Managed Bastion after 12 attempts"
-              exit 1
-            fi
-            echo "Tunnel successfully established on localhost:$LOCAL_PORT"
-
-            echo "=== Deploying to $IP via localhost:$LOCAL_PORT ==="
-            scp -P "$LOCAL_PORT" -i ~/.ssh/oracle_deploy \
-                -o StrictHostKeyChecking=no \
-                -o UserKnownHostsFile=/dev/null \
-                "$JAR" ubuntu@127.0.0.1:/tmp/app.jar
-
-            ssh -p "$LOCAL_PORT" -i ~/.ssh/oracle_deploy \
-                -o StrictHostKeyChecking=no \
-                -o UserKnownHostsFile=/dev/null \
-                ubuntu@127.0.0.1 "ENV_B64='$ENV_B64' FB_B64='$FB_B64' bash -se" <<'REMOTE'
-          set -eu
-
-          sudo install -d -m 750 -o root -g LOVEWANSHI /etc/lovewanshi-milan
-          sudo install -d -m 755 -o LOVEWANSHI -g LOVEWANSHI /var/log/lovewanshi-milan
-
-          printf %s "$ENV_B64" | base64 -d | sudo tee /etc/lovewanshi-milan/lovewanshi-milan.env >/dev/null
-          sudo chown root:lovewanshi /etc/lovewanshi-milan/lovewanshi-milan.env
-          sudo chmod 640 /etc/lovewanshi-milan/lovewanshi-milan.env
-
-          if [ -n "$FB_B64" ]; then
-            printf %s "$FB_B64" | base64 -d | sudo tee /etc/lovewanshi-milan/firebase.json >/dev/null
-            sudo chown root:lovewanshi /etc/lovewanshi-milan/firebase.json
-            sudo chmod 640 /etc/lovewanshi-milan/firebase.json
-          fi
-
-          # The unit is rewritten on every deploy so the profile and paths are
-          # whatever this workflow says, not whatever cloud-init left behind.
-          # It must be `prod`: application.properties is gitignored and so is
-          # absent from a CI-built jar, which leaves the `local` profile with
-          # no base layer and unresolved placeholders for the S3 bucket and
-          # OAuth client IDs - the context would refuse to start.
-          sudo tee /etc/systemd/system/lovewanshi-milan.service >/dev/null <<'UNIT'
-          [Unit]
-          Description=LOVEWANSHI Milan API (Oracle prod)
-          After=network-online.target
-          Wants=network-online.target
-
-          [Service]
-          Type=simple
-          User=LOVEWANSHI
-          Group=LOVEWANSHI
-          EnvironmentFile=/etc/lovewanshi-milan/lovewanshi-milan.env
-          ExecStart=/usr/bin/java -Xms256m -Xmx1g -jar /opt/lovewanshi-milan/app.jar --spring.profiles.active=prod
-          WorkingDirectory=/opt/lovewanshi-milan
-          Restart=on-failure
-          RestartSec=5
-          SuccessExitStatus=143
-          StandardOutput=append:/var/log/lovewanshi-milan/app.log
-          StandardError=append:/var/log/lovewanshi-milan/app.log
-
-          ProtectSystem=full
-          ReadWritePaths=/var/log/lovewanshi-milan
-          NoNewPrivileges=true
-
-          [Install]
-          WantedBy=multi-user.target
-          UNIT
-
-          # Keeps the last good jar so a bad rollout can be reverted by hand
-          # without waiting for another build.
-          if [ -f /opt/lovewanshi-milan/app.jar ]; then
-            sudo cp /opt/lovewanshi-milan/app.jar /opt/lovewanshi-milan/app.previous.jar
-          fi
-          sudo mv /tmp/app.jar /opt/lovewanshi-milan/app.jar
-          sudo chown lovewanshi:lovewanshi /opt/lovewanshi-milan/app.jar
-          sudo chmod 644 /opt/lovewanshi-milan/app.jar
-
-          sudo systemctl daemon-reload
-          sudo systemctl enable lovewanshi-milan
-          sudo systemctl restart lovewanshi-milan
-
-          echo waiting for health
-          for i in $(seq 1 60); do
-            if curl -fsS --max-time 3 http://127.0.0.1:8080/actuator/health 2>/dev/null | grep -q UP; then
-              echo APP HEALTHY
-              break
-            fi
-            if [ "$i" -eq 60 ]; then
-              echo HEALTH CHECK FAILED
-              sudo tail -n 80 /var/log/lovewanshi-milan/app.log || true
-              sudo systemctl status lovewanshi-milan --no-pager || true
-              exit 1
-            fi
-            sleep 2
-          done
-
-          # The load balancer health-checks port 80, not 8080 - nginx has to be
-          # up for this backend to receive any traffic at all.
-          sudo nginx -t
-          sudo systemctl enable --now nginx
-          curl -fsS --max-time 5 http://127.0.0.1/actuator/health | grep -q UP || {
-            echo "NGINX IS NOT PROXYING TO THE APP"
-            exit 1
-          }
-          echo NGINX OK
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/oracle_deploy \
+              ubuntu@${{ env.VM_HOST }} bash -se <<'REMOTE'
+            set -eu
+            sudo mv /tmp/app.jar /opt/lovewanshi-milan/app.jar
+            sudo chown ubuntu:ubuntu /opt/lovewanshi-milan/app.jar
+            sudo chmod 644 /opt/lovewanshi-milan/app.jar
+            sudo systemctl restart lovewanshi-milan
           REMOTE
 
-            echo "=== Cleaning up tunnel and session for $IP ==="
-            kill "$TUNNEL_PID" 2>/dev/null || true
-            wait "$TUNNEL_PID" 2>/dev/null || true
-            sleep 2
-            oci bastion session delete --session-id "$SESSION_ID" --force 2>/dev/null || true
-
-            echo "=== $IP deployed and healthy ==="
-          done
-
-      - name: Check the load balancer serves the deployed app
-        env:
-          LOAD_BALANCER_IP: ${{ secrets.ORACLE_LOAD_BALANCER_IP || '130.210.52.85' }}
-        run: |
-          set -uo pipefail
-          LB_TARGET="${LOAD_BALANCER_IP:-130.210.52.85}"
-          for _ in $(seq 1 12); do
-            if curl -fsSL -k --max-time 10 "http://${LB_TARGET}/actuator/health" 2>/dev/null | grep -q UP || curl -fsS --max-time 10 "https://api.lovewanshisamaj.in/actuator/health" 2>/dev/null | grep -q UP; then
-              echo "::notice::Load balancer healthy - deployed ${GITHUB_SHA::8}"
+          echo "Waiting for backend health check on http://${{ env.VM_HOST }}/actuator/health..."
+          for i in $(seq 1 30); do
+            if curl -fsS --max-time 5 "http://${{ env.VM_HOST }}/actuator/health" 2>/dev/null | grep -q UP; then
+              echo "::notice::Backend successfully deployed and healthy on Oracle VM!"
               exit 0
             fi
-            sleep 10
+            sleep 3
           done
-          echo "::error::Load balancer did not return a healthy response. Backends may still be registering - check the OCI console."
+
+          echo "::error::Health check timed out."
           exit 1

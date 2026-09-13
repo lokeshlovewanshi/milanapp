@@ -136,32 +136,48 @@ resource "oci_core_security_list" "public" {
   vcn_id         = oci_core_vcn.main.id
   display_name   = "${var.project}-app-sl"
 
-  # Outbound: unrestricted so instances can call AWS S3 (pre-signed URLs,
-  # SDK), reach Let's Encrypt ACME endpoint, pull OS updates via NAT, and
-  # talk to HeatWave MySQL on the private subnet.
   egress_security_rules {
     destination = "0.0.0.0/0"
     protocol    = "all"
   }
 
-  # Spring Boot JAR (port 8080) - only from the LB subnet. The LB health
-  # checker and forwarded traffic both originate from 10.30.3.0/24.
+  # SSH (port 22)
   ingress_security_rules {
-    source   = "10.30.3.0/24" # LB + bastion subnet
-    protocol = "6"             # TCP
-    tcp_options {
-      min = 8080
-      max = 8080
-    }
-  }
-
-  # SSH - from OCI Managed Bastion and intra-VCN
-  ingress_security_rules {
-    source   = "10.30.0.0/16" # VCN CIDR
-    protocol = "6"
+    source   = "0.0.0.0/0"
+    protocol = "6" # TCP
     tcp_options {
       min = 22
       max = 22
+    }
+  }
+
+  # HTTP (port 80)
+  ingress_security_rules {
+    source   = "0.0.0.0/0"
+    protocol = "6" # TCP
+    tcp_options {
+      min = 80
+      max = 80
+    }
+  }
+
+  # HTTPS (port 443)
+  ingress_security_rules {
+    source   = "0.0.0.0/0"
+    protocol = "6" # TCP
+    tcp_options {
+      min = 443
+      max = 443
+    }
+  }
+
+  # Spring Boot Backend (port 8080)
+  ingress_security_rules {
+    source   = "0.0.0.0/0"
+    protocol = "6" # TCP
+    tcp_options {
+      min = 8080
+      max = 8080
     }
   }
 
@@ -176,14 +192,13 @@ resource "oci_core_security_list" "public" {
   }
 }
 
-# App subnet - instances stay here. Route table now points to NAT (not IGW)
-# so outbound S3/AWS calls still work without a public IP.
+# App public subnet - instances have public IPs and route directly to Internet Gateway
 resource "oci_core_subnet" "public" {
   compartment_id             = var.compartment_ocid
   vcn_id                     = oci_core_vcn.main.id
   display_name               = "${var.project}-public-subnet"
   cidr_block                 = "10.30.1.0/24"
-  route_table_id             = oci_core_route_table.app.id
+  route_table_id             = oci_core_route_table.public.id
   security_list_ids          = [oci_core_security_list.public.id]
   dns_label                  = "public"
   prohibit_public_ip_on_vnic = false

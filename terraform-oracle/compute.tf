@@ -68,14 +68,16 @@ resource "oci_core_instance" "dev" {
     boot_volume_size_in_gbs = var.instance_boot_volume_gb
   }
 
+  depends_on = [oci_mysql_mysql_db_system.dev]
+
   metadata = {
     ssh_authorized_keys = file(var.ssh_public_key_path)
     user_data = base64encode(templatefile("${path.module}/cloud-init.sh", {
       db_name     = var.db_name
       db_username = var.db_username
       db_password = var.db_password
-      db_host     = oci_mysql_mysql_db_system.dev.endpoints[0].ip_address
-      db_port     = oci_mysql_mysql_db_system.dev.endpoints[0].port
+      db_host     = try(oci_mysql_mysql_db_system.dev.endpoints[0].ip_address, "")
+      db_port     = try(oci_mysql_mysql_db_system.dev.endpoints[0].port, 3306)
     }))
   }
 

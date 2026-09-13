@@ -1,4 +1,4 @@
-﻿package com.match.partner.openapi.notification.service;
+package com.match.partner.openapi.notification.service;
 
 import com.match.partner.common.Utils.CommonUtils;
 import com.match.partner.openapi.notification.model.NotificationType;

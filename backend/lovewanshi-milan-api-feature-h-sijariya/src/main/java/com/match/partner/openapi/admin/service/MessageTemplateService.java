@@ -1,4 +1,4 @@
-﻿package com.match.partner.openapi.admin.service;
+package com.match.partner.openapi.admin.service;
 
 import com.match.partner.common.configuration.ClientException;
 import com.match.partner.openapi.admin.model.dao.MessageTemplate;

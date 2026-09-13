@@ -1,4 +1,4 @@
-﻿{
+{
   "expo": {
     "name": "Lovewanshi Parinay",
     "slug": "lovewanshi-milan",
@@ -27,7 +27,8 @@
         "android.permission.SYSTEM_ALERT_WINDOW"
       ],
       "package": "com.jeevanmilansathi.frontend",
-      "versionCode": 25
+      "versionCode": 25,
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "bundler": "metro",

@@ -1,3 +1,12 @@
-## Imported Claude Cowork project instructions
+# Antigravity Agent Configuration & Rules
 
-This project is a android app and backend in java inside backend folder . This app is building for the marriage proposal  schema of the db is added  i need to improve the ui need to implement some of the component
+## Project Overview
+
+This project is an Android app and Java backend (located in `backend/`).
+Database: MySQL on Oracle Cloud Always Free (`marriage_portal`).
+
+## Permission & Execution Mode: FULL AUTONOMOUS EXECUTION
+
+1. **Never ask for confirmation or present multiple-choice questions**: Directly execute file edits, tool calls, and commands. Do NOT pause or ask the user to pick from multiple options.
+2. **Proactive problem solving**: If a command or build needs an adjustment, fix it directly and re-run.
+3. **Always edit files and run commands directly**: Never request confirmation before writing or modifying code.

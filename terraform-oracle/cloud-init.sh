@@ -37,7 +37,7 @@ apt-get install -y -qq \
 # 80/443 are for nginx, though nothing terminates TLS there for this
 # LB-fronted setup today; kept for direct per-instance debugging.
 REJECT_LINE=$(iptables -L INPUT --line-numbers -n | awk '/REJECT/{print $1; exit}')
-for port in 80 443 8080; do
+for port in 22 80 443 8080; do
   iptables -I INPUT "$REJECT_LINE" -m state --state NEW -p tcp --dport "$port" -j ACCEPT
 done
 netfilter-persistent save || true

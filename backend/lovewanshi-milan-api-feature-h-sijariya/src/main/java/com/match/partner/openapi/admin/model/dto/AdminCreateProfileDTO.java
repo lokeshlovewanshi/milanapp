@@ -1,4 +1,4 @@
-﻿package com.match.partner.openapi.admin.model.dto;
+package com.match.partner.openapi.admin.model.dto;
 
 import com.match.partner.openapi.user.model.dto.UserProfileDTO;
 import lombok.Data;

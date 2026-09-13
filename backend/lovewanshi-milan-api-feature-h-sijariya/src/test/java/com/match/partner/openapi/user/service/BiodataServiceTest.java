@@ -1,4 +1,4 @@
-﻿package com.match.partner.openapi.user.service;
+package com.match.partner.openapi.user.service;
 
 import com.match.partner.common.Utils.CommonUtils;
 import com.match.partner.common.service.S3ServiceInterface;
