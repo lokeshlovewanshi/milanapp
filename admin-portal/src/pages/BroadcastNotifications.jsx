@@ -1,17 +1,17 @@
-import React, { useState } from "react";
+﻿import React, { useState } from "react";
 import { api } from "../api";
 
 const PRESETS = [
   {
     label: "🎉 Festival Greeting",
-    title: "✨ Festival Greetings from Gahoi Parinay",
+    title: "✨ Festival Greetings from Lovewanshi Parinay",
     body: "Wishing you and your family joy and prosperity on this auspicious occasion! Find your perfect match today.",
     link: "/browse",
   },
   {
     label: "👑 New Verified Profiles",
     title: "✨ New Profiles Added Today!",
-    body: "New verified profiles from Jhansi, Kanpur, Gwalior & Mauranipur have joined Gahoi Parinay. Check them out now!",
+    body: "New verified profiles from Jhansi, Kanpur, Gwalior & Mauranipur have joined Lovewanshi Parinay. Check them out now!",
     link: "/browse",
   },
   {
@@ -23,7 +23,7 @@ const PRESETS = [
   {
     label: "🚀 App Update Announcement",
     title: "📲 New App Feature Available",
-    body: "We have updated the Gahoi Parinay app with a clean new design and faster Kundali matching. Update now on Play Store!",
+    body: "We have updated the Lovewanshi Parinay app with a clean new design and faster Kundali matching. Update now on Play Store!",
     link: "/browse",
   },
 ];
@@ -340,7 +340,7 @@ export default function BroadcastNotifications() {
               <input
                 type="text"
                 className="input-field"
-                placeholder="e.g. ✨ Greetings from Gahoi Parinay!"
+                placeholder="e.g. ✨ Greetings from Lovewanshi Parinay!"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 required
@@ -454,7 +454,7 @@ export default function BroadcastNotifications() {
               }}
             >
               <div style={{ fontSize: "0.75rem", opacity: 0.7, marginBottom: "0.75rem", textAlign: "center" }}>
-                Gahoi Parinay Push Notification
+                Lovewanshi Parinay Push Notification
               </div>
 
               <div
@@ -483,7 +483,7 @@ export default function BroadcastNotifications() {
                   >
                     GP
                   </div>
-                  <span style={{ fontSize: "0.8rem", fontWeight: "600", opacity: 0.9 }}>Gahoi Parinay</span>
+                  <span style={{ fontSize: "0.8rem", fontWeight: "600", opacity: 0.9 }}>Lovewanshi Parinay</span>
                   <span style={{ fontSize: "0.7rem", opacity: 0.5, marginLeft: "auto" }}>now</span>
                 </div>
 

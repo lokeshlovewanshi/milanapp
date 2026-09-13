@@ -1,4 +1,4 @@
-package com.match.partner.openapi.billing.service;
+﻿package com.match.partner.openapi.billing.service;
 
 import com.match.partner.openapi.billing.model.dao.*;
 import com.match.partner.openapi.billing.model.dto.*;
@@ -44,7 +44,7 @@ public class BillingService {
     private String provider;
 
     /** Where the gateway sends the customer back to. */
-    @Value("${payments.return-url:gahoimilan://payment/return}")
+    @Value("${payments.return-url:LOVEWANSHImilan://payment/return}")
     private String returnUrl;
 
     /** Our own page that posts into the gateway. Empty until it is deployed. */

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+﻿import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { api } from "../api";
 import ContactMessageModal from "../components/ContactMessageModal";
@@ -966,7 +966,7 @@ export default function ProfileDetail() {
                 <input
                   type="text"
                   className="input-field"
-                  placeholder="e.g. 🌸 Update regarding your Gahoi Parinay profile"
+                  placeholder="e.g. 🌸 Update regarding your Lovewanshi Parinay profile"
                   value={notifTitle}
                   onChange={(e) => setNotifTitle(e.target.value)}
                   required

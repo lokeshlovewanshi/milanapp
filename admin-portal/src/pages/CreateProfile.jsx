@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+﻿import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { api } from "../api";
 import {
@@ -276,7 +276,7 @@ export default function CreateProfile() {
                 Initial Password (Optional)
                 <input
                   type="text"
-                  placeholder="Defaults to Gahoi@2026"
+                  placeholder="Defaults to Lovewanshi@2026"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />

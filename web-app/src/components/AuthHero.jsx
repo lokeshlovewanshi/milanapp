@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import { Link } from "react-router-dom";
 import { HeartIcon, Icon } from "./Icons";
 import authHeroImg from "../assets/auth-hero.jpg";
@@ -20,7 +20,7 @@ export default function AuthHero({
           {/* Left Column: Photographic Hero & Brand */}
           <div className="auth-hero-media">
             <div className="auth-hero-photo-wrap">
-              <img src={authHeroImg} alt="Gahoi Parinay Couple" className="auth-hero-photo" />
+              <img src={authHeroImg} alt="Lovewanshi Parinay Couple" className="auth-hero-photo" />
               <div className="auth-hero-photo-fade" />
             </div>
 

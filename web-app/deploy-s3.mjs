@@ -1,4 +1,4 @@
-import {
+﻿import {
   S3Client,
   ListBucketsCommand,
   CreateBucketCommand,
@@ -13,7 +13,7 @@ import path from "path";
 import mime from "mime-types";
 
 const REGION = process.env.AWS_REGION || "ap-south-1";
-const PROFILE = process.env.AWS_PROFILE || "gahoi";
+const PROFILE = process.env.AWS_PROFILE || "LOVEWANSHI";
 
 let credentialsProvider;
 if (process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY) {
@@ -39,17 +39,17 @@ async function main() {
   // Desired bucket name for web app
   let bucketName = process.env.S3_BUCKET_NAME;
   if (!bucketName) {
-    // Check if there is an existing web bucket or default to gahoi-parinay-web
+    // Check if there is an existing web bucket or default to LOVEWANSHI-parinay-web
     const match = (bucketsRes.Buckets || []).find(
       (b) =>
-        b.Name === "gahoi-parinay-web" ||
-        b.Name === "gahoiparinay-web" ||
-        b.Name === "gahoiparaya-web" ||
-        b.Name === "gahoimarriage-web" ||
-        b.Name === "app.gahoimarriage.in" ||
-        b.Name === "gahoimarriage.in"
+        b.Name === "LOVEWANSHI-parinay-web" ||
+        b.Name === "LOVEWANSHIparinay-web" ||
+        b.Name === "LOVEWANSHIparaya-web" ||
+        b.Name === "lovewanshisamaj-web" ||
+        b.Name === "app.lovewanshisamaj.in" ||
+        b.Name === "lovewanshisamaj.in"
     );
-    bucketName = match ? match.Name : "gahoi-parinay-web";
+    bucketName = match ? match.Name : "LOVEWANSHI-parinay-web";
   }
 
   const bucketExists = (bucketsRes.Buckets || []).some((b) => b.Name === bucketName);

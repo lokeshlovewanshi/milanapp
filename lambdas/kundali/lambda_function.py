@@ -1,4 +1,4 @@
-"""
+﻿"""
 North Indian kundali (birth chart) generation.
 
 Given a date, time and place of birth, returns the chart data plus a
@@ -92,7 +92,7 @@ MANGLIK_HOUSES = {1, 2, 4, 7, 8, 12}
 
 # Enough of India to cover where this community actually is, so a caller can
 # pass a place name instead of coordinates. The Bundelkhand towns are here on
-# purpose: they are the Gahoi heartland and are missing from most city lists.
+# purpose: they are the LOVEWANSHI heartland and are missing from most city lists.
 # For anything else, pass latitude/longitude explicitly.
 CITIES = {
     "jhansi": (25.4484, 78.5685), "gwalior": (26.2183, 78.1828),

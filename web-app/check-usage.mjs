@@ -1,4 +1,4 @@
-import { CloudWatchClient, GetMetricDataCommand } from "@aws-sdk/client-cloudwatch";
+﻿import { CloudWatchClient, GetMetricDataCommand } from "@aws-sdk/client-cloudwatch";
 import { fromIni } from "@aws-sdk/credential-providers";
 
 let credentialsProvider;
@@ -8,7 +8,7 @@ if (process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY) {
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   };
 } else {
-  credentialsProvider = fromIni({ profile: process.env.AWS_PROFILE || "gahoi" });
+  credentialsProvider = fromIni({ profile: process.env.AWS_PROFILE || "LOVEWANSHI" });
 }
 
 const cw = new CloudWatchClient({
@@ -80,8 +80,8 @@ async function main() {
   console.log("📈 AWS CLOUDFRONT MONTH-TO-DATE USAGE REPORT");
   console.log("=======================================================");
 
-  const web = await checkCloudFrontMetrics("E3GCII599CUC5F", "Gahoi Marriage Web App (gahoimarriage.in)");
-  const admin = await checkCloudFrontMetrics("E37G13Y3ALQDRE", "Gahoi Parinay Admin (admin.gahoimarriage.in)");
+  const web = await checkCloudFrontMetrics("E3GCII599CUC5F", "Lovewanshi Samaj Web App (lovewanshisamaj.in)");
+  const admin = await checkCloudFrontMetrics("E37G13Y3ALQDRE", "Lovewanshi Parinay Admin (admin.lovewanshisamaj.in)");
 
   const totalBytes = web.bytes + admin.bytes;
   const totalGb = (totalBytes / (1024 * 1024 * 1024)).toFixed(4);

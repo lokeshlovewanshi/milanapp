@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import { api } from "../api";
 
 export default function Plans() {
@@ -354,7 +354,7 @@ export default function Plans() {
           <table className="data-table">
             <thead>
               <tr>
-                <th>Gahoi ID</th>
+                <th>LOVEWANSHI ID</th>
                 <th>Member Name</th>
                 <th>Email / Mobile</th>
                 <th>Plan Activated</th>

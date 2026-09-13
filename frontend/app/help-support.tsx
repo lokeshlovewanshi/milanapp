@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Pressable, ScrollView, Linking, Alert } from 'react-native';
+﻿import { View, Text, StyleSheet, Pressable, ScrollView, Linking, Alert } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useEffect, useState } from 'react';
@@ -18,7 +18,7 @@ const FALLBACK_PHONE = '7676554631';
 const FALLBACK_EMAIL = 'jeevanmilansathi@gmail.com';
 
 /**
- * Contact details for the people running Gahoi Milan.
+ * Contact details for the people running LOVEWANSHI Milan.
  *
  * Both rows hand off to the phone's own apps rather than trying to send
  * anything from inside this one: `tel:` opens the dialer with the number
@@ -96,7 +96,7 @@ export default function HelpSupportScreen() {
           style={({ pressed }) => [styles.row, pressed && styles.rowPressed]}
           onPress={() =>
             open(
-              `mailto:${email}?subject=${encodeURIComponent('Gahoi Milan - support')}`,
+              `mailto:${email}?subject=${encodeURIComponent('LOVEWANSHI Milan - support')}`,
               email
             )
           }

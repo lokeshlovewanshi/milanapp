@@ -7,8 +7,8 @@ on:
   push:
     branches: [main, dev]
     paths:
-      - 'lambdas/**'
-      - '.github/workflows/deploy-lambdas.yml'
+      - "lambdas/**"
+      - ".github/workflows/deploy-lambdas.yml"
   workflow_dispatch:
     inputs:
       environment:
@@ -57,20 +57,20 @@ jobs:
             arch: arm64
           - name: kundali_match
             fn_suffix: kundali-match
-            layer_suffix: ''
+            layer_suffix: ""
             runtime_type: python
             runtime: python3.12
             arch: arm64
             platform: manylinux2014_aarch64
-            python: '3.12'
+            python: "3.12"
           - name: welcome_email
             fn_suffix: welcome-email
-            layer_suffix: ''
+            layer_suffix: ""
             runtime_type: python
             runtime: python3.12
             arch: arm64
             platform: manylinux2014_aarch64
-            python: '3.12'
+            python: "3.12"
           - name: kundali
             fn_suffix: kundali
             layer_suffix: swisseph
@@ -78,7 +78,7 @@ jobs:
             runtime: python3.11
             arch: x86_64
             platform: manylinux2014_x86_64
-            python: '3.11'
+            python: "3.11"
 
     steps:
       - uses: actions/checkout@v4

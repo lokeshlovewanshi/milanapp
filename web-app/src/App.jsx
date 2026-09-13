@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import { Navigate, Route, Routes, Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import { isLoggedIn, clearSession, notificationAPI, profileAPI } from "./api";
 import { Icon } from "./components/Icons";
@@ -71,9 +71,9 @@ function Layout({ children }) {
         <div className="navbar-container">
           {/* Brand Logo & Wordmark */}
           <Link to="/browse" className="navbar-brand">
-            <img src={logoImg} alt="Gahoi Parinay" className="navbar-logo-img" />
+            <img src={logoImg} alt="Lovewanshi Parinay" className="navbar-logo-img" />
             <div className="navbar-brand-text">
-              <span className="navbar-brand-title">Gahoi Parinay</span>
+              <span className="navbar-brand-title">Lovewanshi Parinay</span>
             </div>
           </Link>
 

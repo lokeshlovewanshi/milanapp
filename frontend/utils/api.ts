@@ -1,4 +1,4 @@
-import axios from "axios";
+﻿import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Platform } from "react-native";
 import Constants from "expo-constants";
@@ -7,7 +7,7 @@ import Constants from "expo-constants";
 import { router } from "expo-router";
 
 const BACKEND_PORT = 8080;
-const PROD_BACKEND_URL = "https://api.gahoimarriage.in";
+const PROD_BACKEND_URL = "https://api.lovewanshisamaj.in";
 
 /**
  * The host the JS bundle was served from, e.g. "192.168.1.14:8081".

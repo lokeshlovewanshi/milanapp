@@ -1,4 +1,4 @@
-name: Deploy Frontend (Web App & Admin Portal)
+﻿name: Deploy Frontend (Web App & Admin Portal)
 
 on:
   push:
@@ -30,7 +30,7 @@ jobs:
       - name: Install dependencies & build Web App
         working-directory: web-app
         env:
-          VITE_API_BASE_URL: https://api.gahoimarriage.in
+          VITE_API_BASE_URL: https://api.lovewanshisamaj.in
         run: |
           npm ci
           npm run build
@@ -61,7 +61,7 @@ jobs:
       - name: Install dependencies & build Admin Portal
         working-directory: admin-portal
         env:
-          VITE_API_BASE_URL: https://api.gahoimarriage.in
+          VITE_API_BASE_URL: https://api.lovewanshisamaj.in
         run: |
           npm ci
           npm run build

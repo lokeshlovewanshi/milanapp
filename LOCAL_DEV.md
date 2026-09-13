@@ -1,12 +1,12 @@
-# Running the backend locally against api.gahoimarriage.in
+﻿# Running the backend locally against api.lovewanshisamaj.in
 
 For developing without touching prod AWS. The Spring Boot server runs on
 your Mac against a local MySQL database; a Cloudflare Tunnel makes
-`api.gahoimarriage.in` reach it instead of the real EC2 instance while the
+`api.lovewanshisamaj.in` reach it instead of the real EC2 instance while the
 tunnel is up. Nothing in `terraform/` or on the prod server is touched by
 any of this - it is purely a DNS record you flip back and forth.
 
-**While the tunnel is running, `api.gahoimarriage.in` serves your laptop,
+**While the tunnel is running, `api.lovewanshisamaj.in` serves your laptop,
 not production.** Anything pointed at that domain - the production APK,
 anyone else's requests - hits your local server instead. Only do this if
 nothing real currently depends on that domain. See "Reverting" below for
@@ -29,7 +29,7 @@ mysql -u root -e "
 ## 2. Run the backend on the `local` profile
 
 ```bash
-cd backend/gahoi-milan-api-feature-h-sijariya
+cd backend/LOVEWANSHI-milan-api-feature-h-sijariya
 ./gradlew bootRun --args='--spring.profiles.active=local'
 ```
 
@@ -49,15 +49,15 @@ curl http://localhost:8080/actuator/health
 cloudflared tunnel login
 
 # Creates the tunnel and a credentials file at ~/.cloudflared/<id>.json
-cloudflared tunnel create gahoi-milan-local
+cloudflared tunnel create LOVEWANSHI-milan-local
 ```
 
 That prints a **Tunnel ID** (a UUID) and the path to the credentials JSON.
 Copy the template to a real (gitignored) config and fill both in:
 
 ```bash
-cp backend/gahoi-milan-api-feature-h-sijariya/deploy/local/cloudflared-config.yml.example \
-   backend/gahoi-milan-api-feature-h-sijariya/deploy/local/cloudflared-config.yml
+cp backend/LOVEWANSHI-milan-api-feature-h-sijariya/deploy/local/cloudflared-config.yml.example \
+   backend/LOVEWANSHI-milan-api-feature-h-sijariya/deploy/local/cloudflared-config.yml
 ```
 
 ```yaml
@@ -68,7 +68,7 @@ credentials-file: /Users/harshsijariya/.cloudflared/<the UUID>.json
 ## 4. Point the domain at the tunnel (GoDaddy)
 
 GoDaddy stays the DNS provider - no nameserver migration needed. In
-GoDaddy's DNS manager for `gahoimarriage.in`:
+GoDaddy's DNS manager for `lovewanshisamaj.in`:
 
 - **Delete or edit** the existing `api` **A record** (currently `3.7.79.20`,
   your prod Elastic IP)
@@ -80,10 +80,10 @@ record's TTL.
 ## 5. Start the tunnel
 
 ```bash
-cloudflared tunnel --config backend/gahoi-milan-api-feature-h-sijariya/deploy/local/cloudflared-config.yml run gahoi-milan-local
+cloudflared tunnel --config backend/LOVEWANSHI-milan-api-feature-h-sijariya/deploy/local/cloudflared-config.yml run LOVEWANSHI-milan-local
 ```
 
-Leave this running. `https://api.gahoimarriage.in` now reaches your local
+Leave this running. `https://api.lovewanshisamaj.in` now reaches your local
 Spring Boot server for as long as this process is up.
 
 ## Reverting - get production traffic back

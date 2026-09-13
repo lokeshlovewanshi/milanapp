@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
 import { profileAPI, likeAPI, shortlistAPI, viewsAPI, isLoggedIn } from "../api";
 import { VerifiedBadge, HeartIcon, BookmarkIcon, Icon } from "../components/Icons";
@@ -141,7 +141,7 @@ export default function ProfileDetail() {
     const heightFormatted = formatHeight(profile.height);
     const primaryImg = photos[0] || profile.profileImage || profile.profileImageFull;
 
-    document.title = `${candidateName} (${code}) - Gahoi Parinay Matrimony`;
+    document.title = `${candidateName} (${code}) - Lovewanshi Parinay Matrimony`;
 
     const updateMeta = (prop, content) => {
       if (!content) return;
@@ -155,7 +155,7 @@ export default function ProfileDetail() {
       el.setAttribute("content", content);
     };
 
-    updateMeta("og:title", `${candidateName} (${code})${age ? ` - ${age} Yrs` : ""}${heightFormatted ? `, ${heightFormatted}` : ""} | Gahoi Parinay`);
+    updateMeta("og:title", `${candidateName} (${code})${age ? ` - ${age} Yrs` : ""}${heightFormatted ? `, ${heightFormatted}` : ""} | Lovewanshi Parinay`);
     updateMeta("og:description", [profile.profession, profile.education, profile.city, profile.gotra ? `Gotra: ${profile.gotra}` : ""].filter(Boolean).join(" • "));
     if (primaryImg) {
       updateMeta("og:image", primaryImg);
@@ -411,7 +411,7 @@ export default function ProfileDetail() {
               <div className="biodata-meta-list">
                 <div className="biodata-meta-item">
                   <Icon name="check" size={14} color="#059669" />
-                  <span>100% Gahoi Vaishya Community</span>
+                  <span>100% LOVEWANSHI Vaishya Community</span>
                 </div>
                 {profile.profileCreatedBy && (
                   <div className="biodata-meta-item">
@@ -437,7 +437,7 @@ export default function ProfileDetail() {
           {/* Candidate Hero Card */}
           <div className="biodata-hero-card">
             <h1 className="biodata-hero-title">
-              {profile.name || "Gahoi Member"}
+              {profile.name || "LOVEWANSHI Member"}
               {profile.verified !== false && <VerifiedBadge size={22} />}
             </h1>
 
@@ -738,10 +738,10 @@ export default function ProfileDetail() {
                 <Icon name="lock" size={28} color="#8A1538" />
               </div>
               <h3 className="biodata-guest-title">
-                Connect with {profile.name || "this Gahoi Member"}
+                Connect with {profile.name || "this LOVEWANSHI Member"}
               </h3>
               <p className="biodata-guest-sub">
-                Create a free profile on Gahoi Parinay to unlock full family details, match Kundali with 36 Gunas, and send marriage proposals.
+                Create a free profile on Lovewanshi Parinay to unlock full family details, match Kundali with 36 Gunas, and send marriage proposals.
               </p>
               <div style={{ display: "flex", gap: "0.85rem", justifyContent: "center", flexWrap: "wrap" }}>
                 <Link to="/login" state={{ from: location.pathname }}>

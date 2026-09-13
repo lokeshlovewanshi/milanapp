@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import { Link } from "react-router-dom";
 
 export default function SeoFooter() {
@@ -27,7 +27,7 @@ export default function SeoFooter() {
         }}
       >
         <div>
-          © {new Date().getFullYear()} <strong>Gahoi Parinay</strong> (gahoimarriage.in). All rights reserved.
+          © {new Date().getFullYear()} <strong>Lovewanshi Parinay</strong> (lovewanshisamaj.in). All rights reserved.
         </div>
         <div style={{ display: "flex", gap: "1.25rem" }}>
           <Link to="/privacy" style={{ color: "#4B5563", textDecoration: "none" }}>

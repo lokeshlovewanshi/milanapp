@@ -1,4 +1,4 @@
-import {
+﻿import {
   CloudFrontClient,
   GetDistributionConfigCommand,
   UpdateDistributionCommand,
@@ -13,7 +13,7 @@ if (process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY) {
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   };
 } else {
-  credentialsProvider = fromIni({ profile: process.env.AWS_PROFILE || "gahoi" });
+  credentialsProvider = fromIni({ profile: process.env.AWS_PROFILE || "LOVEWANSHI" });
 }
 
 const cf = new CloudFrontClient({
@@ -22,7 +22,7 @@ const cf = new CloudFrontClient({
 });
 
 const DISTRIBUTION_ID = "E3GCII599CUC5F";
-const S3_WEBSITE_ORIGIN = "gahoi-parinay-web.s3-website.ap-south-1.amazonaws.com";
+const S3_WEBSITE_ORIGIN = "LOVEWANSHI-parinay-web.s3-website.ap-south-1.amazonaws.com";
 
 async function main() {
   console.log(`Fetching CloudFront config for ${DISTRIBUTION_ID}...`);
@@ -37,7 +37,7 @@ async function main() {
     Quantity: 1,
     Items: [
       {
-        Id: "gahoi-parinay-web-s3-website",
+        Id: "LOVEWANSHI-parinay-web-s3-website",
         DomainName: S3_WEBSITE_ORIGIN,
         OriginPath: "",
         CustomHeaders: { Quantity: 0 },
@@ -59,7 +59,7 @@ async function main() {
   };
 
   // 2. Set Default Cache Behavior
-  config.DefaultCacheBehavior.TargetOriginId = "gahoi-parinay-web-s3-website";
+  config.DefaultCacheBehavior.TargetOriginId = "LOVEWANSHI-parinay-web-s3-website";
   config.DefaultCacheBehavior.ViewerProtocolPolicy = "redirect-to-https";
   config.DefaultCacheBehavior.TrustedKeyGroups = {
     Enabled: false,
@@ -85,7 +85,7 @@ async function main() {
   config.DefaultRootObject = "index.html";
 
   // 4. Set Aliases to include root and www and app
-  const aliases = ["gahoimarriage.in", "www.gahoimarriage.in", "app.gahoimarriage.in"];
+  const aliases = ["lovewanshisamaj.in", "www.lovewanshisamaj.in", "app.lovewanshisamaj.in"];
   config.Aliases = {
     Quantity: aliases.length,
     Items: aliases,

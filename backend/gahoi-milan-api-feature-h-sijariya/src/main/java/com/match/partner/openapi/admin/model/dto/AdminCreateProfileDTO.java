@@ -1,4 +1,4 @@
-package com.match.partner.openapi.admin.model.dto;
+﻿package com.match.partner.openapi.admin.model.dto;
 
 import com.match.partner.openapi.user.model.dto.UserProfileDTO;
 import lombok.Data;
@@ -12,7 +12,7 @@ import lombok.EqualsAndHashCode;
 public class AdminCreateProfileDTO extends UserProfileDTO {
     /**
      * Optional initial password. If null or blank, a default initial password
-     * (e.g. Gahoi@2026) will be assigned so the member can sign in later.
+     * (e.g. Lovewanshi@2026) will be assigned so the member can sign in later.
      */
     private String password;
 }

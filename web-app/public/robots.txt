@@ -1,4 +1,4 @@
-User-agent: *
+﻿User-agent: *
 Allow: /
 
 User-agent: Googlebot
@@ -10,4 +10,4 @@ Allow: /
 User-agent: Bingbot
 Allow: /
 
-Sitemap: https://www.gahoimarriage.in/sitemap.xml
+Sitemap: https://www.lovewanshisamaj.in/sitemap.xml

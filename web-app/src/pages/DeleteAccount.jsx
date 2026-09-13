@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+﻿import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { profileAPI, clearSession, isLoggedIn } from "../api";
 import logoImg from "../assets/logo.png";
@@ -29,9 +29,9 @@ export default function DeleteAccount() {
       {/* Header */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "2rem", borderBottom: "1px solid var(--border)", paddingBottom: "1.25rem" }}>
         <Link to="/" style={{ display: "flex", alignItems: "center", gap: "0.6rem", textDecoration: "none" }}>
-          <img src={logoImg} alt="Gahoi Parinay" style={{ width: 34, height: 34, objectFit: "contain" }} />
+          <img src={logoImg} alt="Lovewanshi Parinay" style={{ width: 34, height: 34, objectFit: "contain" }} />
           <span style={{ fontFamily: "var(--font-serif)", fontSize: "1.25rem", fontWeight: 700, color: "var(--auth-maroon)" }}>
-            Gahoi Parinay
+            Lovewanshi Parinay
           </span>
         </Link>
         <Link to="/browse" className="secondary small" style={{ display: "inline-flex", alignItems: "center", gap: "0.4rem", textDecoration: "none" }}>
@@ -145,7 +145,7 @@ export default function DeleteAccount() {
                 If you no longer have access to your account or prefer human assistance, send an email request from your registered email address:
               </p>
               <a
-                href="mailto:jeevanmilansathi@gmail.com?subject=Account%20Deletion%20Request%20-%20Gahoi%20Parinay&body=Please%20delete%20my%20Gahoi%20Parinay%20account.%0A%0ARegistered%20Email%3A%20%0ARegistered%20Mobile%20Number%3A%20%0AFull%20Name%3A%20"
+                href="mailto:jeevanmilansathi@gmail.com?subject=Account%20Deletion%20Request%20-%20LOVEWANSHI%20Parinay&body=Please%20delete%20my%20LOVEWANSHI%20Parinay%20account.%0A%0ARegistered%20Email%3A%20%0ARegistered%20Mobile%20Number%3A%20%0AFull%20Name%3A%20"
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
@@ -206,7 +206,7 @@ export default function DeleteAccount() {
           <Link to="/privacy" style={{ fontSize: "0.85rem", color: "var(--auth-crimson)", textDecoration: "underline" }}>
             View Privacy Policy
           </Link>
-          <span className="muted small">© {new Date().getFullYear()} Gahoi Parinay</span>
+          <span className="muted small">© {new Date().getFullYear()} Lovewanshi Parinay</span>
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import { HeartIcon } from "./Icons";
 import authHeroImg from "../assets/auth-hero.jpg";
 
@@ -6,7 +6,7 @@ export default function HomeBanner() {
   return (
     <div className="home-banner-card">
       <div className="home-banner-photo-wrap">
-        <img src={authHeroImg} alt="Gahoi Parinay" className="home-banner-photo" />
+        <img src={authHeroImg} alt="Lovewanshi Parinay" className="home-banner-photo" />
       </div>
       <div className="home-banner-content">
         <div className="banner-rings">
@@ -19,7 +19,7 @@ export default function HomeBanner() {
           <HeartIcon filled size={11} color="#D98A86" />
           <div className="banner-rule-line" />
         </div>
-        <p className="banner-tagline">Find your perfect match in Gahoi community</p>
+        <p className="banner-tagline">Find your perfect match in LOVEWANSHI community</p>
       </div>
     </div>
   );

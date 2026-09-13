@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { profileAPI, referenceAPI, likeAPI, shortlistAPI } from "../api";
 import { VerifiedBadge, HeartIcon, BookmarkIcon, Icon } from "../components/Icons";
@@ -30,7 +30,7 @@ function formatProfileCode(id) {
   return `GM${digits}`;
 }
 
-const GAHOI_GOTRAS = [
+const LOVEWANSHI_GOTRAS = [
   "Katheriya", "Seth", "Mor", "Pahariya", "Piparsaniya", 
   "Kharya", "Rawat", "Kasondhan", "Gupta", "Budholiya", 
   "Nagariya", "Kankane", "Sijariya", "Nikhra", "Bhadan", 
@@ -278,7 +278,7 @@ export default function Browse() {
       {loading && (
         <div className="discovery-loading-box">
           <div className="loading-spinner-ring" />
-          <p className="loading-spinner-text">Loading verified Gahoi matches...</p>
+          <p className="loading-spinner-text">Loading verified LOVEWANSHI matches...</p>
         </div>
       )}
 
@@ -310,7 +310,7 @@ export default function Browse() {
             const heightFormatted = formatHeight(p.height);
             const professionFormatted = formatProfession(p.profession);
             const educationFormatted = formatEducation(p.education);
-            const gotraLabel = p.gotra || "Gahoi";
+            const gotraLabel = p.gotra || "LOVEWANSHI";
             const photoSrc = p.profileImageFull || p.profileImage || p.imageUrl;
             const locationText = [p.city || p.presentAddress, p.state].filter(Boolean).join(", ") || "India";
 
@@ -344,7 +344,7 @@ export default function Browse() {
                     </button>
                   )}
 
-                  {/* Bottom-Left: Verified Gahoi Member Badge */}
+                  {/* Bottom-Left: Verified LOVEWANSHI Member Badge */}
                   <div className="card-verified-tag">
                     <span className="verified-blue-shield">
                       <svg width="15" height="15" viewBox="0 0 20 20" fill="none">
@@ -352,7 +352,7 @@ export default function Browse() {
                         <path d="M6.5 9.5L9 12L13.5 7.5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
                     </span>
-                    <span>Verified Gahoi Member</span>
+                    <span>Verified LOVEWANSHI Member</span>
                   </div>
                 </Link>
 
@@ -360,7 +360,7 @@ export default function Browse() {
                 <div className="card-details-box">
                   <div className="card-name-line">
                     <Link to={`/profiles/${p.id}`} className="card-profile-name">
-                      {p.name || "Gahoi Member"}
+                      {p.name || "LOVEWANSHI Member"}
                     </Link>
                   </div>
 
@@ -372,7 +372,7 @@ export default function Browse() {
                     <span className="gotra-prefix">गोत्र:</span>
                     <span className="gotra-name">{gotraLabel}</span>
                     <span className="gotra-dot">•</span>
-                    <span className="gotra-community">Gahoi</span>
+                    <span className="gotra-community">LOVEWANSHI</span>
                   </div>
 
                   <div className="card-career-line" title={`${professionFormatted || ""} ${educationFormatted ? `• ${educationFormatted}` : ""}`}>
@@ -484,7 +484,7 @@ export default function Browse() {
             <div className="filter-drawer-header">
               <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
                 <Icon name="filter" size={18} color="#E83A5B" />
-                <h3 className="filter-drawer-title">Filter Gahoi Matches</h3>
+                <h3 className="filter-drawer-title">Filter LOVEWANSHI Matches</h3>
               </div>
               <button
                 type="button"
@@ -506,7 +506,7 @@ export default function Browse() {
                   onChange={(e) => setFilter({ ...filter, gotra: e.target.value })}
                 >
                   <option value="">All Gotras (सभी गोत्र)</option>
-                  {GAHOI_GOTRAS.map((g) => (
+                  {LOVEWANSHI_GOTRAS.map((g) => (
                     <option value={g} key={g}>{g}</option>
                   ))}
                 </select>

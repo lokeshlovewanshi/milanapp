@@ -1,25 +1,25 @@
-# Play Store listing copy — Gahoi Milan
+﻿# Play Store listing copy — LOVEWANSHI Milan
 
 Paste directly into Play Console → Store presence → Main store listing.
 
 ## App name
-Gahoi Milan
+LOVEWANSHI Milan
 
-(In-app the header currently reads "Gahoi Parinay" in a couple of places —
+(In-app the header currently reads "Lovewanshi Parinay" in a couple of places —
 see the note at the bottom of this file. Pick one before submitting; this
-listing assumes "Gahoi Milan", matching app.json and the package name.)
+listing assumes "LOVEWANSHI Milan", matching app.json and the package name.)
 
 ## Short description (80 char max)
 
 ```
-Trusted matrimony app for the Gahoi community — verified, kundali match
+Trusted matrimony app for the LOVEWANSHI community — verified, kundali match
 ```
 71 characters.
 
 ## Full description (4000 char max)
 
 ```
-Gahoi Milan is a matrimony app built for the Gahoi community — a focused,
+LOVEWANSHI Milan is a matrimony app built for the LOVEWANSHI community — a focused,
 family-first space to find a life partner, not an endless swipe feed.
 
 VERIFIED, FAMILY-FIRST PROFILES
@@ -61,7 +61,7 @@ WHAT YOU CAN DO
 • See who's recently viewed your profile
 • Get notified the moment someone connects with you
 
-Gahoi Milan is free to use, with a Silver and Gold membership for members
+LOVEWANSHI Milan is free to use, with a Silver and Gold membership for members
 who want unlimited requests, priority visibility and advanced filters.
 
 Questions or feedback: jeevanmilansathi@gmail.com
@@ -77,8 +77,8 @@ Questions or feedback: jeevanmilansathi@gmail.com
 - **Privacy Policy URL:** the GitHub Pages link from `docs/privacy-policy.html`
   (see PUBLISHING.md for the exact URL once Pages is enabled).
 - **App name inconsistency to resolve before submitting:** app.json and the
-  Play package name both say "Gahoi Milan"; the in-app home header currently
-  renders the literal string "Gahoi Parinay". Decide which name is the real
+  Play package name both say "LOVEWANSHI Milan"; the in-app home header currently
+  renders the literal string "Lovewanshi Parinay". Decide which name is the real
   product name and make the other one match — a listing titled one thing
   that opens to a different wordmark on the first screen looks like a typo
   to a reviewer (and to a user).

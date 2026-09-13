@@ -1,4 +1,4 @@
-# Play Console Data Safety form — answers for Gahoi Milan
+﻿# Play Console Data Safety form — answers for LOVEWANSHI Milan
 
 Matches `docs/privacy-policy.html`. Fill this in under Play Console → App content →
 Data safety. Google checks your declaration against what the app actually does, so

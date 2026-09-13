@@ -1,11 +1,11 @@
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+﻿import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { fromIni } from "@aws-sdk/credential-providers";
 import fs from "fs";
 import path from "path";
 
 const REGION = process.env.AWS_REGION || "ap-south-1";
-const PROFILE = process.env.AWS_PROFILE || "gahoi";
-const BUCKET_NAME = process.env.S3_BUCKET_NAME || "gahoi-parinay-web";
+const PROFILE = process.env.AWS_PROFILE || "LOVEWANSHI";
+const BUCKET_NAME = process.env.S3_BUCKET_NAME || "LOVEWANSHI-parinay-web";
 
 let credentialsProvider;
 if (process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY) {
@@ -50,7 +50,7 @@ function cleanStr(val) {
 
 async function syncProfile(profileId) {
   console.log(`\n==> Fetching profile data for: ${profileId}...`);
-  const apiUrl = `https://api.gahoimarriage.in/api/v1/users/${profileId}`;
+  const apiUrl = `https://api.lovewanshisamaj.in/api/v1/users/${profileId}`;
   const res = await fetch(apiUrl);
   if (!res.ok) {
     console.error(`Failed to fetch profile ${profileId}: ${res.status}`);
@@ -67,7 +67,7 @@ async function syncProfile(profileId) {
   const professionStr = cleanStr(data.profession || data.occupationDetails);
   const educationStr = cleanStr(data.education || data.educationDetails);
   const cityStr = [data.city, data.state].filter(Boolean).join(", ");
-  const gotraStr = data.gotra || "Gahoi";
+  const gotraStr = data.gotra || "LOVEWANSHI";
 
   // Photo resolution: primary first
   const photo =
@@ -75,7 +75,7 @@ async function syncProfile(profileId) {
     data.profileImageFull ||
     (data.profileImageDetails && data.profileImageDetails[0]?.url) ||
     (data.profileImages && data.profileImages[0]) ||
-    "https://www.gahoimarriage.in/assets/auth-hero.jpg";
+    "https://www.lovewanshisamaj.in/assets/auth-hero.jpg";
 
   const quickDetails = [
     age ? `${age} Yrs` : null,
@@ -87,9 +87,9 @@ async function syncProfile(profileId) {
     .filter(Boolean)
     .join(" • ");
 
-  const pageTitle = `${name} (${code}) - Gahoi Parinay Matrimony`;
-  const ogTitle = `${name} (${code})${age ? ` - ${age} Yrs` : ""}${heightStr ? `, ${heightStr}` : ""} | Gahoi Parinay`;
-  const ogDesc = `${quickDetails}${gotraStr ? ` • Gotra: ${gotraStr}` : ""}. View complete verified biodata & family details on Gahoi Parinay.`;
+  const pageTitle = `${name} (${code}) - Lovewanshi Parinay Matrimony`;
+  const ogTitle = `${name} (${code})${age ? ` - ${age} Yrs` : ""}${heightStr ? `, ${heightStr}` : ""} | Lovewanshi Parinay`;
+  const ogDesc = `${quickDetails}${gotraStr ? ` • Gotra: ${gotraStr}` : ""}. View complete verified biodata & family details on Lovewanshi Parinay.`;
 
   // Read base index.html from dist/
   const distIndex = path.resolve("./dist/index.html");

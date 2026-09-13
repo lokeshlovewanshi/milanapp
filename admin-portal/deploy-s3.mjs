@@ -1,4 +1,4 @@
-import {
+﻿import {
   S3Client,
   ListBucketsCommand,
   CreateBucketCommand,
@@ -13,7 +13,7 @@ import path from "path";
 import mime from "mime-types";
 
 const REGION = process.env.AWS_REGION || "ap-south-1";
-const PROFILE = process.env.AWS_PROFILE || "gahoi";
+const PROFILE = process.env.AWS_PROFILE || "LOVEWANSHI";
 
 let credentialsProvider;
 if (process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY) {
@@ -36,7 +36,7 @@ async function main() {
   console.log("Available S3 Buckets in account:");
   (bucketsRes.Buckets || []).forEach((b) => console.log(` • ${b.Name}`));
 
-  const bucketName = process.env.S3_BUCKET_NAME || "gahoi-parinay-admin";
+  const bucketName = process.env.S3_BUCKET_NAME || "LOVEWANSHI-parinay-admin";
   const bucketExists = (bucketsRes.Buckets || []).some((b) => b.Name === bucketName);
 
   if (!bucketExists) {

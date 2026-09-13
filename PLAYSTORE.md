@@ -1,4 +1,4 @@
-# Publishing Gahoi Milan to the Play Store
+﻿# Publishing LOVEWANSHI Milan to the Play Store
 
 Audited against the actual project on 7 Aug 2026, not from a generic checklist.
 Everything marked ✅ was verified against the build; ❌ and ⚠️ are open.
@@ -16,7 +16,7 @@ resets if you drop below twelve. So the earliest possible production date is
 about two weeks after you get twelve people onto a closed track, regardless of
 how ready the code is.
 
-Organisation accounts are exempt. If Gahoi Milan is going out under a registered
+Organisation accounts are exempt. If LOVEWANSHI Milan is going out under a registered
 entity rather than your personal name, that route avoids the wait entirely and
 is worth deciding before you pay the \$25.
 
@@ -114,7 +114,7 @@ Play requires **two** routes for any app with accounts:
 
 1. **In app** - ✅ built. Profile tab → "Delete my account".
 2. **A public web URL** where someone can request deletion *without installing
-   the app* - ❌ missing. A simple page on `gahoimarriage.in` with a form or an
+   the app* - ❌ missing. A simple page on `lovewanshisamaj.in` with a form or an
    email address satisfies this.
 
 Note your deletion is a soft delete: `deleted_at` is stamped, the row survives

@@ -1,4 +1,4 @@
-package com.match.partner.openapi.auth.service;
+﻿package com.match.partner.openapi.auth.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +47,7 @@ public class EmailService {
     @Value("${app.mail.from:}")
     private String from;
 
-    @Value("${app.mail.from-name:Gahoi Parinay}")
+    @Value("${app.mail.from-name:Lovewanshi Parinay}")
     private String fromName;
 
     public record EmailSendResult(boolean success, String message) {}
@@ -82,7 +82,7 @@ public class EmailService {
             MimeMessage message = sender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, "UTF-8");
             helper.setTo(to);
-            helper.setSubject(code + " is your Gahoi Milan code");
+            helper.setSubject(code + " is your LOVEWANSHI Milan code");
             helper.setFrom(from, fromName);
             helper.setText(html(code, heading, purposeLine, validMinutes), true);
 
@@ -140,8 +140,8 @@ public class EmailService {
             MimeMessage message = sender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, "UTF-8");
             helper.setTo(to);
-            helper.setSubject("✨ Congratulations! Your Gahoi Parinay profile is verified (" + gmId + ")");
-            helper.setFrom(from, "Gahoi Parinay");
+            helper.setSubject("✨ Congratulations! Your Lovewanshi Parinay profile is verified (" + gmId + ")");
+            helper.setFrom(from, "Lovewanshi Parinay");
             helper.setText(welcomeVerifiedHtml(fullName != null && !fullName.isBlank() ? fullName : "Member", gmId), true);
 
             sender.send(message);
@@ -171,7 +171,7 @@ public class EmailService {
                 <head>
                   <meta charset="UTF-8">
                   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                  <title>Welcome to Gahoi Parinay</title>
+                  <title>Welcome to Lovewanshi Parinay</title>
                 </head>
                 <body style="margin:0;padding:0;background-color:#FAF5F6;font-family:'Segoe UI',Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;">
                   <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#FAF5F6;padding:24px 12px;">
@@ -184,10 +184,10 @@ public class EmailService {
                             <td align="center" style="background:linear-gradient(135deg, #7B1220 0%%, #A5122F 100%%);padding:36px 24px 28px;text-align:center;border-bottom:4px solid #D4AF37;">
                               <div style="font-size:28px;margin-bottom:8px;">💍✨💍</div>
                               <h1 style="color:#FFFFFF;margin:0;font-size:26px;font-weight:700;letter-spacing:0.5px;font-family:Georgia,serif;">
-                                Gahoi Parinay
+                                Lovewanshi Parinay
                               </h1>
                               <p style="color:#FCE8EE;margin:4px 0 16px;font-size:13px;letter-spacing:1px;text-transform:uppercase;">
-                                Gahoi Samaj Trusted Matrimony
+                                Lovewanshi Samaj Trusted Matrimony
                               </p>
                               
                               <!-- Verified Shield Badge -->
@@ -208,14 +208,14 @@ public class EmailService {
                                 Namaste, %s! 🙏
                               </h2>
                               <p style="color:#333333;font-size:15px;line-height:1.6;margin:0 0 16px;">
-                                We are pleased to inform you that your profile has been <strong>successfully verified</strong> by the Gahoi Parinay community moderation team.
+                                We are pleased to inform you that your profile has been <strong>successfully verified</strong> by the Lovewanshi Parinay community moderation team.
                               </p>
                               
                               <!-- ID Card Box -->
                               <table width="100%%" border="0" cellspacing="0" cellpadding="0" style="background:#FFF8FA;border-left:4px solid #A5122F;border-radius:6px;padding:12px 16px;margin:0 0 24px;">
                                 <tr>
                                   <td>
-                                    <span style="color:#6B5C5E;font-size:12px;text-transform:uppercase;font-weight:600;display:block;">Your Gahoi Parinay ID</span>
+                                    <span style="color:#6B5C5E;font-size:12px;text-transform:uppercase;font-weight:600;display:block;">Your Lovewanshi Parinay ID</span>
                                     <span style="color:#7B1220;font-size:18px;font-weight:800;letter-spacing:1px;">%s</span>
                                   </td>
                                 </tr>
@@ -230,7 +230,7 @@ public class EmailService {
                                 <tr>
                                   <td width="36" valign="top" style="font-size:20px;">👥</td>
                                   <td style="padding-left:8px;font-size:14px;color:#4A5568;line-height:1.5;">
-                                    <strong style="color:#1A202C;">Browse Verified Profiles:</strong> Connect directly with verified Gahoi Samaj brides &amp; grooms across India.
+                                    <strong style="color:#1A202C;">Browse Verified Profiles:</strong> Connect directly with verified Lovewanshi Samaj brides &amp; grooms across India.
                                   </td>
                                 </tr>
                               </table>
@@ -259,7 +259,7 @@ public class EmailService {
                               <table width="100%%" border="0" cellspacing="0" cellpadding="0" style="margin:28px 0;">
                                 <tr>
                                   <td align="center">
-                                    <a href="https://www.gahoimarriage.in/browse" style="display:inline-block;background:linear-gradient(135deg, #7B1220 0%%, #A5122F 100%%);color:#FFFFFF;text-decoration:none;font-size:16px;font-weight:700;padding:14px 32px;border-radius:999px;box-shadow:0 4px 14px rgba(123,18,32,0.35);letter-spacing:0.5px;">
+                                    <a href="https://www.lovewanshisamaj.in/browse" style="display:inline-block;background:linear-gradient(135deg, #7B1220 0%%, #A5122F 100%%);color:#FFFFFF;text-decoration:none;font-size:16px;font-weight:700;padding:14px 32px;border-radius:999px;box-shadow:0 4px 14px rgba(123,18,32,0.35);letter-spacing:0.5px;">
                                       Explore Verified Matches / रिश्ते देखें →
                                     </a>
                                   </td>
@@ -275,7 +275,7 @@ public class EmailService {
                                 Need assistance? Write to our support team at <a href="mailto:jeevanmilansathi@gmail.com" style="color:#A5122F;font-weight:600;">jeevanmilansathi@gmail.com</a>
                               </p>
                               <p style="color:#A0AEC0;font-size:11px;margin:0;">
-                                © Gahoi Parinay · Official Community Matrimony Portal · <a href="https://www.gahoimarriage.in" style="color:#A5122F;text-decoration:none;">www.gahoimarriage.in</a>
+                                © Lovewanshi Parinay · Official Community Matrimony Portal · <a href="https://www.lovewanshisamaj.in" style="color:#A5122F;text-decoration:none;">www.lovewanshisamaj.in</a>
                               </p>
                             </td>
                           </tr>
@@ -296,7 +296,7 @@ public class EmailService {
     private String html(String code, String heading, String purposeLine, int validMinutes) {
         return """
                 <div style="font-family:Helvetica,Arial,sans-serif;max-width:480px;margin:0 auto;padding:24px;color:#1A1A1A">
-                  <h1 style="font-size:22px;color:#7B1220;margin:0 0 4px">Gahoi Parinay</h1>
+                  <h1 style="font-size:22px;color:#7B1220;margin:0 0 4px">Lovewanshi Parinay</h1>
                   <p style="font-size:15px;color:#6B7280;margin:0 0 24px">%s</p>
                   <p style="font-size:15px;margin:0 0 8px">%s</p>
                   <div style="font-size:34px;font-weight:bold;letter-spacing:8px;color:#7B1220;
@@ -342,8 +342,8 @@ public class EmailService {
             MimeMessage message = sender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, "UTF-8");
             helper.setTo(to);
-            helper.setSubject("🎉 Welcome to Gahoi Parinay! Your " + planName + " Plan (" + durationText + ") is Active");
-            helper.setFrom(from, "Gahoi Parinay");
+            helper.setSubject("🎉 Welcome to Lovewanshi Parinay! Your " + planName + " Plan (" + durationText + ") is Active");
+            helper.setFrom(from, "Lovewanshi Parinay");
             helper.setText(planActivationHtml(displayName, planName, durationText, validityDate, isFreeOffer), true);
 
             sender.send(message);
@@ -374,7 +374,7 @@ public class EmailService {
                 <head>
                   <meta charset="UTF-8">
                   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                  <title>Gahoi Parinay Plan Activated</title>
+                  <title>Lovewanshi Parinay Plan Activated</title>
                 </head>
                 <body style="margin:0;padding:0;background-color:#FAF5F6;font-family:'Segoe UI',Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;">
                   <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#FAF5F6;padding:24px 12px;">
@@ -387,10 +387,10 @@ public class EmailService {
                             <td align="center" style="background:linear-gradient(135deg, #7B1220 0%%, #A5122F 100%%);padding:36px 24px 28px;text-align:center;border-bottom:4px solid #D4AF37;">
                               <div style="font-size:28px;margin-bottom:8px;">💍✨👑</div>
                               <h1 style="color:#FFFFFF;margin:0;font-size:26px;font-weight:700;letter-spacing:0.5px;font-family:Georgia,serif;">
-                                Gahoi Parinay
+                                Lovewanshi Parinay
                               </h1>
                               <p style="color:#FCE8EE;margin:4px 0 16px;font-size:13px;letter-spacing:1px;text-transform:uppercase;">
-                                Gahoi Samaj Trusted Matrimony
+                                Lovewanshi Samaj Trusted Matrimony
                               </p>
                               
                               <!-- Plan Badge -->
@@ -411,7 +411,7 @@ public class EmailService {
                                 Welcome, %s! 🙏
                               </h2>
                               <p style="color:#333333;font-size:15px;line-height:1.6;margin:0 0 16px;">
-                                Thank you for joining <strong>Gahoi Parinay</strong>. Your <strong>%s Plan (%s)</strong> has been successfully activated on your account.
+                                Thank you for joining <strong>Lovewanshi Parinay</strong>. Your <strong>%s Plan (%s)</strong> has been successfully activated on your account.
                               </p>
                               
                               <!-- Plan Details Card Box -->
@@ -478,7 +478,7 @@ public class EmailService {
                               <table width="100%%" border="0" cellspacing="0" cellpadding="0" style="margin:28px 0;">
                                 <tr>
                                   <td align="center">
-                                    <a href="https://www.gahoimarriage.in/browse" style="display:inline-block;background:linear-gradient(135deg, #7B1220 0%%, #A5122F 100%%);color:#FFFFFF;text-decoration:none;font-size:16px;font-weight:700;padding:14px 32px;border-radius:999px;box-shadow:0 4px 14px rgba(123,18,32,0.35);letter-spacing:0.5px;">
+                                    <a href="https://www.lovewanshisamaj.in/browse" style="display:inline-block;background:linear-gradient(135deg, #7B1220 0%%, #A5122F 100%%);color:#FFFFFF;text-decoration:none;font-size:16px;font-weight:700;padding:14px 32px;border-radius:999px;box-shadow:0 4px 14px rgba(123,18,32,0.35);letter-spacing:0.5px;">
                                       Start Exploring Matches →
                                     </a>
                                   </td>
@@ -494,7 +494,7 @@ public class EmailService {
                                 Need assistance? Write to our support team at <a href="mailto:jeevanmilansathi@gmail.com" style="color:#A5122F;font-weight:600;">jeevanmilansathi@gmail.com</a>
                               </p>
                               <p style="color:#A0AEC0;font-size:11px;margin:0;">
-                                © Gahoi Parinay · Official Community Matrimony Portal · <a href="https://www.gahoimarriage.in" style="color:#A5122F;text-decoration:none;">www.gahoimarriage.in</a>
+                                © Lovewanshi Parinay · Official Community Matrimony Portal · <a href="https://www.lovewanshisamaj.in" style="color:#A5122F;text-decoration:none;">www.lovewanshisamaj.in</a>
                               </p>
                             </td>
                           </tr>
@@ -509,7 +509,7 @@ public class EmailService {
     }
 
     /**
-     * Sends a custom admin outreach email to a member from noreply@gahoimarriage.in.
+     * Sends a custom admin outreach email to a member from noreply@lovewanshisamaj.in.
      * Attempts direct JavaMail first, and automatically falls back to the Lambda email dispatcher.
      */
     public EmailSendResult sendCustomOutreachEmail(String to, String subject, String bodyContent, String recipientName, String profileId) {
@@ -520,7 +520,7 @@ public class EmailService {
 
         String finalSubject = subject != null && !subject.isBlank()
                 ? subject.trim()
-                : "Important update regarding your Gahoi Parinay profile";
+                : "Important update regarding your Lovewanshi Parinay profile";
         String htmlBody = customOutreachHtml(recipientName, profileId, bodyContent);
 
         // 1. Try JavaMailSender direct SMTP
@@ -531,14 +531,14 @@ public class EmailService {
                 MimeMessageHelper helper = new MimeMessageHelper(message, "UTF-8");
                 helper.setTo(to.trim());
                 helper.setSubject(finalSubject);
-                String senderEmail = (from != null && !from.isBlank()) ? from.trim() : "noreply@gahoimarriage.in";
-                String senderName = (fromName != null && !fromName.isBlank()) ? fromName.trim() : "Gahoi Parinay";
+                String senderEmail = (from != null && !from.isBlank()) ? from.trim() : "noreply@lovewanshisamaj.in";
+                String senderName = (fromName != null && !fromName.isBlank()) ? fromName.trim() : "Lovewanshi Parinay";
                 helper.setFrom(senderEmail, senderName);
                 helper.setText(htmlBody, true);
 
                 sender.send(message);
                 log.info("Admin outreach email successfully sent via direct JavaMail to {} from {}", mask(to), senderEmail);
-                return new EmailSendResult(true, "Email sent successfully from noreply@gahoimarriage.in");
+                return new EmailSendResult(true, "Email sent successfully from noreply@lovewanshisamaj.in");
             } catch (Exception e) {
                 Throwable root = e;
                 while (root.getCause() != null && root.getCause() != root) {
@@ -557,7 +557,7 @@ public class EmailService {
                     to.trim(), finalSubject, htmlBody, bodyContent, recipientName, profileId);
             if (lambdaSent) {
                 log.info("Admin outreach email successfully sent via Lambda to {}", mask(to));
-                return new EmailSendResult(true, "Email sent successfully from noreply@gahoimarriage.in");
+                return new EmailSendResult(true, "Email sent successfully from noreply@lovewanshisamaj.in");
             }
         }
 
@@ -580,7 +580,7 @@ public class EmailService {
                 <head>
                   <meta charset="UTF-8">
                   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                  <title>Gahoi Parinay</title>
+                  <title>Lovewanshi Parinay</title>
                 </head>
                 <body style="margin:0;padding:0;background-color:#FAF5F6;font-family:'Segoe UI',Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;">
                   <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#FAF5F6;padding:24px 12px;">
@@ -593,10 +593,10 @@ public class EmailService {
                             <td align="center" style="background:linear-gradient(135deg, #7B1220 0%, #A5122F 100%);padding:32px 24px 26px;text-align:center;border-bottom:4px solid #D4AF37;">
                               <div style="font-size:26px;margin-bottom:6px;">💍✨👑</div>
                               <h1 style="color:#FFFFFF;margin:0;font-size:26px;font-weight:700;letter-spacing:0.5px;font-family:Georgia,serif;">
-                                Gahoi Parinay
+                                Lovewanshi Parinay
                               </h1>
                               <p style="color:#FCE8EE;margin:4px 0 14px;font-size:13px;letter-spacing:1px;text-transform:uppercase;">
-                                Gahoi Samaj Trusted Matrimony
+                                Lovewanshi Samaj Trusted Matrimony
                               </p>
                               
                               <table border="0" cellspacing="0" cellpadding="0" style="background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.35);border-radius:999px;margin:0 auto;">
@@ -620,8 +620,8 @@ public class EmailService {
                               <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin:28px 0 12px;">
                                 <tr>
                                   <td align="center">
-                                    <a href="https://www.gahoimarriage.in/login" style="display:inline-block;background:linear-gradient(135deg, #7B1220 0%, #A5122F 100%);color:#FFFFFF;text-decoration:none;font-size:15px;font-weight:700;padding:13px 32px;border-radius:999px;box-shadow:0 4px 14px rgba(123,18,32,0.3);letter-spacing:0.3px;">
-                                      Open Gahoi Parinay Portal →
+                                    <a href="https://www.lovewanshisamaj.in/login" style="display:inline-block;background:linear-gradient(135deg, #7B1220 0%, #A5122F 100%);color:#FFFFFF;text-decoration:none;font-size:15px;font-weight:700;padding:13px 32px;border-radius:999px;box-shadow:0 4px 14px rgba(123,18,32,0.3);letter-spacing:0.3px;">
+                                      Open Lovewanshi Parinay Portal →
                                     </a>
                                   </td>
                                 </tr>
@@ -638,7 +638,7 @@ public class EmailService {
                                     <strong>Have questions or need assistance?</strong><br>
                                     Our support team is happy to help you:<br>
                                     📞 Phone / WhatsApp: <a href="tel:7676554631" style="color:#7B1220;font-weight:600;text-decoration:none;">7676554631</a> &nbsp;|&nbsp; 
-                                    ✉️ Email: <a href="mailto:noreply@gahoimarriage.in" style="color:#7B1220;font-weight:600;text-decoration:none;">noreply@gahoimarriage.in</a>
+                                    ✉️ Email: <a href="mailto:noreply@lovewanshisamaj.in" style="color:#7B1220;font-weight:600;text-decoration:none;">noreply@lovewanshisamaj.in</a>
                                   </td>
                                 </tr>
                               </table>
@@ -652,10 +652,10 @@ public class EmailService {
                                 TRADITION &bull; TRUST &bull; BETTER TOMORROW
                               </p>
                               <p style="color:#718096;font-size:11px;margin:0 0 6px;">
-                                Where Families Meet &bull; Connecting Gahoi Families Worldwide
+                                Where Families Meet &bull; Connecting LOVEWANSHI Families Worldwide
                               </p>
                               <p style="color:#A0AEC0;font-size:11px;margin:0;">
-                                Website: <a href="https://www.gahoimarriage.in" style="color:#7B1220;text-decoration:none;">www.gahoimarriage.in</a> &bull; Sent via Official Community Relay
+                                Website: <a href="https://www.lovewanshisamaj.in" style="color:#7B1220;text-decoration:none;">www.lovewanshisamaj.in</a> &bull; Sent via Official Community Relay
                               </p>
                             </td>
                           </tr>

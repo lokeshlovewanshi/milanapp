@@ -1,4 +1,4 @@
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://api.gahoimarriage.in";
+﻿const BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://api.lovewanshisamaj.in";
 
 function getToken() {
   return localStorage.getItem("adminToken");

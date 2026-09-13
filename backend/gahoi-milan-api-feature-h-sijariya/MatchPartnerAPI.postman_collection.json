@@ -1,14 +1,14 @@
-{
+﻿{
   "info": {
     "_postman_id": "5f29abf9-be8c-4b96-a29d-96a295b8f2c6",
-    "name": "Gahoi Milan - Complete API Collection",
-    "description": "Comprehensive, production-ready Postman collection for Gahoi Milan Backend & Chat Services.\nIncludes automated JWT token saving, realistic payloads, request parameters, and complete coverage of all User, Admin, Reference, and Chat endpoints.",
+    "name": "LOVEWANSHI Milan - Complete API Collection",
+    "description": "Comprehensive, production-ready Postman collection for LOVEWANSHI Milan Backend & Chat Services.\nIncludes automated JWT token saving, realistic payloads, request parameters, and complete coverage of all User, Admin, Reference, and Chat endpoints.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
     {
       "key": "baseUrl",
-      "value": "https://api.gahoimarriage.in",
+      "value": "https://api.lovewanshisamaj.in",
       "type": "string"
     },
     {
@@ -589,7 +589,7 @@
             "description": "Updates any profile fields for the authenticated member",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Harsh Sijariya\",\n  \"gender\": \"Male\",\n  \"maritalStatus\": \"NEVER_MARRIED\",\n  \"dateOfBirth\": \"1998-05-15T00:00:00\",\n  \"height\": \"H_58\",\n  \"weight\": 70,\n  \"complexion\": \"Fair\",\n  \"bloodGroup\": \"O_POS\",\n  \"diet\": \"VEGETARIAN\",\n  \"disability\": \"None\",\n  \"gotra\": \"Kashyap\",\n  \"aakna\": \"Kankane\",\n  \"motherTongue\": \"Hindi\",\n  \"country\": \"India\",\n  \"state\": \"Madhya Pradesh\",\n  \"city\": \"Jhansi\",\n  \"education\": \"B_TECH\",\n  \"educationDetails\": \"Computer Science & Engineering\",\n  \"profession\": \"SOFTWARE_ENG\",\n  \"organization\": \"Tech Corp\",\n  \"annualIncome\": \"INR_15_20_LPA\",\n  \"workCity\": \"Bangalore\",\n  \"fathersName\": \"R. K. Sijariya\",\n  \"fathersOccupation\": \"Business\",\n  \"mothersName\": \"Mrs. Sijariya\",\n  \"mothersOccupation\": \"Homemaker\",\n  \"aboutMyself\": \"Software professional looking for an educated and understanding life partner.\",\n  \"partnerPreferences\": \"Educated girl from Gahoi Vaishya family.\"\n}",
+              "raw": "{\n  \"name\": \"Harsh Sijariya\",\n  \"gender\": \"Male\",\n  \"maritalStatus\": \"NEVER_MARRIED\",\n  \"dateOfBirth\": \"1998-05-15T00:00:00\",\n  \"height\": \"H_58\",\n  \"weight\": 70,\n  \"complexion\": \"Fair\",\n  \"bloodGroup\": \"O_POS\",\n  \"diet\": \"VEGETARIAN\",\n  \"disability\": \"None\",\n  \"gotra\": \"Kashyap\",\n  \"aakna\": \"Kankane\",\n  \"motherTongue\": \"Hindi\",\n  \"country\": \"India\",\n  \"state\": \"Madhya Pradesh\",\n  \"city\": \"Jhansi\",\n  \"education\": \"B_TECH\",\n  \"educationDetails\": \"Computer Science & Engineering\",\n  \"profession\": \"SOFTWARE_ENG\",\n  \"organization\": \"Tech Corp\",\n  \"annualIncome\": \"INR_15_20_LPA\",\n  \"workCity\": \"Bangalore\",\n  \"fathersName\": \"R. K. Sijariya\",\n  \"fathersOccupation\": \"Business\",\n  \"mothersName\": \"Mrs. Sijariya\",\n  \"mothersOccupation\": \"Homemaker\",\n  \"aboutMyself\": \"Software professional looking for an educated and understanding life partner.\",\n  \"partnerPreferences\": \"Educated girl from LOVEWANSHI Vaishya family.\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -2388,7 +2388,7 @@
             "description": "Authenticates admin and saves JWT token to collection variable {{adminToken}}",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"admin@gahoimarriage.in\",\n  \"password\": \"AdminPassword@123\"\n}",
+              "raw": "{\n  \"email\": \"admin@lovewanshisamaj.in\",\n  \"password\": \"AdminPassword@123\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -2955,7 +2955,7 @@
             "description": "Curates a user profile to be highlighted on the home screen",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"profileId\": 1,\n  \"sortOrder\": 1,\n  \"note\": \"Featured Gahoi wedding match 2026\"\n}",
+              "raw": "{\n  \"profileId\": 1,\n  \"sortOrder\": 1,\n  \"note\": \"Featured LOVEWANSHI wedding match 2026\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -3155,7 +3155,7 @@
             "description": "Fires a high-priority FCM push broadcast to all registered devices",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"title\": \"Happy Diwali from Gahoi Milan!\",\n  \"body\": \"Special festive discounts are now live on all Gold and Silver plans. Check out today!\",\n  \"topic\": \"all-users\",\n  \"link\": \"/plans\",\n  \"saveToFeed\": true\n}",
+              "raw": "{\n  \"title\": \"Happy Diwali from LOVEWANSHI Milan!\",\n  \"body\": \"Special festive discounts are now live on all Gold and Silver plans. Check out today!\",\n  \"topic\": \"all-users\",\n  \"link\": \"/plans\",\n  \"saveToFeed\": true\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -3341,7 +3341,7 @@
             "description": "Sends a message via HTTP REST when WebSocket is reconnecting",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"conversationId\": \"{{conversationId}}\",\n  \"recipientId\": 2,\n  \"content\": \"Namaste, I saw your profile on Gahoi Milan.\",\n  \"type\": \"TEXT\",\n  \"mediaUrl\": \"\",\n  \"tempId\": \"client_msg_101\"\n}",
+              "raw": "{\n  \"conversationId\": \"{{conversationId}}\",\n  \"recipientId\": 2,\n  \"content\": \"Namaste, I saw your profile on LOVEWANSHI Milan.\",\n  \"type\": \"TEXT\",\n  \"mediaUrl\": \"\",\n  \"tempId\": \"client_msg_101\"\n}",
               "options": {
                 "raw": {
                   "language": "json"

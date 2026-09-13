@@ -1,4 +1,4 @@
-import {
+﻿import {
   View,
   Text,
   StyleSheet,
@@ -202,7 +202,7 @@ export default function ProfileScreen() {
         <TouchableOpacity
           style={styles.membership}
           activeOpacity={0.85}
-          onPress={() => Linking.openURL('https://www.gahoimarriage.in/membership').catch(() => router.push('/subscription'))}
+          onPress={() => Linking.openURL('https://www.lovewanshisamaj.in/membership').catch(() => router.push('/subscription'))}
           accessibilityRole="button"
           accessibilityLabel="Membership"
         >

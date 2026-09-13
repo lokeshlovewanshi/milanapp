@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback } from "react";
+﻿import React, { useEffect, useRef, useState, useCallback } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { profileAPI, referenceAPI, attachmentAPI, biodataAPI, clearSession } from "../api";
 import { VerifiedBadge, Icon } from "../components/Icons";
@@ -654,7 +654,7 @@ export default function MyProfile() {
             </span>
           </div>
           <p className="profile-greeting-sub">
-            {profile.email || profile.mobileNo || "Gahoi Parinay Community Member"}
+            {profile.email || profile.mobileNo || "Lovewanshi Parinay Community Member"}
           </p>
         </div>
       </div>
@@ -785,7 +785,7 @@ export default function MyProfile() {
           type="button"
           className="profile-action-card"
           onClick={() => setShowMembershipModal(true)}
-          title="View Gahoi Parinay membership plan"
+          title="View Lovewanshi Parinay membership plan"
         >
           <div className="action-card-icon icon-membership">
             <Icon name="award" size={20} />
@@ -1059,7 +1059,7 @@ export default function MyProfile() {
                       <div className="jeevansathi-attr-icon"><Icon name="sparkles" size={16} /></div>
                       <div className="jeevansathi-attr-content">
                         <span className="jeevansathi-attr-label">Community / Religion</span>
-                        <span className="jeevansathi-attr-val">Gahoi Vaishya</span>
+                        <span className="jeevansathi-attr-val">LOVEWANSHI Vaishya</span>
                       </div>
                     </div>
                     <div className="jeevansathi-attr-row">
@@ -1323,7 +1323,7 @@ export default function MyProfile() {
                 <span style={{ fontSize: "0.78rem", color: "var(--secondary-text)", lineHeight: 1.4, display: "block" }}>
                   {profile.hidden
                     ? "Your profile is currently hidden from search listings."
-                    : "Your profile is visible to all verified Gahoi members."}
+                    : "Your profile is visible to all verified LOVEWANSHI members."}
                 </span>
               </div>
               <button
@@ -1382,7 +1382,7 @@ export default function MyProfile() {
                 <Icon name="award" size={28} />
               </div>
               <h3 style={{ margin: "0 0 0.25rem", fontSize: "1.3rem", color: "var(--dark-navy)", fontWeight: 800 }}>
-                Gahoi Parinay Community Membership
+                Lovewanshi Parinay Community Membership
               </h3>
               <span style={{ background: "#ECFDF5", color: "#065F46", border: "1px solid #A7F3D0", padding: "2px 10px", borderRadius: "var(--radius-pill)", fontSize: "0.78rem", fontWeight: 700 }}>
                 100% Free Lifetime Community Service ★
@@ -1392,7 +1392,7 @@ export default function MyProfile() {
             <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", marginBottom: "1.5rem" }}>
               <div style={{ display: "flex", gap: "0.6rem", alignItems: "flex-start", fontSize: "0.88rem" }}>
                 <span style={{ color: "#166534", fontWeight: 800 }}>✓</span>
-                <span>Unlimited profile browsing across all 20 Gahoi Gotras</span>
+                <span>Unlimited profile browsing across all 20 LOVEWANSHI Gotras</span>
               </div>
               <div style={{ display: "flex", gap: "0.6rem", alignItems: "flex-start", fontSize: "0.88rem" }}>
                 <span style={{ color: "#166534", fontWeight: 800 }}>✓</span>

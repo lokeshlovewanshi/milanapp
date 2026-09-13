@@ -1,4 +1,4 @@
-# Running Gahoi Milan locally
+﻿# Running LOVEWANSHI Milan locally
 
 Runs the whole app on your Mac with no AWS involved — the EC2 box can stay
 stopped. Everything below assumes:
@@ -54,7 +54,7 @@ the migrations **in this order**:
 ```bash
 mysql -u root -p -e "CREATE DATABASE IF NOT EXISTS marriage_portal;"
 mysql -u root -p marriage_portal < Dump20260725.sql
-cd backend/gahoi-milan-api-feature-h-sijariya/src/main/resources/db
+cd backend/LOVEWANSHI-milan-api-feature-h-sijariya/src/main/resources/db
 mysql -u root -p marriage_portal < reference_data.sql
 mysql -u root -p marriage_portal < created_at.sql
 mysql -u root -p marriage_portal < notifications.sql
@@ -69,7 +69,7 @@ not run.
 ## 2. Backend
 
 ```bash
-cd "backend/gahoi-milan-api-feature-h-sijariya"
+cd "backend/LOVEWANSHI-milan-api-feature-h-sijariya"
 ./gradlew bootRun
 ```
 
@@ -86,7 +86,7 @@ curl http://localhost:8080/actuator/health
 Expect `{"status":"UP"}`.
 
 Credentials come from
-`backend/gahoi-milan-api-feature-h-sijariya/src/main/resources/application.properties`,
+`backend/LOVEWANSHI-milan-api-feature-h-sijariya/src/main/resources/application.properties`,
 which is gitignored. If it is ever missing, copy
 `application.properties.example` next to it and fill in the blanks — the
 `${VAR:default}` syntax means environment variables override it.
@@ -225,7 +225,7 @@ Keeping ~15 GB free avoids the emulator refusing to boot.
 | `SDK location not found` | `frontend/android/local.properties` is missing — it is gitignored. Recreate it as shown in step 4. |
 | Backend exits at startup with a schema error | A migration was not run. Reload in the order in step 1. |
 | `Communications link failure` | MySQL is not running. `brew services start mysql` |
-| App shows a network error on every screen | Backend is not running, or `.env` still points at `api.gahoimarriage.in` while EC2 is stopped. Check the `🔧 API Configuration` log Metro prints at startup — it shows the resolved URL. |
+| App shows a network error on every screen | Backend is not running, or `.env` still points at `api.lovewanshisamaj.in` while EC2 is stopped. Check the `🔧 API Configuration` log Metro prints at startup — it shows the resolved URL. |
 | Network error on the emulator only | URL says `localhost` instead of `10.0.2.2`. Fix `.env`, restart Metro with `--clear`. |
 | `Cleartext HTTP traffic not permitted` | A release build is being used against `http://`. Rebuild with `expo run:android` (debug). |
 | Google button errors immediately | `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID` is blank. Use email/password, or fill it in and rebuild. |
@@ -242,7 +242,7 @@ Keeping ~15 GB free avoids the emulator refusing to boot.
 Set `frontend/.env` back to:
 
 ```
-EXPO_PUBLIC_BACKEND_URL=https://api.gahoimarriage.in
+EXPO_PUBLIC_BACKEND_URL=https://api.lovewanshisamaj.in
 ```
 
 then restart Metro with `--clear` and rebuild. The EC2 instance has to be

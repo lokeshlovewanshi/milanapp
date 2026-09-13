@@ -1,4 +1,4 @@
-package com.match.partner.openapi.admin.service;
+﻿package com.match.partner.openapi.admin.service;
 
 import com.match.partner.common.Utils.CommonUtils;
 import com.match.partner.common.service.S3ServiceInterface;
@@ -77,7 +77,7 @@ class AdminFeaturedStoryServiceTest {
 
         UserProfile profile = new UserProfile();
         profile.setId(101);
-        profile.setName("Aarav Gahoi");
+        profile.setName("Aarav LOVEWANSHI");
         profile.setVerified(true);
 
         AttachmentDao attachment = new AttachmentDao();
@@ -99,7 +99,7 @@ class AdminFeaturedStoryServiceTest {
         // 1. Get cached data directly
         List<CachedFeaturedStory> cachedData = featuredStoryService.getActiveStoriesData();
         assertEquals(1, cachedData.size());
-        assertEquals("Aarav Gahoi", cachedData.get(0).getName());
+        assertEquals("Aarav LOVEWANSHI", cachedData.get(0).getName());
         assertEquals("photo_101.jpg", cachedData.get(0).getPhotoFileName());
         assertEquals(101, cachedData.get(0).getUserProfileId());
         assertEquals(42L, cachedData.get(0).getViewsCount());

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Linking } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -57,7 +57,7 @@ export default function SubscriptionScreen() {
         <TouchableOpacity
           style={styles.webBtn}
           activeOpacity={0.85}
-          onPress={() => Linking.openURL('https://www.gahoimarriage.in/membership')}
+          onPress={() => Linking.openURL('https://www.lovewanshisamaj.in/membership')}
         >
           <Ionicons name="globe-outline" size={18} color="#FFFFFF" />
           <Text style={styles.webBtnText}>Manage & Upgrade on Web Portal ↗</Text>

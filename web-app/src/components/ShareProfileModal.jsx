@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+﻿import React, { useState, useRef, useEffect } from "react";
 import { VerifiedBadge, WhatsAppIcon, Icon } from "./Icons";
 import { formatHeight, formatEducation, formatProfession } from "../formatters";
 
@@ -99,7 +99,7 @@ export default function ShareProfileModal({ profile, photos = [], onClose }) {
   const educationStr = formatEducation(profile?.education);
   const professionStr = formatProfession(profile?.profession);
   const cityStr = [profile?.city || profile?.town, profile?.state].filter(Boolean).join(", ");
-  const gotraStr = profile?.gotra || "Gahoi";
+  const gotraStr = profile?.gotra || "LOVEWANSHI";
 
   const candidatePhotos = Array.from(
     new Set([
@@ -114,7 +114,7 @@ export default function ShareProfileModal({ profile, photos = [], onClose }) {
   ).filter(Boolean);
 
   const primaryPhoto = candidatePhotos[0] || null;
-  const shareUrl = `https://www.gahoimarriage.in/profiles/${code}`;
+  const shareUrl = `https://www.lovewanshisamaj.in/profiles/${code}`;
   const playStoreUrl = "https://play.google.com/store/apps/details?id=com.jeevanmilansathi.frontend";
 
   // Build clean quick details line
@@ -238,7 +238,7 @@ export default function ShareProfileModal({ profile, photos = [], onClose }) {
       // Badge text
       ctx.fillStyle = "#1E293B";
       ctx.font = "bold 17px 'Nunito Sans', -apple-system, sans-serif";
-      ctx.fillText("Verified Gahoi Member", 82, badgeY + 27);
+      ctx.fillText("Verified LOVEWANSHI Member", 82, badgeY + 27);
 
       // 3. Candidate Name
       ctx.fillStyle = "#FFFFFF";
@@ -249,7 +249,7 @@ export default function ShareProfileModal({ profile, photos = [], onClose }) {
       ctx.fillStyle = "#E2E8F0";
       ctx.font = "600 22px 'Nunito Sans', -apple-system, sans-serif";
       const metricsText = [age ? `${age} Yrs` : "", heightStr ? heightStr : ""].filter(Boolean).join(" • ");
-      ctx.fillText(metricsText || "Gahoi Community Member", 40, height - 220);
+      ctx.fillText(metricsText || "LOVEWANSHI Community Member", 40, height - 220);
 
       // 5. Gotra Badge Pill
       const gotraBadgeY = height - 190;
@@ -259,7 +259,7 @@ export default function ShareProfileModal({ profile, photos = [], onClose }) {
       ctx.fill();
       ctx.fillStyle = "#E83A5B";
       ctx.font = "700 17px 'Nunito Sans', -apple-system, sans-serif";
-      ctx.fillText(`गोत्र: ${gotraStr} • Gahoi`, 54, gotraBadgeY + 24);
+      ctx.fillText(`गोत्र: ${gotraStr} • LOVEWANSHI`, 54, gotraBadgeY + 24);
 
       // 6. Career & Education line
       ctx.fillStyle = "#F8FAFC";
@@ -277,7 +277,7 @@ export default function ShareProfileModal({ profile, photos = [], onClose }) {
       // 8. Branding Footer Bar
       ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
       ctx.font = "600 15px 'Nunito Sans', -apple-system, sans-serif";
-      ctx.fillText(`Gahoi Parinay (gahoimarriage.in) • ID: ${code}`, 40, height - 35);
+      ctx.fillText(`Lovewanshi Parinay (lovewanshisamaj.in) • ID: ${code}`, 40, height - 35);
 
       // Convert to blob
       canvas.toBlob((b) => {
@@ -308,7 +308,7 @@ export default function ShareProfileModal({ profile, photos = [], onClose }) {
         const file = new File([cardBlob], `${code}_card.jpg`, { type: "image/jpeg" });
         await navigator.share({
           files: [file],
-          title: `${name} - Gahoi Parinay Matrimony`,
+          title: `${name} - Lovewanshi Parinay Matrimony`,
           text: shareMessage,
         });
         return;
@@ -338,7 +338,7 @@ export default function ShareProfileModal({ profile, photos = [], onClose }) {
       const url = URL.createObjectURL(cardBlob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `${code}_${name.replace(/\s+/g, "_")}_GahoiParinay.jpg`;
+      a.download = `${code}_${name.replace(/\s+/g, "_")}_LOVEWANSHIParinay.jpg`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -350,7 +350,7 @@ export default function ShareProfileModal({ profile, photos = [], onClose }) {
       const dataUrl = canvasRef.current.toDataURL("image/jpeg", 0.95);
       const a = document.createElement("a");
       a.href = dataUrl;
-      a.download = `${code}_${name.replace(/\s+/g, "_")}_GahoiParinay.jpg`;
+      a.download = `${code}_${name.replace(/\s+/g, "_")}_LOVEWANSHIParinay.jpg`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -410,7 +410,7 @@ export default function ShareProfileModal({ profile, photos = [], onClose }) {
                 <div className="share-card-overlay-gradient">
                   <div className="share-card-badge-row">
                     <span className="share-verified-badge">
-                      <VerifiedBadge size={14} /> Verified Gahoi Member
+                      <VerifiedBadge size={14} /> Verified LOVEWANSHI Member
                     </span>
                   </div>
                   <h4 className="share-card-name">{name}</h4>
@@ -418,7 +418,7 @@ export default function ShareProfileModal({ profile, photos = [], onClose }) {
                     {[age ? `${age} Yrs` : "", heightStr].filter(Boolean).join(" • ")}
                   </div>
                   <div className="share-card-gotra-pill">
-                    गोत्र: {gotraStr} • Gahoi
+                    गोत्र: {gotraStr} • LOVEWANSHI
                   </div>
                   <div className="share-card-sub-info">
                     <span>💼 {[professionStr, educationStr].filter(Boolean).join(" • ")}</span>

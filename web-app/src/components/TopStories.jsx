@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { storyAPI } from "../api";
 import AvatarFallback from "./AvatarFallback";
@@ -52,7 +52,7 @@ export default function TopStories({ fallbackProfiles = [], myId = null }) {
     <div className="top-stories-section">
       <div className="section-header-simple">
         <h3 className="section-title">Top Stories</h3>
-        <span className="section-subtitle">Featured by Gahoi Parinay</span>
+        <span className="section-subtitle">Featured by Lovewanshi Parinay</span>
       </div>
 
       <div className="stories-rail">

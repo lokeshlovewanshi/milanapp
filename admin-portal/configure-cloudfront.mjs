@@ -1,4 +1,4 @@
-import {
+﻿import {
   CloudFrontClient,
   ListDistributionsCommand,
   CreateDistributionCommand,
@@ -13,7 +13,7 @@ if (process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY) {
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   };
 } else {
-  credentialsProvider = fromIni({ profile: process.env.AWS_PROFILE || "gahoi" });
+  credentialsProvider = fromIni({ profile: process.env.AWS_PROFILE || "LOVEWANSHI" });
 }
 
 const cf = new CloudFrontClient({
@@ -21,10 +21,10 @@ const cf = new CloudFrontClient({
   credentials: credentialsProvider,
 });
 
-const S3_BUCKET_NAME = "gahoi-parinay-admin";
+const S3_BUCKET_NAME = "LOVEWANSHI-parinay-admin";
 const S3_WEBSITE_ORIGIN = `${S3_BUCKET_NAME}.s3-website.ap-south-1.amazonaws.com`;
 const ACM_CERT_ARN = "arn:aws:acm:us-east-1:975375540512:certificate/c7537968-9a48-4659-853b-76ae4544a9e1";
-const ADMIN_ALIAS = "admin.gahoimarriage.in";
+const ADMIN_ALIAS = "admin.lovewanshisamaj.in";
 
 async function main() {
   console.log("Checking existing CloudFront distributions...");
@@ -59,7 +59,7 @@ async function main() {
   console.log(`Creating new CloudFront distribution for ${ADMIN_ALIAS}...`);
   const distributionConfig = {
     CallerReference: `admin-portal-${Date.now()}`,
-    Comment: "Gahoi Parinay Admin Portal",
+    Comment: "Lovewanshi Parinay Admin Portal",
     Enabled: true,
     DefaultRootObject: "index.html",
     Aliases: {
@@ -70,7 +70,7 @@ async function main() {
       Quantity: 1,
       Items: [
         {
-          Id: "gahoi-parinay-admin-s3-website",
+          Id: "LOVEWANSHI-parinay-admin-s3-website",
           DomainName: S3_WEBSITE_ORIGIN,
           OriginPath: "",
           CustomHeaders: { Quantity: 0 },
@@ -91,7 +91,7 @@ async function main() {
       ],
     },
     DefaultCacheBehavior: {
-      TargetOriginId: "gahoi-parinay-admin-s3-website",
+      TargetOriginId: "LOVEWANSHI-parinay-admin-s3-website",
       ViewerProtocolPolicy: "redirect-to-https",
       AllowedMethods: {
         Quantity: 2,

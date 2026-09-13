@@ -1,4 +1,4 @@
-{
+﻿{
   "cli": {
     "version": ">= 5.9.0",
     "appVersionSource": "remote"
@@ -21,7 +21,7 @@
         "buildType": "apk"
       },
       "env": {
-        "EXPO_PUBLIC_BACKEND_URL": "https://api.gahoimarriage.in",
+        "EXPO_PUBLIC_BACKEND_URL": "https://api.lovewanshisamaj.in",
         "ANDROID_SIDELOAD_APK": "1",
         "EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID": "828927114900-bvnjghkne3h6ri7csejk173n0o9760ed.apps.googleusercontent.com"
       }
@@ -32,7 +32,7 @@
         "buildType": "apk"
       },
       "env": {
-        "EXPO_PUBLIC_BACKEND_URL": "https://api.gahoimarriage.in",
+        "EXPO_PUBLIC_BACKEND_URL": "https://api.lovewanshisamaj.in",
         "ANDROID_SIDELOAD_APK": "1",
         "EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID": "828927114900-bvnjghkne3h6ri7csejk173n0o9760ed.apps.googleusercontent.com"
       }
@@ -43,7 +43,7 @@
         "buildType": "app-bundle"
       },
       "env": {
-        "EXPO_PUBLIC_BACKEND_URL": "https://api.gahoimarriage.in",
+        "EXPO_PUBLIC_BACKEND_URL": "https://api.lovewanshisamaj.in",
         "EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID": "828927114900-bvnjghkne3h6ri7csejk173n0o9760ed.apps.googleusercontent.com"
       }
     }

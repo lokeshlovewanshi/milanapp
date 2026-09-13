@@ -1,4 +1,4 @@
-package com.match.partner.openapi.notification.service;
+﻿package com.match.partner.openapi.notification.service;
 
 import com.match.partner.common.Utils.CommonUtils;
 import com.match.partner.openapi.notification.model.NotificationType;
@@ -274,7 +274,7 @@ public class NotificationServiceImpl implements NotificationServiceInterface {
         String detailSuffix = details.isEmpty() ? "" : " (" + String.join(", ", details) + ")";
 
         String title = "🌸 New Verified Profile / नया रिश्ता जुड़ा";
-        String body = "✨ " + name + detailSuffix + " joined Gahoi Parinay. Tap to view profile.";
+        String body = "✨ " + name + detailSuffix + " joined Lovewanshi Parinay. Tap to view profile.";
 
         Map<String, String> data = new HashMap<>();
         data.put("type", NotificationType.PROFILE_VERIFIED.name());

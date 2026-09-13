@@ -1,4 +1,4 @@
-# Deploying the API
+﻿# Deploying the API
 
 Production is **two Oracle Cloud instances behind an Always Free load
 balancer**, in `ap-mumbai-1`. Not AWS - the AWS stack this repo's older
@@ -7,20 +7,20 @@ the Lambdas remain there.
 
 | | |
 |---|---|
-| Domain | `https://api.gahoimarriage.in` |
+| Domain | `https://api.lovewanshisamaj.in` |
 | Load balancer | `130.210.52.85` (OCI, Always Free) |
 | Bastion Host | `152.67.7.218` (public IP) |
 | Instance 0 | `10.30.1.102` (private subnet, no public IP) |
 | Instance 1 | `10.30.1.121` (private subnet, no public IP) |
 | Database | MySQL HeatWave, `10.30.2.173:3306`, schema `marriage_portal` |
-| Photos | S3 `gahoi-milan-photos`, served via CloudFront `dm53nmzbwxptr.cloudfront.net` |
-| SSH via Bastion | `ssh -J ubuntu@152.67.7.218 -i ~/.ssh/gahoi_milan_dev ubuntu@<instance_ip>` |
+| Photos | S3 `LOVEWANSHI-milan-photos`, served via CloudFront `dm53nmzbwxptr.cloudfront.net` |
+| SSH via Bastion | `ssh -J ubuntu@152.67.7.218 -i ~/.ssh/LOVEWANSHI_milan_dev ubuntu@<instance_ip>` |
 
 Request path:
 
 ```
 phone / browser
-  → api.gahoimarriage.in        (DNS at GoDaddy)
+  → api.lovewanshisamaj.in        (DNS at GoDaddy)
   → OCI load balancer :443      (TLS terminates here)
   → nginx :80 on one instance   (round robin on private subnet)
   → java :8080
@@ -36,23 +36,23 @@ several hours to create. Never terraform-destroy them.
 
 | What | Where |
 |---|---|
-| Jar | `/opt/gahoi-milan/app.jar` |
-| Previous jar | `/opt/gahoi-milan/app.previous.jar` (rollback) |
-| Secrets | `/etc/gahoi-milan/gahoi-milan.env` — `root:gahoi`, mode `640` |
-| Firebase key | `/etc/gahoi-milan/firebase.json` |
-| Service | `gahoi-milan.service` (systemd), runs as `gahoi` |
-| Logs | `/var/log/gahoi-milan/app.log` |
-| nginx site | `/etc/nginx/sites-available/gahoi-milan` |
+| Jar | `/opt/LOVEWANSHI-milan/app.jar` |
+| Previous jar | `/opt/LOVEWANSHI-milan/app.previous.jar` (rollback) |
+| Secrets | `/etc/LOVEWANSHI-milan/LOVEWANSHI-milan.env` — `root:LOVEWANSHI`, mode `640` |
+| Firebase key | `/etc/LOVEWANSHI-milan/firebase.json` |
+| Service | `LOVEWANSHI-milan.service` (systemd), runs as `LOVEWANSHI` |
+| Logs | `/var/log/LOVEWANSHI-milan/app.log` |
+| nginx site | `/etc/nginx/sites-available/LOVEWANSHI-milan` |
 
 The app runs as a plain Java process under systemd. No Docker.
 
 ```bash
 # Connect via Bastion
-ssh -J ubuntu@152.67.7.218 -i ~/.ssh/gahoi_milan_dev ubuntu@10.30.1.102
+ssh -J ubuntu@152.67.7.218 -i ~/.ssh/LOVEWANSHI_milan_dev ubuntu@10.30.1.102
 
-sudo systemctl status gahoi-milan
-sudo systemctl restart gahoi-milan
-sudo tail -f /var/log/gahoi-milan/app.log
+sudo systemctl status LOVEWANSHI-milan
+sudo systemctl restart LOVEWANSHI-milan
+sudo tail -f /var/log/LOVEWANSHI-milan/app.log
 ```
 
 ---
@@ -89,12 +89,12 @@ FIREBASE_SERVICE_ACCOUNT_JSON                 CORS_ALLOWED_ORIGINS
 When CI is not an option. Build, copy via bastion ProxyJump, swap, restart, wait for health:
 
 ```bash
-cd backend/gahoi-milan-api-feature-h-sijariya
+cd backend/LOVEWANSHI-milan-api-feature-h-sijariya
 ./gradlew build -x test
 
 JAR=build/libs/partner-0.0.1-SNAPSHOT.jar
 for IP in 10.30.1.102 10.30.1.121; do
-  rsync -e "ssh -J ubuntu@152.67.7.218 -i ~/.ssh/gahoi_milan_dev" --partial --inplace "$JAR" ubuntu@$IP:/tmp/app.jar
+  rsync -e "ssh -J ubuntu@152.67.7.218 -i ~/.ssh/LOVEWANSHI_milan_dev" --partial --inplace "$JAR" ubuntu@$IP:/tmp/app.jar
 done
 ```
 
@@ -102,12 +102,12 @@ Then on **each** instance in turn - never both at once, or there is a moment
 with nothing serving:
 
 ```bash
-ssh -J ubuntu@152.67.7.218 -i ~/.ssh/gahoi_milan_dev ubuntu@10.30.1.102
+ssh -J ubuntu@152.67.7.218 -i ~/.ssh/LOVEWANSHI_milan_dev ubuntu@10.30.1.102
 
-sudo cp /opt/gahoi-milan/app.jar /opt/gahoi-milan/app.previous.jar
-sudo mv /tmp/app.jar /opt/gahoi-milan/app.jar
-sudo chown gahoi:gahoi /opt/gahoi-milan/app.jar
-sudo systemctl restart gahoi-milan
+sudo cp /opt/LOVEWANSHI-milan/app.jar /opt/LOVEWANSHI-milan/app.previous.jar
+sudo mv /tmp/app.jar /opt/LOVEWANSHI-milan/app.jar
+sudo chown LOVEWANSHI:LOVEWANSHI /opt/LOVEWANSHI-milan/app.jar
+sudo systemctl restart LOVEWANSHI-milan
 
 # Wait for UP before touching the second instance.
 until curl -fsS --max-time 3 http://127.0.0.1:8080/actuator/health | grep -q UP; do sleep 2; done
@@ -118,18 +118,18 @@ Cold start is 30-75 seconds.
 ### Rollback
 
 ```bash
-sudo cp /opt/gahoi-milan/app.previous.jar /opt/gahoi-milan/app.jar
-sudo systemctl restart gahoi-milan
+sudo cp /opt/LOVEWANSHI-milan/app.previous.jar /opt/LOVEWANSHI-milan/app.jar
+sudo systemctl restart LOVEWANSHI-milan
 ```
 
 ### Verify
 
 ```bash
-curl -s https://api.gahoimarriage.in/actuator/health          # {"status":"UP"}
+curl -s https://api.lovewanshisamaj.in/actuator/health          # {"status":"UP"}
 for i in 1 2 3 4; do curl -s -o /dev/null -w "%{http_code} " \
-  https://api.gahoimarriage.in/actuator/health; done          # both backends
+  https://api.lovewanshisamaj.in/actuator/health; done          # both backends
 curl -s -o /dev/null -w "%{http_code}\n" \
-  https://api.gahoimarriage.in/api/v1/user                    # 401 = auth works
+  https://api.lovewanshisamaj.in/api/v1/user                    # 401 = auth works
 ```
 
 ---
@@ -160,8 +160,8 @@ time.
 To reissue by hand:
 
 ```bash
-ssh -J ubuntu@152.67.7.218 -i ~/.ssh/gahoi_milan_dev ubuntu@10.30.1.102
-sudo certbot certonly --webroot -w /var/www/certbot -d api.gahoimarriage.in
+ssh -J ubuntu@152.67.7.218 -i ~/.ssh/LOVEWANSHI_milan_dev ubuntu@10.30.1.102
+sudo certbot certonly --webroot -w /var/www/certbot -d api.lovewanshisamaj.in
 ```
 
 then upload `fullchain.pem` (leaf first, chain separately) and `privkey.pem`
@@ -175,14 +175,14 @@ MySQL HeatWave on the private subnet - not reachable directly from the internet.
 
 ### Option 1: Port-forward tunnel from your laptop (Workbench / DBeaver)
 ```bash
-ssh -L 3306:10.30.2.173:3306 -i ~/.ssh/gahoi_milan_dev ubuntu@152.67.7.218
+ssh -L 3306:10.30.2.173:3306 -i ~/.ssh/LOVEWANSHI_milan_dev ubuntu@152.67.7.218
 ```
 Then connect your local MySQL client to `127.0.0.1:3306`.
 
 ### Option 2: CLI through an instance via Bastion
 ```bash
-ssh -J ubuntu@152.67.7.218 -i ~/.ssh/gahoi_milan_dev ubuntu@10.30.1.102
-set -a; source <(sudo cat /etc/gahoi-milan/gahoi-milan.env); set +a
+ssh -J ubuntu@152.67.7.218 -i ~/.ssh/LOVEWANSHI_milan_dev ubuntu@10.30.1.102
+set -a; source <(sudo cat /etc/LOVEWANSHI-milan/LOVEWANSHI-milan.env); set +a
 mysql -h 10.30.2.173 -u "$DB_USERNAME" -p"$DB_PASSWORD" marriage_portal
 ```
 
@@ -203,11 +203,11 @@ mysqldump -h 127.0.0.1 -u <user> -p marriage_portal \
 ## Configuration
 
 `application-prod.properties` reads everything from the environment; systemd
-supplies it from `/etc/gahoi-milan/gahoi-milan.env`. To change a value:
+supplies it from `/etc/LOVEWANSHI-milan/LOVEWANSHI-milan.env`. To change a value:
 
 ```bash
-sudo nano /etc/gahoi-milan/gahoi-milan.env
-sudo systemctl restart gahoi-milan
+sudo nano /etc/LOVEWANSHI-milan/LOVEWANSHI-milan.env
+sudo systemctl restart LOVEWANSHI-milan
 ```
 
 Two that are easy to get wrong:

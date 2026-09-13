@@ -1,8 +1,8 @@
-"""
-Gahoi Parinay - Asynchronous Welcome Email Lambda Function.
+﻿"""
+Lovewanshi Parinay - Asynchronous Welcome Email Lambda Function.
 
 Triggered asynchronously upon member registration (standard signup or Google OAuth).
-Delivers a responsive, professional HTML welcome email featuring the Gahoi Parinay
+Delivers a responsive, professional HTML welcome email featuring the Lovewanshi Parinay
 promotional flyer (hosted on S3 & CloudFront CDN), personalized greeting, profile completion
 checklist, and direct portal links.
 
@@ -27,13 +27,13 @@ SMTP_HOST = os.environ.get("SMTP_HOST", "smtp.email.ap-mumbai-1.oci.oraclecloud.
 SMTP_PORT = int(os.environ.get("SMTP_PORT", "587"))
 SMTP_USER = os.environ.get("SMTP_USER", "ocid1.user.oc1..aaaaaaaadusre56c2v2qhzcqyc6arhwvpvwb3u5bwc7su3b3s6miqi6sobkq@ocid1.tenancy.oc1..aaaaaaaassjcgarb3f5lqujpprme3ba5unnva2ktj2bn2bfbl44ycsyb53ka.f0.com")
 SMTP_PASS = os.environ.get("SMTP_PASS", "W_E1]bSM5C!dS!]qv0td")
-SMTP_FROM = os.environ.get("SMTP_FROM", "noreply@gahoimarriage.in")
+SMTP_FROM = os.environ.get("SMTP_FROM", "noreply@lovewanshisamaj.in")
 SMTP_FROM_NAME = os.environ.get("SMTP_FROM_NAME", "Lovewanshi Parinay")
 
-APP_URL = os.environ.get("APP_URL", "https://www.gahoimarriage.in")
-BANNER_IMAGE_URL = os.environ.get("BANNER_IMAGE_URL", "https://www.gahoimarriage.in/assets/welcome-banner.jpg")
+APP_URL = os.environ.get("APP_URL", "https://www.lovewanshisamaj.in")
+BANNER_IMAGE_URL = os.environ.get("BANNER_IMAGE_URL", "https://www.lovewanshisamaj.in/assets/welcome-banner.jpg")
 SUPPORT_PHONE = os.environ.get("SUPPORT_PHONE", "7676554631")
-SUPPORT_EMAIL = os.environ.get("SUPPORT_EMAIL", "support@gahoimarriage.in")
+SUPPORT_EMAIL = os.environ.get("SUPPORT_EMAIL", "support@lovewanshisamaj.in")
 
 
 def format_profile_id(raw_id: str | int | None) -> str:

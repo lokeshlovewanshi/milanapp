@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { api } from "../api";
 
@@ -55,12 +55,12 @@ export default function DirectMessage() {
   function interpolate(text, customName, customId, customPhone, customEmail) {
     if (!text) return "";
     const name = customName || recipientName.trim() || "Member";
-    const id = customId || profileId.trim() || "Gahoi Parinay";
+    const id = customId || profileId.trim() || "Lovewanshi Parinay";
     const mobile = customPhone || phoneNumber.trim() || "";
     const mail = customEmail || email.trim() || "";
     const profileUrl = matchedProfile?.id
-      ? `https://www.gahoimarriage.in/profiles/${matchedProfile.id}`
-      : "https://www.gahoimarriage.in";
+      ? `https://www.lovewanshisamaj.in/profiles/${matchedProfile.id}`
+      : "https://www.lovewanshisamaj.in";
 
     return text
       .replace(/{name}/g, name)
@@ -1111,7 +1111,7 @@ export default function DirectMessage() {
                   required
                   value={contactForm.name}
                   onChange={(e) => setContactForm((p) => ({ ...p, name: e.target.value }))}
-                  placeholder="e.g. Suresh Gahoi"
+                  placeholder="e.g. Suresh LOVEWANSHI"
                   style={{ width: "100%", padding: "0.55rem 0.75rem", borderRadius: "6px", border: "1px solid #D1D5DB", fontSize: "0.9rem" }}
                   autoFocus
                 />
@@ -1143,7 +1143,7 @@ export default function DirectMessage() {
                   >
                     <option value="PROSPECT">Prospect / Lead</option>
                     <option value="INCOMPLETE">Incomplete Profile</option>
-                    <option value="COMMUNITY_LEAD">Gahoi Samaj Lead</option>
+                    <option value="COMMUNITY_LEAD">Lovewanshi Samaj Lead</option>
                     <option value="MATCHMAKER">Matchmaker / Pandit</option>
                     <option value="FAMILY_ELDER">Family Elder</option>
                     <option value="GENERAL">General</option>

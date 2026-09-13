@@ -1,4 +1,4 @@
-# Lambdas
+﻿# Lambdas
 
 Deployed by `.github/workflows/deploy-lambdas.yml` on merge to `main`, when
 anything under `lambdas/**` changes. See [Automated deployment](#automated-deployment)
@@ -6,7 +6,7 @@ for the one-time setup that workflow needs.
 
 | Folder | Trigger | What it does |
 | --- | --- | --- |
-| `image_compression/` | S3 `ObjectCreated:*` on `gahoi-milan-photos` | Shrinks a profile photo in place and writes a thumbnail |
+| `image_compression/` | S3 `ObjectCreated:*` on `LOVEWANSHI-milan-photos` | Shrinks a profile photo in place and writes a thumbnail |
 | `kundali/` | Invoked from the backend | North Indian horoscope chart from birth date, time and place |
 
 ---
@@ -49,7 +49,7 @@ permissions the workflow needs. No new GitHub secret is required -
 deploy, and Terraform grants them the extra Lambda permissions.
 
 Function names come from `local.name`, so they are
-`gahoi-milan-prod-image-compression` and `gahoi-milan-prod-kundali`. **If you
+`LOVEWANSHI-milan-prod-image-compression` and `LOVEWANSHI-milan-prod-kundali`. **If you
 change `project` or `environment`, update the matrix in the workflow to match**
 - it looks functions up by name, and a rename makes the deploy fail rather than
 silently deploy to the wrong place.
@@ -125,7 +125,7 @@ The runtime uses Node.js with Sharp for ultra-fast, multi-threaded SIMD image pr
    cd .. && zip -qr ../sharp-layer.zip nodejs
    ```
 
-3. **Set the S3 trigger** on `gahoi-milan-photos`, event `s3:ObjectCreated:*`.
+3. **Set the S3 trigger** on `LOVEWANSHI-milan-photos`, event `s3:ObjectCreated:*`.
    Do **not** set a prefix or suffix filter - photos are stored at the bucket
    root with UUID keys and usually no file extension, so there is nothing to
    filter on. Recursion is prevented in code instead; see below.
@@ -139,7 +139,7 @@ The runtime uses Node.js with Sharp for ultra-fast, multi-threaded SIMD image pr
        {
          "Effect": "Allow",
          "Action": ["s3:GetObject", "s3:PutObject", "s3:GetObjectTagging", "s3:PutObjectTagging"],
-         "Resource": "arn:aws:s3:::gahoi-milan-photos/*"
+         "Resource": "arn:aws:s3:::LOVEWANSHI-milan-photos/*"
        },
        {
          "Effect": "Allow",
@@ -195,7 +195,7 @@ The trigger only fires on new uploads. For the photos already in the bucket,
 copying each object onto itself re-fires `ObjectCreated`:
 
 ```bash
-aws s3 cp s3://gahoi-milan-photos/ s3://gahoi-milan-photos/ --recursive --metadata-directive REPLACE --exclude "thumbs/*"
+aws s3 cp s3://LOVEWANSHI-milan-photos/ s3://LOVEWANSHI-milan-photos/ --recursive --metadata-directive REPLACE --exclude "thumbs/*"
 ```
 
 Do this **after** verifying the recursion guard on a handful of objects.

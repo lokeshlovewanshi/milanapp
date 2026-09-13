@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+﻿import React, { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { authAPI, setToken } from "../api";
 import { useGoogleButton } from "../useGoogleButton";
@@ -56,7 +56,7 @@ export default function Signup() {
   return (
     <AuthHero
       title="Create Account"
-      subtitle="Find your perfect match with Gahoi Parinay"
+      subtitle="Find your perfect match with Lovewanshi Parinay"
       tagline={["Find the one who", "completes your story."]}
       backTo="/login"
     >

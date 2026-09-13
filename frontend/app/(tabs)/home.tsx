@@ -1,4 +1,4 @@
-import {
+﻿import {
   View,
   Text,
   StyleSheet,
@@ -485,7 +485,7 @@ export default function HomeScreen() {
         </TouchableOpacity>
 
         <View style={styles.topBarTitle}>
-          <Text style={styles.wordmark}>Gahoi Parinay</Text>
+          <Text style={styles.wordmark}>Lovewanshi Parinay</Text>
           <Ionicons name="chevron-down" size={14} color="#1A1A1A" style={{ marginLeft: 3, marginTop: 3 }} />
         </View>
 

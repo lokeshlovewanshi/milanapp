@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes, Link, useNavigate } from "react-router-dom";
+﻿import { Navigate, Route, Routes, Link, useNavigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Queue from "./pages/Queue";
 import ProfileDetail from "./pages/ProfileDetail";
@@ -32,7 +32,7 @@ function Layout({ children }) {
   return (
     <div className="app-shell">
       <nav className="topnav">
-        <div className="topnav-brand">Gahoi Parinay Admin</div>
+        <div className="topnav-brand">Lovewanshi Parinay Admin</div>
         <div className="topnav-links">
           <Link to="/queue">Queue &amp; Monitoring</Link>
           <Link to="/verified">✅ Verified Profiles</Link>

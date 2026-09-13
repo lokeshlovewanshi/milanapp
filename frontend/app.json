@@ -1,11 +1,11 @@
-{
+﻿{
   "expo": {
-    "name": "Gahoi Parinay",
-    "slug": "gahoi-milan",
+    "name": "Lovewanshi Parinay",
+    "slug": "LOVEWANSHI-milan",
     "version": "1.2.2",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "gahoimilan",
+    "scheme": "LOVEWANSHImilan",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": false,
     "ios": {

@@ -1,4 +1,4 @@
-package com.match.partner.openapi.user.service;
+﻿package com.match.partner.openapi.user.service;
 
 import com.match.partner.openapi.user.model.dao.UserProfile;
 import com.match.partner.openapi.user.model.dto.GoogleTokenResponse;
@@ -20,7 +20,7 @@ public class GoogleAuthServiceImpl implements GoogleAuthServiceInterface {
     private String clientId;
     @Value("${spring.security.oauth2.client.registration.google.client-secret:}")
     private String clientSecret;
-    @Value("${spring.security.oauth2.client.registration.google.redirect-uri:https://api.gahoimarriage.in/api/v1/auth/grantcode}")
+    @Value("${spring.security.oauth2.client.registration.google.redirect-uri:https://api.lovewanshisamaj.in/api/v1/auth/grantcode}")
     private String redirectUri;
 
     public ResponseEntity<ProfileResponse> getOauthAccessTokenGoogle(String code) {

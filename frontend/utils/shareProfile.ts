@@ -1,4 +1,4 @@
-import { Share } from 'react-native';
+﻿import { Share } from 'react-native';
 import { profileId, profileName, profileCode, profileImage } from '../components/theme';
 
 export interface ShareOptions {
@@ -127,7 +127,7 @@ export function cleanValue(val: any): string {
 export function buildProfileShareMessage(profile: any, isOwnProfile = false): string {
   const name = profileName(profile) || 'Member';
   const code = profileCode(profile) || profileId(profile) || '';
-  const shareUrl = `https://www.gahoimarriage.in/profile/${code}`;
+  const shareUrl = `https://www.lovewanshisamaj.in/profile/${code}`;
   const playStoreUrl = 'https://play.google.com/store/apps/details?id=com.jeevanmilansathi.frontend';
 
   const age = profile?.age ? `${profile.age} yrs` : null;
@@ -144,7 +144,7 @@ export function buildProfileShareMessage(profile: any, isOwnProfile = false): st
   if (isOwnProfile) {
     return [
       `🙏 Namaste,`,
-      `Check out my marriage profile on Gahoi Parinay 🌸`,
+      `Check out my marriage profile on Lovewanshi Parinay 🌸`,
       ``,
       `👤 Name: ${name}`,
       code ? `🆔 Profile ID: ${code}` : '',
@@ -154,7 +154,7 @@ export function buildProfileShareMessage(profile: any, isOwnProfile = false): st
       `🔗 View full profile & photos:`,
       `${shareUrl}`,
       ``,
-      `📲 Download Gahoi Parinay App:`,
+      `📲 Download Lovewanshi Parinay App:`,
       `${playStoreUrl}`,
     ]
       .filter((line) => line !== '')
@@ -164,7 +164,7 @@ export function buildProfileShareMessage(profile: any, isOwnProfile = false): st
   return [
     `Hi 👋 ${name} This Side 🙏`,
     ``,
-    `I saw your profile on Gahoi Parinay App and found it interesting 🤩`,
+    `I saw your profile on Lovewanshi Parinay App and found it interesting 🤩`,
     ``,
     `Me & My Family Members 👨‍👩‍👧‍👦 want to discuss further For Marriage. 👫`,
     ``,
@@ -189,11 +189,11 @@ export async function shareProfile(profile: any, options: ShareOptions = {}): Pr
   if (!profile) return;
 
   const { isOwnProfile = false } = options;
-  const name = profileName(profile) || 'Gahoi Parinay Profile';
+  const name = profileName(profile) || 'Lovewanshi Parinay Profile';
   const message = buildProfileShareMessage(profile, isOwnProfile);
   const title = isOwnProfile
-    ? `${name} - Marriage Profile on Gahoi Parinay`
-    : `${name} - Gahoi Parinay Marriage Proposal`;
+    ? `${name} - Marriage Profile on Lovewanshi Parinay`
+    : `${name} - Lovewanshi Parinay Marriage Proposal`;
 
   try {
     await Share.share({
@@ -211,9 +211,9 @@ export async function shareProfile(profile: any, options: ShareOptions = {}): Pr
  * Builds and shares a structured Kundali summary for a profile without using 'amanglik'.
  */
 export async function shareKundali(profile: any, kundaliData?: any): Promise<void> {
-  const name = profileName(profile) || 'Gahoi Parinay Member';
+  const name = profileName(profile) || 'Lovewanshi Parinay Member';
   const code = profileCode(profile) || profileId(profile) || '';
-  const shareUrl = code ? `https://www.gahoimarriage.in/profile/${code}` : 'https://www.gahoimarriage.in';
+  const shareUrl = code ? `https://www.lovewanshisamaj.in/profile/${code}` : 'https://www.lovewanshisamaj.in';
   const playStoreUrl = 'https://play.google.com/store/apps/details?id=com.jeevanmilansathi.frontend';
 
   const rashi = cleanValue(kundaliData?.moon_sign || kundaliData?.rashi || profile?.rashi || 'N/A');
@@ -242,7 +242,7 @@ export async function shareKundali(profile: any, kundaliData?: any): Promise<voi
     `🔗 View full profile & complete Kundali chart:`,
     `${shareUrl}`,
     ``,
-    `📲 Gahoi Parinay App: ${playStoreUrl}`,
+    `📲 Lovewanshi Parinay App: ${playStoreUrl}`,
   ].filter(Boolean);
 
   const message = lines.join('\n');

@@ -1,4 +1,4 @@
-package com.match.partner.openapi.admin.service;
+﻿package com.match.partner.openapi.admin.service;
 
 import com.match.partner.common.configuration.ClientException;
 import com.match.partner.openapi.admin.model.dto.AdminCreateProfileDTO;
@@ -305,12 +305,12 @@ public class AdminProfileService {
             }
         } else if (dto.getMobileNo() != null && !dto.getMobileNo().isBlank()) {
             String sanitizedPhone = dto.getMobileNo().replaceAll("[^0-9]", "");
-            email = "user." + sanitizedPhone + "@gahoipariniy.in";
+            email = "user." + sanitizedPhone + "@LOVEWANSHIpariniy.in";
             if (userProfileRepository.findByEmail(email).isPresent()) {
-                email = "user." + sanitizedPhone + "." + System.currentTimeMillis() + "@gahoipariniy.in";
+                email = "user." + sanitizedPhone + "." + System.currentTimeMillis() + "@LOVEWANSHIpariniy.in";
             }
         } else {
-            email = "user." + System.currentTimeMillis() + "@gahoipariniy.in";
+            email = "user." + System.currentTimeMillis() + "@LOVEWANSHIpariniy.in";
         }
 
         UserProfile user = new UserProfile();
@@ -322,7 +322,7 @@ public class AdminProfileService {
 
         String rawPassword = (dto.getPassword() != null && !dto.getPassword().isBlank())
                 ? dto.getPassword().trim()
-                : "Gahoi@2026";
+                : "Lovewanshi@2026";
         user.setPassword(passwordEncoder.encode(rawPassword));
 
         user.setStatus(Status.APPROVED);

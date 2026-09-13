@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { api } from "../api";
 
 export default function ContactMessageModal({ profile, onClose }) {
@@ -10,7 +10,7 @@ export default function ContactMessageModal({ profile, onClose }) {
   // WhatsApp / Email state
   const [messageText, setMessageText] = useState("");
   const [mailSubject, setMailSubject] = useState(
-    `Important update regarding your Gahoi Parinay profile (${profile?.displayId || `GM${profile?.id}`})`
+    `Important update regarding your Lovewanshi Parinay profile (${profile?.displayId || `GM${profile?.id}`})`
   );
   const [copied, setCopied] = useState(false);
   const [sendingMail, setSendingMail] = useState(false);
@@ -39,7 +39,7 @@ export default function ContactMessageModal({ profile, onClose }) {
     const profileId = profile?.displayId || (profile?.id ? `GM${String(profile.id).padStart(5, "0")}` : "");
     const mobileNo = profile?.mobileNo || profile?.whatsappNo || "";
     const email = profile?.email || "";
-    const profileUrl = profile?.id ? `https://www.gahoimarriage.in/profiles/${profile.id}` : "https://www.gahoimarriage.in";
+    const profileUrl = profile?.id ? `https://www.lovewanshisamaj.in/profiles/${profile.id}` : "https://www.lovewanshisamaj.in";
 
     return text
       .replace(/{name}/g, name)
@@ -116,7 +116,7 @@ export default function ContactMessageModal({ profile, onClose }) {
         recipientName: profile?.name || "Member",
         profileId: profile?.displayId || (profile?.id ? `GM${String(profile.id).padStart(5, "0")}` : ""),
       });
-      setMailSuccess(res?.message || "Email sent successfully from noreply@gahoimarriage.in!");
+      setMailSuccess(res?.message || "Email sent successfully from noreply@lovewanshisamaj.in!");
     } catch (err) {
       setMailError(err?.message || "Failed to send email");
     } finally {
@@ -487,7 +487,7 @@ export default function ContactMessageModal({ profile, onClose }) {
                   From (Official Matrimony Outreach)
                 </div>
                 <div style={{ fontSize: "0.95rem", fontWeight: 700, color: "#7B1220", fontFamily: "monospace" }}>
-                  noreply@gahoimarriage.in
+                  noreply@lovewanshisamaj.in
                 </div>
               </div>
               <span
@@ -686,7 +686,7 @@ export default function ContactMessageModal({ profile, onClose }) {
                   }}
                 >
                   <span>{sendingMail ? "⏳" : "✉️"}</span>
-                  {sendingMail ? "Sending via noreply@gahoimarriage.in..." : "Send Email from noreply@gahoimarriage.in"}
+                  {sendingMail ? "Sending via noreply@lovewanshisamaj.in..." : "Send Email from noreply@lovewanshisamaj.in"}
                 </button>
               </div>
             </div>

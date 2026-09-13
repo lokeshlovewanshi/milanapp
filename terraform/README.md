@@ -1,6 +1,6 @@
-# Infrastructure
+﻿# Infrastructure
 
-Terraform for the Gahoi Milan API: VPC, EC2, database, CodeDeploy, and an OIDC role so GitHub Actions deploys without a stored AWS key.
+Terraform for the LOVEWANSHI Milan API: VPC, EC2, database, CodeDeploy, and an OIDC role so GitHub Actions deploys without a stored AWS key.
 
 ## Is CodeDeploy free?
 
@@ -40,7 +40,7 @@ together.
 
 ## Secrets
 
-Production values live in `/etc/gahoi-milan/gahoi-milan.env` on the instance.
+Production values live in `/etc/LOVEWANSHI-milan/LOVEWANSHI-milan.env` on the instance.
 The deploy workflow assembles that file from GitHub repository secrets and
 ships it base64-encoded, so nothing sensitive is in this repo or in Terraform.
 
@@ -90,8 +90,8 @@ Takes 10–15 minutes, mostly waiting on RDS.
 
 `terraform output next_steps` prints the checklist. In short:
 
-1. Point DNS at `terraform output api_public_ip`, then on the server run `sudo certbot --nginx -d api.gahoimarriage.in`
-2. Fill in `/etc/gahoi-milan/gahoi-milan.env` — Terraform writes the DB URL and username, you add the passwords and secrets
+1. Point DNS at `terraform output api_public_ip`, then on the server run `sudo certbot --nginx -d api.lovewanshisamaj.in`
+2. Fill in `/etc/LOVEWANSHI-milan/LOVEWANSHI-milan.env` — Terraform writes the DB URL and username, you add the passwords and secrets
 3. Add two GitHub repository secrets from the outputs: `AWS_DEPLOY_ROLE_ARN` and `AWS_ARTIFACT_BUCKET`
 4. Load the schema by connecting from the EC2 box (RDS is private, by design)
 5. Push to `main` — the workflow builds, tests, bundles and deploys

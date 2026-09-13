@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import { Link } from "react-router-dom";
 import logoImg from "../assets/logo.png";
 import { Icon } from "../components/Icons";
@@ -9,9 +9,9 @@ export default function PrivacyPolicy() {
       {/* Header */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "2rem", borderBottom: "1px solid var(--border)", paddingBottom: "1.25rem" }}>
         <Link to="/" style={{ display: "flex", alignItems: "center", gap: "0.6rem", textDecoration: "none" }}>
-          <img src={logoImg} alt="Gahoi Parinay" style={{ width: 34, height: 34, objectFit: "contain" }} />
+          <img src={logoImg} alt="Lovewanshi Parinay" style={{ width: 34, height: 34, objectFit: "contain" }} />
           <span style={{ fontFamily: "var(--font-serif)", fontSize: "1.25rem", fontWeight: 700, color: "var(--auth-maroon)" }}>
-            Gahoi Parinay
+            Lovewanshi Parinay
           </span>
         </Link>
         <Link to="/browse" className="secondary small" style={{ display: "inline-flex", alignItems: "center", gap: "0.4rem", textDecoration: "none" }}>
@@ -25,12 +25,12 @@ export default function PrivacyPolicy() {
           Privacy Policy
         </h1>
         <p className="muted" style={{ fontSize: "0.9rem", marginBottom: "1.5rem" }}>
-          Last Updated: 22 August 2026 · Effective for Gahoi Parinay (Gahoi Marriage) Web Portal & Mobile Application
+          Last Updated: 22 August 2026 · Effective for Lovewanshi Parinay (Lovewanshi Samaj) Web Portal & Mobile Application
         </p>
 
         <div style={{ background: "#FDF2F4", borderLeft: "4px solid var(--auth-crimson)", padding: "1rem 1.25rem", borderRadius: "0 var(--radius-sm) var(--radius-sm) 0", marginBottom: "2rem" }}>
           <p style={{ margin: 0, fontSize: "0.95rem", color: "#5C131E", lineHeight: 1.6 }}>
-            <strong>Gahoi Parinay</strong> is a dedicated matrimony portal built exclusively for the Gahoi community to help members connect with verified bride and groom proposals. This Privacy Policy details how we collect, use, protect, and handle your personal and matrimonial data.
+            <strong>Lovewanshi Parinay</strong> is a dedicated matrimony portal built exclusively for the LOVEWANSHI community to help members connect with verified bride and groom proposals. This Privacy Policy details how we collect, use, protect, and handle your personal and matrimonial data.
           </p>
         </div>
 
@@ -93,7 +93,7 @@ export default function PrivacyPolicy() {
             5. Account Deletion & Data Rights
           </h2>
           <p style={{ lineHeight: 1.7, color: "var(--text)" }}>
-            You maintain full control over your data on Gahoi Parinay:
+            You maintain full control over your data on Lovewanshi Parinay:
           </p>
           <ul style={{ paddingLeft: "1.5rem", lineHeight: 1.8, color: "var(--text)" }}>
             <li><strong>Profile Visibility:</strong> You can temporarily hide your profile from search results at any time from your account settings.</li>
@@ -110,19 +110,19 @@ export default function PrivacyPolicy() {
             If you have any questions, concerns, or requests regarding this Privacy Policy or your personal information, please contact our support team:
           </p>
           <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--radius-sm)", padding: "1.25rem", marginTop: "1rem" }}>
-            <p style={{ margin: "0 0 0.5rem", fontWeight: 600, color: "var(--text)" }}>Gahoi Parinay Support Desk</p>
+            <p style={{ margin: "0 0 0.5rem", fontWeight: 600, color: "var(--text)" }}>Lovewanshi Parinay Support Desk</p>
             <p style={{ margin: "0 0 0.5rem", color: "var(--text)" }}>
               Email: <a href="mailto:jeevanmilansathi@gmail.com" style={{ color: "var(--auth-crimson)", fontWeight: 600 }}>jeevanmilansathi@gmail.com</a>
             </p>
             <p style={{ margin: 0, color: "var(--text-muted)", fontSize: "0.9rem" }}>
-              Website: <a href="https://www.gahoimarriage.in" style={{ color: "var(--auth-crimson)" }}>https://www.gahoimarriage.in</a>
+              Website: <a href="https://www.lovewanshisamaj.in" style={{ color: "var(--auth-crimson)" }}>https://www.lovewanshisamaj.in</a>
             </p>
           </div>
         </section>
 
         <div style={{ borderTop: "1px solid var(--border)", paddingTop: "1.5rem", textAlign: "center" }}>
           <p className="muted" style={{ fontSize: "0.85rem", margin: 0 }}>
-            © {new Date().getFullYear()} Gahoi Parinay. Dedicated Matrimonial Platform for the Gahoi Community.
+            © {new Date().getFullYear()} Lovewanshi Parinay. Dedicated Matrimonial Platform for the LOVEWANSHI Community.
           </p>
         </div>
       </div>
