@@ -1,6 +1,6 @@
 # Cloudflare Tunnel config for local development.
 #
-# Routes api.gahoimarriage.in traffic to the Spring Boot server running on
+# Routes api.lovewanshisamaj.in traffic to the Spring Boot server running on
 # this machine (application-local.properties, port 8080). See LOCAL_DEV.md
 # for the one-time setup this file depends on.
 #
@@ -13,6 +13,6 @@ tunnel: REPLACE_WITH_TUNNEL_ID
 credentials-file: REPLACE_WITH_PATH_TO_CREDENTIALS_JSON
 
 ingress:
-  - hostname: api.gahoimarriage.in
+  - hostname: api.lovewanshisamaj.in
     service: http://localhost:8080
   - service: http_status:404

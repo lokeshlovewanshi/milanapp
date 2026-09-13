@@ -48,19 +48,19 @@ echo "    $(aws --version)"
 echo "==> Creating the service account"
 # No login shell and no home directory: this account exists to own a process,
 # and giving it either would only widen what a compromise reaches.
-id -u gahoi &>/dev/null || useradd --system --no-create-home --shell /usr/sbin/nologin gahoi
+id -u lovewanshi &>/dev/null || useradd --system --no-create-home --shell /usr/sbin/nologin lovewanshi
 
 echo "==> Creating directories"
-install -d -m 755 -o gahoi -g gahoi /opt/gahoi-milan
-install -d -m 755 -o gahoi -g gahoi /var/log/gahoi-milan
-install -d -m 750 -o root  -g gahoi /etc/gahoi-milan
+install -d -m 755 -o lovewanshi -g lovewanshi /opt/lovewanshi-milan
+install -d -m 755 -o lovewanshi -g lovewanshi /var/log/lovewanshi-milan
+install -d -m 750 -o root  -g lovewanshi /etc/lovewanshi-milan
 
 echo "==> Environment file"
 # The deploy refuses to run without this. It holds no credentials - only which
 # Secrets Manager secret to read; the instance role supplies the rest.
-if [[ ! -f /etc/gahoi-milan/gahoi-milan.env ]]; then
-  cat > /etc/gahoi-milan/gahoi-milan.env <<'ENVFILE'
-SECRET_ID=gahoi-milan/prod
+if [[ ! -f /etc/lovewanshi-milan/lovewanshi-milan.env ]]; then
+  cat > /etc/lovewanshi-milan/lovewanshi-milan.env <<'ENVFILE'
+SECRET_ID=lovewanshi-milan/prod
 AWS_REGION=ap-south-1
 SERVER_PORT=8080
 ENVFILE
@@ -68,8 +68,8 @@ ENVFILE
 else
   echo "    already present - leaving it alone"
 fi
-chown root:gahoi /etc/gahoi-milan/gahoi-milan.env
-chmod 640 /etc/gahoi-milan/gahoi-milan.env
+chown root:lovewanshi /etc/lovewanshi-milan/lovewanshi-milan.env
+chmod 640 /etc/lovewanshi-milan/lovewanshi-milan.env
 
 echo "==> Adding swap"
 # A t3.small has 2 GB, enough for the 1 GB heap plus the OS in normal use.
@@ -110,22 +110,22 @@ cat <<'DONE'
 Server ready. Next:
 
   1. Copy your environment file:
-       sudo cp gahoi-milan.env.example /etc/gahoi-milan/gahoi-milan.env
-       sudo nano /etc/gahoi-milan/gahoi-milan.env       # fill in every value
-       sudo chown root:gahoi /etc/gahoi-milan/gahoi-milan.env
-       sudo chmod 640 /etc/gahoi-milan/gahoi-milan.env
+       sudo cp lovewanshi-milan.env.example /etc/lovewanshi-milan/lovewanshi-milan.env
+       sudo nano /etc/lovewanshi-milan/lovewanshi-milan.env       # fill in every value
+       sudo chown root:lovewanshi /etc/lovewanshi-milan/lovewanshi-milan.env
+       sudo chmod 640 /etc/lovewanshi-milan/lovewanshi-milan.env
 
   2. Install the systemd unit:
-       sudo cp gahoi-milan.service /etc/systemd/system/
+       sudo cp lovewanshi-milan.service /etc/systemd/system/
        sudo systemctl daemon-reload
-       sudo systemctl enable gahoi-milan
+       sudo systemctl enable lovewanshi-milan
 
   3. Point your domain's A record at this server's public IP, then:
-       sudo cp nginx-gahoi-milan.conf /etc/nginx/sites-available/gahoi-milan
-       sudo ln -sf /etc/nginx/sites-available/gahoi-milan \
-            /etc/nginx/sites-enabled/gahoi-milan
+       sudo cp nginx-lovewanshi-milan.conf /etc/nginx/sites-available/lovewanshi-milan
+       sudo ln -sf /etc/nginx/sites-available/lovewanshi-milan \
+            /etc/nginx/sites-enabled/lovewanshi-milan
        sudo rm -f /etc/nginx/sites-enabled/default
-       sudo certbot --nginx -d api.gahoimarriage.in
+       sudo certbot --nginx -d api.lovewanshisamaj.in
        sudo nginx -t && sudo systemctl reload nginx
 
   4. Deploy the jar from your Mac:

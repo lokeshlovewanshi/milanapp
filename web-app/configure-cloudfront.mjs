@@ -22,7 +22,7 @@ const cf = new CloudFrontClient({
 });
 
 const DISTRIBUTION_ID = "E3GCII599CUC5F";
-const S3_WEBSITE_ORIGIN = "LOVEWANSHI-parinay-web.s3-website.ap-south-1.amazonaws.com";
+const S3_WEBSITE_ORIGIN = "lovewanshi-parinay-web.s3-website.ap-south-1.amazonaws.com";
 
 async function main() {
   console.log(`Fetching CloudFront config for ${DISTRIBUTION_ID}...`);
@@ -37,7 +37,7 @@ async function main() {
     Quantity: 1,
     Items: [
       {
-        Id: "LOVEWANSHI-parinay-web-s3-website",
+        Id: "lovewanshi-parinay-web-s3-website",
         DomainName: S3_WEBSITE_ORIGIN,
         OriginPath: "",
         CustomHeaders: { Quantity: 0 },
@@ -59,7 +59,7 @@ async function main() {
   };
 
   // 2. Set Default Cache Behavior
-  config.DefaultCacheBehavior.TargetOriginId = "LOVEWANSHI-parinay-web-s3-website";
+  config.DefaultCacheBehavior.TargetOriginId = "lovewanshi-parinay-web-s3-website";
   config.DefaultCacheBehavior.ViewerProtocolPolicy = "redirect-to-https";
   config.DefaultCacheBehavior.TrustedKeyGroups = {
     Enabled: false,

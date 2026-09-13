@@ -40,11 +40,11 @@ aws --version
 
 # --- Service account -------------------------------------------------------
 # No login shell, no home directory: it exists to own a process.
-id -u gahoi &>/dev/null || useradd --system --no-create-home --shell /usr/sbin/nologin gahoi
+id -u lovewanshi &>/dev/null || useradd --system --no-create-home --shell /usr/sbin/nologin lovewanshi
 
-install -d -m 755 -o gahoi -g gahoi /opt/gahoi-milan
-install -d -m 755 -o gahoi -g gahoi /var/log/gahoi-milan
-install -d -m 750 -o root  -g gahoi /etc/gahoi-milan
+install -d -m 755 -o lovewanshi -g lovewanshi /opt/lovewanshi-milan
+install -d -m 755 -o lovewanshi -g lovewanshi /var/log/lovewanshi-milan
+install -d -m 750 -o root  -g lovewanshi /etc/lovewanshi-milan
 
 # --- Swap ------------------------------------------------------------------
 # A t3.small has 2 GB, which is enough for normal operation - so this swap is
@@ -75,21 +75,21 @@ systemctl start codedeploy-agent
 # with the first deploy: the GitHub Actions workflow assembles this file from
 # repository secrets and ships it base64-encoded, which is why the guard below
 # matters - re-running bootstrap must not clobber a deployed config.
-if [ ! -f /etc/gahoi-milan/gahoi-milan.env ]; then
-  cat > /etc/gahoi-milan/gahoi-milan.env <<ENVFILE
+if [ ! -f /etc/lovewanshi-milan/lovewanshi-milan.env ]; then
+  cat > /etc/lovewanshi-milan/lovewanshi-milan.env <<ENVFILE
 AWS_REGION=${region}
 SERVER_PORT=8080
 ENVFILE
 
-  chown root:gahoi /etc/gahoi-milan/gahoi-milan.env
-  chmod 640 /etc/gahoi-milan/gahoi-milan.env
+  chown root:lovewanshi /etc/lovewanshi-milan/lovewanshi-milan.env
+  chmod 640 /etc/lovewanshi-milan/lovewanshi-milan.env
 fi
 
 # --- nginx placeholder -----------------------------------------------------
 # Serves the health check over plain HTTP so the first deployment can be
 # validated before a certificate exists. Replaced by the real config once the
 # domain resolves and certbot has run.
-cat > /etc/nginx/sites-available/gahoi-milan <<'NGINX'
+cat > /etc/nginx/sites-available/lovewanshi-milan <<'NGINX'
 server {
     listen 80 default_server;
     server_name _;
@@ -107,7 +107,7 @@ server {
 }
 NGINX
 
-ln -sf /etc/nginx/sites-available/gahoi-milan /etc/nginx/sites-enabled/gahoi-milan
+ln -sf /etc/nginx/sites-available/lovewanshi-milan /etc/nginx/sites-enabled/lovewanshi-milan
 rm -f /etc/nginx/sites-enabled/default
 nginx -t && systemctl reload nginx
 systemctl enable nginx
@@ -118,4 +118,4 @@ timedatectl set-timezone Asia/Kolkata
 apt-get install -y -qq unattended-upgrades
 echo 'Unattended-Upgrade::Automatic-Reboot "false";' > /etc/apt/apt.conf.d/51unattended-upgrades-local
 
-echo "bootstrap complete: $(date -Is)" > /var/log/gahoi-milan/bootstrap.done
+echo "bootstrap complete: $(date -Is)" > /var/log/lovewanshi-milan/bootstrap.done

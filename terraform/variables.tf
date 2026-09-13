@@ -1,7 +1,7 @@
 variable "project" {
   description = "Prefix for every resource name."
   type        = string
-  default     = "gahoi-milan"
+  default     = "lovewanshi-milan"
 }
 
 variable "region" {
@@ -97,13 +97,13 @@ variable "api_domain" {
     the certificate.
   EOT
   type        = string
-  default     = "api.gahoimarriage.in"
+  default     = "api.lovewanshisamaj.in"
 }
 
 variable "s3_photo_bucket" {
   description = "Existing bucket holding profile photos. Terraform grants access, it does not create it."
   type        = string
-  default     = "gahoi-milan-photos"
+  default     = "lovewanshi-milan-photos"
 }
 
 variable "github_repository" {

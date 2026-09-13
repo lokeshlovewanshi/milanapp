@@ -83,7 +83,7 @@ find_sg_id() {
   id=$(terraform output -raw app_security_group_id 2>/dev/null || true)
   if [[ -z "$id" || "$id" == "None" ]]; then
     id=$(aws ec2 describe-security-groups \
-      --filters "Name=group-name,Values=gahoi-milan-prod-app" \
+      --filters "Name=group-name,Values=lovewanshi-milan-app" \
       --query 'SecurityGroups[0].GroupId' --output text 2>/dev/null || true)
   fi
   [[ -n "$id" && "$id" != "None" ]] && echo "$id"
@@ -216,7 +216,7 @@ terraform apply -target="$TARGET" -auto-approve
 
 echo
 echo "Done. SSH should answer now:"
-echo "  ssh -i ~/.ssh/gahoi-milan.pem ubuntu@\$(terraform output -raw api_public_ip 2>/dev/null || echo '<host>')"
+echo "  ssh -i ~/.ssh/lovewanshi-milan.pem ubuntu@\$(terraform output -raw api_public_ip 2>/dev/null || echo '<host>')"
 echo
 echo "Commit the terraform.tfvars change so the next person's apply does not"
 echo "revert it."

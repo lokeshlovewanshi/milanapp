@@ -3,14 +3,14 @@ os: linux
 
 files:
   - source: app.jar
-    destination: /opt/LOVEWANSHI-milan
-  - source: LOVEWANSHI-milan.service
+    destination: /opt/lovewanshi-milan
+  - source: lovewanshi-milan.service
     destination: /etc/systemd/system
 
 # The agent runs as root and would otherwise leave the jar root-owned, which
 # the unprivileged service account then cannot read.
 permissions:
-  - object: /opt/LOVEWANSHI-milan/app.jar
+  - object: /opt/lovewanshi-milan/app.jar
     owner: LOVEWANSHI
     group: LOVEWANSHI
     mode: 644

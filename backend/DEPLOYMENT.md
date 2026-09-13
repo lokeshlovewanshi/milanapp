@@ -13,8 +13,8 @@ the Lambdas remain there.
 | Instance 0 | `10.30.1.102` (private subnet, no public IP) |
 | Instance 1 | `10.30.1.121` (private subnet, no public IP) |
 | Database | MySQL HeatWave, `10.30.2.173:3306`, schema `marriage_portal` |
-| Photos | S3 `LOVEWANSHI-milan-photos`, served via CloudFront `dm53nmzbwxptr.cloudfront.net` |
-| SSH via Bastion | `ssh -J ubuntu@152.67.7.218 -i ~/.ssh/LOVEWANSHI_milan_dev ubuntu@<instance_ip>` |
+| Photos | S3 `lovewanshi-milan-photos`, served via CloudFront `dm53nmzbwxptr.cloudfront.net` |
+| SSH via Bastion | `ssh -J ubuntu@152.67.7.218 -i ~/.ssh/lovewanshi_milan_dev ubuntu@<instance_ip>` |
 
 Request path:
 
@@ -36,23 +36,23 @@ several hours to create. Never terraform-destroy them.
 
 | What | Where |
 |---|---|
-| Jar | `/opt/LOVEWANSHI-milan/app.jar` |
-| Previous jar | `/opt/LOVEWANSHI-milan/app.previous.jar` (rollback) |
-| Secrets | `/etc/LOVEWANSHI-milan/LOVEWANSHI-milan.env` — `root:LOVEWANSHI`, mode `640` |
-| Firebase key | `/etc/LOVEWANSHI-milan/firebase.json` |
-| Service | `LOVEWANSHI-milan.service` (systemd), runs as `LOVEWANSHI` |
-| Logs | `/var/log/LOVEWANSHI-milan/app.log` |
-| nginx site | `/etc/nginx/sites-available/LOVEWANSHI-milan` |
+| Jar | `/opt/lovewanshi-milan/app.jar` |
+| Previous jar | `/opt/lovewanshi-milan/app.previous.jar` (rollback) |
+| Secrets | `/etc/lovewanshi-milan/lovewanshi-milan.env` — `root:lovewanshi`, mode `640` |
+| Firebase key | `/etc/lovewanshi-milan/firebase.json` |
+| Service | `lovewanshi-milan.service` (systemd), runs as `LOVEWANSHI` |
+| Logs | `/var/log/lovewanshi-milan/app.log` |
+| nginx site | `/etc/nginx/sites-available/lovewanshi-milan` |
 
 The app runs as a plain Java process under systemd. No Docker.
 
 ```bash
 # Connect via Bastion
-ssh -J ubuntu@152.67.7.218 -i ~/.ssh/LOVEWANSHI_milan_dev ubuntu@10.30.1.102
+ssh -J ubuntu@152.67.7.218 -i ~/.ssh/lovewanshi_milan_dev ubuntu@10.30.1.102
 
-sudo systemctl status LOVEWANSHI-milan
-sudo systemctl restart LOVEWANSHI-milan
-sudo tail -f /var/log/LOVEWANSHI-milan/app.log
+sudo systemctl status lovewanshi-milan
+sudo systemctl restart lovewanshi-milan
+sudo tail -f /var/log/lovewanshi-milan/app.log
 ```
 
 ---
@@ -89,12 +89,12 @@ FIREBASE_SERVICE_ACCOUNT_JSON                 CORS_ALLOWED_ORIGINS
 When CI is not an option. Build, copy via bastion ProxyJump, swap, restart, wait for health:
 
 ```bash
-cd backend/LOVEWANSHI-milan-api-feature-h-sijariya
+cd backend/lovewanshi-milan-api-feature-h-sijariya
 ./gradlew build -x test
 
 JAR=build/libs/partner-0.0.1-SNAPSHOT.jar
 for IP in 10.30.1.102 10.30.1.121; do
-  rsync -e "ssh -J ubuntu@152.67.7.218 -i ~/.ssh/LOVEWANSHI_milan_dev" --partial --inplace "$JAR" ubuntu@$IP:/tmp/app.jar
+  rsync -e "ssh -J ubuntu@152.67.7.218 -i ~/.ssh/lovewanshi_milan_dev" --partial --inplace "$JAR" ubuntu@$IP:/tmp/app.jar
 done
 ```
 
@@ -102,12 +102,12 @@ Then on **each** instance in turn - never both at once, or there is a moment
 with nothing serving:
 
 ```bash
-ssh -J ubuntu@152.67.7.218 -i ~/.ssh/LOVEWANSHI_milan_dev ubuntu@10.30.1.102
+ssh -J ubuntu@152.67.7.218 -i ~/.ssh/lovewanshi_milan_dev ubuntu@10.30.1.102
 
-sudo cp /opt/LOVEWANSHI-milan/app.jar /opt/LOVEWANSHI-milan/app.previous.jar
-sudo mv /tmp/app.jar /opt/LOVEWANSHI-milan/app.jar
-sudo chown LOVEWANSHI:LOVEWANSHI /opt/LOVEWANSHI-milan/app.jar
-sudo systemctl restart LOVEWANSHI-milan
+sudo cp /opt/lovewanshi-milan/app.jar /opt/lovewanshi-milan/app.previous.jar
+sudo mv /tmp/app.jar /opt/lovewanshi-milan/app.jar
+sudo chown lovewanshi:lovewanshi /opt/lovewanshi-milan/app.jar
+sudo systemctl restart lovewanshi-milan
 
 # Wait for UP before touching the second instance.
 until curl -fsS --max-time 3 http://127.0.0.1:8080/actuator/health | grep -q UP; do sleep 2; done
@@ -118,8 +118,8 @@ Cold start is 30-75 seconds.
 ### Rollback
 
 ```bash
-sudo cp /opt/LOVEWANSHI-milan/app.previous.jar /opt/LOVEWANSHI-milan/app.jar
-sudo systemctl restart LOVEWANSHI-milan
+sudo cp /opt/lovewanshi-milan/app.previous.jar /opt/lovewanshi-milan/app.jar
+sudo systemctl restart lovewanshi-milan
 ```
 
 ### Verify
@@ -160,7 +160,7 @@ time.
 To reissue by hand:
 
 ```bash
-ssh -J ubuntu@152.67.7.218 -i ~/.ssh/LOVEWANSHI_milan_dev ubuntu@10.30.1.102
+ssh -J ubuntu@152.67.7.218 -i ~/.ssh/lovewanshi_milan_dev ubuntu@10.30.1.102
 sudo certbot certonly --webroot -w /var/www/certbot -d api.lovewanshisamaj.in
 ```
 
@@ -175,14 +175,14 @@ MySQL HeatWave on the private subnet - not reachable directly from the internet.
 
 ### Option 1: Port-forward tunnel from your laptop (Workbench / DBeaver)
 ```bash
-ssh -L 3306:10.30.2.173:3306 -i ~/.ssh/LOVEWANSHI_milan_dev ubuntu@152.67.7.218
+ssh -L 3306:10.30.2.173:3306 -i ~/.ssh/lovewanshi_milan_dev ubuntu@152.67.7.218
 ```
 Then connect your local MySQL client to `127.0.0.1:3306`.
 
 ### Option 2: CLI through an instance via Bastion
 ```bash
-ssh -J ubuntu@152.67.7.218 -i ~/.ssh/LOVEWANSHI_milan_dev ubuntu@10.30.1.102
-set -a; source <(sudo cat /etc/LOVEWANSHI-milan/LOVEWANSHI-milan.env); set +a
+ssh -J ubuntu@152.67.7.218 -i ~/.ssh/lovewanshi_milan_dev ubuntu@10.30.1.102
+set -a; source <(sudo cat /etc/lovewanshi-milan/lovewanshi-milan.env); set +a
 mysql -h 10.30.2.173 -u "$DB_USERNAME" -p"$DB_PASSWORD" marriage_portal
 ```
 
@@ -203,11 +203,11 @@ mysqldump -h 127.0.0.1 -u <user> -p marriage_portal \
 ## Configuration
 
 `application-prod.properties` reads everything from the environment; systemd
-supplies it from `/etc/LOVEWANSHI-milan/LOVEWANSHI-milan.env`. To change a value:
+supplies it from `/etc/lovewanshi-milan/lovewanshi-milan.env`. To change a value:
 
 ```bash
-sudo nano /etc/LOVEWANSHI-milan/LOVEWANSHI-milan.env
-sudo systemctl restart LOVEWANSHI-milan
+sudo nano /etc/lovewanshi-milan/lovewanshi-milan.env
+sudo systemctl restart lovewanshi-milan
 ```
 
 Two that are easy to get wrong:

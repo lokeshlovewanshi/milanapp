@@ -59,7 +59,7 @@ resource "oci_core_instance" "dev" {
   create_vnic_details {
     subnet_id        = oci_core_subnet.public.id
     assign_public_ip = false # Remove via OCI Console; Terraform cannot apply without destroy
-    hostname_label   = "gahoi-milan-dev-${count.index}"
+    hostname_label   = "lovewanshi-milan-dev-${count.index}"
   }
 
   source_details {

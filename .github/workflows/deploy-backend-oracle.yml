@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
 
 env:
-  BACKEND_DIR: backend/LOVEWANSHI-milan-api-feature-h-sijariya
+  BACKEND_DIR: backend/lovewanshi-milan-api-feature-h-sijariya
   # These are the two existing production instances. Keeping the hosts here
   # means this deployment workflow never needs OCI API credentials: it cannot
   # create, terminate, resize, or otherwise alter any Oracle resource.
@@ -143,7 +143,7 @@ jobs:
           AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:-}
           AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:-}
           FIREBASE_ENABLED=${FIREBASE_ENABLED}
-          FIREBASE_SERVICE_ACCOUNT_PATH=/etc/LOVEWANSHI-milan/firebase.json
+          FIREBASE_SERVICE_ACCOUNT_PATH=/etc/lovewanshi-milan/firebase.json
           MAIL_HOST=${MAIL_HOST:-smtp.email.ap-mumbai-1.oci.oraclecloud.com}
           MAIL_PORT=${MAIL_PORT:-587}
           MAIL_USERNAME=${MAIL_USERNAME:-ocid1.user.oc1..aaaaaaaadusre56c2v2qhzcqyc6arhwvpvwb3u5bwc7su3b3s6miqi6sobkq@ocid1.tenancy.oc1..aaaaaaaassjcgarb3f5lqujpprme3ba5unnva2ktj2bn2bfbl44ycsyb53ka.f0.com}
@@ -228,17 +228,17 @@ jobs:
                 ubuntu@127.0.0.1 "ENV_B64='$ENV_B64' FB_B64='$FB_B64' bash -se" <<'REMOTE'
           set -eu
 
-          sudo install -d -m 750 -o root -g LOVEWANSHI /etc/LOVEWANSHI-milan
-          sudo install -d -m 755 -o LOVEWANSHI -g LOVEWANSHI /var/log/LOVEWANSHI-milan
+          sudo install -d -m 750 -o root -g LOVEWANSHI /etc/lovewanshi-milan
+          sudo install -d -m 755 -o LOVEWANSHI -g LOVEWANSHI /var/log/lovewanshi-milan
 
-          printf %s "$ENV_B64" | base64 -d | sudo tee /etc/LOVEWANSHI-milan/LOVEWANSHI-milan.env >/dev/null
-          sudo chown root:LOVEWANSHI /etc/LOVEWANSHI-milan/LOVEWANSHI-milan.env
-          sudo chmod 640 /etc/LOVEWANSHI-milan/LOVEWANSHI-milan.env
+          printf %s "$ENV_B64" | base64 -d | sudo tee /etc/lovewanshi-milan/lovewanshi-milan.env >/dev/null
+          sudo chown root:lovewanshi /etc/lovewanshi-milan/lovewanshi-milan.env
+          sudo chmod 640 /etc/lovewanshi-milan/lovewanshi-milan.env
 
           if [ -n "$FB_B64" ]; then
-            printf %s "$FB_B64" | base64 -d | sudo tee /etc/LOVEWANSHI-milan/firebase.json >/dev/null
-            sudo chown root:LOVEWANSHI /etc/LOVEWANSHI-milan/firebase.json
-            sudo chmod 640 /etc/LOVEWANSHI-milan/firebase.json
+            printf %s "$FB_B64" | base64 -d | sudo tee /etc/lovewanshi-milan/firebase.json >/dev/null
+            sudo chown root:lovewanshi /etc/lovewanshi-milan/firebase.json
+            sudo chmod 640 /etc/lovewanshi-milan/firebase.json
           fi
 
           # The unit is rewritten on every deploy so the profile and paths are
@@ -247,7 +247,7 @@ jobs:
           # absent from a CI-built jar, which leaves the `local` profile with
           # no base layer and unresolved placeholders for the S3 bucket and
           # OAuth client IDs - the context would refuse to start.
-          sudo tee /etc/systemd/system/LOVEWANSHI-milan.service >/dev/null <<'UNIT'
+          sudo tee /etc/systemd/system/lovewanshi-milan.service >/dev/null <<'UNIT'
           [Unit]
           Description=LOVEWANSHI Milan API (Oracle prod)
           After=network-online.target
@@ -257,17 +257,17 @@ jobs:
           Type=simple
           User=LOVEWANSHI
           Group=LOVEWANSHI
-          EnvironmentFile=/etc/LOVEWANSHI-milan/LOVEWANSHI-milan.env
-          ExecStart=/usr/bin/java -Xms256m -Xmx1g -jar /opt/LOVEWANSHI-milan/app.jar --spring.profiles.active=prod
-          WorkingDirectory=/opt/LOVEWANSHI-milan
+          EnvironmentFile=/etc/lovewanshi-milan/lovewanshi-milan.env
+          ExecStart=/usr/bin/java -Xms256m -Xmx1g -jar /opt/lovewanshi-milan/app.jar --spring.profiles.active=prod
+          WorkingDirectory=/opt/lovewanshi-milan
           Restart=on-failure
           RestartSec=5
           SuccessExitStatus=143
-          StandardOutput=append:/var/log/LOVEWANSHI-milan/app.log
-          StandardError=append:/var/log/LOVEWANSHI-milan/app.log
+          StandardOutput=append:/var/log/lovewanshi-milan/app.log
+          StandardError=append:/var/log/lovewanshi-milan/app.log
 
           ProtectSystem=full
-          ReadWritePaths=/var/log/LOVEWANSHI-milan
+          ReadWritePaths=/var/log/lovewanshi-milan
           NoNewPrivileges=true
 
           [Install]
@@ -276,16 +276,16 @@ jobs:
 
           # Keeps the last good jar so a bad rollout can be reverted by hand
           # without waiting for another build.
-          if [ -f /opt/LOVEWANSHI-milan/app.jar ]; then
-            sudo cp /opt/LOVEWANSHI-milan/app.jar /opt/LOVEWANSHI-milan/app.previous.jar
+          if [ -f /opt/lovewanshi-milan/app.jar ]; then
+            sudo cp /opt/lovewanshi-milan/app.jar /opt/lovewanshi-milan/app.previous.jar
           fi
-          sudo mv /tmp/app.jar /opt/LOVEWANSHI-milan/app.jar
-          sudo chown LOVEWANSHI:LOVEWANSHI /opt/LOVEWANSHI-milan/app.jar
-          sudo chmod 644 /opt/LOVEWANSHI-milan/app.jar
+          sudo mv /tmp/app.jar /opt/lovewanshi-milan/app.jar
+          sudo chown lovewanshi:lovewanshi /opt/lovewanshi-milan/app.jar
+          sudo chmod 644 /opt/lovewanshi-milan/app.jar
 
           sudo systemctl daemon-reload
-          sudo systemctl enable LOVEWANSHI-milan
-          sudo systemctl restart LOVEWANSHI-milan
+          sudo systemctl enable lovewanshi-milan
+          sudo systemctl restart lovewanshi-milan
 
           echo waiting for health
           for i in $(seq 1 60); do
@@ -295,8 +295,8 @@ jobs:
             fi
             if [ "$i" -eq 60 ]; then
               echo HEALTH CHECK FAILED
-              sudo tail -n 80 /var/log/LOVEWANSHI-milan/app.log || true
-              sudo systemctl status LOVEWANSHI-milan --no-pager || true
+              sudo tail -n 80 /var/log/lovewanshi-milan/app.log || true
+              sudo systemctl status lovewanshi-milan --no-pager || true
               exit 1
             fi
             sleep 2

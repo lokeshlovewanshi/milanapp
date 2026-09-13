@@ -1,20 +1,20 @@
 [Unit]
-Description=Gahoi Milan API
+Description=Lovewanshi Milan API
 Documentation=https://github.com/harshsijariya/milanapp
 After=network-online.target
 Wants=network-online.target
 
 [Service]
 Type=simple
-User=gahoi
-Group=gahoi
+User=lovewanshi
+Group=lovewanshi
 
 # Secrets live here, root-owned and chmod 600. Keeping them out of this unit
 # file matters because systemd unit files are world-readable, and `systemctl
 # cat` would otherwise print every password to anyone with shell access.
-EnvironmentFile=/etc/gahoi-milan/gahoi-milan.env
+EnvironmentFile=/etc/lovewanshi-milan/lovewanshi-milan.env
 
-WorkingDirectory=/opt/gahoi-milan
+WorkingDirectory=/opt/lovewanshi-milan
 
 # Sized for a t3.small (2 GB). 1 GB of heap leaves roughly 700 MB for the OS,
 # nginx and the JVM's own off-heap memory - metaspace, thread stacks, code
@@ -30,7 +30,7 @@ ExecStart=/usr/bin/java \
   -XX:MaxMetaspaceSize=192m \
   -Djava.security.egd=file:/dev/urandom \
   -Duser.timezone=Asia/Kolkata \
-  -jar /opt/gahoi-milan/app.jar \
+  -jar /opt/lovewanshi-milan/app.jar \
   --spring.profiles.active=prod
 
 SuccessExitStatus=143
@@ -44,7 +44,7 @@ TimeoutStopSec=30
 
 StandardOutput=journal
 StandardError=journal
-SyslogIdentifier=gahoi-milan
+SyslogIdentifier=lovewanshi-milan
 
 # --- Hardening ------------------------------------------------------------
 # The app reads uploads and writes logs; it has no business touching anything
@@ -54,7 +54,7 @@ NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=full
 ProtectHome=true
-ReadWritePaths=/var/log/gahoi-milan /opt/gahoi-milan
+ReadWritePaths=/var/log/lovewanshi-milan /opt/lovewanshi-milan
 ProtectKernelTunables=true
 ProtectControlGroups=true
 RestrictSUIDSGID=true

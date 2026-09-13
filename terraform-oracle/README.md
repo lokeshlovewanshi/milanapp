@@ -56,26 +56,26 @@ came up; re-run `terraform apply "tfplan"` later to fill in the other.
 ## 3. First deploy
 
 Each instance boots with the application database already created on the
-managed MySQL DB system, and a `LOVEWANSHI-milan` systemd service installed but
+managed MySQL DB system, and a `lovewanshi-milan` systemd service installed but
 with no jar yet. Pick whichever instance actually came up (check
 `instance_public_ips`) and deploy to that one - <instance_public_ip> below
 means that IP.
 
 ```bash
 # Build the jar locally
-cd backend/LOVEWANSHI-milan-api-feature-h-sijariya
+cd backend/lovewanshi-milan-api-feature-h-sijariya
 ./gradlew bootJar
 
 # Ship it and your real app.properties secrets (Firebase, JWT, mail, Google OAuth)
-scp -i ~/.ssh/LOVEWANSHI_milan_dev build/libs/*.jar ubuntu@<instance_public_ip>:/tmp/app.jar
-scp -i ~/.ssh/LOVEWANSHI_milan_dev src/main/resources/application.properties ubuntu@<instance_public_ip>:/tmp/application.properties
+scp -i ~/.ssh/lovewanshi_milan_dev build/libs/*.jar ubuntu@<instance_public_ip>:/tmp/app.jar
+scp -i ~/.ssh/lovewanshi_milan_dev src/main/resources/application.properties ubuntu@<instance_public_ip>:/tmp/application.properties
 
-ssh -i ~/.ssh/LOVEWANSHI_milan_dev ubuntu@<instance_public_ip>
-  sudo mv /tmp/app.jar /opt/LOVEWANSHI-milan/app.jar
-  sudo mv /tmp/application.properties /opt/LOVEWANSHI-milan/application.properties
-  sudo chown LOVEWANSHI:LOVEWANSHI /opt/LOVEWANSHI-milan/app.jar /opt/LOVEWANSHI-milan/application.properties
-  sudo systemctl restart LOVEWANSHI-milan
-  sudo systemctl status LOVEWANSHI-milan
+ssh -i ~/.ssh/lovewanshi_milan_dev ubuntu@<instance_public_ip>
+  sudo mv /tmp/app.jar /opt/lovewanshi-milan/app.jar
+  sudo mv /tmp/application.properties /opt/lovewanshi-milan/application.properties
+  sudo chown lovewanshi:lovewanshi /opt/lovewanshi-milan/app.jar /opt/lovewanshi-milan/application.properties
+  sudo systemctl restart lovewanshi-milan
+  sudo systemctl status lovewanshi-milan
   curl http://localhost:8080/actuator/health
 ```
 
@@ -83,12 +83,12 @@ If you end up with both instances running, only deploy to (and point DNS at)
 one of them - the second is a spare, not a load-balanced pair; nothing here
 sets up traffic splitting between them.
 
-(`application.properties` sitting next to the jar in `/opt/LOVEWANSHI-milan/` is
+(`application.properties` sitting next to the jar in `/opt/lovewanshi-milan/` is
 picked up by Spring automatically as the base config layer, same as it works
 locally - `--spring.profiles.active=local` in the systemd unit layers
 `application-local.properties`'s DB/JPA/logging defaults on top, but the DB
 values there get overridden by the `DB_URL`/`DB_USERNAME`/`DB_PASSWORD`
-already in `/etc/LOVEWANSHI-milan/LOVEWANSHI-milan.env` from cloud-init, so no edits
+already in `/etc/lovewanshi-milan/lovewanshi-milan.env` from cloud-init, so no edits
 needed there.)
 
 ## 4. Point dev-api.lovewanshisamaj.in here and get a cert
@@ -105,7 +105,7 @@ Value: <instance_public_ip>
 Wait for it to resolve (`dig +short dev-api.lovewanshisamaj.in`), then:
 
 ```bash
-ssh -i ~/.ssh/LOVEWANSHI_milan_dev ubuntu@<instance_public_ip>
+ssh -i ~/.ssh/lovewanshi_milan_dev ubuntu@<instance_public_ip>
 sudo certbot --nginx -d dev-api.lovewanshisamaj.in
 ```
 
@@ -141,7 +141,7 @@ terraform output -raw mysql_endpoint   # e.g. 10.30.2.173:3306
 oci bastion session create-port-forwarding \
   --bastion-id "$BASTION_ID" \
   --display-name mysql-tunnel \
-  --ssh-public-key-file ~/.ssh/LOVEWANSHI_milan_dev.pub \
+  --ssh-public-key-file ~/.ssh/lovewanshi_milan_dev.pub \
   --session-ttl 10800 \
   --target-private-ip <ip from mysql_endpoint> \
   --target-port 3306 \
@@ -149,7 +149,7 @@ oci bastion session create-port-forwarding \
 
 # The command above's output includes the session OCID; use it here, or
 # `oci bastion session get --session-id <id> --query 'data."ssh-metadata"'`
-ssh -i ~/.ssh/LOVEWANSHI_milan_dev -N -L 3307:<ip from mysql_endpoint>:3306 -p 22 \
+ssh -i ~/.ssh/lovewanshi_milan_dev -N -L 3307:<ip from mysql_endpoint>:3306 -p 22 \
   <session-ocid>@host.bastion.ap-mumbai-1.oci.oraclecloud.com
 
 # In another terminal, once the tunnel is up:

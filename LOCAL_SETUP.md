@@ -54,7 +54,7 @@ the migrations **in this order**:
 ```bash
 mysql -u root -p -e "CREATE DATABASE IF NOT EXISTS marriage_portal;"
 mysql -u root -p marriage_portal < Dump20260725.sql
-cd backend/LOVEWANSHI-milan-api-feature-h-sijariya/src/main/resources/db
+cd backend/lovewanshi-milan-api-feature-h-sijariya/src/main/resources/db
 mysql -u root -p marriage_portal < reference_data.sql
 mysql -u root -p marriage_portal < created_at.sql
 mysql -u root -p marriage_portal < notifications.sql
@@ -69,7 +69,7 @@ not run.
 ## 2. Backend
 
 ```bash
-cd "backend/LOVEWANSHI-milan-api-feature-h-sijariya"
+cd "backend/lovewanshi-milan-api-feature-h-sijariya"
 ./gradlew bootRun
 ```
 
@@ -86,7 +86,7 @@ curl http://localhost:8080/actuator/health
 Expect `{"status":"UP"}`.
 
 Credentials come from
-`backend/LOVEWANSHI-milan-api-feature-h-sijariya/src/main/resources/application.properties`,
+`backend/lovewanshi-milan-api-feature-h-sijariya/src/main/resources/application.properties`,
 which is gitignored. If it is ever missing, copy
 `application.properties.example` next to it and fill in the blanks — the
 `${VAR:default}` syntax means environment variables override it.

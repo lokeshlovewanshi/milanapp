@@ -2,41 +2,41 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
-    <loc>https://www.gahoimarriage.in/</loc>
+    <loc>https://www.lovewanshisamaj.in/</loc>
     <lastmod>2026-08-26</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <image:image>
-      <image:loc>https://www.gahoimarriage.in/assets/auth-hero.jpg</image:loc>
-      <image:title>Gahoi Samaj Matrimony &amp; Marriage Portal</image:title>
+      <image:loc>https://www.lovewanshisamaj.in/assets/auth-hero.jpg</image:loc>
+      <image:title>Lovewanshi Samaj Matrimony &amp; Marriage Portal</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://www.gahoimarriage.in/login</loc>
+    <loc>https://www.lovewanshisamaj.in/login</loc>
     <lastmod>2026-08-26</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.gahoimarriage.in/signup</loc>
+    <loc>https://www.lovewanshisamaj.in/signup</loc>
     <lastmod>2026-08-26</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.gahoimarriage.in/browse</loc>
+    <loc>https://www.lovewanshisamaj.in/browse</loc>
     <lastmod>2026-08-26</lastmod>
     <changefreq>always</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.gahoimarriage.in/privacy</loc>
+    <loc>https://www.lovewanshisamaj.in/privacy</loc>
     <lastmod>2026-08-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.gahoimarriage.in/delete-account</loc>
+    <loc>https://www.lovewanshisamaj.in/delete-account</loc>
     <lastmod>2026-08-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>

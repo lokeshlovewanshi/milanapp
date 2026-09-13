@@ -13,7 +13,7 @@ output "database_endpoint" {
 }
 
 output "database_jdbc_url" {
-  description = "Paste into DB_URL in /etc/gahoi-milan/gahoi-milan.env."
+  description = "Paste into DB_URL in /etc/lovewanshi-milan/lovewanshi-milan.env."
   value       = local.db_url
 }
 
@@ -45,8 +45,8 @@ output "next_steps" {
 
     2. Fill in the secrets:
          ssh -i ~/.ssh/${var.key_pair_name}.pem ubuntu@${aws_eip.app.public_ip}
-         sudo nano /etc/gahoi-milan/gahoi-milan.env
-         sudo systemctl restart gahoi-milan
+         sudo nano /etc/lovewanshi-milan/lovewanshi-milan.env
+         sudo systemctl restart lovewanshi-milan
 
     3. In GitHub -> Settings -> Secrets and variables -> Actions, add:
          AWS_DEPLOY_ROLE_ARN   = ${aws_iam_role.github_actions.arn}

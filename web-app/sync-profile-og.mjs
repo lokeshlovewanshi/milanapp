@@ -5,7 +5,7 @@ import path from "path";
 
 const REGION = process.env.AWS_REGION || "ap-south-1";
 const PROFILE = process.env.AWS_PROFILE || "LOVEWANSHI";
-const BUCKET_NAME = process.env.S3_BUCKET_NAME || "LOVEWANSHI-parinay-web";
+const BUCKET_NAME = process.env.S3_BUCKET_NAME || "lovewanshi-parinay-web";
 
 let credentialsProvider;
 if (process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY) {

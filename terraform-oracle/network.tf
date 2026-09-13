@@ -2,7 +2,7 @@ resource "oci_core_vcn" "main" {
   compartment_id = var.compartment_ocid
   display_name   = "${var.project}-vcn"
   cidr_blocks    = ["10.30.0.0/16"]
-  dns_label      = "gahoidev"
+  dns_label      = "lovewanshidev"
 }
 
 resource "oci_core_internet_gateway" "main" {

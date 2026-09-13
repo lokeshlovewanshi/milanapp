@@ -57,11 +57,11 @@ for i in $(seq 1 10); do
 done
 
 # --- Service account ---------------------------------------------------------
-id -u gahoi &>/dev/null || useradd --system --no-create-home --shell /usr/sbin/nologin gahoi
+id -u lovewanshi &>/dev/null || useradd --system --no-create-home --shell /usr/sbin/nologin lovewanshi
 
-install -d -m 755 -o gahoi -g gahoi /opt/gahoi-milan
-install -d -m 755 -o gahoi -g gahoi /var/log/gahoi-milan
-install -d -m 750 -o root  -g gahoi /etc/gahoi-milan
+install -d -m 755 -o lovewanshi -g lovewanshi /opt/lovewanshi-milan
+install -d -m 755 -o lovewanshi -g lovewanshi /var/log/lovewanshi-milan
+install -d -m 750 -o root  -g lovewanshi /etc/lovewanshi-milan
 
 # --- Environment file ---------------------------------------------------------
 # Placeholder - the real app secrets (JWT key, Firebase, mail, etc.) get
@@ -69,35 +69,35 @@ install -d -m 750 -o root  -g gahoi /etc/gahoi-milan
 # gitignored application.properties. This file only carries the DB creds
 # terraform already knows, so a fresh deploy has a working DB connection
 # from the first boot.
-if [ ! -f /etc/gahoi-milan/gahoi-milan.env ]; then
-  cat > /etc/gahoi-milan/gahoi-milan.env <<ENVFILE
+if [ ! -f /etc/lovewanshi-milan/lovewanshi-milan.env ]; then
+  cat > /etc/lovewanshi-milan/lovewanshi-milan.env <<ENVFILE
 SERVER_PORT=8080
 DB_URL=jdbc:mysql://${db_host}:${db_port}/${db_name}
 DB_USERNAME=${db_username}
 DB_PASSWORD=${db_password}
 ENVFILE
 
-  chown root:gahoi /etc/gahoi-milan/gahoi-milan.env
-  chmod 640 /etc/gahoi-milan/gahoi-milan.env
+  chown root:lovewanshi /etc/lovewanshi-milan/lovewanshi-milan.env
+  chmod 640 /etc/lovewanshi-milan/lovewanshi-milan.env
 fi
 
 # --- systemd unit --------------------------------------------------------
-cat > /etc/systemd/system/gahoi-milan.service <<'UNIT'
+cat > /etc/systemd/system/lovewanshi-milan.service <<'UNIT'
 [Unit]
-Description=Gahoi Milan API (dev, Oracle)
+Description=Lovewanshi Milan API (dev, Oracle)
 After=network.target
 
 [Service]
 Type=simple
-User=gahoi
-Group=gahoi
-EnvironmentFile=/etc/gahoi-milan/gahoi-milan.env
-ExecStart=/usr/bin/java -jar /opt/gahoi-milan/app.jar --spring.profiles.active=local
-WorkingDirectory=/opt/gahoi-milan
+User=lovewanshi
+Group=lovewanshi
+EnvironmentFile=/etc/lovewanshi-milan/lovewanshi-milan.env
+ExecStart=/usr/bin/java -jar /opt/lovewanshi-milan/app.jar --spring.profiles.active=local
+WorkingDirectory=/opt/lovewanshi-milan
 Restart=on-failure
 RestartSec=5
-StandardOutput=append:/var/log/gahoi-milan/app.log
-StandardError=append:/var/log/gahoi-milan/app.log
+StandardOutput=append:/var/log/lovewanshi-milan/app.log
+StandardError=append:/var/log/lovewanshi-milan/app.log
 
 ProtectSystem=full
 NoNewPrivileges=true
@@ -107,12 +107,12 @@ WantedBy=multi-user.target
 UNIT
 
 systemctl daemon-reload
-systemctl enable gahoi-milan
+systemctl enable lovewanshi-milan
 
 # --- nginx placeholder ---------------------------------------------------
 # Plain HTTP until the dev-api subdomain resolves here and certbot has run
 # (see README.md step 4) - identical reasoning to prod's placeholder.
-cat > /etc/nginx/sites-available/gahoi-milan <<'NGINX'
+cat > /etc/nginx/sites-available/lovewanshi-milan <<'NGINX'
 server {
     listen 80 default_server;
     server_name _;
@@ -130,11 +130,11 @@ server {
 }
 NGINX
 
-ln -sf /etc/nginx/sites-available/gahoi-milan /etc/nginx/sites-enabled/gahoi-milan
+ln -sf /etc/nginx/sites-available/lovewanshi-milan /etc/nginx/sites-enabled/lovewanshi-milan
 rm -f /etc/nginx/sites-enabled/default
 nginx -t && systemctl reload nginx
 systemctl enable nginx
 
 timedatectl set-timezone Asia/Kolkata
 
-echo "bootstrap complete: $(date -Is)" > /var/log/gahoi-milan/bootstrap.done
+echo "bootstrap complete: $(date -Is)" > /var/log/lovewanshi-milan/bootstrap.done

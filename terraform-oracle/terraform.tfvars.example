@@ -7,7 +7,7 @@ fingerprint          = "xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx"
 oci_private_key_path = "~/.oci/oci_api_key.pem"
 region               = "ap-mumbai-1"
 compartment_ocid     = "ocid1.tenancy.oc1..xxxxxxxx" # root compartment = tenancy_ocid
-ssh_public_key_path  = "~/.ssh/gahoi_milan_dev.pub"
+ssh_public_key_path  = "~/.ssh/lovewanshi_milan_dev.pub"
 
 # Set the real password via: export TF_VAR_db_password='...'
 # db_password = "..."
@@ -18,23 +18,23 @@ ssh_public_key_path  = "~/.ssh/gahoi_milan_dev.pub"
 #
 #   brew install certbot
 #   sudo certbot certonly --manual --preferred-challenges dns \
-#     -d api.gahoimarriage.in
+#     -d api.lovewanshisamaj.in
 #
 # Then paste the file contents below (heredoc syntax preserves newlines):
 # ---------------------------------------------------------------------------
 ssl_certificate_pem = <<-EOT
   -----BEGIN CERTIFICATE-----
-  (paste contents of /etc/letsencrypt/live/api.gahoimarriage.in/fullchain.pem)
+  (paste contents of /etc/letsencrypt/live/api.lovewanshisamaj.in/fullchain.pem)
   -----END CERTIFICATE-----
 EOT
 
 ssl_private_key_pem = <<-EOT
   -----BEGIN PRIVATE KEY-----
-  (paste contents of /etc/letsencrypt/live/api.gahoimarriage.in/privkey.pem)
+  (paste contents of /etc/letsencrypt/live/api.lovewanshisamaj.in/privkey.pem)
   -----END PRIVATE KEY-----
 EOT
 
-domain_name = "api.gahoimarriage.in"
+domain_name = "api.lovewanshisamaj.in"
 
 # ---------------------------------------------------------------------------
 # Bastion SSH Access (Port 22)

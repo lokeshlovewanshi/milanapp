@@ -6,12 +6,12 @@
 #   export TF_VAR_db_password='...'
 #   terraform apply
 
-key_pair_name    = "gahoi-milan"
+key_pair_name    = "lovewanshi-milan"
 ssh_allowed_cidr = "YOUR.IP.HERE/32"   # curl -s https://checkip.amazonaws.com
 
-api_domain  = "api.gahoimarriage.in"
+api_domain  = "api.lovewanshisamaj.in"
 region      = "ap-south-1"
-project     = "gahoi-milan"
+project     = "lovewanshi-milan"
 environment = "prod"
 
 # db.t3.micro is the only free-tier-eligible database size.
@@ -23,7 +23,7 @@ db_instance_class = "db.t3.micro"
 instance_type = "t3.small"
 
 
-s3_photo_bucket   = "gahoi-milan-photos"
+s3_photo_bucket   = "lovewanshi-milan-photos"
 github_repository = "harshsijariya/milanapp"
 github_branch     = "main"
 

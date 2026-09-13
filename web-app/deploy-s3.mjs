@@ -39,17 +39,17 @@ async function main() {
   // Desired bucket name for web app
   let bucketName = process.env.S3_BUCKET_NAME;
   if (!bucketName) {
-    // Check if there is an existing web bucket or default to LOVEWANSHI-parinay-web
+    // Check if there is an existing web bucket or default to lovewanshi-parinay-web
     const match = (bucketsRes.Buckets || []).find(
       (b) =>
-        b.Name === "LOVEWANSHI-parinay-web" ||
+        b.Name === "lovewanshi-parinay-web" ||
         b.Name === "LOVEWANSHIparinay-web" ||
         b.Name === "LOVEWANSHIparaya-web" ||
         b.Name === "lovewanshisamaj-web" ||
         b.Name === "app.lovewanshisamaj.in" ||
         b.Name === "lovewanshisamaj.in"
     );
-    bucketName = match ? match.Name : "LOVEWANSHI-parinay-web";
+    bucketName = match ? match.Name : "lovewanshi-parinay-web";
   }
 
   const bucketExists = (bucketsRes.Buckets || []).some((b) => b.Name === bucketName);

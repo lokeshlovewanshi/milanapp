@@ -19,9 +19,9 @@ warn() { printf "  \033[33m!\033[0m    %s\n" "$1"; }
 die()  { printf "  \033[31mfail\033[0m %s\n" "$1" >&2; exit 1; }
 
 REGION="${AWS_REGION:-ap-south-1}"
-KEY_NAME="gahoi-milan"
+KEY_NAME="lovewanshi-milan"
 KEY_PATH="$HOME/.ssh/${KEY_NAME}.pem"
-SECRETS_FILE="$HOME/.gahoi-milan-secrets.txt"
+SECRETS_FILE="$HOME/.lovewanshi-milan-secrets.txt"
 
 # --- 1. Tools --------------------------------------------------------------
 bold "1. Checking tools"
@@ -40,7 +40,7 @@ ok "terraform $(terraform version -json 2>/dev/null | sed -n 's/.*"terraform_ver
 bold "2. Checking AWS credentials"
 
 if ! IDENTITY=$(aws sts get-caller-identity --output json 2>/dev/null); then
-  die "Not authenticated. Run:  aws configure --profile gahoi   (then: export AWS_PROFILE=gahoi)"
+  die "Not authenticated. Run:  aws configure --profile lovewanshi   (then: export AWS_PROFILE=lovewanshi)"
 fi
 
 ACCOUNT=$(echo "$IDENTITY" | sed -n 's/.*"Account": *"\([^"]*\)".*/\1/p')
@@ -48,13 +48,13 @@ ARN=$(echo "$IDENTITY" | sed -n 's/.*"Arn": *"\([^"]*\)".*/\1/p')
 ok "account $ACCOUNT"
 ok "identity $ARN"
 
-# Refuse to run with a key listed in ~/.gahoi-milan-blocked-keys (one access
+# Refuse to run with a key listed in ~/.lovewanshi-milan-blocked-keys (one access
 # key ID per line). Applying with a credential that has leaked would hand the
 # whole stack to whoever else already has it.
 #
 # The list lives outside the repo on purpose: naming a compromised key in a
 # public repository tells people exactly what to go looking for in the history.
-BLOCKED_KEYS="$HOME/.gahoi-milan-blocked-keys"
+BLOCKED_KEYS="$HOME/.lovewanshi-milan-blocked-keys"
 CURRENT_KEY=$(aws configure get aws_access_key_id 2>/dev/null || true)
 if [[ -n "$CURRENT_KEY" && -f "$BLOCKED_KEYS" ]] && grep -qxF "$CURRENT_KEY" "$BLOCKED_KEYS"; then
   die "Access key $CURRENT_KEY is on your blocked list. Create a new one in IAM, deactivate that one, then re-run."
@@ -126,7 +126,7 @@ else
 
   umask 077
   {
-    echo "# Gahoi Milan production secrets - generated $(date -Iseconds)"
+    echo "# Lovewanshi Milan production secrets - generated $(date -Iseconds)"
     echo "# Keep this file. Terraform will not show the password again."
     echo "DB_PASSWORD=$GENERATED"
     echo "JWT_SECRET=$(openssl rand -base64 48 | tr -d '\n')"

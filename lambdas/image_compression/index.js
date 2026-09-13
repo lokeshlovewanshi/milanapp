@@ -1,5 +1,5 @@
 ﻿/**
- * S3-triggered image compression for LOVEWANSHI-milan-photos using Node.js & Sharp.
+ * S3-triggered image compression for lovewanshi-milan-photos using Node.js & Sharp.
  *
  * Shrinks profile photos efficiently while keeping them looking pristine at viewing size,
  * and writes a thumbnail for feed and list screens.

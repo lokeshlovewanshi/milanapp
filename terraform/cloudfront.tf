@@ -114,7 +114,7 @@ resource "aws_cloudfront_distribution" "photos" {
 
   viewer_certificate {
     # The default *.cloudfront.net certificate. A custom domain such as
-    # images.gahoimarriage.in would need an ACM certificate in us-east-1
+    # images.lovewanshisamaj.in would need an ACM certificate in us-east-1
     # specifically - CloudFront reads certificates from nowhere else - plus a
     # DNS record. Not required for the app to work, since the API hands out
     # whatever hostname it signs.

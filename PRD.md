@@ -10,7 +10,7 @@ once interest is mutual.
 | Frontend | Expo / React Native 0.81, expo-router, TypeScript |
 | Backend | Spring Boot 3 (Java 17), Gradle, REST at `/api/v1` |
 | Database | MySQL 8 (`marriage_portal`) |
-| Photo storage | AWS S3 (`LOVEWANSHI-milan-photos`, ap-south-1) |
+| Photo storage | AWS S3 (`lovewanshi-milan-photos`, ap-south-1) |
 | Push | Firebase Cloud Messaging (optional — degrades to in-app only) |
 | Auth | Email + password (JWT), or Google Sign-In |
 | Production API | `https://api.lovewanshisamaj.in` |
@@ -198,7 +198,7 @@ ship as SQL under `src/main/resources/db/`.
 - `/actuator/health` is public so the deploy gate can reach it.
 - Deploys are health-gated with automatic rollback to the previous jar.
 - The prod profile reads one JSON secret from AWS Secrets Manager
-  (`LOVEWANSHI-milan/prod`) at startup via the instance role. Absent that profile no
+  (`lovewanshi-milan/prod`) at startup via the instance role. Absent that profile no
   AWS call is made, which is what keeps local development self-contained.
 
 ---

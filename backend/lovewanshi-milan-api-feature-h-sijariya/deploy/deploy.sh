@@ -2,8 +2,8 @@
 # ---------------------------------------------------------------------------
 # Build the jar locally and ship it to the server.
 #
-#   ./deploy/deploy.sh ubuntu@10.30.1.102 ~/.ssh/gahoi_milan_dev
-#   ./deploy/deploy.sh ubuntu@10.30.1.102 ~/.ssh/gahoi_milan_dev 152.67.7.218
+#   ./deploy/deploy.sh ubuntu@10.30.1.102 ~/.ssh/lovewanshi_milan_dev
+#   ./deploy/deploy.sh ubuntu@10.30.1.102 ~/.ssh/lovewanshi_milan_dev 152.67.7.218
 #
 # Keeps the previous jar so a bad deploy can be rolled back in one command.
 # ---------------------------------------------------------------------------
@@ -53,15 +53,15 @@ ssh "${SSH_OPTS[@]}" "$TARGET" 'bash -s' <<'REMOTE'
 set -euo pipefail
 
 # Keep one generation back for rollback.
-if [[ -f /opt/gahoi-milan/app.jar ]]; then
-  sudo cp /opt/gahoi-milan/app.jar /opt/gahoi-milan/app.previous.jar
+if [[ -f /opt/lovewanshi-milan/app.jar ]]; then
+  sudo cp /opt/lovewanshi-milan/app.jar /opt/lovewanshi-milan/app.previous.jar
 fi
 
-sudo mv /tmp/app-new.jar /opt/gahoi-milan/app.jar
-sudo chown gahoi:gahoi /opt/gahoi-milan/app.jar
-sudo chmod 644 /opt/gahoi-milan/app.jar
+sudo mv /tmp/app-new.jar /opt/lovewanshi-milan/app.jar
+sudo chown lovewanshi:lovewanshi /opt/lovewanshi-milan/app.jar
+sudo chmod 644 /opt/lovewanshi-milan/app.jar
 
-sudo systemctl restart gahoi-milan
+sudo systemctl restart lovewanshi-milan
 
 # Wait for the health endpoint rather than sleeping a fixed number of seconds:
 # a cold JVM plus Hibernate validation can take 40 seconds on a t3.micro, and
@@ -78,11 +78,11 @@ done
 
 echo
 echo "Service did not come up. Last 40 log lines:" >&2
-sudo journalctl -u gahoi-milan -n 40 --no-pager >&2
+sudo journalctl -u lovewanshi-milan -n 40 --no-pager >&2
 echo >&2
 echo "Roll back with:" >&2
-echo "  sudo cp /opt/gahoi-milan/app.previous.jar /opt/gahoi-milan/app.jar" >&2
-echo "  sudo systemctl restart gahoi-milan" >&2
+echo "  sudo cp /opt/lovewanshi-milan/app.previous.jar /opt/lovewanshi-milan/app.jar" >&2
+echo "  sudo systemctl restart lovewanshi-milan" >&2
 exit 1
 REMOTE
 

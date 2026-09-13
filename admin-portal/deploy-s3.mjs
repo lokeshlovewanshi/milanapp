@@ -36,7 +36,7 @@ async function main() {
   console.log("Available S3 Buckets in account:");
   (bucketsRes.Buckets || []).forEach((b) => console.log(` • ${b.Name}`));
 
-  const bucketName = process.env.S3_BUCKET_NAME || "LOVEWANSHI-parinay-admin";
+  const bucketName = process.env.S3_BUCKET_NAME || "lovewanshi-parinay-admin";
   const bucketExists = (bucketsRes.Buckets || []).some((b) => b.Name === bucketName);
 
   if (!bucketExists) {

@@ -29,7 +29,7 @@ mysql -u root -e "
 ## 2. Run the backend on the `local` profile
 
 ```bash
-cd backend/LOVEWANSHI-milan-api-feature-h-sijariya
+cd backend/lovewanshi-milan-api-feature-h-sijariya
 ./gradlew bootRun --args='--spring.profiles.active=local'
 ```
 
@@ -49,15 +49,15 @@ curl http://localhost:8080/actuator/health
 cloudflared tunnel login
 
 # Creates the tunnel and a credentials file at ~/.cloudflared/<id>.json
-cloudflared tunnel create LOVEWANSHI-milan-local
+cloudflared tunnel create lovewanshi-milan-local
 ```
 
 That prints a **Tunnel ID** (a UUID) and the path to the credentials JSON.
 Copy the template to a real (gitignored) config and fill both in:
 
 ```bash
-cp backend/LOVEWANSHI-milan-api-feature-h-sijariya/deploy/local/cloudflared-config.yml.example \
-   backend/LOVEWANSHI-milan-api-feature-h-sijariya/deploy/local/cloudflared-config.yml
+cp backend/lovewanshi-milan-api-feature-h-sijariya/deploy/local/cloudflared-config.yml.example \
+   backend/lovewanshi-milan-api-feature-h-sijariya/deploy/local/cloudflared-config.yml
 ```
 
 ```yaml
@@ -80,7 +80,7 @@ record's TTL.
 ## 5. Start the tunnel
 
 ```bash
-cloudflared tunnel --config backend/LOVEWANSHI-milan-api-feature-h-sijariya/deploy/local/cloudflared-config.yml run LOVEWANSHI-milan-local
+cloudflared tunnel --config backend/lovewanshi-milan-api-feature-h-sijariya/deploy/local/cloudflared-config.yml run lovewanshi-milan-local
 ```
 
 Leave this running. `https://api.lovewanshisamaj.in` now reaches your local

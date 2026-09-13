@@ -19,7 +19,7 @@ terraform {
   # what is actually deployed, and two people applying at once corrupt it.
   #
   # backend "s3" {
-  #   bucket       = "gahoi-milan-tfstate"
+  #   bucket       = "lovewanshi-milan-tfstate"
   #   key          = "prod/terraform.tfstate"
   #   region       = "ap-south-1"
   #   encrypt      = true

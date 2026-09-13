@@ -14,8 +14,8 @@ BASTION_ID="ocid1.bastion.oc1.ap-mumbai-1.amaaaaaaant6llaa6n6m4ex5ivg63kk22ie6ky
 MYSQL_IP="10.30.2.173"
 MYSQL_PORT="3306"
 REGION="ap-mumbai-1"
-SSH_KEY="$HOME/.ssh/gahoi_milan_dev"
-SSH_PUB_KEY="$HOME/.ssh/gahoi_milan_dev.pub"
+SSH_KEY="$HOME/.ssh/lovewanshi_milan_dev"
+SSH_PUB_KEY="$HOME/.ssh/lovewanshi_milan_dev.pub"
 
 # Find OCI CLI
 if command -v oci >/dev/null 2>&1; then

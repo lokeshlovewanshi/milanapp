@@ -1,5 +1,5 @@
 output "load_balancer_public_ip" {
-  description = "Point api.gahoimarriage.in's A record at this IP - it round-robins across both backend instances."
+  description = "Point api.lovewanshisamaj.in's A record at this IP - it round-robins across both backend instances."
   value       = oci_load_balancer_load_balancer.app.ip_address_details[0].ip_address
 }
 

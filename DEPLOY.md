@@ -8,9 +8,9 @@ load the database, point DNS, get a certificate, deploy, build the APK.
 | | |
 |---|---|
 | API server | `i-0b4ff76ecea727577` - address via `terraform output -raw api_public_ip` |
-| Database | `LOVEWANSHI-milan-prod-db.chi6ik84i9qr.ap-south-1.rds.amazonaws.com` |
+| Database | `lovewanshi-milan-prod-db.chi6ik84i9qr.ap-south-1.rds.amazonaws.com` |
 | Domain | `api.lovewanshisamaj.in` |
-| Secret | `LOVEWANSHI-milan/prod` |
+| Secret | `lovewanshi-milan/prod` |
 
 ---
 
@@ -35,7 +35,7 @@ load the database, point DNS, get a certificate, deploy, build the APK.
 
 Set them as GitHub repository secrets, under
 Settings -> Secrets and variables -> Actions. The deploy workflow assembles
-`/etc/LOVEWANSHI-milan/LOVEWANSHI-milan.env` from them on every deploy.
+`/etc/lovewanshi-milan/lovewanshi-milan.env` from them on every deploy.
 
 Have ready:
 
@@ -49,7 +49,7 @@ Have ready:
 Confirm it landed:
 
 ```bash
-aws secretsmanager get-secret-value --secret-id LOVEWANSHI-milan/prod \
+aws secretsmanager get-secret-value --secret-id lovewanshi-milan/prod \
   --region ap-south-1 --query SecretString --output text | python3 -m json.tool
 ```
 
@@ -60,18 +60,18 @@ aws secretsmanager get-secret-value --secret-id LOVEWANSHI-milan/prod \
 RDS is private, so this runs from the EC2 box.
 
 ```bash
-scp -i ~/.ssh/LOVEWANSHI-milan.pem \
+scp -i ~/.ssh/lovewanshi-milan.pem \
   Dump20260725.sql \
-  backend/LOVEWANSHI-milan-api-feature-h-sijariya/src/main/resources/db/*.sql \
+  backend/lovewanshi-milan-api-feature-h-sijariya/src/main/resources/db/*.sql \
   ubuntu@$API_HOST:~
 
-ssh -i ~/.ssh/LOVEWANSHI-milan.pem ubuntu@$API_HOST
+ssh -i ~/.ssh/lovewanshi-milan.pem ubuntu@$API_HOST
 ```
 
 On the server — schema first, then migrations, in this order:
 
 ```bash
-DB=LOVEWANSHI-milan-prod-db.chi6ik84i9qr.ap-south-1.rds.amazonaws.com
+DB=lovewanshi-milan-prod-db.chi6ik84i9qr.ap-south-1.rds.amazonaws.com
 
 mysql -h $DB -u admin -p < Dump20260725.sql
 mysql -h $DB -u admin -p marriage_portal < reference_data.sql
@@ -84,7 +84,7 @@ mysql -h $DB -u admin -p marriage_portal < completion_zodiac_fix.sql
 that were already loaded — without it the profile completion score is capped at
 98% and the log fills with `references unknown field 'rashi'`.
 
-Password is `DB_PASSWORD` in `~/.LOVEWANSHI-milan-secrets.txt`.
+Password is `DB_PASSWORD` in `~/.lovewanshi-milan-secrets.txt`.
 
 The app runs `ddl-auto=validate`, so it **refuses to start** if the tables do
 not match the entities. A startup failure here is almost always a migration
@@ -124,10 +124,10 @@ It must print that same address before the next step. Let's Encrypt allows only
 ## 4. Certificate
 
 ```bash
-ssh -i ~/.ssh/LOVEWANSHI-milan.pem ubuntu@$API_HOST
+ssh -i ~/.ssh/lovewanshi-milan.pem ubuntu@$API_HOST
 
-sudo cp nginx-LOVEWANSHI-milan.conf /etc/nginx/sites-available/LOVEWANSHI-milan
-sudo ln -sf /etc/nginx/sites-available/LOVEWANSHI-milan /etc/nginx/sites-enabled/
+sudo cp nginx-lovewanshi-milan.conf /etc/nginx/sites-available/lovewanshi-milan
+sudo ln -sf /etc/nginx/sites-available/lovewanshi-milan /etc/nginx/sites-enabled/
 sudo rm -f /etc/nginx/sites-enabled/default
 
 sudo certbot --nginx -d api.lovewanshisamaj.in
@@ -195,13 +195,13 @@ and existing users cannot upgrade.
 
 ```bash
 # Logs
-ssh -i ~/.ssh/LOVEWANSHI-milan.pem ubuntu@$API_HOST
-sudo journalctl -u LOVEWANSHI-milan -f
+ssh -i ~/.ssh/lovewanshi-milan.pem ubuntu@$API_HOST
+sudo journalctl -u lovewanshi-milan -f
 
 # Restart without SSH
 aws ssm send-command --instance-ids i-0b4ff76ecea727577 \
   --document-name AWS-RunShellScript \
-  --parameters commands='systemctl restart LOVEWANSHI-milan'
+  --parameters commands='systemctl restart lovewanshi-milan'
 
 # Change a secret: edit in the console, then restart as above
 ```
@@ -226,9 +226,9 @@ Deploying again is just a push to `main` touching `backend/**`.
 
 | Symptom | Cause |
 |---|---|
-| App will not start | Missing migration (`ddl-auto=validate`), or a blank value in the secret. `journalctl -u LOVEWANSHI-milan -n 100` |
-| `Could not read secret` | Instance role lost `secretsmanager:GetSecretValue`, or `SECRET_ID` is wrong in `/etc/LOVEWANSHI-milan/LOVEWANSHI-milan.env` |
-| 502 from nginx | Java is not listening. `systemctl status LOVEWANSHI-milan` |
+| App will not start | Missing migration (`ddl-auto=validate`), or a blank value in the secret. `journalctl -u lovewanshi-milan -n 100` |
+| `Could not read secret` | Instance role lost `secretsmanager:GetSecretValue`, or `SECRET_ID` is wrong in `/etc/lovewanshi-milan/lovewanshi-milan.env` |
+| 502 from nginx | Java is not listening. `systemctl status lovewanshi-milan` |
 | App cannot reach API | `eas.json` had the wrong URL at build time — rebuild |
 | Deploy stuck at Pending | SSM agent. `aws ssm describe-instance-information` |
 | Connection refused to RDS | Security group needs the EC2 group as source, not an IP |
@@ -238,7 +238,7 @@ Deploying again is just a push to `main` touching `backend/**`.
 ## Reference
 
 - [`terraform/README.md`](terraform/README.md) — infrastructure, costs, design decisions
-- Secrets: one JSON blob in `LOVEWANSHI-milan/prod`, read at startup by
+- Secrets: one JSON blob in `lovewanshi-milan/prod`, read at startup by
   `SecretsManagerEnvironmentPostProcessor` using the instance role
 - Local development is unaffected: no prod profile means no AWS call, and
   `application.properties` is used as before

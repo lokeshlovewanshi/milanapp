@@ -20,5 +20,5 @@ done
 
 echo
 echo "Health check never passed. Last 60 log lines:" >&2
-journalctl -u gahoi-milan -n 60 --no-pager >&2
+journalctl -u lovewanshi-milan -n 60 --no-pager >&2
 exit 1

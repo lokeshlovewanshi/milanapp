@@ -41,7 +41,7 @@ variable "compartment_ocid" {
 variable "project" {
   description = "Prefix for every resource name."
   type        = string
-  default     = "gahoi-milan-dev"
+  default     = "lovewanshi-milan-dev"
 }
 
 variable "ssh_public_key_path" {
@@ -100,7 +100,7 @@ variable "db_name" {
 
 variable "db_username" {
   type    = string
-  default = "gahoi_dev"
+  default = "lovewanshi_dev"
 }
 
 variable "db_password" {
@@ -117,14 +117,14 @@ variable "db_password" {
 #
 #   brew install certbot
 #   sudo certbot certonly --manual --preferred-challenges dns \
-#     -d api.gahoimarriage.in
+#     -d api.lovewanshisamaj.in
 #
 # Follow the prompt to add a _acme-challenge TXT record in your DNS provider,
 # then wait ~30 seconds for propagation before pressing Enter.
 #
 # After success the files are at:
-#   /etc/letsencrypt/live/api.gahoimarriage.in/fullchain.pem  <- ssl_certificate_pem
-#   /etc/letsencrypt/live/api.gahoimarriage.in/privkey.pem    <- ssl_private_key_pem
+#   /etc/letsencrypt/live/api.lovewanshisamaj.in/fullchain.pem  <- ssl_certificate_pem
+#   /etc/letsencrypt/live/api.lovewanshisamaj.in/privkey.pem    <- ssl_private_key_pem
 #
 # Paste the file contents (with literal \n newlines) into terraform.tfvars:
 #   ssl_certificate_pem = <<-EOT
@@ -156,7 +156,7 @@ variable "ssl_private_key_pem" {
 }
 
 variable "domain_name" {
-  description = "Domain name for the SSL certificate, e.g. api.gahoimarriage.in."
+  description = "Domain name for the SSL certificate, e.g. api.lovewanshisamaj.in."
   type        = string
-  default     = "api.gahoimarriage.in"
+  default     = "api.lovewanshisamaj.in"
 }

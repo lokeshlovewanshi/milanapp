@@ -21,7 +21,7 @@ const cf = new CloudFrontClient({
   credentials: credentialsProvider,
 });
 
-const S3_BUCKET_NAME = "LOVEWANSHI-parinay-admin";
+const S3_BUCKET_NAME = "lovewanshi-parinay-admin";
 const S3_WEBSITE_ORIGIN = `${S3_BUCKET_NAME}.s3-website.ap-south-1.amazonaws.com`;
 const ACM_CERT_ARN = "arn:aws:acm:us-east-1:975375540512:certificate/c7537968-9a48-4659-853b-76ae4544a9e1";
 const ADMIN_ALIAS = "admin.lovewanshisamaj.in";
@@ -70,7 +70,7 @@ async function main() {
       Quantity: 1,
       Items: [
         {
-          Id: "LOVEWANSHI-parinay-admin-s3-website",
+          Id: "lovewanshi-parinay-admin-s3-website",
           DomainName: S3_WEBSITE_ORIGIN,
           OriginPath: "",
           CustomHeaders: { Quantity: 0 },
@@ -91,7 +91,7 @@ async function main() {
       ],
     },
     DefaultCacheBehavior: {
-      TargetOriginId: "LOVEWANSHI-parinay-admin-s3-website",
+      TargetOriginId: "lovewanshi-parinay-admin-s3-website",
       ViewerProtocolPolicy: "redirect-to-https",
       AllowedMethods: {
         Quantity: 2,
