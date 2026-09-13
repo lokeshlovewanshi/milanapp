@@ -13,6 +13,11 @@ output "instance_private_ips" {
   value       = [for i in oci_core_instance.dev : i.private_ip]
 }
 
+output "instance_public_ips" {
+  description = "Public IPs of the app instances."
+  value       = [for i in oci_core_instance.dev : i.public_ip]
+}
+
 output "mysql_tunnel_command" {
   description = "OCI CLI command to create an SSH port-forwarding session to MySQL Workbench."
   value       = "oci bastion session create-port-forwarding --bastion-id ${oci_bastion_bastion.main.id} --display-name mysql-tunnel --ssh-public-key-file ${var.ssh_public_key_path} --session-ttl 10800 --target-private-ip ${oci_mysql_mysql_db_system.dev.endpoints[0].ip_address} --target-port 3306 --wait-for-state SUCCEEDED"
