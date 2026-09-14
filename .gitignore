@@ -120,6 +120,7 @@ mvnw.cmd
 # Firebase client config. The keys inside ship in the APK so they are not
 # strictly secret, but there is no reason to publish the project's identifiers.
 **/google-services.json
+!frontend/google-services.json
 **/GoogleService-Info.plist
 
 # Cloudflare Tunnel config for local dev (LOCAL_DEV.md). Holds a per-machine

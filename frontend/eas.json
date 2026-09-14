@@ -1,4 +1,4 @@
-﻿{
+{
   "cli": {
     "version": ">= 5.9.0",
     "appVersionSource": "remote"
@@ -21,9 +21,10 @@
         "buildType": "apk"
       },
       "env": {
-        "EXPO_PUBLIC_BACKEND_URL": "https://api.lovewanshisamaj.in",
+        "EXPO_PUBLIC_BACKEND_URL": "http://155.248.244.90",
         "ANDROID_SIDELOAD_APK": "1",
-        "EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID": "828927114900-bvnjghkne3h6ri7csejk173n0o9760ed.apps.googleusercontent.com"
+        "EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID": "406753347579-m6lrjt7sqarvqg745dt7avfqi3m0nv3a.apps.googleusercontent.com",
+        "EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID": "406753347579-m6lrjt7sqarvqg745dt7avfqi3m0nv3a.apps.googleusercontent.com"
       }
     },
     "production-apk": {
@@ -32,9 +33,10 @@
         "buildType": "apk"
       },
       "env": {
-        "EXPO_PUBLIC_BACKEND_URL": "https://api.lovewanshisamaj.in",
+        "EXPO_PUBLIC_BACKEND_URL": "http://155.248.244.90",
         "ANDROID_SIDELOAD_APK": "1",
-        "EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID": "828927114900-bvnjghkne3h6ri7csejk173n0o9760ed.apps.googleusercontent.com"
+        "EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID": "406753347579-m6lrjt7sqarvqg745dt7avfqi3m0nv3a.apps.googleusercontent.com",
+        "EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID": "406753347579-m6lrjt7sqarvqg745dt7avfqi3m0nv3a.apps.googleusercontent.com"
       }
     },
     "production": {
@@ -43,8 +45,8 @@
         "buildType": "app-bundle"
       },
       "env": {
-        "EXPO_PUBLIC_BACKEND_URL": "https://api.lovewanshisamaj.in",
-        "EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID": "828927114900-bvnjghkne3h6ri7csejk173n0o9760ed.apps.googleusercontent.com"
+        "EXPO_PUBLIC_BACKEND_URL": "http://155.248.244.90",
+        "EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID": "406753347579-m6lrjt7sqarvqg745dt7avfqi3m0nv3a.apps.googleusercontent.com"
       }
     }
   },

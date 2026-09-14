@@ -58,7 +58,7 @@
         "expo-build-properties",
         {
           "android": {
-            "usesCleartextTraffic": false,
+            "usesCleartextTraffic": true,
             "newArchEnabled": false,
             "enableMinifyInReleaseBuilds": true,
             "enableShrinkResourcesInReleaseBuilds": true,
@@ -79,11 +79,8 @@
       "typedRoutes": true
     },
     "extra": {
-      "router": {},
-      "eas": {
-        "projectId": "b7ca2b30-3e46-41b9-8bee-e18ada82434f"
-      }
+      "router": {}
     },
-    "owner": "jeevanmilansathi"
+    "owner": "lovewanshi"
   }
 }

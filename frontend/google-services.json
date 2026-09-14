@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "60164489360",
+    "project_id": "lovewanshi-milan-8672a",
+    "storage_bucket": "lovewanshi-milan-8672a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:60164489360:android:ccc76307ba5dc61abf1815",
+        "android_client_info": {
+          "package_name": "com.jeevanmilansathi.frontend"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC26aOs4ybPNZMiqN1C4y35XMjA8OeQv-k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
+}
