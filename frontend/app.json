@@ -79,7 +79,10 @@
       "typedRoutes": true
     },
     "extra": {
-      "router": {}
+      "router": {},
+      "eas": {
+        "projectId": "c575f8c4-d4f3-408d-a572-3ca937ce5756"
+      }
     },
     "owner": "lovewanshi"
   }
