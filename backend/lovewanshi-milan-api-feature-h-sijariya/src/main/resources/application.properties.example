@@ -43,7 +43,8 @@ aws.s3.bucket.name=${AWS_S3_BUCKET:lovewanshi-milan-photos}
 # different app would be accepted. Include both the Web and Android IDs.
 # These are public identifiers that ship inside the APK, not secrets.
 google.oauth.client-ids=${GOOGLE_OAUTH_CLIENT_IDS:}
-spring.security.oauth2.client.registration.google.client-id=dummyClientId
+google.oauth.client-ids=60164489360-1pkt5m1o5anp6iervgjc3pug1qadrosa.apps.googleusercontent.com
+spring.security.oauth2.client.registration.google.client-id=60164489360-1pkt5m1o5anp6iervgjc3pug1qadrosa.apps.googleusercontent.com
 spring.security.oauth2.client.registration.google.redirect-uri=http://localhost:8080/api/v1/auth/grantcode
 
 # Push notifications (Firebase Cloud Messaging).
