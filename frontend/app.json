@@ -4,7 +4,7 @@
     "slug": "lovewanshi-milan",
     "version": "1.2.2",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/lovewanshi-parinay-icon-v3.png",
     "scheme": "LOVEWANSHImilan",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": false,
@@ -14,7 +14,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/lovewanshi-parinay-adaptive-icon-v3.png",
         "backgroundColor": "#F8F4E8"
       },
       "edgeToEdgeEnabled": true,
@@ -33,14 +33,14 @@
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/lovewanshi-parinay-icon-v3.png"
     },
     "plugins": [
       "expo-router",
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-image.png",
+          "image": "./assets/images/lovewanshi-parinay-icon-v3.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#FFFFFF"

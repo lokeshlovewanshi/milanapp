@@ -171,6 +171,7 @@ sql/backup_*.sql
 .terraform/
 tfplan*
 crash.log
+terraform-oracle/retry-second-instance*.log
 
 # Signed app binaries. 34 MB and 17 MB, rebuilt from source by EAS or gradle -
 # git is the wrong place for them.

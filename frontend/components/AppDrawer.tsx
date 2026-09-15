@@ -139,7 +139,7 @@ export default function AppDrawer({
 
           <View style={styles.drawerFooter}>
             <Image
-              source={require('../assets/images/logo.png')}
+              source={require('../assets/images/lovewanshi-parinay-icon-v3.png')}
               style={{ width: 34, height: 34, borderRadius: 8 }}
               contentFit="contain"
             />

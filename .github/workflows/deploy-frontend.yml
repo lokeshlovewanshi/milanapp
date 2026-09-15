@@ -5,7 +5,6 @@ on:
     branches: [main]
     paths:
       - 'web-app/**'
-      - 'admin-portal/**'
       - '.github/workflows/deploy-frontend.yml'
   workflow_dispatch:
 
@@ -37,37 +36,6 @@ jobs:
 
       - name: Deploy Web App to S3 & Invalidate CloudFront
         working-directory: web-app
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ap-south-1
-        run: |
-          node deploy-s3.mjs
-          node configure-cloudfront.mjs
-
-  deploy-admin-portal:
-    name: Deploy Admin Portal to S3 & CloudFront
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: 'npm'
-          cache-dependency-path: admin-portal/package-lock.json
-
-      - name: Install dependencies & build Admin Portal
-        working-directory: admin-portal
-        env:
-          VITE_API_BASE_URL: https://api.lovewanshisamaj.in
-        run: |
-          npm ci
-          npm run build
-
-      - name: Deploy Admin Portal to S3 & Invalidate CloudFront
-        working-directory: admin-portal
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

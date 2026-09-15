@@ -89,6 +89,11 @@ variable "instance_boot_volume_gb" {
   default     = 100
 }
 
+variable "primary_backend_private_ip" {
+  description = "Stable private IP of the existing VM registered with the load balancer."
+  type        = string
+}
+
 # ---------------------------------------------------------------------------
 # Database
 # ---------------------------------------------------------------------------

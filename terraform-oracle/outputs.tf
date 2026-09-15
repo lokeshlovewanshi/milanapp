@@ -17,3 +17,8 @@ output "ssh_command" {
   description = "Command to SSH directly into the Always Free VM."
   value       = "ssh -i ~/.ssh/oci_dev ubuntu@${oci_core_instance.dev[0].public_ip}"
 }
+
+output "load_balancer_ip" {
+  description = "Public IP address of the Always Free OCI load balancer."
+  value       = oci_load_balancer_load_balancer.app.ip_address_details[0].ip_address
+}

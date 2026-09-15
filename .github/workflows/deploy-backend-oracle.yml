@@ -2,7 +2,7 @@ name: Deploy backend (Oracle prod)
 
 on:
   push:
-    branches: [main, fresh-dev]
+    branches: [prd, dev]
     paths:
       - "backend/**"
       - ".github/workflows/deploy-backend-oracle.yml"
@@ -10,7 +10,8 @@ on:
 
 env:
   BACKEND_DIR: backend/lovewanshi-milan-api-feature-h-sijariya
-  VM_HOST: "155.248.244.90"
+  # Until the second VM is available, deployments keep using this existing VM.
+  FALLBACK_VM_HOST: "155.248.244.90"
 
 concurrency:
   group: deploy-backend-oracle
@@ -39,6 +40,8 @@ jobs:
       - name: Deploy to Oracle Cloud Always Free VM
         env:
           ORACLE_SSH_PRIVATE_KEY: ${{ secrets.ORACLE_SSH_PRIVATE_KEY }}
+          # Optional comma-separated IPs. When absent, FALLBACK_VM_HOST is used.
+          ORACLE_VM_HOSTS: ${{ secrets.ORACLE_VM_HOSTS }}
         run: |
           set -euo pipefail
 
@@ -52,28 +55,36 @@ jobs:
           chmod 600 ~/.ssh/oracle_deploy
 
           JAR=$(ls -t ${{ env.BACKEND_DIR }}/build/libs/*.jar | grep -v -- '-plain' | head -1)
-          echo "Uploading $JAR to ${{ env.VM_HOST }}..."
+          TARGETS="${ORACLE_VM_HOSTS:-${{ env.FALLBACK_VM_HOST }}}"
+          TARGETS="${TARGETS//,/ }"
 
-          scp -o StrictHostKeyChecking=no -i ~/.ssh/oracle_deploy \
-              "$JAR" ubuntu@${{ env.VM_HOST }}:/tmp/app.jar
+          for VM_HOST in $TARGETS; do
+            echo "Uploading $JAR to $VM_HOST..."
+            scp -o StrictHostKeyChecking=no -i ~/.ssh/oracle_deploy \
+              "$JAR" "ubuntu@$VM_HOST:/tmp/app.jar"
 
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/oracle_deploy \
-              ubuntu@${{ env.VM_HOST }} bash -se <<'REMOTE'
-            set -eu
-            sudo mv /tmp/app.jar /opt/lovewanshi-milan/app.jar
-            sudo chown ubuntu:ubuntu /opt/lovewanshi-milan/app.jar
-            sudo chmod 644 /opt/lovewanshi-milan/app.jar
-            sudo systemctl restart lovewanshi-milan
+            ssh -o StrictHostKeyChecking=no -i ~/.ssh/oracle_deploy \
+              "ubuntu@$VM_HOST" bash -se <<'REMOTE'
+              set -eu
+              sudo mv /tmp/app.jar /opt/lovewanshi-milan/app.jar
+              sudo chown ubuntu:ubuntu /opt/lovewanshi-milan/app.jar
+              sudo chmod 644 /opt/lovewanshi-milan/app.jar
+              sudo systemctl restart lovewanshi-milan
           REMOTE
 
-          echo "Waiting for backend health check on http://${{ env.VM_HOST }}/actuator/health..."
-          for i in $(seq 1 30); do
-            if curl -fsS --max-time 5 "http://${{ env.VM_HOST }}/actuator/health" 2>/dev/null | grep -q UP; then
-              echo "::notice::Backend successfully deployed and healthy on Oracle VM!"
-              exit 0
-            fi
-            sleep 3
-          done
+            echo "Waiting for backend health check on http://$VM_HOST/actuator/health..."
+            healthy=false
+            for i in $(seq 1 30); do
+              if curl -fsS --max-time 5 "http://$VM_HOST/actuator/health" 2>/dev/null | grep -q UP; then
+                healthy=true
+                break
+              fi
+              sleep 3
+            done
 
-          echo "::error::Health check timed out."
-          exit 1
+            if [ "$healthy" != true ]; then
+              echo "::error::Health check timed out for $VM_HOST."
+              exit 1
+            fi
+            echo "::notice::Backend successfully deployed and healthy on $VM_HOST."
+          done
