@@ -19,7 +19,6 @@ on:
 
 permissions:
   contents: read
-  id-token: write
 
 concurrency:
   group: deploy-admin-portal-${{ github.ref }}
@@ -52,13 +51,15 @@ jobs:
           ADMIN_PORTAL_BUCKET: ${{ vars.ADMIN_PORTAL_BUCKET }}
           ADMIN_PORTAL_DISTRIBUTION_ID: ${{ vars.ADMIN_PORTAL_DISTRIBUTION_ID }}
           ADMIN_API_BASE_URL: ${{ vars.ADMIN_API_BASE_URL }}
-          AWS_GITHUB_DEPLOY_ROLE_ARN: ${{ secrets.AWS_GITHUB_DEPLOY_ROLE_ARN }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
           test -n "${AWS_REGION}"
           test -n "${ADMIN_PORTAL_BUCKET}"
           test -n "${ADMIN_PORTAL_DISTRIBUTION_ID}"
           test -n "${ADMIN_API_BASE_URL}"
-          test -n "${AWS_GITHUB_DEPLOY_ROLE_ARN}"
+          test -n "${AWS_ACCESS_KEY_ID}"
+          test -n "${AWS_SECRET_ACCESS_KEY}"
 
       - name: Install dependencies and build
         working-directory: admin-portal
@@ -71,8 +72,8 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ secrets.AWS_GITHUB_DEPLOY_ROLE_ARN }}
-          role-session-name: milanapp-admin-portal-deploy
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ vars.AWS_REGION }}
 
       - name: Upload static files and refresh CloudFront
