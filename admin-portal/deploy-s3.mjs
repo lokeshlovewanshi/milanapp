@@ -199,8 +199,11 @@ async function main() {
       );
       let cfDomain = null;
       try {
-        const { GetDistributionCommand } = await import("@aws-sdk/client-cloudfront");
-        const getDistRes = await cf.send(new GetDistributionCommand({ Id: distId }));
+        const { GetDistributionCommand } =
+          await import("@aws-sdk/client-cloudfront");
+        const getDistRes = await cf.send(
+          new GetDistributionCommand({ Id: distId }),
+        );
         cfDomain = getDistRes.Distribution?.DomainName;
       } catch (_) {}
 
@@ -209,7 +212,10 @@ async function main() {
         console.log(`🌐 CloudFront HTTPS Domain: https://${cfDomain}`);
       }
     } catch (cfErr) {
-      console.warn("⚠️ Warning creating CloudFront invalidation:", cfErr.message);
+      console.warn(
+        "⚠️ Warning creating CloudFront invalidation:",
+        cfErr.message,
+      );
     }
   }
 
@@ -226,12 +232,19 @@ async function main() {
       `* **Direct S3 Website**: [${websiteUrl}](${websiteUrl})`,
     ];
     if (process.env.ADMIN_PORTAL_DISTRIBUTION_ID) {
-      summaryLines.push(`* **CloudFront Distribution**: \`${process.env.ADMIN_PORTAL_DISTRIBUTION_ID}\``);
+      summaryLines.push(
+        `* **CloudFront Distribution**: \`${process.env.ADMIN_PORTAL_DISTRIBUTION_ID}\``,
+      );
     }
-    summaryLines.push(`* **Backend API**: \`${process.env.VITE_API_BASE_URL || "http://155.248.244.90"}\``);
+    summaryLines.push(
+      `* **Backend API**: \`${process.env.VITE_API_BASE_URL || "https://api.lovewanshisamaj.in"}\``,
+    );
     summaryLines.push("");
     try {
-      fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, summaryLines.join("\n") + "\n");
+      fs.appendFileSync(
+        process.env.GITHUB_STEP_SUMMARY,
+        summaryLines.join("\n") + "\n",
+      );
     } catch (_) {}
   }
   console.log(`::notice title=Admin Portal URL::${websiteUrl}`);

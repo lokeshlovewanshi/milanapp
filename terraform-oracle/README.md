@@ -7,7 +7,7 @@ Ampere A1 compute (2 OCPU / 12GB, Always Free - Oracle halved this from 4/24
 on 2026-06-15) running Ubuntu + Spring Boot on the `local` profile behind
 nginx + certbot, plus a separate Always Free HeatWave MySQL DB system (its
 own free allocation, does not eat into the compute limit above) in a private
-subnet. Reachable at `dev-api.lovewanshisamaj.in`.
+subnet. Reachable at `api.lovewanshisamaj.in`.
 
 ## 1. Get OCI API credentials
 
@@ -91,7 +91,7 @@ values there get overridden by the `DB_URL`/`DB_USERNAME`/`DB_PASSWORD`
 already in `/etc/lovewanshi-milan/lovewanshi-milan.env` from cloud-init, so no edits
 needed there.)
 
-## 4. Point dev-api.lovewanshisamaj.in here and get a cert
+## 4. Point api.lovewanshisamaj.in here and get a cert
 
 At GoDaddy (or wherever `lovewanshisamaj.in` is authoritative once the
 Cloudflare experiment is fully reverted - see `../LOCAL_DEV.md`), add:
@@ -102,15 +102,15 @@ Host:  dev-api
 Value: <instance_public_ip>
 ```
 
-Wait for it to resolve (`dig +short dev-api.lovewanshisamaj.in`), then:
+Wait for it to resolve (`dig +short api.lovewanshisamaj.in`), then:
 
 ```bash
 ssh -i ~/.ssh/lovewanshi_milan_dev ubuntu@<instance_public_ip>
-sudo certbot --nginx -d dev-api.lovewanshisamaj.in
+sudo certbot --nginx -d api.lovewanshisamaj.in
 ```
 
 Certbot rewrites the nginx config to redirect 80 -> 443 and auto-renews via
-its own systemd timer. Verify: `curl https://dev-api.lovewanshisamaj.in/actuator/health`.
+its own systemd timer. Verify: `curl https://api.lovewanshisamaj.in/actuator/health`.
 
 ## Connecting to MySQL directly (no compute instance needed)
 

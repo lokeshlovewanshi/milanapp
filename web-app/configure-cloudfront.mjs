@@ -23,6 +23,10 @@ const cf = new CloudFrontClient({
 
 const DISTRIBUTION_ID = "E3GCII599CUC5F";
 const S3_WEBSITE_ORIGIN = "lovewanshi-parinay-web.s3-website.ap-south-1.amazonaws.com";
+// CloudFront only accepts ACM certificates issued in us-east-1. Supply a new
+// ARN through ACM_CERT_ARN when the certificate is replaced.
+const ACM_CERT_ARN = process.env.ACM_CERT_ARN ||
+  "arn:aws:acm:us-east-1:104771965660:certificate/b039126a-9573-4995-8e4c-7ec32713d75e";
 
 async function main() {
   console.log(`Fetching CloudFront config for ${DISTRIBUTION_ID}...`);
@@ -89,6 +93,14 @@ async function main() {
   config.Aliases = {
     Quantity: aliases.length,
     Items: aliases,
+  };
+
+  // The wildcard ACM certificate covers the root, www, and app aliases.
+  config.ViewerCertificate = {
+    ACMCertificateArn: ACM_CERT_ARN,
+    SSLSupportMethod: "sni-only",
+    MinimumProtocolVersion: "TLSv1.2_2021",
+    CertificateSource: "acm",
   };
 
   // 5. Custom Error Responses for SPA Client-Side Routing

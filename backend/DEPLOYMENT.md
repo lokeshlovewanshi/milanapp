@@ -1,6 +1,6 @@
 ﻿# Deploying the API
 
-Production is **two Oracle Cloud instances behind an Always Free load
+Production is an **Oracle Cloud instance behind an Always Free load
 balancer**, in `ap-mumbai-1`. Not AWS - the AWS stack this repo's older
 `DEPLOY.md` describes (EC2 + RDS + CodeDeploy) was retired, and only S3 and
 the Lambdas remain there.
@@ -8,11 +8,9 @@ the Lambdas remain there.
 | | |
 |---|---|
 | Domain | `https://api.lovewanshisamaj.in` |
-| Load balancer | `130.210.52.85` (OCI, Always Free) |
-| Bastion Host | `152.67.7.218` (public IP) |
-| Instance 0 | `10.30.1.102` (private subnet, no public IP) |
-| Instance 1 | `10.30.1.121` (private subnet, no public IP) |
-| Database | MySQL HeatWave, `10.30.2.173:3306`, schema `marriage_portal` |
+| Load balancer | `161.118.171.172` (OCI, Always Free) |
+| VM | `155.248.244.90` (public IP; backend `10.30.1.245`) |
+| Database | MySQL HeatWave, schema `marriage_portal` |
 | Photos | S3 `lovewanshi-milan-photos`, served via CloudFront `dm53nmzbwxptr.cloudfront.net` |
 | SSH via Bastion | `ssh -J ubuntu@152.67.7.218 -i ~/.ssh/lovewanshi_milan_dev ubuntu@<instance_ip>` |
 
@@ -22,7 +20,7 @@ Request path:
 phone / browser
   → api.lovewanshisamaj.in        (DNS at GoDaddy)
   → OCI load balancer :443      (TLS terminates here)
-  → nginx :80 on one instance   (round robin on private subnet)
+  → nginx :80 on the backend VM
   → java :8080
 ```
 
@@ -61,10 +59,8 @@ sudo tail -f /var/log/lovewanshi-milan/app.log
 
 ### Through CI (preferred)
 
-`.github/workflows/deploy-backend-oracle.yml` builds the jar and deploys to both
-private instances through the Bastion host (`152.67.7.218`) **one at a time** with a
-health gate on each - so a bad build stops after the first and the second
-keeps serving.
+`.github/workflows/deploy-backend-oracle.yml` builds the jar and deploys it to
+the Oracle backend VM with a health check after restart.
 
 It runs on push to `main` under `backend/**`, or by hand from the Actions tab.
 
@@ -72,7 +68,7 @@ Requires these repository secrets:
 
 ```
 ORACLE_SSH_PRIVATE_KEY   ORACLE_DB_URL        ORACLE_BASTION_HOST (optional, default: 152.67.7.218)
-ORACLE_JWT_SECRET        ORACLE_DB_USERNAME   ORACLE_LOAD_BALANCER_IP (optional, default: 130.210.52.85)
+ORACLE_JWT_SECRET        ORACLE_DB_USERNAME   ORACLE_LOAD_BALANCER_IP (optional, default: 161.118.171.172)
 AWS_ACCESS_KEY_ID        ORACLE_DB_PASSWORD   NOTIFICATIONS_ADMIN_SECRET
 AWS_SECRET_ACCESS_KEY    AWS_S3_BUCKET        API_BASE_URL
 GOOGLE_OAUTH_CLIENT_IDS  MAIL_USERNAME        MAIL_PASSWORD

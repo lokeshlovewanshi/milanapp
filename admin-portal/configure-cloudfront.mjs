@@ -23,7 +23,10 @@ const cf = new CloudFrontClient({
 
 const S3_BUCKET_NAME = "lovewanshi-parinay-admin";
 const S3_WEBSITE_ORIGIN = `${S3_BUCKET_NAME}.s3-website.ap-south-1.amazonaws.com`;
-const ACM_CERT_ARN = "arn:aws:acm:us-east-1:975375540512:certificate/c7537968-9a48-4659-853b-76ae4544a9e1";
+// The ACM certificate must be in us-east-1 for CloudFront. Override this when
+// rotating certificates rather than editing the deployment script.
+const ACM_CERT_ARN = process.env.ACM_CERT_ARN ||
+  "arn:aws:acm:us-east-1:104771965660:certificate/b039126a-9573-4995-8e4c-7ec32713d75e";
 const ADMIN_ALIAS = "admin.lovewanshisamaj.in";
 
 async function main() {
