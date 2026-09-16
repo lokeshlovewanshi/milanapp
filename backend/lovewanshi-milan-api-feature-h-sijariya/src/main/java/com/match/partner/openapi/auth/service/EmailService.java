@@ -272,7 +272,7 @@ public class EmailService {
                           <tr>
                             <td style="background-color:#FDF8F9;padding:20px 24px;border-top:1px solid #F0DDE2;text-align:center;">
                               <p style="color:#718096;font-size:12px;margin:0 0 6px;">
-                                Need assistance? Write to our support team at <a href="mailto:jeevanmilansathi@gmail.com" style="color:#A5122F;font-weight:600;">jeevanmilansathi@gmail.com</a>
+                                Need assistance? Write to our support team at <a href="mailto:lovewanshisamaj@gmail.com" style="color:#A5122F;font-weight:600;">lovewanshisamaj@gmail.com</a>
                               </p>
                               <p style="color:#A0AEC0;font-size:11px;margin:0;">
                                 © Lovewanshi Parinay · Official Community Matrimony Portal · <a href="https://www.lovewanshisamaj.in" style="color:#A5122F;text-decoration:none;">www.lovewanshisamaj.in</a>
@@ -491,7 +491,7 @@ public class EmailService {
                           <tr>
                             <td style="background-color:#FDF8F9;padding:20px 24px;border-top:1px solid #F0DDE2;text-align:center;">
                               <p style="color:#718096;font-size:12px;margin:0 0 6px;">
-                                Need assistance? Write to our support team at <a href="mailto:jeevanmilansathi@gmail.com" style="color:#A5122F;font-weight:600;">jeevanmilansathi@gmail.com</a>
+                                Need assistance? Write to our support team at <a href="mailto:lovewanshisamaj@gmail.com" style="color:#A5122F;font-weight:600;">lovewanshisamaj@gmail.com</a>
                               </p>
                               <p style="color:#A0AEC0;font-size:11px;margin:0;">
                                 © Lovewanshi Parinay · Official Community Matrimony Portal · <a href="https://www.lovewanshisamaj.in" style="color:#A5122F;text-decoration:none;">www.lovewanshisamaj.in</a>

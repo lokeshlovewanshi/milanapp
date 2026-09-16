@@ -26,7 +26,7 @@ public class SupportContactController {
     @Value("${support.contact.phone:7676554631}")
     private String phone;
 
-    @Value("${support.contact.email:jeevanmilansathi@gmail.com}")
+    @Value("${support.contact.email:lovewanshisamaj@gmail.com}")
     private String email;
 
     /**

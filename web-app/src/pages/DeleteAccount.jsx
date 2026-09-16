@@ -145,7 +145,7 @@ export default function DeleteAccount() {
                 If you no longer have access to your account or prefer human assistance, send an email request from your registered email address:
               </p>
               <a
-                href="mailto:jeevanmilansathi@gmail.com?subject=Account%20Deletion%20Request%20-%20LOVEWANSHI%20Parinay&body=Please%20delete%20my%20LOVEWANSHI%20Parinay%20account.%0A%0ARegistered%20Email%3A%20%0ARegistered%20Mobile%20Number%3A%20%0AFull%20Name%3A%20"
+                href="mailto:lovewanshisamaj@gmail.com?subject=Account%20Deletion%20Request%20-%20LOVEWANSHI%20Parinay&body=Please%20delete%20my%20LOVEWANSHI%20Parinay%20account.%0A%0ARegistered%20Email%3A%20%0ARegistered%20Mobile%20Number%3A%20%0AFull%20Name%3A%20"
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
@@ -160,7 +160,7 @@ export default function DeleteAccount() {
                 }}
               >
                 <Icon name="message-circle" size={16} />
-                <span>Email jeevanmilansathi@gmail.com →</span>
+                <span>Email lovewanshisamaj@gmail.com →</span>
               </a>
               <p style={{ fontSize: "0.82rem", color: "var(--text-muted)", marginTop: "0.85rem", marginBottom: 0 }}>
                 * We process manual email requests within 48-72 business hours upon verifying ownership.

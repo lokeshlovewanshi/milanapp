@@ -361,10 +361,10 @@ export default function PrivacyPolicy() {
             <p style={{ margin: "0 0 0.5rem", color: "var(--text)" }}>
               Email:{" "}
               <a
-                href="mailto:jeevanmilansathi@gmail.com"
+                href="mailto:lovewanshisamaj@gmail.com"
                 style={{ color: "var(--auth-crimson)", fontWeight: 600 }}
               >
-                jeevanmilansathi@gmail.com
+                lovewanshisamaj@gmail.com
               </a>
             </p>
             <p

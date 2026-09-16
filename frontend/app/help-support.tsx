@@ -15,7 +15,7 @@ import { auth, colors, font, spacing } from '../components/theme';
  * something else is already broken.
  */
 const FALLBACK_PHONE = '7676554631';
-const FALLBACK_EMAIL = 'jeevanmilansathi@gmail.com';
+const FALLBACK_EMAIL = 'lovewanshisamaj@gmail.com';
 
 /**
  * Contact details for the people running LOVEWANSHI Milan.
