@@ -2,7 +2,7 @@ name: Deploy Admin Portal
 
 on:
   push:
-    branches: [dev, fresh-dev, prd]
+    branches: [dev, prd]
     paths:
       - "admin-portal/**"
       - ".github/workflows/deploy-admin-portal.yml"
