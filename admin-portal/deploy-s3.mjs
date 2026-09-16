@@ -1,4 +1,4 @@
-﻿import {
+import {
   S3Client,
   ListBucketsCommand,
   CreateBucketCommand,
@@ -36,7 +36,7 @@ async function main() {
   console.log("Available S3 Buckets in account:");
   (bucketsRes.Buckets || []).forEach((b) => console.log(` • ${b.Name}`));
 
-  const bucketName = process.env.S3_BUCKET_NAME || "lovewanshi-parinay-admin";
+  const bucketName = process.env.ADMIN_PORTAL_BUCKET || process.env.S3_BUCKET_NAME || "lovewanshi-parinay-admin";
   const bucketExists = (bucketsRes.Buckets || []).some((b) => b.Name === bucketName);
 
   if (!bucketExists) {
@@ -161,6 +161,25 @@ async function main() {
     REGION === "us-east-1"
       ? `http://${bucketName}.s3-website-us-east-1.amazonaws.com`
       : `http://${bucketName}.s3-website.${REGION}.amazonaws.com`;
+
+  const distId = process.env.ADMIN_PORTAL_DISTRIBUTION_ID;
+  if (distId) {
+    try {
+      console.log(`\nCreating CloudFront invalidation for distribution '${distId}'...`);
+      const { CloudFrontClient, CreateInvalidationCommand } = await import("@aws-sdk/client-cloudfront");
+      const cf = new CloudFrontClient({ region: "us-east-1", credentials: credentialsProvider });
+      await cf.send(new CreateInvalidationCommand({
+        DistributionId: distId,
+        InvalidationBatch: {
+          CallerReference: `deploy-${Date.now()}`,
+          Paths: { Quantity: 1, Items: ["/*"] },
+        },
+      }));
+      console.log("✓ CloudFront cache invalidated successfully.");
+    } catch (cfErr) {
+      console.warn("⚠️ Warning creating CloudFront invalidation:", cfErr.message);
+    }
+  }
 
   console.log("\n=======================================================");
   console.log("🎉 ADMIN PORTAL DEPLOYMENT SUCCESSFUL!");
