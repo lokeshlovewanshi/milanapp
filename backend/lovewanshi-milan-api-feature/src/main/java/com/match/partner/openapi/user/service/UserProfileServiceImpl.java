@@ -1,6 +1,7 @@
 package com.match.partner.openapi.user.service;
 
 import com.match.partner.openapi.user.model.UserProfileMapper;
+import com.match.partner.common.configuration.CacheConfiguration;
 import com.match.partner.openapi.user.model.dao.Status;
 import com.match.partner.openapi.user.model.dao.UserProfile;
 import com.match.partner.openapi.user.model.dto.ProfileRegistrationDto;
@@ -30,6 +31,7 @@ import com.match.partner.common.configuration.ClientException;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -334,6 +336,7 @@ public class UserProfileServiceImpl implements UserProfileServiceInterface {
      * tamper with.
      */
     @Override
+    @CacheEvict(value = CacheConfiguration.FEATURED_STORIES_CACHE, allEntries = true)
     public void setProfileHidden(String userName, boolean hidden) {
         UserProfile profile = requireLiveProfile(userName);
         profile.setHidden(hidden);

@@ -96,7 +96,7 @@ export default function Queue() {
 
   return (
     <div>
-      <div className="page-header" style={{ marginBottom: "1.25rem" }}>
+      <div className="page-header">
         <div>
           <h1 style={{ margin: "0 0 0.25rem 0" }}>User Monitoring &amp; Verification Queue</h1>
           <p className="muted" style={{ margin: 0 }}>
@@ -104,18 +104,17 @@ export default function Queue() {
           </p>
         </div>
 
-        <div style={{ display: "flex", gap: "0.75rem", alignItems: "center" }}>
+        <div className="page-header-actions">
           <Link to="/profiles/new">
             <button type="button" className="primary small">
               ➕ Create Profile
             </button>
           </Link>
-          <div className="view-toggle" style={{ display: "flex", background: "#E5E7EB", borderRadius: "6px", padding: "2px" }}>
+          <div className="view-toggle">
             <button
               type="button"
               className={viewMode === "table" ? "small primary" : "small secondary"}
               onClick={() => setViewMode("table")}
-              style={{ padding: "0.3rem 0.75rem", borderRadius: "4px" }}
             >
               📊 Monitoring List
             </button>
@@ -123,7 +122,6 @@ export default function Queue() {
               type="button"
               className={viewMode === "grid" ? "small primary" : "small secondary"}
               onClick={() => setViewMode("grid")}
-              style={{ padding: "0.3rem 0.75rem", borderRadius: "4px" }}
             >
               🗂️ Cards View
             </button>
@@ -132,20 +130,19 @@ export default function Queue() {
       </div>
 
       {actionMessage && (
-        <div className="success-banner" style={{ marginBottom: "1rem" }}>
+        <div className="success-banner">
           {actionMessage}
         </div>
       )}
 
       {/* Filter Bar */}
-      <div style={{ display: "flex", gap: "1rem", marginBottom: "1rem", alignItems: "center" }}>
+      <div className="filter-bar">
         <input
           type="text"
           placeholder="Filter by name, mobile, display ID..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="input-field"
-          style={{ maxWidth: "360px", padding: "0.5rem 0.75rem" }}
         />
         <span className="muted small">
           {data ? `${filteredList.length} of ${data.totalElements || list.length} pending profiles` : ""}
@@ -162,8 +159,8 @@ export default function Queue() {
 
       {/* 1. Monitoring Table View */}
       {!loading && viewMode === "table" && filteredList.length > 0 && (
-        <div className="card" style={{ padding: 0, overflowX: "auto" }}>
-          <table className="data-table" style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
+        <div className="table-container">
+          <table className="data-table">
             <thead>
               <tr style={{ background: "#F9FAFB", borderBottom: "1px solid #E5E7EB" }}>
                 <th style={{ padding: "0.75rem 1rem", fontWeight: "600", fontSize: "0.85rem", color: "#374151" }}>ID</th>

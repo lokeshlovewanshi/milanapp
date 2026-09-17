@@ -166,12 +166,10 @@ api.interceptors.response.use(
  * True when this failure means "your token is no longer good", as opposed to
  * "you may not do that".
  *
- * The distinction matters because both arrive as 403. Spring Security answers
- * an expired JWT with 403 and a body naming the expiry; it also answers a
- * genuine authorisation failure with 403. Logging someone out for the second
- * kind would boot them mid-session for tapping something they cannot do, so the
- * body is checked rather than the status alone. 401 needs no such check - the
- * backend only issues it for authentication.
+ * The member app has no state in which an authenticated API should be denied.
+ * Treat 401, 403, and 410 consistently: clear the saved session and require a
+ * fresh sign-in. This prevents concurrent API failures from leaving the UI
+ * looking signed in when the account has been blocked, deleted, or invalidated.
  */
 function isExpiredSession(error: any): boolean {
   const status = error?.response?.status;
@@ -179,12 +177,7 @@ function isExpiredSession(error: any): boolean {
   // soft-deleted. It is not a screen-level error the member can fix, so end
   // the saved login session immediately.
   if (status === 410) return true;
-  if (status !== 401 && status !== 403) return false;
-  if (status === 401) return true;
-
-  const body = error.response?.data;
-  const text = typeof body === "string" ? body : JSON.stringify(body ?? "");
-  return /jwt expired|token has expired|expiredjwt|signature is invalid|jwt signature/i.test(text);
+  return status === 401 || status === 403;
 }
 
 /**

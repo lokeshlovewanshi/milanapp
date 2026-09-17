@@ -38,10 +38,10 @@ async function request(path, options = {}) {
     },
   });
 
-  // 401 means an expired/invalid token; 410 means the profile was deleted.
-  // Both states end this browser session. Login/signup themselves never carry
-  // a member token, so the hard redirect is safe everywhere else.
-  if ((res.status === 401 || res.status === 410) && getToken()) {
+  // Every 401, 403, or 410 from an authenticated member request ends the
+  // browser session. This covers expired/invalid tokens and accounts that an
+  // admin blocked or deleted. Login/signup do not carry a member token.
+  if ((res.status === 401 || res.status === 403 || res.status === 410) && getToken()) {
     clearSession();
     window.location.href = "/login";
     throw new Error(res.status === 410 ? "Account is no longer available" : "Session expired");

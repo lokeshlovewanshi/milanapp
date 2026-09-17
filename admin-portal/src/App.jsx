@@ -1,4 +1,5 @@
-﻿import { Navigate, Route, Routes, Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { Navigate, Route, Routes, NavLink, Link, useNavigate, useLocation } from "react-router-dom";
 import Login from "./pages/Login";
 import Queue from "./pages/Queue";
 import ProfileDetail from "./pages/ProfileDetail";
@@ -21,7 +22,9 @@ function RequireAuth({ children }) {
 
 function Layout({ children }) {
   const navigate = useNavigate();
+  const location = useLocation();
   const name = localStorage.getItem("adminName");
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   function logout() {
     localStorage.removeItem("adminToken");
@@ -29,27 +32,69 @@ function Layout({ children }) {
     navigate("/login");
   }
 
+  const closeMenu = () => setMobileOpen(false);
+
   return (
     <div className="app-shell">
       <nav className="topnav">
-        <div className="topnav-brand">Lovewanshi Parinay Admin</div>
-        <div className="topnav-links">
-          <Link to="/queue">Queue &amp; Monitoring</Link>
-          <Link to="/verified">✅ Verified Profiles</Link>
-          <Link to="/outreach">💬 Send Message</Link>
-          <Link to="/profiles/new">➕ Create Profile</Link>
-          <Link to="/plans">Plans &amp; Offers</Link>
-          <Link to="/featured">Highlighted Profiles</Link>
-          <Link to="/broadcast">📢 Notifications</Link>
-          <Link to="/tickets">Support Tickets</Link>
+        <div className="topnav-header">
+          <Link to="/queue" className="topnav-brand" onClick={closeMenu}>
+            👑 Lovewanshi Parinay Admin
+          </Link>
+          <button
+            type="button"
+            className="mobile-menu-toggle"
+            onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label="Toggle Navigation Menu"
+          >
+            {mobileOpen ? "✕" : "☰"}
+          </button>
         </div>
-        <div className="topnav-user">
-          <span className="muted">{name}</span>
-          <button className="secondary" onClick={logout}>
+
+        <div className={`topnav-links ${mobileOpen ? "open" : ""}`}>
+          <NavLink to="/queue" onClick={closeMenu} className={({ isActive }) => (isActive ? "active" : "")}>
+            📊 Queue &amp; Monitoring
+          </NavLink>
+          <NavLink to="/verified" onClick={closeMenu} className={({ isActive }) => (isActive ? "active" : "")}>
+            ✅ Verified Profiles
+          </NavLink>
+          <NavLink to="/outreach" onClick={closeMenu} className={({ isActive }) => (isActive ? "active" : "")}>
+            💬 Send Message
+          </NavLink>
+          <NavLink to="/profiles/new" onClick={closeMenu} className={({ isActive }) => (isActive ? "active" : "")}>
+            ➕ Create Profile
+          </NavLink>
+          <NavLink to="/plans" onClick={closeMenu} className={({ isActive }) => (isActive ? "active" : "")}>
+            💳 Plans &amp; Offers
+          </NavLink>
+          <NavLink to="/featured" onClick={closeMenu} className={({ isActive }) => (isActive ? "active" : "")}>
+            ⭐ Highlighted
+          </NavLink>
+          <NavLink to="/broadcast" onClick={closeMenu} className={({ isActive }) => (isActive ? "active" : "")}>
+            📢 Notifications
+          </NavLink>
+          <NavLink to="/tickets" onClick={closeMenu} className={({ isActive }) => (isActive ? "active" : "")}>
+            🎫 Support Tickets
+          </NavLink>
+
+          <div className="topnav-mobile-user">
+            {name && <span className="muted small">👤 {name}</span>}
+            <button className="secondary small" onClick={logout}>
+              Log out
+            </button>
+          </div>
+        </div>
+
+        <div className="topnav-user desktop-only">
+          {name && <span className="muted small">👤 {name}</span>}
+          <button className="secondary small" onClick={logout}>
             Log out
           </button>
         </div>
       </nav>
+
+      {mobileOpen && <div className="mobile-backdrop" onClick={closeMenu} />}
+
       <main className="content">{children}</main>
     </div>
   );

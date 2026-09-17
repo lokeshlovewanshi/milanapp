@@ -106,7 +106,7 @@ export default function VerifiedProfiles() {
   return (
     <div>
       {/* Page Header */}
-      <div className="page-header" style={{ marginBottom: "1.25rem" }}>
+      <div className="page-header">
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
             <h1 style={{ margin: "0 0 0.25rem 0" }}>Verified Profiles</h1>
@@ -131,21 +131,17 @@ export default function VerifiedProfiles() {
           </p>
         </div>
 
-        <div style={{ display: "flex", gap: "0.75rem", alignItems: "center" }}>
+        <div className="page-header-actions">
           <Link to="/profiles/new">
             <button type="button" className="primary small">
               ➕ Create Profile
             </button>
           </Link>
-          <div
-            className="view-toggle"
-            style={{ display: "flex", background: "#E5E7EB", borderRadius: "6px", padding: "2px" }}
-          >
+          <div className="view-toggle">
             <button
               type="button"
               className={viewMode === "table" ? "small primary" : "small secondary"}
               onClick={() => setViewMode("table")}
-              style={{ padding: "0.3rem 0.75rem", borderRadius: "4px" }}
             >
               📊 Monitoring List
             </button>
@@ -153,7 +149,6 @@ export default function VerifiedProfiles() {
               type="button"
               className={viewMode === "grid" ? "small primary" : "small secondary"}
               onClick={() => setViewMode("grid")}
-              style={{ padding: "0.3rem 0.75rem", borderRadius: "4px" }}
             >
               🗂️ Cards View
             </button>
@@ -162,21 +157,13 @@ export default function VerifiedProfiles() {
       </div>
 
       {actionMessage && (
-        <div className="success-banner" style={{ marginBottom: "1rem" }}>
+        <div className="success-banner">
           {actionMessage}
         </div>
       )}
 
       {/* Filter / Search Bar */}
-      <div
-        style={{
-          display: "flex",
-          gap: "0.75rem",
-          marginBottom: "1.25rem",
-          alignItems: "center",
-          flexWrap: "wrap",
-        }}
-      >
+      <div className="filter-bar">
         <div style={{ position: "relative", flex: "1 1 320px", maxWidth: "480px" }}>
           <input
             type="text"
@@ -252,8 +239,8 @@ export default function VerifiedProfiles() {
 
       {/* 1. Monitoring Table View */}
       {!loading && viewMode === "table" && list.length > 0 && (
-        <div className="card" style={{ padding: 0, overflowX: "auto" }}>
-          <table className="data-table" style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
+        <div className="table-container">
+          <table className="data-table">
             <thead>
               <tr style={{ background: "#F9FAFB", borderBottom: "1px solid #E5E7EB" }}>
                 <th style={{ padding: "0.75rem 1rem", fontWeight: "600", fontSize: "0.85rem", color: "#374151" }}>

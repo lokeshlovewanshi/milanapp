@@ -1,4 +1,4 @@
-﻿import React, { useState } from "react";
+import React, { useState } from "react";
 import { api } from "../api";
 
 const PRESETS = [
@@ -199,7 +199,7 @@ export default function BroadcastNotifications() {
         </div>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 340px", gap: "1.5rem", alignItems: "start" }}>
+      <div className="broadcast-layout">
         {/* Form Column */}
         <div className="card">
           <form
@@ -364,10 +364,9 @@ export default function BroadcastNotifications() {
             </div>
 
             <div
+              className="form-grid"
               style={{
-                display: "grid",
-                gridTemplateColumns: activeTab === "broadcast" ? "1fr 1fr" : "1fr",
-                gap: "1rem",
+                gridTemplateColumns: activeTab === "broadcast" ? undefined : "1fr",
                 marginBottom: "1.2rem",
               }}
             >

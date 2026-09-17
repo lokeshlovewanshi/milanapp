@@ -144,7 +144,12 @@ public class AdminFeaturedStoryService {
 
     private CachedFeaturedStory toCachedData(FeaturedStory story) {
         UserProfile profile = userProfileRepository.findById(story.getUserProfileId())
-                .filter(p -> p.getDeletedAt() == null && Boolean.TRUE.equals(p.getVerified()))
+                // Top Stories is another member-facing discovery surface, so
+                // it follows exactly the same visibility rules as Home.
+                .filter(p -> p.getDeletedAt() == null
+                        && !Boolean.TRUE.equals(p.getHidden())
+                        && !Boolean.TRUE.equals(p.getBlocked())
+                        && Boolean.TRUE.equals(p.getVerified()))
                 .orElse(null);
         if (profile == null) {
             return null;

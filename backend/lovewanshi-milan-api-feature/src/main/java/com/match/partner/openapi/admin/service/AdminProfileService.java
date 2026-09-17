@@ -1,6 +1,7 @@
 package com.match.partner.openapi.admin.service;
 
 import com.match.partner.common.configuration.ClientException;
+import com.match.partner.common.configuration.CacheConfiguration;
 import com.match.partner.openapi.admin.model.dto.AdminCreateProfileDTO;
 import com.match.partner.openapi.admin.model.dto.AdminProfileDetailDTO;
 import com.match.partner.openapi.admin.model.dto.AdminProfileSummaryDTO;
@@ -24,6 +25,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -147,6 +149,7 @@ public class AdminProfileService {
      * requests restoration, the restore flow clears this flag and submits the
      * profile for admin review again.
      */
+    @CacheEvict(value = CacheConfiguration.FEATURED_STORIES_CACHE, allEntries = true)
     public AdminProfileSummaryDTO block(int id) {
         UserProfile profile = userProfileRepository.findById(id)
                 .filter(p -> p.getDeletedAt() == null)
@@ -157,6 +160,7 @@ public class AdminProfileService {
         return toSummary(profile);
     }
 
+    @CacheEvict(value = CacheConfiguration.FEATURED_STORIES_CACHE, allEntries = true)
     public AdminProfileSummaryDTO unblock(int id) {
         UserProfile profile = userProfileRepository.findById(id)
                 .filter(p -> p.getDeletedAt() == null)
@@ -430,6 +434,7 @@ public class AdminProfileService {
         return toDetail(profile);
     }
 
+    @CacheEvict(value = CacheConfiguration.FEATURED_STORIES_CACHE, allEntries = true)
     public AdminProfileDetailDTO setVisibility(int id, boolean hidden) {
         UserProfile profile = userProfileRepository.findById(id)
                 .filter(p -> p.getDeletedAt() == null)
@@ -440,6 +445,7 @@ public class AdminProfileService {
         return toDetail(saved);
     }
 
+    @CacheEvict(value = CacheConfiguration.FEATURED_STORIES_CACHE, allEntries = true)
     public void deleteProfile(int id) {
         UserProfile profile = userProfileRepository.findById(id)
                 .filter(p -> p.getDeletedAt() == null)
