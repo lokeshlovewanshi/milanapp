@@ -11,10 +11,10 @@ import {
   Animated,
   Share,
 } from 'react-native';
-import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import AvatarFallback from './AvatarFallback';
+import StableImage from './StableImage';
 import { VerifiedBadge } from './BrandIcons';
 import { useReference } from '../utils/useReference';
 import { connectionAction, type ConnectionState } from '../utils/useConnections';
@@ -186,8 +186,8 @@ function ProfileFeedCard({
             >
               <View style={styles.avatarInner}>
                 {avatarUri ? (
-                  <Image
-                    source={{ uri: avatarUri }}
+                  <StableImage
+                    uri={avatarUri}
                     style={styles.avatar}
                     contentFit="cover"
                     contentPosition="top"
@@ -234,8 +234,8 @@ function ProfileFeedCard({
                 onPress={handlePhotoPress}
                 style={styles.photoTouchable}
               >
-                <Image
-                  source={{ uri: photoUri }}
+                <StableImage
+                  uri={photoUri}
                   style={styles.photo}
                   contentFit="cover"
                   contentPosition="top"

@@ -37,6 +37,8 @@ type Props = {
    * starting content (recent or popular), and typing queries the API.
    */
   onSearch?: (query: string) => Promise<Option[]>;
+  /** Let a typed value be saved when it is not in the suggested list. */
+  allowCustom?: boolean;
   /**
    * Fetch the next page of `options` while browsing (nothing typed yet).
    * Ignored once there is a search query in progress - paging and searching
@@ -69,6 +71,7 @@ export default function OptionSheet({
   multi = false,
   searchable,
   onSearch,
+  allowCustom = false,
   onLoadMore,
   loadingMore,
   onClose,
@@ -143,6 +146,18 @@ export default function OptionSheet({
     if (!q) return options;
     return options.filter((o) => o.label.toLowerCase().includes(q));
   }, [options, query, onSearch, remote]);
+
+  const customValue = useMemo(() => {
+    const typed = query.trim();
+    if (!allowCustom || !typed) return null;
+    return filtered.some(
+      (option) =>
+        option.code.toLowerCase() === typed.toLowerCase() ||
+        option.label.toLowerCase() === typed.toLowerCase(),
+    )
+      ? null
+      : typed;
+  }, [allowCustom, filtered, query]);
 
   const selectedChips = useMemo(
     () =>
@@ -230,6 +245,21 @@ export default function OptionSheet({
             // next alphabetical page onto a filtered list of matches.
             onEndReached={!query.trim() ? onLoadMore : undefined}
             onEndReachedThreshold={0.5}
+            ListHeaderComponent={
+              customValue ? (
+                <TouchableOpacity
+                  style={styles.customRow}
+                  activeOpacity={0.7}
+                  onPress={() => {
+                    onSave(customValue);
+                    onClose();
+                  }}
+                >
+                  <Ionicons name="add-circle-outline" size={22} color={auth.crimson} />
+                  <Text style={styles.customLabel}>Use “{customValue}”</Text>
+                </TouchableOpacity>
+              ) : null
+            }
             ListFooterComponent={
               loadingMore ? (
                 <View style={styles.loadingMore}>
@@ -333,6 +363,15 @@ const styles = StyleSheet.create({
     gap: spacing.md,
     paddingVertical: 13,
   },
+  customRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.md,
+    paddingVertical: 13,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.hairline,
+  },
+  customLabel: { flex: 1, fontSize: font.title, color: auth.crimson, fontWeight: '600' },
   box: {
     width: 22,
     height: 22,

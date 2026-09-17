@@ -7,9 +7,9 @@ import {
   TouchableOpacity,
   useWindowDimensions,
 } from 'react-native';
-import { Image } from 'expo-image';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import AvatarFallback from './AvatarFallback';
+import StableImage from './StableImage';
 import { useReference } from '../utils/useReference';
 import { connectionAction, type ConnectionState } from '../utils/useConnections';
 import {
@@ -128,7 +128,7 @@ function SuggestionRail({
                 style={styles.cardBody}
               >
                 {uri ? (
-                  <Image source={{ uri }} style={styles.avatar} contentFit="cover" contentPosition="top" />
+                  <StableImage uri={uri} style={styles.avatar} contentFit="cover" contentPosition="top" />
                 ) : (
                   <View style={[styles.avatar, styles.avatarFallback]}>
                     <AvatarFallback profile={profile} glyphSize={34} />

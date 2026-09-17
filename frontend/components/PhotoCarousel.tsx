@@ -10,11 +10,11 @@ import {
   type NativeSyntheticEvent,
   type NativeScrollEvent,
 } from 'react-native';
-import { Image } from 'expo-image';
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import AvatarFallback from './AvatarFallback';
+import StableImage from './StableImage';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors, font, spacing, photoHeight } from './theme';
 
@@ -126,11 +126,10 @@ export default function PhotoCarousel({
         onMomentumScrollEnd={onMomentumEnd}
         renderItem={({ item }) => (
           <Pressable onPress={() => setViewerOpen(true)}>
-            <Image
-              source={{ uri: item }}
+            <StableImage
+              uri={item}
               style={{ width, height: h }}
               contentFit="cover"
-              transition={200}
             />
           </Pressable>
         )}
@@ -247,11 +246,10 @@ function PhotoViewer({
             setIndex(Math.round(e.nativeEvent.contentOffset.x / Math.max(1, width)))
           }
           renderItem={({ item }) => (
-            <Image
-              source={{ uri: item }}
+            <StableImage
+              uri={item}
               style={{ width, height }}
               contentFit="contain"
-              transition={150}
             />
           )}
         />
@@ -304,8 +302,8 @@ function PhotoViewer({
             <View style={[styles.thumbs, { bottom: insets.bottom + spacing.md }]}>
               {photos.map((uri, i) => (
                 <TouchableOpacity key={`t-${i}`} onPress={() => goTo(i)} activeOpacity={0.8}>
-                  <Image
-                    source={{ uri }}
+                  <StableImage
+                    uri={uri}
                     style={[styles.thumb, i === index && styles.thumbActive]}
                     contentFit="cover"
                   />

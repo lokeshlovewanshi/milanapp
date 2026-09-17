@@ -9,9 +9,9 @@ import {
   Animated,
   Easing,
 } from 'react-native';
-import { Image } from 'expo-image';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import AvatarFallback from './AvatarFallback';
+import StableImage from './StableImage';
 import { VerifiedBadge } from './BrandIcons';
 import { useReference } from '../utils/useReference';
 import { connectionAction, type ConnectionState } from '../utils/useConnections';
@@ -179,7 +179,7 @@ function RailCard({
       <TouchableOpacity activeOpacity={0.9} onPress={onPress}>
         <View style={styles.photoWindow}>
           {uri ? (
-            <Image source={{ uri }} style={styles.photo} contentFit="cover" contentPosition="top" />
+            <StableImage uri={uri} style={styles.photo} contentFit="cover" contentPosition="top" />
           ) : (
             <View style={[styles.photo, styles.photoFallback]}>
               <AvatarFallback profile={profile} glyphSize={38} />

@@ -294,6 +294,7 @@ export default function SectionForm({ spec, values, onChange, errors }: Props) {
         value={picker ? values[picker.key] : null}
         multi={picker?.kind === 'multiselect'}
         onSearch={picker?.remote === 'city' ? searchCities : undefined}
+        allowCustom={picker?.remote === 'city'}
         onLoadMore={
           picker?.remote === 'city' && cityBrowse.hasMore
             ? () => loadCityPage(cityBrowse.page + 1)

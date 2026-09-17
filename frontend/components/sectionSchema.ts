@@ -193,12 +193,12 @@ export const SECTIONS: Record<string, SectionSpec> = {
       // Birth place and time lead because they are what the kundali is built
       // from - everything below is describable, these two are load-bearing.
       //
-      // A city from the list, not free text. Free text is how this column came
-      // to hold "Nihal" and "Hdhdjd", and a kundali cannot be calculated from
-      // those - the chart needs real coordinates, which only a known city has.
+      // Searchable city suggestions make it quick to choose a known location.
+      // A typed location can also be kept when it is not in the reference list,
+      // so families are not blocked by an incomplete city catalogue.
       {
         key: "placeOfBirth",
-        label: "Place of birth",
+        label: "Place of birth (city)",
         kind: "select",
         remote: "city",
       },
@@ -317,6 +317,7 @@ export const SECTIONS: Record<string, SectionSpec> = {
         label: "Father's occupation",
         kind: "select",
         lookup: "profession",
+        suggest: 5,
       },
       {
         key: "fathersContactNo",
@@ -330,6 +331,7 @@ export const SECTIONS: Record<string, SectionSpec> = {
         label: "Mother's occupation",
         kind: "select",
         lookup: "profession",
+        suggest: 5,
       },
       {
         key: "marriedBrothers",
@@ -357,7 +359,7 @@ export const SECTIONS: Record<string, SectionSpec> = {
       },
       {
         key: "maternalUnclesName",
-        label: "Maternal uncle's name",
+        label: "Maternal uncle's name (Mama)",
         kind: "text",
       },
       {

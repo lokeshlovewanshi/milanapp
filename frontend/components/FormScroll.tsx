@@ -90,7 +90,7 @@ export const useCoveredHeight = (measured: number): number => {
 };
 
 const FormScroll = forwardRef<FormScrollHandle, Props>(
-  ({ children, gap = 24, contentContainerStyle, onScroll, ...rest }, ref) => {
+  ({ children, gap = 24, contentContainerStyle, onScroll, onTouchStart, ...rest }, ref) => {
     const scrollRef = useRef<ScrollView>(null);
     const offset = useRef(0);
 
@@ -122,13 +122,13 @@ const FormScroll = forwardRef<FormScrollHandle, Props>(
       [onScroll],
     );
 
-    useEffect(() => {
+    const scrollFocusedInputIntoView = useCallback(() => {
       if (rawKeyboard === 0) return;
 
-      // One tick of delay: the bottom padding has to exist before an offset is
-      // worth computing, or the view scrolls to a position that stops being
-      // valid a moment later.
-      const timer = setTimeout(() => {
+      // Run whenever a field is tapped as well as when the keyboard opens.
+      // Otherwise moving from one field to a lower one keeps that input below
+      // an already-open keyboard.
+      setTimeout(() => {
         const input = TextInput.State.currentlyFocusedInput?.();
         const scroller = scrollRef.current;
         if (!input || !scroller) return;
@@ -159,16 +159,22 @@ const FormScroll = forwardRef<FormScrollHandle, Props>(
             });
           }
         );
-      }, 60);
-
-      return () => clearTimeout(timer);
+      }, 80);
     }, [rawKeyboard, covered, gap]);
+
+    useEffect(() => {
+      scrollFocusedInputIntoView();
+    }, [scrollFocusedInputIntoView]);
 
     return (
       <ScrollView
         ref={scrollRef}
         onLayout={(e) => setViewport(e.nativeEvent.layout.height)}
         onScroll={handleScroll}
+        onTouchStart={(event) => {
+          onTouchStart?.(event);
+          scrollFocusedInputIntoView();
+        }}
         scrollEventThrottle={16}
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode={Platform.OS === 'ios' ? 'interactive' : 'none'}

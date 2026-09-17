@@ -7,6 +7,16 @@ export type OptionMap = Record<string, Option[]>;
 
 const CACHE_KEY = 'reference_options_v1';
 
+/** Agriculture is intentionally the first choice anywhere professions are shown. */
+function orderedOptions(category: string, options: Option[]): Option[] {
+  if (category !== 'profession') return options;
+  return [...options].sort((a, b) => {
+    if (a.code === 'AGRICULTURE') return -1;
+    if (b.code === 'AGRICULTURE') return 1;
+    return 0;
+  });
+}
+
 /**
  * Dropdown data, fetched once and shared.
  *
@@ -87,7 +97,7 @@ export function useReference() {
 
   /** Options for one category, or an empty list if it has not loaded. */
   const list = useCallback(
-    (category: string): Option[] => options[category] ?? [],
+    (category: string): Option[] => orderedOptions(category, options[category] ?? []),
     [options]
   );
 
