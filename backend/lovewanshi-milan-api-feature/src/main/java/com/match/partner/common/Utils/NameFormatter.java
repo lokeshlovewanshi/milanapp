@@ -19,7 +19,6 @@ public final class NameFormatter {
     );
 
     /**
-     * "HARSH  sijariya" -> "Harsh Sijariya".
      *
      * Users type names in every case imaginable - ALL CAPS from a phone keyboard,
      * all lowercase from a hurried signup - and a profile list looks broken when

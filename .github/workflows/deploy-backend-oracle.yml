@@ -18,7 +18,7 @@ on:
           - prd
 
 env:
-  BACKEND_DIR: backend/lovewanshi-milan-api-feature-h-sijariya
+  BACKEND_DIR: backend/lovewanshi-milan-api-feature
   FALLBACK_VM_HOST: "155.248.244.90"
 
 concurrency:
@@ -46,7 +46,7 @@ jobs:
           cache: gradle
 
       - name: Build the jar
-        working-directory: backend/lovewanshi-milan-api-feature-h-sijariya
+        working-directory: backend/lovewanshi-milan-api-feature
         run: |
           chmod +x ./gradlew
           ./gradlew clean bootJar -x test --no-daemon

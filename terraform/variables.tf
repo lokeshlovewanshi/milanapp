@@ -109,7 +109,7 @@ variable "s3_photo_bucket" {
 variable "github_repository" {
   description = "owner/repo, for the OIDC trust policy."
   type        = string
-  default     = "harshsijariya/milanapp"
+  default     = "lokeshlovewanshi/milanapp"
 }
 
 variable "github_branch" {

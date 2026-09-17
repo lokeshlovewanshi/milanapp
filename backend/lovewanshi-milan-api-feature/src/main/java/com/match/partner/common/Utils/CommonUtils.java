@@ -37,7 +37,6 @@ public class CommonUtils {
     }
 
     /**
-     * Normalise a person's name for storage: "HARSH  sijariya" -> "Harsh Sijariya".
      *
      * Delegates to NameFormatter. UserProfile also normalises its own name in a
      * JPA lifecycle callback, so every save path is covered whether or not the

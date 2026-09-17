@@ -2,7 +2,7 @@ package com.match.partner.openapi.notification.model.dto;
 
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Data
 public class NotificationDto {
@@ -24,5 +24,6 @@ public class NotificationDto {
     private String actorName;
     private String actorImage;
     private boolean read;
-    private LocalDateTime createdAt;
+    /** UTC instant, serialized as ISO-8601 with a trailing Z for clients. */
+    private Instant createdAt;
 }

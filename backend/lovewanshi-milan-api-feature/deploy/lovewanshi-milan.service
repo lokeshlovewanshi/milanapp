@@ -1,6 +1,6 @@
 [Unit]
 Description=Lovewanshi Milan API
-Documentation=https://github.com/harshsijariya/milanapp
+Documentation=https://github.com/lokeshlovewanshi/milanapp
 After=network-online.target
 Wants=network-online.target
 

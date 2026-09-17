@@ -33,20 +33,26 @@ export const GENDER_OPTIONS = [
   { code: "FEMALE", label: "Female" },
 ];
 
-export const HEIGHT_OPTIONS = Object.entries(HEIGHT_MAP).map(([code, label]) => ({
-  code,
-  label,
-}));
+export const HEIGHT_OPTIONS = Object.entries(HEIGHT_MAP).map(
+  ([code, label]) => ({
+    code,
+    label,
+  }),
+);
 
-export const INCOME_OPTIONS = Object.entries(ANNUAL_INCOME_MAP).map(([code, label]) => ({
-  code,
-  label,
-}));
+export const INCOME_OPTIONS = Object.entries(ANNUAL_INCOME_MAP).map(
+  ([code, label]) => ({
+    code,
+    label,
+  }),
+);
 
-export const MARITAL_STATUS_OPTIONS = Object.entries(MARITAL_STATUS_MAP).map(([code, label]) => ({
-  code,
-  label,
-}));
+export const MARITAL_STATUS_OPTIONS = Object.entries(MARITAL_STATUS_MAP).map(
+  ([code, label]) => ({
+    code,
+    label,
+  }),
+);
 
 export const DIET_OPTIONS = [
   { code: "VEG", label: "Vegetarian" },
@@ -63,10 +69,12 @@ export const MANGLIK_OPTIONS = [
   { code: "DONT_KNOW", label: "Don't Know" },
 ];
 
-export const COMPLEXION_OPTIONS = Object.entries(COMPLEXION_MAP).map(([code, label]) => ({
-  code,
-  label,
-}));
+export const COMPLEXION_OPTIONS = Object.entries(COMPLEXION_MAP).map(
+  ([code, label]) => ({
+    code,
+    label,
+  }),
+);
 
 export const BLOOD_GROUP_OPTIONS = [
   { code: "APLUS", label: "A+" },
@@ -79,15 +87,19 @@ export const BLOOD_GROUP_OPTIONS = [
   { code: "AB_", label: "AB-" },
 ];
 
-export const EMPLOYED_IN_OPTIONS = Object.entries(EMPLOYED_IN_MAP).map(([code, label]) => ({
-  code,
-  label,
-}));
+export const EMPLOYED_IN_OPTIONS = Object.entries(EMPLOYED_IN_MAP).map(
+  ([code, label]) => ({
+    code,
+    label,
+  }),
+);
 
-export const EDUCATION_OPTIONS = Object.entries(EDUCATION_MAP).map(([code, label]) => ({
-  code,
-  label,
-}));
+export const EDUCATION_OPTIONS = Object.entries(EDUCATION_MAP).map(
+  ([code, label]) => ({
+    code,
+    label,
+  }),
+);
 
 export const PROFESSION_OPTIONS = Object.entries(PROFESSION_MAP)
   .filter(([code]) => code !== "BUSINESS") // filter legacy alias
@@ -215,28 +227,7 @@ export const FAMILY_TYPE_OPTIONS = [
   { code: "NUCLEAR", label: "Nuclear Family / एकल परिवार" },
 ];
 
-export const GOTRA_OPTIONS = [
-  { code: "Katheriya", label: "Katheriya (कठेरिया)" },
-  { code: "Seth", label: "Seth (सेठ)" },
-  { code: "Mor", label: "Mor (मोर)" },
-  { code: "Pahariya", label: "Pahariya (पहाड़िया)" },
-  { code: "Piparsaniya", label: "Piparsaniya (पिपरसानिया)" },
-  { code: "Kharya", label: "Kharya / Khare (खरे / खर्या)" },
-  { code: "Rawat", label: "Rawat (रावत)" },
-  { code: "Kasondhan", label: "Kasondhan (कासोधन)" },
-  { code: "Gupta", label: "Gupta (गुप्ता)" },
-  { code: "Budholiya", label: "Budholiya (बुधोलिया)" },
-  { code: "Nagariya", label: "Nagariya (नगरिया)" },
-  { code: "Kankane", label: "Kankane (कंकने)" },
-  { code: "Sijariya", label: "Sijariya (सिजरिया)" },
-  { code: "Nikhra", label: "Nikhra (निखरा)" },
-  { code: "Bhadan", label: "Bhadan (भाड़न)" },
-  { code: "Taran", label: "Taran (तारन)" },
-  { code: "Chudigar", label: "Chudigar (चूड़ीगार)" },
-  { code: "Kapasya", label: "Kapasya (कपास्या)" },
-  { code: "Makhariya", label: "Makhariya (मखरिया)" },
-  { code: "Goyal", label: "Goyal (गोयल)" },
-];
+export const GOTRA_OPTIONS = [];
 
 export const STATE_OPTIONS = [
   { code: "Madhya Pradesh", label: "Madhya Pradesh (मध्य प्रदेश)" },
@@ -273,7 +264,10 @@ export const STATE_OPTIONS = [
   { code: "Tripura", label: "Tripura (त्रिपुरा)" },
   { code: "Uttarakhand", label: "Uttarakhand (उत्तराखंड)" },
   { code: "Andaman and Nicobar Islands", label: "Andaman and Nicobar Islands" },
-  { code: "Dadra and Nagar Haveli and Daman and Diu", label: "Dadra and Nagar Haveli and Daman and Diu" },
+  {
+    code: "Dadra and Nagar Haveli and Daman and Diu",
+    label: "Dadra and Nagar Haveli and Daman and Diu",
+  },
   { code: "Lakshadweep", label: "Lakshadweep" },
 ];
 
@@ -335,18 +329,19 @@ export function useReference() {
 
   const list = useCallback(
     (category) => {
-      const dynamic = options[category] || (category === "zodiac" ? options["rashi"] : null);
+      const dynamic =
+        options[category] || (category === "zodiac" ? options["rashi"] : null);
       if (Array.isArray(dynamic) && dynamic.length > 0) {
         return dynamic;
       }
       return STATIC_CATEGORY_MAP[category] || [];
     },
-    [options]
+    [options],
   );
 
   const label = useCallback(
     (category, code) => formatCode(category, code, list(category)),
-    [list]
+    [list],
   );
 
   return { options, list, label, loading };
@@ -371,37 +366,41 @@ export function useLocations() {
               code: s.name,
               label: s.name,
               id: s.id,
-            }))
+            })),
           );
         }
       })
       .catch(() => {});
   }, []);
 
-  const loadCities = useCallback(async (stateName) => {
-    if (!stateName) {
-      setCities([]);
-      return;
-    }
-    const match = states.find(
-      (s) => s.code?.toLowerCase() === String(stateName).toLowerCase() || s.label?.toLowerCase() === String(stateName).toLowerCase()
-    );
-    if (!match?.id) {
-      setCities([]);
-      return;
-    }
+  const loadCities = useCallback(
+    async (stateName) => {
+      if (!stateName) {
+        setCities([]);
+        return;
+      }
+      const match = states.find(
+        (s) =>
+          s.code?.toLowerCase() === String(stateName).toLowerCase() ||
+          s.label?.toLowerCase() === String(stateName).toLowerCase(),
+      );
+      if (!match?.id) {
+        setCities([]);
+        return;
+      }
 
-    setLoadingCities(true);
-    try {
-      const res = await referenceAPI.cities({ stateId: match.id });
-      setCities(Array.isArray(res) ? res : res?.data || []);
-    } catch {
-      setCities([]);
-    } finally {
-      setLoadingCities(false);
-    }
-  }, [states]);
+      setLoadingCities(true);
+      try {
+        const res = await referenceAPI.cities({ stateId: match.id });
+        setCities(Array.isArray(res) ? res : res?.data || []);
+      } catch {
+        setCities([]);
+      } finally {
+        setLoadingCities(false);
+      }
+    },
+    [states],
+  );
 
   return { states, cities, loadCities, loadingCities };
 }
-

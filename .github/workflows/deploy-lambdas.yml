@@ -5,7 +5,7 @@ name: Deploy Lambdas
 # layer versions are immutable, so each pointless run leaves another one behind.
 on:
   push:
-    branches: [main, dev]
+    branches: [prd, dev]
     paths:
       - "lambdas/**"
       - ".github/workflows/deploy-lambdas.yml"

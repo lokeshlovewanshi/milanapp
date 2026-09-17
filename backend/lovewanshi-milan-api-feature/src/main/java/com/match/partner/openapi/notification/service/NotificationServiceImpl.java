@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +46,15 @@ public class NotificationServiceImpl implements NotificationServiceInterface {
     private final UserProfileMapper userProfileMapper;
     private final PushService pushService;
     private final CommonUtils commonUtils;
+
+    /**
+     * Notification DATETIME values are UTC by contract. The column itself has
+     * no timezone, so using the server's default timezone here would make the
+     * same database row mean a different instant after a deployment.
+     */
+    private static LocalDateTime utcNow() {
+        return LocalDateTime.now(ZoneOffset.UTC);
+    }
 
     private Integer userIdOf(String userName) {
         return userProfileRepository.findByEmail(userName)
@@ -123,7 +133,7 @@ public class NotificationServiceImpl implements NotificationServiceInterface {
     @Override
     @Transactional
     public void markAllRead(String userName) {
-        notificationRepository.markAllRead(userIdOf(userName), LocalDateTime.now());
+        notificationRepository.markAllRead(userIdOf(userName), utcNow());
     }
 
     /**
@@ -144,7 +154,7 @@ public class NotificationServiceImpl implements NotificationServiceInterface {
         row.setTitle(title);
         row.setBody(body);
         row.setActorId(actorId);
-        row.setCreatedAt(LocalDateTime.now());
+        row.setCreatedAt(utcNow());
         notificationRepository.save(row);
 
         // A profile view stays in the bell only - no push. Someone browsing
@@ -189,7 +199,7 @@ public class NotificationServiceImpl implements NotificationServiceInterface {
         pushService.sendToTopic(topic, body.getTitle(), body.getBody(), data);
 
         if (body.isSaveToFeed()) {
-            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime now = utcNow();
             List<UserProfile> all = userProfileRepository.findAll();
             List<Notification> rows = all.stream().map(user -> {
                 Notification n = new Notification();
@@ -215,7 +225,7 @@ public class NotificationServiceImpl implements NotificationServiceInterface {
         n.setType(NotificationType.BROADCAST);
         n.setTitle(title);
         n.setBody(body);
-        n.setCreatedAt(LocalDateTime.now());
+        n.setCreatedAt(utcNow());
         notificationRepository.save(n);
 
         Map<String, String> data = new HashMap<>();
@@ -292,7 +302,7 @@ public class NotificationServiceImpl implements NotificationServiceInterface {
 
         // 2. Persist in-app notification to the bell feed of all other active users
         try {
-            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime now = utcNow();
             List<UserProfile> allUsers = userProfileRepository.findAll();
             List<Notification> feedRows = allUsers.stream()
                     .filter(u -> u.getId() != null && !u.getId().equals(profile.getId()) && u.getDeletedAt() == null)
@@ -329,7 +339,10 @@ public class NotificationServiceImpl implements NotificationServiceInterface {
         dto.setBody(n.getBody());
         dto.setActorId(n.getActorId() == null ? null : commonUtils.convertToJMFormat(n.getActorId()));
         dto.setRead(n.getReadAt() != null);
-        dto.setCreatedAt(n.getCreatedAt());
+        // Historic rows were written by the UTC Oracle instance as a timezone-
+        // less DATETIME. Attach UTC before serializing so both old and new
+        // notifications reach the APK as an unambiguous instant, e.g. ...Z.
+        dto.setCreatedAt(n.getCreatedAt() == null ? null : n.getCreatedAt().toInstant(ZoneOffset.UTC));
 
         UserProfile actor = n.getActorId() == null ? null : actors.get(n.getActorId());
         if (actor != null) {

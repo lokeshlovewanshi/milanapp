@@ -20,7 +20,7 @@ machine:
 ```bash
 mysql -u root -e "
   CREATE DATABASE IF NOT EXISTS marriage_portal;
-  CREATE USER IF NOT EXISTS 'test_user'@'localhost' IDENTIFIED BY 'Harsh@401';
+  CREATE USER IF NOT EXISTS 'test_user'@'localhost' IDENTIFIED BY 'Lokesh@401';
   GRANT ALL PRIVILEGES ON marriage_portal.* TO 'test_user'@'localhost';
 "
 # Load the schema - see backend/.../scripts or sql/ for the current dump.
@@ -29,7 +29,7 @@ mysql -u root -e "
 ## 2. Run the backend on the `local` profile
 
 ```bash
-cd backend/lovewanshi-milan-api-feature-h-sijariya
+cd backend/lovewanshi-milan-api-feature
 ./gradlew bootRun --args='--spring.profiles.active=local'
 ```
 
@@ -56,13 +56,13 @@ That prints a **Tunnel ID** (a UUID) and the path to the credentials JSON.
 Copy the template to a real (gitignored) config and fill both in:
 
 ```bash
-cp backend/lovewanshi-milan-api-feature-h-sijariya/deploy/local/cloudflared-config.yml.example \
-   backend/lovewanshi-milan-api-feature-h-sijariya/deploy/local/cloudflared-config.yml
+cp backend/lovewanshi-milan-api-feature/deploy/local/cloudflared-config.yml.example \
+   backend/lovewanshi-milan-api-feature/deploy/local/cloudflared-config.yml
 ```
 
 ```yaml
 tunnel: <the UUID from `tunnel create`>
-credentials-file: /Users/harshsijariya/.cloudflared/<the UUID>.json
+credentials-file: /Users/LokeshLovewanshi/.cloudflared/<the UUID>.json
 ```
 
 ## 4. Point the domain at the tunnel (GoDaddy)
@@ -80,7 +80,7 @@ record's TTL.
 ## 5. Start the tunnel
 
 ```bash
-cloudflared tunnel --config backend/lovewanshi-milan-api-feature-h-sijariya/deploy/local/cloudflared-config.yml run lovewanshi-milan-local
+cloudflared tunnel --config backend/lovewanshi-milan-api-feature/deploy/local/cloudflared-config.yml run lovewanshi-milan-local
 ```
 
 Leave this running. `https://api.lovewanshisamaj.in` now reaches your local

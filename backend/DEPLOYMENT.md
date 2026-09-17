@@ -5,14 +5,14 @@ balancer**, in `ap-mumbai-1`. Not AWS - the AWS stack this repo's older
 `DEPLOY.md` describes (EC2 + RDS + CodeDeploy) was retired, and only S3 and
 the Lambdas remain there.
 
-| | |
-|---|---|
-| Domain | `https://api.lovewanshisamaj.in` |
-| Load balancer | `161.118.171.172` (OCI, Always Free) |
-| VM | `155.248.244.90` (public IP; backend `10.30.1.245`) |
-| Database | MySQL HeatWave, schema `marriage_portal` |
-| Photos | S3 `lovewanshi-milan-photos`, served via CloudFront `dm53nmzbwxptr.cloudfront.net` |
-| SSH via Bastion | `ssh -J ubuntu@152.67.7.218 -i ~/.ssh/lovewanshi_milan_dev ubuntu@<instance_ip>` |
+|                 |                                                                                    |
+| --------------- | ---------------------------------------------------------------------------------- |
+| Domain          | `https://api.lovewanshisamaj.in`                                                   |
+| Load balancer   | `161.118.171.172` (OCI, Always Free)                                               |
+| VM              | `155.248.244.90` (public IP; backend `10.30.1.245`)                                |
+| Database        | MySQL HeatWave, schema `marriage_portal`                                           |
+| Photos          | S3 `lovewanshi-milan-photos`, served via CloudFront `dm53nmzbwxptr.cloudfront.net` |
+| SSH via Bastion | `ssh -J ubuntu@152.67.7.218 -i ~/.ssh/lovewanshi_milan_dev ubuntu@<instance_ip>`   |
 
 Request path:
 
@@ -32,15 +32,15 @@ several hours to create. Never terraform-destroy them.
 
 ## On the machine
 
-| What | Where |
-|---|---|
-| Jar | `/opt/lovewanshi-milan/app.jar` |
-| Previous jar | `/opt/lovewanshi-milan/app.previous.jar` (rollback) |
-| Secrets | `/etc/lovewanshi-milan/lovewanshi-milan.env` — `root:lovewanshi`, mode `640` |
-| Firebase key | `/etc/lovewanshi-milan/firebase.json` |
-| Service | `lovewanshi-milan.service` (systemd), runs as `LOVEWANSHI` |
-| Logs | `/var/log/lovewanshi-milan/app.log` |
-| nginx site | `/etc/nginx/sites-available/lovewanshi-milan` |
+| What         | Where                                                                        |
+| ------------ | ---------------------------------------------------------------------------- |
+| Jar          | `/opt/lovewanshi-milan/app.jar`                                              |
+| Previous jar | `/opt/lovewanshi-milan/app.previous.jar` (rollback)                          |
+| Secrets      | `/etc/lovewanshi-milan/lovewanshi-milan.env` — `root:lovewanshi`, mode `640` |
+| Firebase key | `/etc/lovewanshi-milan/firebase.json`                                        |
+| Service      | `lovewanshi-milan.service` (systemd), runs as `LOVEWANSHI`                   |
+| Logs         | `/var/log/lovewanshi-milan/app.log`                                          |
+| nginx site   | `/etc/nginx/sites-available/lovewanshi-milan`                                |
 
 The app runs as a plain Java process under systemd. No Docker.
 
@@ -85,7 +85,7 @@ FIREBASE_SERVICE_ACCOUNT_JSON                 CORS_ALLOWED_ORIGINS
 When CI is not an option. Build, copy via bastion ProxyJump, swap, restart, wait for health:
 
 ```bash
-cd backend/lovewanshi-milan-api-feature-h-sijariya
+cd backend/lovewanshi-milan-api-feature
 ./gradlew build -x test
 
 JAR=build/libs/partner-0.0.1-SNAPSHOT.jar
@@ -170,12 +170,15 @@ to the load balancer with `oci lb certificate create`, and update the listener.
 MySQL HeatWave on the private subnet - not reachable directly from the internet.
 
 ### Option 1: Port-forward tunnel from your laptop (Workbench / DBeaver)
+
 ```bash
 ssh -L 3306:10.30.2.173:3306 -i ~/.ssh/lovewanshi_milan_dev ubuntu@152.67.7.218
 ```
+
 Then connect your local MySQL client to `127.0.0.1:3306`.
 
 ### Option 2: CLI through an instance via Bastion
+
 ```bash
 ssh -J ubuntu@152.67.7.218 -i ~/.ssh/lovewanshi_milan_dev ubuntu@10.30.1.102
 set -a; source <(sudo cat /etc/lovewanshi-milan/lovewanshi-milan.env); set +a

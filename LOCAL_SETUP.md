@@ -4,13 +4,14 @@ Runs the whole app on your Mac with no AWS involved — the EC2 box can stay
 stopped. Everything below assumes:
 
 ```bash
-cd "/Users/harshsijariya/Downloads/marriage-app-main 2"
+cd "/Users/lokeshlovewanshi/Downloads/marriage-app-main 2"
 ```
 
 **What you get:** MySQL on localhost with the real schema, the Spring Boot API
 on `:8080`, and the Expo app in the Android emulator pointed at it.
 
 **What does not work locally** (and is fine):
+
 - Photo upload still writes to the real S3 bucket, since the AWS keys in
   `application.properties` are live. Everything else is local.
 - Google Sign-In needs `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID` in `frontend/.env`.
@@ -54,7 +55,7 @@ the migrations **in this order**:
 ```bash
 mysql -u root -p -e "CREATE DATABASE IF NOT EXISTS marriage_portal;"
 mysql -u root -p marriage_portal < Dump20260725.sql
-cd backend/lovewanshi-milan-api-feature-h-sijariya/src/main/resources/db
+cd backend/lovewanshi-milan-api-feature/src/main/resources/db
 mysql -u root -p marriage_portal < reference_data.sql
 mysql -u root -p marriage_portal < created_at.sql
 mysql -u root -p marriage_portal < notifications.sql
@@ -69,7 +70,7 @@ not run.
 ## 2. Backend
 
 ```bash
-cd "backend/lovewanshi-milan-api-feature-h-sijariya"
+cd "backend/lovewanshi-milan-api-feature"
 ./gradlew bootRun
 ```
 
@@ -86,7 +87,7 @@ curl http://localhost:8080/actuator/health
 Expect `{"status":"UP"}`.
 
 Credentials come from
-`backend/lovewanshi-milan-api-feature-h-sijariya/src/main/resources/application.properties`,
+`backend/lovewanshi-milan-api-feature/src/main/resources/application.properties`,
 which is gitignored. If it is ever missing, copy
 `application.properties.example` next to it and fill in the blanks — the
 `${VAR:default}` syntax means environment variables override it.
@@ -122,7 +123,7 @@ Confirm the emulator is attached:
 
 The Gradle build needs to know where the Android SDK is. `frontend/android/` is
 gitignored and regenerated, so `local.properties` disappears on a fresh clone
-and the build fails with *"SDK location not found"*. Recreate it:
+and the build fails with _"SDK location not found"_. Recreate it:
 
 ```bash
 echo "sdk.dir=$HOME/Library/Android/sdk" > frontend/android/local.properties
@@ -193,7 +194,7 @@ rm -rf "$AVD"/snapshots && mkdir -p "$AVD"/snapshots
 ```
 
 This resets the emulator's internal Android state — installed apps and any
-accounts signed in *inside the emulator* are gone. Nothing on the Mac is
+accounts signed in _inside the emulator_ are gone. Nothing on the Mac is
 touched. The partition regenerates clean on next boot.
 
 Or wipe on launch without deleting anything yourself:
@@ -206,13 +207,13 @@ Or wipe on launch without deleting anything yourself:
 
 Sizes measured on this machine:
 
-| Path | Was | Safe to delete? |
-|---|---|---|
-| `~/.gradle/caches` | 12 GB | Yes — re-downloads on next build |
-| `~/Library/Android/sdk/system-images` | part of 14 GB | Only unused API levels, via SDK Manager |
-| `~/Library/Developer/CoreSimulator` | 5.2 GB | Yes if you do not build iOS: `xcrun simctl delete unavailable` |
-| `~/Library/Caches/Yarn` | 1.6 GB | Yes — `yarn cache clean` |
-| `frontend/android/build`, `frontend/.metro-cache` | varies | Yes — regenerated |
+| Path                                              | Was           | Safe to delete?                                                |
+| ------------------------------------------------- | ------------- | -------------------------------------------------------------- |
+| `~/.gradle/caches`                                | 12 GB         | Yes — re-downloads on next build                               |
+| `~/Library/Android/sdk/system-images`             | part of 14 GB | Only unused API levels, via SDK Manager                        |
+| `~/Library/Developer/CoreSimulator`               | 5.2 GB        | Yes if you do not build iOS: `xcrun simctl delete unavailable` |
+| `~/Library/Caches/Yarn`                           | 1.6 GB        | Yes — `yarn cache clean`                                       |
+| `frontend/android/build`, `frontend/.metro-cache` | varies        | Yes — regenerated                                              |
 
 Keeping ~15 GB free avoids the emulator refusing to boot.
 
@@ -220,20 +221,20 @@ Keeping ~15 GB free avoids the emulator refusing to boot.
 
 ## When something breaks
 
-| Symptom | Cause and fix |
-|---|---|
-| `SDK location not found` | `frontend/android/local.properties` is missing — it is gitignored. Recreate it as shown in step 4. |
-| Backend exits at startup with a schema error | A migration was not run. Reload in the order in step 1. |
-| `Communications link failure` | MySQL is not running. `brew services start mysql` |
-| App shows a network error on every screen | Backend is not running, or `.env` still points at `api.lovewanshisamaj.in` while EC2 is stopped. Check the `🔧 API Configuration` log Metro prints at startup — it shows the resolved URL. |
-| Network error on the emulator only | URL says `localhost` instead of `10.0.2.2`. Fix `.env`, restart Metro with `--clear`. |
-| `Cleartext HTTP traffic not permitted` | A release build is being used against `http://`. Rebuild with `expo run:android` (debug). |
-| Google button errors immediately | `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID` is blank. Use email/password, or fill it in and rebuild. |
-| Emulator will not boot / "not enough space" | Wipe data, above. |
-| "System UI isn't responding" right after boot | Normal on the first cold boot after a data wipe — SystemUI is re-initializing. Tap **Wait**. |
-| Wrong password returns 500, not 401 | Known backend bug, see [PRD.md](PRD.md) known gaps. The login does reach the server. |
-| Metro serves stale code | `npx expo start --clear` |
-| Port 8080 already taken | `lsof -ti:8080 -sTCP:LISTEN \| xargs kill`. Keep `-sTCP:LISTEN` — without it `lsof` also matches *clients connected to* 8080, so a running emulator gets killed along with the server. |
+| Symptom                                       | Cause and fix                                                                                                                                                                              |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `SDK location not found`                      | `frontend/android/local.properties` is missing — it is gitignored. Recreate it as shown in step 4.                                                                                         |
+| Backend exits at startup with a schema error  | A migration was not run. Reload in the order in step 1.                                                                                                                                    |
+| `Communications link failure`                 | MySQL is not running. `brew services start mysql`                                                                                                                                          |
+| App shows a network error on every screen     | Backend is not running, or `.env` still points at `api.lovewanshisamaj.in` while EC2 is stopped. Check the `🔧 API Configuration` log Metro prints at startup — it shows the resolved URL. |
+| Network error on the emulator only            | URL says `localhost` instead of `10.0.2.2`. Fix `.env`, restart Metro with `--clear`.                                                                                                      |
+| `Cleartext HTTP traffic not permitted`        | A release build is being used against `http://`. Rebuild with `expo run:android` (debug).                                                                                                  |
+| Google button errors immediately              | `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID` is blank. Use email/password, or fill it in and rebuild.                                                                                                |
+| Emulator will not boot / "not enough space"   | Wipe data, above.                                                                                                                                                                          |
+| "System UI isn't responding" right after boot | Normal on the first cold boot after a data wipe — SystemUI is re-initializing. Tap **Wait**.                                                                                               |
+| Wrong password returns 500, not 401           | Known backend bug, see [PRD.md](PRD.md) known gaps. The login does reach the server.                                                                                                       |
+| Metro serves stale code                       | `npx expo start --clear`                                                                                                                                                                   |
+| Port 8080 already taken                       | `lsof -ti:8080 -sTCP:LISTEN \| xargs kill`. Keep `-sTCP:LISTEN` — without it `lsof` also matches _clients connected to_ 8080, so a running emulator gets killed along with the server.     |
 
 ---
 

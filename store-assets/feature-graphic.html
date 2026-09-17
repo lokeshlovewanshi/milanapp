@@ -1,83 +1,134 @@
 ﻿<!doctype html>
 <html>
-<head>
-<meta charset="utf-8">
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html, body { width: 1024px; height: 500px; overflow: hidden; }
-  body {
-    font-family: Georgia, "Iowan Old Style", "Palatino Linotype", Palatino, serif;
-    position: relative;
-    background: linear-gradient(135deg, #FCEEF1 0%, #FBE3E8 55%, #F7D6DD 100%);
-  }
-  .photo {
-    position: absolute;
-    left: 0; top: 0;
-    width: 430px; height: 500px;
-    overflow: hidden;
-  }
-  .photo img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-    object-position: 50% 22%;
-  }
-  .photo::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(90deg, rgba(0,0,0,0) 60%, rgba(251,227,232,0.95) 100%);
-  }
-  .content {
-    position: absolute;
-    left: 460px; top: 0;
-    width: 564px; height: 500px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding-right: 56px;
-  }
-  .rings { display: flex; align-items: center; margin-bottom: 22px; }
-  .ring {
-    width: 46px; height: 46px;
-    border: 4px solid #A41C2E;
-    border-radius: 50%;
-  }
-  .ring + .ring { margin-left: -16px; }
-  .word {
-    font-size: 66px;
-    color: #7B1220;
-    line-height: 1.02;
-    letter-spacing: -0.5px;
-  }
-  .rule {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin: 22px 0;
-  }
-  .rule .line { height: 1px; width: 64px; background: #C98A96; }
-  .rule .dot { width: 7px; height: 7px; border-radius: 50%; background: #A41C2E; }
-  .tag {
-    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
-    font-size: 24px;
-    color: #5B3A40;
-    font-weight: 400;
-  }
-  .tag.hi {
-    font-size: 20px;
-    color: #8A6169;
-    margin-top: 6px;
-  }
-</style>
-</head>
-<body>
-  <div class="photo"><img src="file:///Users/harshsijariya/Downloads/marriage-app-main 2/frontend/assets/images/auth-hero.jpg"></div>
-  <div class="content">
-    <div class="rings"><div class="ring"></div><div class="ring"></div></div>
-    <div class="word">LOVEWANSHI Milan</div>
-    <div class="rule"><div class="line"></div><div class="dot"></div><div class="line"></div></div>
-    <div class="tag">Find your perfect match with astrology</div>
-    <div class="tag hi">आपका जीवनसाथी खोजने का भरोसेमंद तरीका</div>
-  </div>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1024px;
+        height: 500px;
+        overflow: hidden;
+      }
+      body {
+        font-family:
+          Georgia, "Iowan Old Style", "Palatino Linotype", Palatino, serif;
+        position: relative;
+        background: linear-gradient(
+          135deg,
+          #fceef1 0%,
+          #fbe3e8 55%,
+          #f7d6dd 100%
+        );
+      }
+      .photo {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 430px;
+        height: 500px;
+        overflow: hidden;
+      }
+      .photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: 50% 22%;
+      }
+      .photo::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          90deg,
+          rgba(0, 0, 0, 0) 60%,
+          rgba(251, 227, 232, 0.95) 100%
+        );
+      }
+      .content {
+        position: absolute;
+        left: 460px;
+        top: 0;
+        width: 564px;
+        height: 500px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding-right: 56px;
+      }
+      .rings {
+        display: flex;
+        align-items: center;
+        margin-bottom: 22px;
+      }
+      .ring {
+        width: 46px;
+        height: 46px;
+        border: 4px solid #a41c2e;
+        border-radius: 50%;
+      }
+      .ring + .ring {
+        margin-left: -16px;
+      }
+      .word {
+        font-size: 66px;
+        color: #7b1220;
+        line-height: 1.02;
+        letter-spacing: -0.5px;
+      }
+      .rule {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin: 22px 0;
+      }
+      .rule .line {
+        height: 1px;
+        width: 64px;
+        background: #c98a96;
+      }
+      .rule .dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #a41c2e;
+      }
+      .tag {
+        font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+        font-size: 24px;
+        color: #5b3a40;
+        font-weight: 400;
+      }
+      .tag.hi {
+        font-size: 20px;
+        color: #8a6169;
+        margin-top: 6px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="photo">
+      <img
+        src="file:///Users/lokeshlovewanshi/Downloads/marriage-app-main 2/frontend/assets/images/auth-hero.jpg"
+      />
+    </div>
+    <div class="content">
+      <div class="rings">
+        <div class="ring"></div>
+        <div class="ring"></div>
+      </div>
+      <div class="word">LOVEWANSHI Milan</div>
+      <div class="rule">
+        <div class="line"></div>
+        <div class="dot"></div>
+        <div class="line"></div>
+      </div>
+      <div class="tag">Find your perfect match with astrology</div>
+      <div class="tag hi">आपका जीवनसाथी खोजने का भरोसेमंद तरीका</div>
+    </div>
+  </body>
 </html>

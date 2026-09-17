@@ -1,19 +1,18 @@
 ﻿# Deploying LOVEWANSHI Milan
 
-Everything below assumes `cd "/Users/harshsijariya/Downloads/marriage-app-main 2"`.
+Everything below assumes `cd "/Users/LokeshLovewanshi/Downloads/marriage-app-main 2"`.
 
 Your infrastructure is already created. What remains is: put the secrets in,
 load the database, point DNS, get a certificate, deploy, build the APK.
 
-| | |
-|---|---|
+|            |                                                                           |
+| ---------- | ------------------------------------------------------------------------- |
 | API server | `i-0b4ff76ecea727577` - address via `terraform output -raw api_public_ip` |
-| Database | `lovewanshi-milan-prod-db.chi6ik84i9qr.ap-south-1.rds.amazonaws.com` |
-| Domain | `api.lovewanshisamaj.in` |
-| Secret | `lovewanshi-milan/prod` |
+| Database   | `lovewanshi-milan-prod-db.chi6ik84i9qr.ap-south-1.rds.amazonaws.com`      |
+| Domain     | `api.lovewanshisamaj.in`                                                  |
+| Secret     | `lovewanshi-milan/prod`                                                   |
 
 ---
-
 
 > **The server address is not fixed.** It has changed several times, so these
 > commands use `$API_HOST` rather than a number that goes stale in the file.
@@ -29,7 +28,6 @@ load the database, point DNS, get a certificate, deploy, build the APK.
 > ```bash
 > cd terraform && ./allow-my-ip.sh
 > ```
-
 
 ## 1. Put the secrets in
 
@@ -62,7 +60,7 @@ RDS is private, so this runs from the EC2 box.
 ```bash
 scp -i ~/.ssh/lovewanshi-milan.pem \
   Dump20260725.sql \
-  backend/lovewanshi-milan-api-feature-h-sijariya/src/main/resources/db/*.sql \
+  backend/lovewanshi-milan-api-feature/src/main/resources/db/*.sql \
   ubuntu@$API_HOST:~
 
 ssh -i ~/.ssh/lovewanshi-milan.pem ubuntu@$API_HOST
@@ -96,9 +94,9 @@ that was not run.
 
 GoDaddy → **My Products → lovewanshisamaj.in → DNS → Add New Record**
 
-| Type | Name | Value | TTL |
-|---|---|---|---|
-| A | `api` | the Elastic IP - see below | 600 |
+| Type | Name  | Value                      | TTL |
+| ---- | ----- | -------------------------- | --- |
+| A    | `api` | the Elastic IP - see below | 600 |
 
 Take the value from Terraform rather than from this file, which has been wrong
 three times:
@@ -224,14 +222,14 @@ Deploying again is just a push to `main` touching `backend/**`.
 
 ## When something breaks
 
-| Symptom | Cause |
-|---|---|
-| App will not start | Missing migration (`ddl-auto=validate`), or a blank value in the secret. `journalctl -u lovewanshi-milan -n 100` |
-| `Could not read secret` | Instance role lost `secretsmanager:GetSecretValue`, or `SECRET_ID` is wrong in `/etc/lovewanshi-milan/lovewanshi-milan.env` |
-| 502 from nginx | Java is not listening. `systemctl status lovewanshi-milan` |
-| App cannot reach API | `eas.json` had the wrong URL at build time — rebuild |
-| Deploy stuck at Pending | SSM agent. `aws ssm describe-instance-information` |
-| Connection refused to RDS | Security group needs the EC2 group as source, not an IP |
+| Symptom                   | Cause                                                                                                                       |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| App will not start        | Missing migration (`ddl-auto=validate`), or a blank value in the secret. `journalctl -u lovewanshi-milan -n 100`            |
+| `Could not read secret`   | Instance role lost `secretsmanager:GetSecretValue`, or `SECRET_ID` is wrong in `/etc/lovewanshi-milan/lovewanshi-milan.env` |
+| 502 from nginx            | Java is not listening. `systemctl status lovewanshi-milan`                                                                  |
+| App cannot reach API      | `eas.json` had the wrong URL at build time — rebuild                                                                        |
+| Deploy stuck at Pending   | SSM agent. `aws ssm describe-instance-information`                                                                          |
+| Connection refused to RDS | Security group needs the EC2 group as source, not an IP                                                                     |
 
 ---
 

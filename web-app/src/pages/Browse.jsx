@@ -1,7 +1,12 @@
 ﻿import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { profileAPI, referenceAPI, likeAPI, shortlistAPI } from "../api";
-import { VerifiedBadge, HeartIcon, BookmarkIcon, Icon } from "../components/Icons";
+import {
+  VerifiedBadge,
+  HeartIcon,
+  BookmarkIcon,
+  Icon,
+} from "../components/Icons";
 import AvatarFallback from "../components/AvatarFallback";
 import TrustRow from "../components/TrustRow";
 import {
@@ -26,16 +31,14 @@ function calculateAge(dob) {
 function formatProfileCode(id) {
   if (!id) return "";
   const raw = String(id);
-  const digits = raw.startsWith("JM") || raw.startsWith("GM") ? raw.slice(2) : raw.padStart(5, "0");
+  const digits =
+    raw.startsWith("JM") || raw.startsWith("GM")
+      ? raw.slice(2)
+      : raw.padStart(5, "0");
   return `GM${digits}`;
 }
 
-const LOVEWANSHI_GOTRAS = [
-  "Katheriya", "Seth", "Mor", "Pahariya", "Piparsaniya", 
-  "Kharya", "Rawat", "Kasondhan", "Gupta", "Budholiya", 
-  "Nagariya", "Kankane", "Sijariya", "Nikhra", "Bhadan", 
-  "Taran", "Chudigar", "Kapasya", "Makhariya", "Goyal"
-];
+const LOVEWANSHI_GOTRAS = [];
 
 const EMPTY_FILTER = {
   ageFrom: "",
@@ -65,8 +68,11 @@ export default function Browse() {
   const [showFilterDrawer, setShowFilterDrawer] = useState(false);
 
   useEffect(() => {
-    referenceAPI.allOptions().then(setOptions).catch(() => {});
-    
+    referenceAPI
+      .allOptions()
+      .then(setOptions)
+      .catch(() => {});
+
     profileAPI
       .getMe()
       .then(setMyProfile)
@@ -109,7 +115,7 @@ export default function Browse() {
       setData((prev) => ({
         ...prev,
         content: (prev?.content || []).map((p) =>
-          p.id === profile.id ? { ...p, isShortlisted: !p.isShortlisted } : p
+          p.id === profile.id ? { ...p, isShortlisted: !p.isShortlisted } : p,
         ),
       }));
     } finally {
@@ -128,7 +134,9 @@ export default function Browse() {
       setData((prev) => ({
         ...prev,
         content: (prev?.content || []).map((p) =>
-          p.id === profile.id ? { ...p, isLiked: true, likeStatus: "PENDING" } : p
+          p.id === profile.id
+            ? { ...p, isLiked: true, likeStatus: "PENDING" }
+            : p,
         ),
       }));
     } catch (err) {
@@ -137,11 +145,16 @@ export default function Browse() {
         setData((prev) => ({
           ...prev,
           content: (prev?.content || []).map((p) =>
-            p.id === profile.id ? { ...p, isLiked: true, likeStatus: "PENDING" } : p
+            p.id === profile.id
+              ? { ...p, isLiked: true, likeStatus: "PENDING" }
+              : p,
           ),
         }));
       } else {
-        alert(err?.message || "Could not send connection request. Please try again.");
+        alert(
+          err?.message ||
+            "Could not send connection request. Please try again.",
+        );
       }
     } finally {
       setBusyId(null);
@@ -159,7 +172,7 @@ export default function Browse() {
       setData((prev) => ({
         ...prev,
         content: (prev?.content || []).map((p) =>
-          p.id === profile.id ? { ...p, isLiked: false, likeStatus: null } : p
+          p.id === profile.id ? { ...p, isLiked: false, likeStatus: null } : p,
         ),
       }));
     } catch (err) {
@@ -175,7 +188,10 @@ export default function Browse() {
       e.preventDefault();
       e.stopPropagation();
     }
-    const isLiked = profile.isLiked || profile.likeStatus === "PENDING" || profile.likeStatus === "ACCEPTED";
+    const isLiked =
+      profile.isLiked ||
+      profile.likeStatus === "PENDING" ||
+      profile.likeStatus === "ACCEPTED";
     if (isLiked) {
       await withdrawLike(profile, e);
     } else {
@@ -186,7 +202,10 @@ export default function Browse() {
   // Fallback options if reference endpoint is loading
   const maritalOptions = options.marital_status?.length
     ? options.marital_status
-    : Object.entries(MARITAL_STATUS_MAP).map(([code, label]) => ({ code, label }));
+    : Object.entries(MARITAL_STATUS_MAP).map(([code, label]) => ({
+        code,
+        label,
+      }));
 
   const manglikOptions = options.manglik?.length
     ? options.manglik
@@ -219,7 +238,11 @@ export default function Browse() {
               setPage(0);
             }}
           >
-            <HeartIcon size={16} filled={oppositeGender} color={oppositeGender ? "#FFFFFF" : "#E83A5B"} />
+            <HeartIcon
+              size={16}
+              filled={oppositeGender}
+              color={oppositeGender ? "#FFFFFF" : "#E83A5B"}
+            />
             <span>Matches for you</span>
           </button>
 
@@ -231,7 +254,11 @@ export default function Browse() {
               setPage(0);
             }}
           >
-            <Icon name="users" size={16} color={!oppositeGender ? "#FFFFFF" : "#667085"} />
+            <Icon
+              name="users"
+              size={16}
+              color={!oppositeGender ? "#FFFFFF" : "#667085"}
+            />
             <span>All Verified</span>
           </button>
 
@@ -240,9 +267,15 @@ export default function Browse() {
             className={`filter-chip-btn filter-trigger ${hasActiveFilters ? "has-active" : ""}`}
             onClick={() => setShowFilterDrawer(true)}
           >
-            <Icon name="filter" size={15} color={hasActiveFilters ? "#E83A5B" : "#667085"} />
+            <Icon
+              name="filter"
+              size={15}
+              color={hasActiveFilters ? "#E83A5B" : "#667085"}
+            />
             <span>Filter</span>
-            {activeFilterCount > 0 && <span className="filter-count-badge">{activeFilterCount}</span>}
+            {activeFilterCount > 0 && (
+              <span className="filter-count-badge">{activeFilterCount}</span>
+            )}
           </button>
         </div>
 
@@ -278,7 +311,9 @@ export default function Browse() {
       {loading && (
         <div className="discovery-loading-box">
           <div className="loading-spinner-ring" />
-          <p className="loading-spinner-text">Loading verified LOVEWANSHI matches...</p>
+          <p className="loading-spinner-text">
+            Loading verified LOVEWANSHI matches...
+          </p>
         </div>
       )}
 
@@ -287,9 +322,17 @@ export default function Browse() {
         <div className="discovery-empty-card">
           <Icon name="search" size={40} color="#E83A5B" />
           <h3>No matching profiles found</h3>
-          <p>Try relaxing your filters to discover more compatible community profiles.</p>
+          <p>
+            Try relaxing your filters to discover more compatible community
+            profiles.
+          </p>
           {hasActiveFilters && (
-            <button type="button" className="btn-connect-primary" onClick={clearFilters} style={{ maxWidth: 200, margin: "0 auto" }}>
+            <button
+              type="button"
+              className="btn-connect-primary"
+              onClick={clearFilters}
+              style={{ maxWidth: 200, margin: "0 auto" }}
+            >
               Reset Filters
             </button>
           )}
@@ -303,7 +346,10 @@ export default function Browse() {
             const age = calculateAge(p.dateOfBirth);
             const code = formatProfileCode(p.id);
             const isMine = p.isMine || (myProfile && p.id === myProfile.id);
-            const isLiked = p.isLiked || p.likeStatus === "ACCEPTED" || p.likeStatus === "PENDING";
+            const isLiked =
+              p.isLiked ||
+              p.likeStatus === "ACCEPTED" ||
+              p.likeStatus === "PENDING";
             const isConnected = p.likeStatus === "ACCEPTED";
             const isShortlisted = p.isShortlisted;
 
@@ -312,14 +358,22 @@ export default function Browse() {
             const educationFormatted = formatEducation(p.education);
             const gotraLabel = p.gotra || "LOVEWANSHI";
             const photoSrc = p.profileImageFull || p.profileImage || p.imageUrl;
-            const locationText = [p.city || p.presentAddress, p.state].filter(Boolean).join(", ") || "India";
+            const locationText =
+              [p.city || p.presentAddress, p.state]
+                .filter(Boolean)
+                .join(", ") || "India";
 
             return (
               <div className="matrimony-profile-card" key={p.id}>
                 {/* Photo Frame Container */}
                 <Link to={`/profiles/${p.id}`} className="card-photo-container">
                   {photoSrc ? (
-                    <img src={photoSrc} alt={p.name} className="card-photo-img" loading="lazy" />
+                    <img
+                      src={photoSrc}
+                      alt={p.name}
+                      className="card-photo-img"
+                      loading="lazy"
+                    />
                   ) : (
                     <AvatarFallback profile={p} name={p.name} size={360} />
                   )}
@@ -333,7 +387,11 @@ export default function Browse() {
                       type="button"
                       className="card-bookmark-btn"
                       onClick={(e) => toggleShortlist(p, e)}
-                      title={isShortlisted ? "Remove from shortlist" : "Add to shortlist"}
+                      title={
+                        isShortlisted
+                          ? "Remove from shortlist"
+                          : "Add to shortlist"
+                      }
                       disabled={busyId === p.id}
                     >
                       <BookmarkIcon
@@ -347,9 +405,23 @@ export default function Browse() {
                   {/* Bottom-Left: Verified LOVEWANSHI Member Badge */}
                   <div className="card-verified-tag">
                     <span className="verified-blue-shield">
-                      <svg width="15" height="15" viewBox="0 0 20 20" fill="none">
-                        <path d="M10 1L12.5 3.5H16V7L18.5 9.5L16 12V15.5H12.5L10 18L7.5 15.5H4V12L1.5 9.5L4 7V3.5H7.5L10 1Z" fill="#2563EB" />
-                        <path d="M6.5 9.5L9 12L13.5 7.5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      <svg
+                        width="15"
+                        height="15"
+                        viewBox="0 0 20 20"
+                        fill="none"
+                      >
+                        <path
+                          d="M10 1L12.5 3.5H16V7L18.5 9.5L16 12V15.5H12.5L10 18L7.5 15.5H4V12L1.5 9.5L4 7V3.5H7.5L10 1Z"
+                          fill="#2563EB"
+                        />
+                        <path
+                          d="M6.5 9.5L9 12L13.5 7.5"
+                          stroke="white"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
                       </svg>
                     </span>
                     <span>Verified LOVEWANSHI Member</span>
@@ -359,13 +431,18 @@ export default function Browse() {
                 {/* Card Details Body */}
                 <div className="card-details-box">
                   <div className="card-name-line">
-                    <Link to={`/profiles/${p.id}`} className="card-profile-name">
+                    <Link
+                      to={`/profiles/${p.id}`}
+                      className="card-profile-name"
+                    >
                       {p.name || "LOVEWANSHI Member"}
                     </Link>
                   </div>
 
                   <div className="card-vital-metrics">
-                    {[age ? `${age} Yrs` : "", heightFormatted].filter(Boolean).join(" • ")}
+                    {[age ? `${age} Yrs` : "", heightFormatted]
+                      .filter(Boolean)
+                      .join(" • ")}
                   </div>
 
                   <div className="card-gotra-pill">
@@ -375,9 +452,16 @@ export default function Browse() {
                     <span className="gotra-community">LOVEWANSHI</span>
                   </div>
 
-                  <div className="card-career-line" title={`${professionFormatted || ""} ${educationFormatted ? `• ${educationFormatted}` : ""}`}>
+                  <div
+                    className="card-career-line"
+                    title={`${professionFormatted || ""} ${educationFormatted ? `• ${educationFormatted}` : ""}`}
+                  >
                     <Icon name="briefcase" size={14} color="#667085" />
-                    <span>{[professionFormatted, educationFormatted].filter(Boolean).join(" • ") || "Details on request"}</span>
+                    <span>
+                      {[professionFormatted, educationFormatted]
+                        .filter(Boolean)
+                        .join(" • ") || "Details on request"}
+                    </span>
                   </div>
 
                   <div className="card-location-line">
@@ -428,7 +512,11 @@ export default function Browse() {
                       </button>
                     )}
 
-                    <Link to={`/profiles/${p.id}`} className="btn-next-arrow" title="View Full Biodata">
+                    <Link
+                      to={`/profiles/${p.id}`}
+                      className="btn-next-arrow"
+                      title="View Full Biodata"
+                    >
                       <Icon name="chevron-right" size={18} color="#E83A5B" />
                     </Link>
                   </div>
@@ -479,12 +567,22 @@ export default function Browse() {
 
       {/* 7. Clean Filter Slide-over Drawer */}
       {showFilterDrawer && (
-        <div className="filter-drawer-overlay" onClick={() => setShowFilterDrawer(false)}>
-          <div className="filter-drawer-panel" onClick={(e) => e.stopPropagation()}>
+        <div
+          className="filter-drawer-overlay"
+          onClick={() => setShowFilterDrawer(false)}
+        >
+          <div
+            className="filter-drawer-panel"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="filter-drawer-header">
-              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+              <div
+                style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
+              >
                 <Icon name="filter" size={18} color="#E83A5B" />
-                <h3 className="filter-drawer-title">Filter LOVEWANSHI Matches</h3>
+                <h3 className="filter-drawer-title">
+                  Filter LOVEWANSHI Matches
+                </h3>
               </div>
               <button
                 type="button"
@@ -503,11 +601,15 @@ export default function Browse() {
                 <select
                   className="filter-field-select"
                   value={filter.gotra}
-                  onChange={(e) => setFilter({ ...filter, gotra: e.target.value })}
+                  onChange={(e) =>
+                    setFilter({ ...filter, gotra: e.target.value })
+                  }
                 >
                   <option value="">All Gotras (सभी गोत्र)</option>
                   {LOVEWANSHI_GOTRAS.map((g) => (
-                    <option value={g} key={g}>{g}</option>
+                    <option value={g} key={g}>
+                      {g}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -515,7 +617,13 @@ export default function Browse() {
               {/* Age Range */}
               <div className="filter-field-block">
                 <label className="filter-field-label">Age Range (आयु)</label>
-                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                  }}
+                >
                   <input
                     type="number"
                     className="filter-field-input"
@@ -523,7 +631,9 @@ export default function Browse() {
                     max="80"
                     placeholder="Min (18)"
                     value={filter.ageFrom}
-                    onChange={(e) => setFilter({ ...filter, ageFrom: e.target.value })}
+                    onChange={(e) =>
+                      setFilter({ ...filter, ageFrom: e.target.value })
+                    }
                   />
                   <span style={{ color: "#667085" }}>to</span>
                   <input
@@ -533,7 +643,9 @@ export default function Browse() {
                     max="80"
                     placeholder="Max (60)"
                     value={filter.ageTo}
-                    onChange={(e) => setFilter({ ...filter, ageTo: e.target.value })}
+                    onChange={(e) =>
+                      setFilter({ ...filter, ageTo: e.target.value })
+                    }
                   />
                 </div>
               </div>
@@ -544,11 +656,15 @@ export default function Browse() {
                 <select
                   className="filter-field-select"
                   value={filter.heightFrom}
-                  onChange={(e) => setFilter({ ...filter, heightFrom: e.target.value })}
+                  onChange={(e) =>
+                    setFilter({ ...filter, heightFrom: e.target.value })
+                  }
                 >
                   <option value="">Any Height</option>
                   {heightOptions.map((o) => (
-                    <option value={o.code} key={o.code}>{o.label}</option>
+                    <option value={o.code} key={o.code}>
+                      {o.label}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -559,11 +675,15 @@ export default function Browse() {
                 <select
                   className="filter-field-select"
                   value={filter.education}
-                  onChange={(e) => setFilter({ ...filter, education: e.target.value })}
+                  onChange={(e) =>
+                    setFilter({ ...filter, education: e.target.value })
+                  }
                 >
                   <option value="">Any Education</option>
                   {educationOptions.map((o) => (
-                    <option value={o.code} key={o.code}>{o.label}</option>
+                    <option value={o.code} key={o.code}>
+                      {o.label}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -576,7 +696,9 @@ export default function Browse() {
                   className="filter-field-input"
                   placeholder="e.g. Software Engineer, Doctor, CA"
                   value={filter.profession}
-                  onChange={(e) => setFilter({ ...filter, profession: e.target.value })}
+                  onChange={(e) =>
+                    setFilter({ ...filter, profession: e.target.value })
+                  }
                 />
               </div>
 
@@ -586,11 +708,15 @@ export default function Browse() {
                 <select
                   className="filter-field-select"
                   value={filter.maritalStatus}
-                  onChange={(e) => setFilter({ ...filter, maritalStatus: e.target.value })}
+                  onChange={(e) =>
+                    setFilter({ ...filter, maritalStatus: e.target.value })
+                  }
                 >
                   <option value="">Any Status</option>
                   {maritalOptions.map((o) => (
-                    <option value={o.code} key={o.code}>{o.label}</option>
+                    <option value={o.code} key={o.code}>
+                      {o.label}
+                    </option>
                   ))}
                 </select>
               </div>

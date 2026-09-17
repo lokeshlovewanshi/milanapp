@@ -228,7 +228,7 @@ INSERT IGNORE INTO lookup_option (category, code, label, sort_order) VALUES
   ('employed_in', 'STUDENT', 'Student', 7);
 
 INSERT IGNORE INTO lookup_option (category, code, label, sort_order) VALUES
-  ('profession', 'SOFTWARE_ENGINEER', 'Software Engineer', 0),
+  ('profession', 'SOFTWARE_ENGINEER', 'Software Engineer', 1),
   ('profession', 'IT_CONSULTANT', 'IT / Software Consultant', 1),
   ('profession', 'DATA_SCIENTIST', 'Data Scientist / Analyst', 2),
   ('profession', 'HARDWARE_ENGINEER', 'Hardware / Network Engineer', 3),
@@ -260,7 +260,7 @@ INSERT IGNORE INTO lookup_option (category, code, label, sort_order) VALUES
   ('profession', 'INTERIOR_DESIGNER', 'Interior Designer', 29),
   ('profession', 'BUSINESSMAN', 'Business Owner / Entrepreneur', 30),
   ('profession', 'SHOPKEEPER', 'Shop / Retail Owner', 31),
-  ('profession', 'AGRICULTURE', 'Agriculture / Farming', 32),
+  ('profession', 'AGRICULTURE', 'Agriculture / Farming', 0),
   ('profession', 'REAL_ESTATE', 'Real Estate', 33),
   ('profession', 'MARKETING', 'Sales / Marketing Professional', 34),
   ('profession', 'HR', 'Human Resources', 35),

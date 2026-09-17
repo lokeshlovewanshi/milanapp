@@ -97,7 +97,7 @@
             "description": "Registers a new user account and returns the initial JWT token",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Harsh Sijariya\",\n  \"email\": \"harsh@example.com\",\n  \"mobileNo\": \"9876543210\",\n  \"password\": \"Password@123\"\n}",
+              "raw": "{\n  \"name\": \"Lokesh Lovewanshi\",\n  \"email\": \"lokeshLovewanshi98@example.com\",\n  \"mobileNo\": \"9876543210\",\n  \"password\": \"Password@123\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -141,7 +141,7 @@
             "description": "Authenticates with email and password. Automatically stores returned token in {{token}}",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"harsh@example.com\",\n  \"password\": \"Password@123\"\n}",
+              "raw": "{\n  \"email\": \"Lokesh@example.com\",\n  \"password\": \"Password@123\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -229,7 +229,7 @@
             "description": "Reactivates a previously soft-deleted account upon verifying credentials",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"harsh@example.com\",\n  \"password\": \"Password@123\"\n}",
+              "raw": "{\n  \"email\": \"Lokesh@example.com\",\n  \"password\": \"Password@123\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -335,7 +335,7 @@
             "description": "Sends a 6-digit one-time code to the given email address. Purpose: VERIFY_EMAIL or RESET_PASSWORD",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"harsh@example.com\",\n  \"purpose\": \"VERIFY_EMAIL\"\n}",
+              "raw": "{\n  \"email\": \"Lokesh@example.com\",\n  \"purpose\": \"VERIFY_EMAIL\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -362,7 +362,7 @@
             "description": "Confirms email address ownership using the 6-digit code",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"harsh@example.com\",\n  \"code\": \"123456\",\n  \"purpose\": \"VERIFY_EMAIL\"\n}",
+              "raw": "{\n  \"email\": \"Lokesh@example.com\",\n  \"code\": \"123456\",\n  \"purpose\": \"VERIFY_EMAIL\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -389,7 +389,7 @@
             "description": "Sets a new password directly by verifying the one-time code",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"harsh@example.com\",\n  \"code\": \"123456\",\n  \"newPassword\": \"NewPassword@123\"\n}",
+              "raw": "{\n  \"email\": \"Lokesh@example.com\",\n  \"code\": \"123456\",\n  \"newPassword\": \"NewPassword@123\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -456,7 +456,7 @@
             "description": "First-time profile setup after initial signup",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"gender\": \"Male\",\n  \"profileCreatedBy\": \"Self\",\n  \"name\": \"Harsh Sijariya\",\n  \"mobileNo\": \"9876543210\",\n  \"dateOfBirth\": \"1998-05-15T00:00:00\",\n  \"aakna\": \"Kankane\",\n  \"country\": \"India\",\n  \"state\": \"Madhya Pradesh\",\n  \"city\": \"Jhansi\"\n}",
+              "raw": "{\n  \"gender\": \"Male\",\n  \"profileCreatedBy\": \"Self\",\n  \"name\": \"Lokesh Lovewnashi\",\n  \"mobileNo\": \"9876543210\",\n  \"dateOfBirth\": \"1998-05-15T00:00:00\",\n  \"aakna\": \"Kankane\",\n  \"country\": \"India\",\n  \"state\": \"Madhya Pradesh\",\n  \"city\": \"Jhansi\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -487,7 +487,7 @@
             "description": "Updates any profile fields for the authenticated member",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Harsh Sijariya\",\n  \"gender\": \"Male\",\n  \"maritalStatus\": \"NEVER_MARRIED\",\n  \"dateOfBirth\": \"1998-05-15T00:00:00\",\n  \"height\": \"H_58\",\n  \"weight\": 70,\n  \"complexion\": \"Fair\",\n  \"bloodGroup\": \"O_POS\",\n  \"diet\": \"VEGETARIAN\",\n  \"disability\": \"None\",\n  \"gotra\": \"Kashyap\",\n  \"aakna\": \"Kankane\",\n  \"motherTongue\": \"Hindi\",\n  \"country\": \"India\",\n  \"state\": \"Madhya Pradesh\",\n  \"city\": \"Jhansi\",\n  \"education\": \"B_TECH\",\n  \"educationDetails\": \"Computer Science & Engineering\",\n  \"profession\": \"SOFTWARE_ENG\",\n  \"organization\": \"Tech Corp\",\n  \"annualIncome\": \"INR_15_20_LPA\",\n  \"workCity\": \"Bangalore\",\n  \"fathersName\": \"R. K. Sijariya\",\n  \"fathersOccupation\": \"Business\",\n  \"mothersName\": \"Mrs. Sijariya\",\n  \"mothersOccupation\": \"Homemaker\",\n  \"aboutMyself\": \"Software professional looking for an educated and understanding life partner.\",\n  \"partnerPreferences\": \"Educated girl from LOVEWANSHI Vaishya family.\"\n}",
+              "raw": "{\n  \"name\": \"Lokesh Lovewnashi\",\n  \"gender\": \"Male\",\n  \"maritalStatus\": \"NEVER_MARRIED\",\n  \"dateOfBirth\": \"1998-05-15T00:00:00\",\n  \"height\": \"H_58\",\n  \"weight\": 70,\n  \"complexion\": \"Fair\",\n  \"bloodGroup\": \"O_POS\",\n  \"diet\": \"VEGETARIAN\",\n  \"disability\": \"None\",\n  \"gotra\": \"Kashyap\",\n  \"aakna\": \"Kankane\",\n  \"motherTongue\": \"Hindi\",\n  \"country\": \"India\",\n  \"state\": \"Madhya Pradesh\",\n  \"city\": \"Jhansi\",\n  \"education\": \"B_TECH\",\n  \"educationDetails\": \"Computer Science & Engineering\",\n  \"profession\": \"SOFTWARE_ENG\",\n  \"organization\": \"Tech Corp\",\n  \"annualIncome\": \"INR_15_20_LPA\",\n  \"workCity\": \"Bangalore\",\n  \"fathersName\": \"R. K. Lovewnashi\",\n  \"fathersOccupation\": \"Business\",\n  \"mothersName\": \"Mrs. Lovewnashi\",\n  \"mothersOccupation\": \"Homemaker\",\n  \"aboutMyself\": \"Software professional looking for an educated and understanding life partner.\",\n  \"partnerPreferences\": \"Educated girl from LOVEWANSHI Vaishya family.\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -725,7 +725,7 @@
             "description": "",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Harsh Sijariya\",\n  \"gender\": \"Male\",\n  \"maritalStatus\": \"NEVER_MARRIED\",\n  \"dateOfBirth\": \"1998-05-15T00:00:00\",\n  \"height\": \"H_58\",\n  \"weight\": 70,\n  \"complexion\": \"Fair\",\n  \"bloodGroup\": \"O_POS\",\n  \"diet\": \"VEGETARIAN\",\n  \"disability\": \"None\",\n  \"profileCreatedBy\": \"Self\"\n}",
+              "raw": "{\n  \"name\": \"Lokesh Lovewnashi\",\n  \"gender\": \"Male\",\n  \"maritalStatus\": \"NEVER_MARRIED\",\n  \"dateOfBirth\": \"1998-05-15T00:00:00\",\n  \"height\": \"H_58\",\n  \"weight\": 70,\n  \"complexion\": \"Fair\",\n  \"bloodGroup\": \"O_POS\",\n  \"diet\": \"VEGETARIAN\",\n  \"disability\": \"None\",\n  \"profileCreatedBy\": \"Self\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -921,7 +921,7 @@
             "description": "",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"fathersName\": \"R. K. Sijariya\",\n  \"fathersOccupation\": \"Businessman\",\n  \"fathersContactNo\": \"9876500000\",\n  \"mothersName\": \"Mrs. Sijariya\",\n  \"mothersOccupation\": \"Homemaker\",\n  \"marriedBrothers\": 0,\n  \"unmarriedBrothers\": 1,\n  \"marriedSisters\": 1,\n  \"unmarriedSisters\": 0,\n  \"maternalUnclesName\": \"Mr. Gupta\",\n  \"maternalUnclesGotra\": \"Kankane\",\n  \"houseStatus\": \"Own House\",\n  \"carStatus\": \"Own Car\",\n  \"aboutMyself\": \"Friendly and ambitious professional.\",\n  \"partnerPreferences\": \"Educated girl from respectable family.\"\n}",
+              "raw": "{\n  \"fathersName\": \"R. K. Lovewnashi\",\n  \"fathersOccupation\": \"Businessman\",\n  \"fathersContactNo\": \"9876500000\",\n  \"mothersName\": \"Mrs. Lovewnashi\",\n  \"mothersOccupation\": \"Homemaker\",\n  \"marriedBrothers\": 0,\n  \"unmarriedBrothers\": 1,\n  \"marriedSisters\": 1,\n  \"unmarriedSisters\": 0,\n  \"maternalUnclesName\": \"Mr. Gupta\",\n  \"maternalUnclesGotra\": \"Kankane\",\n  \"houseStatus\": \"Own House\",\n  \"carStatus\": \"Own Car\",\n  \"aboutMyself\": \"Friendly and ambitious professional.\",\n  \"partnerPreferences\": \"Educated girl from respectable family.\"\n}",
               "options": {
                 "raw": {
                   "language": "json"

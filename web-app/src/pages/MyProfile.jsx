@@ -83,28 +83,7 @@ const MOTHER_TONGUE_OPTIONS = [
   { code: "Other", label: "Other / अन्य" },
 ];
 
-const GOTRA_OPTIONS = [
-  { code: "Katheriya", label: "Katheriya (कठेरिया)" },
-  { code: "Seth", label: "Seth (सेठ)" },
-  { code: "Mor", label: "Mor (मोर)" },
-  { code: "Pahariya", label: "Pahariya (पहाड़िया)" },
-  { code: "Piparsaniya", label: "Piparsaniya (पिपरसानिया)" },
-  { code: "Kharya", label: "Kharya / Khare (खरे / खर्या)" },
-  { code: "Rawat", label: "Rawat (रावत)" },
-  { code: "Kasondhan", label: "Kasondhan (कासोधन)" },
-  { code: "Gupta", label: "Gupta (गुप्ता)" },
-  { code: "Budholiya", label: "Budholiya (बुधोलिया)" },
-  { code: "Nagariya", label: "Nagariya (नगरिया)" },
-  { code: "Kankane", label: "Kankane (कंकने)" },
-  { code: "Sijariya", label: "Sijariya (सिजरिया)" },
-  { code: "Nikhra", label: "Nikhra (निखरा)" },
-  { code: "Bhadan", label: "Bhadan (भाड़न)" },
-  { code: "Taran", label: "Taran (तारन)" },
-  { code: "Chudigar", label: "Chudigar (चूड़ीगार)" },
-  { code: "Kapasya", label: "Kapasya (कपास्या)" },
-  { code: "Makhariya", label: "Makhariya (मखरिया)" },
-  { code: "Goyal", label: "Goyal (गोयल)" },
-];
+const GOTRA_OPTIONS = [];
 
 const ZODIAC_OPTIONS = [
   { code: "Mesha", label: "Mesha / मेष (Aries)" },

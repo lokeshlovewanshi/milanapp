@@ -63,7 +63,7 @@ means that IP.
 
 ```bash
 # Build the jar locally
-cd backend/lovewanshi-milan-api-feature-h-sijariya
+cd backend/lovewanshi-milan-api-feature
 ./gradlew bootJar
 
 # Ship it and your real app.properties secrets (Firebase, JWT, mail, Google OAuth)

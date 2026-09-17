@@ -13,7 +13,7 @@ import socket
 import subprocess
 
 REPO_ROOT = os.path.dirname(os.path.abspath(__file__))
-BACKEND_DIR = os.path.join(REPO_ROOT, "backend", "lovewanshi-milan-api-feature-h-sijariya")
+BACKEND_DIR = os.path.join(REPO_ROOT, "backend", "lovewanshi-milan-api-feature")
 ENV_FILE = os.path.join(REPO_ROOT, ".env")
 
 def load_env(path):

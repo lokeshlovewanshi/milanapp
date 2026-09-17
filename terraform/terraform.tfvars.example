@@ -24,7 +24,7 @@ instance_type = "t3.small"
 
 
 s3_photo_bucket   = "lovewanshi-milan-photos"
-github_repository = "harshsijariya/milanapp"
+github_repository = "lokeshlovewanshi/milanapp"
 github_branch     = "main"
 
 # Set false if this AWS account already has a GitHub OIDC provider.
