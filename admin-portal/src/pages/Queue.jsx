@@ -71,19 +71,13 @@ export default function Queue() {
                 name: updated.name ?? p.name,
                 gender: updated.gender ?? p.gender,
                 mobileNo: updated.mobileNo ?? updated.mobileNumber ?? p.mobileNo,
-                mobileNo:
-                  updated.mobileNo ?? updated.mobileNumber ?? p.mobileNo,
                 email: updated.email ?? p.email,
               }
             : p
-            : p,
         ),
       };
     });
     setActionMessage(`✓ Profile "${updated.name || updated.id}" updated successfully.`);
-    setActionMessage(
-      `✓ Profile "${updated.name || updated.id}" updated successfully.`,
-    );
     setTimeout(() => setActionMessage(null), 4000);
   }
 
@@ -102,48 +96,32 @@ export default function Queue() {
 
   return (
     <div>
-      <div className="page-header" style={{ marginBottom: "1.25rem" }}>
       <div className="page-header">
         <div>
           <h1 style={{ margin: "0 0 0.25rem 0" }}>User Monitoring &amp; Verification Queue</h1>
-          <h1 style={{ margin: "0 0 0.25rem 0" }}>
-            User Monitoring &amp; Verification Queue
-          </h1>
           <p className="muted" style={{ margin: 0 }}>
             Newly registered profiles waiting for approval (Sorted newest first).
-            Newly registered profiles waiting for approval (Sorted newest
-            first).
           </p>
         </div>
 
-        <div style={{ display: "flex", gap: "0.75rem", alignItems: "center" }}>
         <div className="page-header-actions">
           <Link to="/profiles/new">
             <button type="button" className="primary small">
               ➕ Create Profile
             </button>
           </Link>
-          <div className="view-toggle" style={{ display: "flex", background: "#E5E7EB", borderRadius: "6px", padding: "2px" }}>
           <div className="view-toggle">
             <button
               type="button"
               className={viewMode === "table" ? "small primary" : "small secondary"}
-              className={
-                viewMode === "table" ? "small primary" : "small secondary"
-              }
               onClick={() => setViewMode("table")}
-              style={{ padding: "0.3rem 0.75rem", borderRadius: "4px" }}
             >
               📊 Monitoring List
             </button>
             <button
               type="button"
               className={viewMode === "grid" ? "small primary" : "small secondary"}
-              className={
-                viewMode === "grid" ? "small primary" : "small secondary"
-              }
               onClick={() => setViewMode("grid")}
-              style={{ padding: "0.3rem 0.75rem", borderRadius: "4px" }}
             >
               🗂️ Cards View
             </button>
@@ -152,14 +130,12 @@ export default function Queue() {
       </div>
 
       {actionMessage && (
-        <div className="success-banner" style={{ marginBottom: "1rem" }}>
+        <div className="success-banner">
           {actionMessage}
         </div>
       )}
-      {actionMessage && <div className="success-banner">{actionMessage}</div>}
 
       {/* Filter Bar */}
-      <div style={{ display: "flex", gap: "1rem", marginBottom: "1rem", alignItems: "center" }}>
       <div className="filter-bar">
         <input
           type="text"
@@ -167,13 +143,9 @@ export default function Queue() {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="input-field"
-          style={{ maxWidth: "360px", padding: "0.5rem 0.75rem" }}
         />
         <span className="muted small">
           {data ? `${filteredList.length} of ${data.totalElements || list.length} pending profiles` : ""}
-          {data
-            ? `${filteredList.length} of ${data.totalElements || list.length} pending profiles`
-            : ""}
         </span>
       </div>
 
@@ -182,20 +154,11 @@ export default function Queue() {
       {!loading && filteredList.length === 0 && (
         <div className="card" style={{ padding: "2.5rem", textAlign: "center", color: "#6B7280" }}>
           {searchTerm ? "No pending profiles match your filter." : "🎉 Great job! The verification queue is currently empty."}
-        <div
-          className="card"
-          style={{ padding: "2.5rem", textAlign: "center", color: "#6B7280" }}
-        >
-          {searchTerm
-            ? "No pending profiles match your filter."
-            : "🎉 Great job! The verification queue is currently empty."}
         </div>
       )}
 
       {/* 1. Monitoring Table View */}
       {!loading && viewMode === "table" && filteredList.length > 0 && (
-        <div className="card" style={{ padding: 0, overflowX: "auto" }}>
-          <table className="data-table" style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
         <div className="table-container">
           <table className="data-table">
             <thead>
@@ -207,84 +170,6 @@ export default function Queue() {
                 <th style={{ padding: "0.75rem 1rem", fontWeight: "600", fontSize: "0.85rem", color: "#374151" }}>Registered</th>
                 <th style={{ padding: "0.75rem 1rem", fontWeight: "600", fontSize: "0.85rem", color: "#374151", textAlign: "center" }}>Reach / Contact</th>
                 <th style={{ padding: "0.75rem 1rem", fontWeight: "600", fontSize: "0.85rem", color: "#374151", textAlign: "center" }}>Actions</th>
-              <tr
-                style={{
-                  background: "#F9FAFB",
-                  borderBottom: "1px solid #E5E7EB",
-                }}
-              >
-                <th
-                  style={{
-                    padding: "0.75rem 1rem",
-                    fontWeight: "600",
-                    fontSize: "0.85rem",
-                    color: "#374151",
-                  }}
-                >
-                  ID
-                </th>
-                <th
-                  style={{
-                    padding: "0.75rem 1rem",
-                    fontWeight: "600",
-                    fontSize: "0.85rem",
-                    color: "#374151",
-                  }}
-                >
-                  Name
-                </th>
-                <th
-                  style={{
-                    padding: "0.75rem 1rem",
-                    fontWeight: "600",
-                    fontSize: "0.85rem",
-                    color: "#374151",
-                  }}
-                >
-                  Mobile No
-                </th>
-                <th
-                  style={{
-                    padding: "0.75rem 1rem",
-                    fontWeight: "600",
-                    fontSize: "0.85rem",
-                    color: "#374151",
-                  }}
-                >
-                  Is Photo
-                </th>
-                <th
-                  style={{
-                    padding: "0.75rem 1rem",
-                    fontWeight: "600",
-                    fontSize: "0.85rem",
-                    color: "#374151",
-                  }}
-                >
-                  Registered
-                </th>
-                <th
-                  style={{
-                    padding: "0.75rem 1rem",
-                    fontWeight: "600",
-                    fontSize: "0.85rem",
-                    color: "#374151",
-                    textAlign: "center",
-                  }}
-                >
-                  Reach / Contact
-                </th>
-                <th
-                  style={{
-                    padding: "0.75rem 1rem",
-                    fontWeight: "600",
-                    fontSize: "0.85rem",
-                    color: "#374151",
-                    textAlign: "center",
-                  }}
-                >
-                  Actions
-                </th>
               </tr>
             </thead>
             <tbody>
@@ -292,23 +177,9 @@ export default function Queue() {
                 const hasPhoto = Boolean(p.isPhoto || p.profileImage);
                 return (
                   <tr key={p.id} style={{ borderBottom: "1px solid #F3F4F6", transition: "background 0.15s" }}>
-                  <tr
-                    key={p.id}
-                    style={{
-                      borderBottom: "1px solid #F3F4F6",
-                      transition: "background 0.15s",
-                    }}
-                  >
                     {/* ID */}
                     <td style={{ padding: "0.85rem 1rem", whiteSpace: "nowrap" }}>
                       <Link to={`/profiles/${p.id}`} style={{ fontWeight: "600", color: "#A5122F" }}>
-                    <td
-                      style={{ padding: "0.85rem 1rem", whiteSpace: "nowrap" }}
-                    >
-                      <Link
-                        to={`/profiles/${p.id}`}
-                        style={{ fontWeight: "600", color: "#A5122F" }}
-                      >
                         {p.displayId || `GM${String(p.id).padStart(5, "0")}`}
                       </Link>
                     </td>
@@ -317,21 +188,6 @@ export default function Queue() {
                     <td style={{ padding: "0.85rem 1rem" }}>
                       <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
                         <Link to={`/profiles/${p.id}`} style={{ fontWeight: "500", color: "#111827", textDecoration: "none" }}>
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "0.6rem",
-                        }}
-                      >
-                        <Link
-                          to={`/profiles/${p.id}`}
-                          style={{
-                            fontWeight: "500",
-                            color: "#111827",
-                            textDecoration: "none",
-                          }}
-                        >
                           {p.name || "(No name)"}
                         </Link>
                         {p.gender && (
@@ -342,14 +198,6 @@ export default function Queue() {
                               borderRadius: "10px",
                               background: p.gender.toLowerCase() === "female" ? "#FCE7F3" : "#E0E7FF",
                               color: p.gender.toLowerCase() === "female" ? "#9D174D" : "#3730A3",
-                              background:
-                                p.gender.toLowerCase() === "female"
-                                  ? "#FCE7F3"
-                                  : "#E0E7FF",
-                              color:
-                                p.gender.toLowerCase() === "female"
-                                  ? "#9D174D"
-                                  : "#3730A3",
                               fontWeight: "600",
                             }}
                           >
@@ -357,40 +205,19 @@ export default function Queue() {
                           </span>
                         )}
                         {p.blocked && <span className="badge badge-blocked">Blocked</span>}
-                        {p.blocked && (
-                          <span className="badge badge-blocked">Blocked</span>
-                        )}
                       </div>
                       {p.email && <div className="muted small">{p.email}</div>}
                     </td>
 
                     {/* Mobile No */}
                     <td style={{ padding: "0.85rem 1rem", whiteSpace: "nowrap", fontFamily: "monospace", fontSize: "0.9rem" }}>
-                    <td
-                      style={{
-                        padding: "0.85rem 1rem",
-                        whiteSpace: "nowrap",
-                        fontFamily: "monospace",
-                        fontSize: "0.9rem",
-                      }}
-                    >
                       {p.mobileNo || <span className="muted">-</span>}
                     </td>
 
                     {/* Is Photo */}
                     <td style={{ padding: "0.85rem 1rem", whiteSpace: "nowrap" }}>
-                    <td
-                      style={{ padding: "0.85rem 1rem", whiteSpace: "nowrap" }}
-                    >
                       {hasPhoto ? (
                         <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "0.5rem",
-                          }}
-                        >
                           <img
                             src={p.profileImage || "/placeholder.svg"}
                             alt=""
@@ -433,34 +260,12 @@ export default function Queue() {
 
                     {/* Registered */}
                     <td style={{ padding: "0.85rem 1rem", whiteSpace: "nowrap", color: "#4B5563", fontSize: "0.85rem" }}>
-                    <td
-                      style={{
-                        padding: "0.85rem 1rem",
-                        whiteSpace: "nowrap",
-                        color: "#4B5563",
-                        fontSize: "0.85rem",
-                      }}
-                    >
                       {timeAgo(p.createdAt)}
                     </td>
 
                     {/* Reach / Contact Options */}
                     <td style={{ padding: "0.85rem 1rem", textAlign: "center", whiteSpace: "nowrap" }}>
                       <div style={{ display: "inline-flex", gap: "0.4rem", alignItems: "center" }}>
-                    <td
-                      style={{
-                        padding: "0.85rem 1rem",
-                        textAlign: "center",
-                        whiteSpace: "nowrap",
-                      }}
-                    >
-                      <div
-                        style={{
-                          display: "inline-flex",
-                          gap: "0.4rem",
-                          alignItems: "center",
-                        }}
-                      >
                         <button
                           type="button"
                           onClick={() => setContactingProfile(p)}
@@ -529,20 +334,6 @@ export default function Queue() {
                     {/* Last Column: Actions (Edit & Verify) */}
                     <td style={{ padding: "0.85rem 1rem", textAlign: "center", whiteSpace: "nowrap" }}>
                       <div style={{ display: "inline-flex", gap: "0.35rem", alignItems: "center" }}>
-                    <td
-                      style={{
-                        padding: "0.85rem 1rem",
-                        textAlign: "center",
-                        whiteSpace: "nowrap",
-                      }}
-                    >
-                      <div
-                        style={{
-                          display: "inline-flex",
-                          gap: "0.35rem",
-                          alignItems: "center",
-                        }}
-                      >
                         <button
                           type="button"
                           onClick={() => setEditingProfileId(p.id)}
@@ -612,26 +403,13 @@ export default function Queue() {
                     {p.name || "(no name)"}
                   </Link>
                   {p.blocked && <span className="badge badge-blocked">Blocked</span>}
-                  {p.blocked && (
-                    <span className="badge badge-blocked">Blocked</span>
-                  )}
                   <div className="muted">{p.displayId}</div>
                   <div className="muted">{p.gender}</div>
                   <div className="muted small">Mobile: {p.mobileNo || "-"}</div>
                   <div className="muted small">Photo: {hasPhoto ? "✓ Yes" : "❌ No"}</div>
-                  <div className="muted small">
-                    Photo: {hasPhoto ? "✓ Yes" : "❌ No"}
-                  </div>
                   <div className="muted small">{timeAgo(p.createdAt)}</div>
                 </div>
                 <div style={{ display: "flex", gap: "0.4rem", marginTop: "0.4rem" }}>
-                <div
-                  style={{
-                    display: "flex",
-                    gap: "0.4rem",
-                    marginTop: "0.4rem",
-                  }}
-                >
                   <button
                     type="button"
                     onClick={() => setContactingProfile(p)}
@@ -670,13 +448,6 @@ export default function Queue() {
                   )}
                 </div>
                 <div style={{ display: "flex", gap: "0.4rem", marginTop: "0.4rem" }}>
-                <div
-                  style={{
-                    display: "flex",
-                    gap: "0.4rem",
-                    marginTop: "0.4rem",
-                  }}
-                >
                   <button
                     type="button"
                     onClick={() => setEditingProfileId(p.id)}

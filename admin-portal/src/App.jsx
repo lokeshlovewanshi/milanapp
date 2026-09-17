@@ -1,13 +1,5 @@
 import { useState } from "react";
-import {
-  Navigate,
-  Route,
-  Routes,
-  NavLink,
-  Link,
-  useNavigate,
-  useLocation,
-} from "react-router-dom";
+import { Navigate, Route, Routes, NavLink, Link, useNavigate, useLocation } from "react-router-dom";
 import Login from "./pages/Login";
 import Queue from "./pages/Queue";
 import ProfileDetail from "./pages/ProfileDetail";
@@ -62,60 +54,28 @@ function Layout({ children }) {
         </div>
 
         <div className={`topnav-links ${mobileOpen ? "open" : ""}`}>
-          <NavLink
-            to="/queue"
-            onClick={closeMenu}
-            className={({ isActive }) => (isActive ? "active" : "")}
-          >
+          <NavLink to="/queue" onClick={closeMenu} className={({ isActive }) => (isActive ? "active" : "")}>
             📊 Queue &amp; Monitoring
           </NavLink>
-          <NavLink
-            to="/verified"
-            onClick={closeMenu}
-            className={({ isActive }) => (isActive ? "active" : "")}
-          >
+          <NavLink to="/verified" onClick={closeMenu} className={({ isActive }) => (isActive ? "active" : "")}>
             ✅ Verified Profiles
           </NavLink>
-          <NavLink
-            to="/outreach"
-            onClick={closeMenu}
-            className={({ isActive }) => (isActive ? "active" : "")}
-          >
+          <NavLink to="/outreach" onClick={closeMenu} className={({ isActive }) => (isActive ? "active" : "")}>
             💬 Send Message
           </NavLink>
-          <NavLink
-            to="/profiles/new"
-            onClick={closeMenu}
-            className={({ isActive }) => (isActive ? "active" : "")}
-          >
+          <NavLink to="/profiles/new" onClick={closeMenu} className={({ isActive }) => (isActive ? "active" : "")}>
             ➕ Create Profile
           </NavLink>
-          <NavLink
-            to="/plans"
-            onClick={closeMenu}
-            className={({ isActive }) => (isActive ? "active" : "")}
-          >
+          <NavLink to="/plans" onClick={closeMenu} className={({ isActive }) => (isActive ? "active" : "")}>
             💳 Plans &amp; Offers
           </NavLink>
-          <NavLink
-            to="/featured"
-            onClick={closeMenu}
-            className={({ isActive }) => (isActive ? "active" : "")}
-          >
+          <NavLink to="/featured" onClick={closeMenu} className={({ isActive }) => (isActive ? "active" : "")}>
             ⭐ Highlighted
           </NavLink>
-          <NavLink
-            to="/broadcast"
-            onClick={closeMenu}
-            className={({ isActive }) => (isActive ? "active" : "")}
-          >
+          <NavLink to="/broadcast" onClick={closeMenu} className={({ isActive }) => (isActive ? "active" : "")}>
             📢 Notifications
           </NavLink>
-          <NavLink
-            to="/tickets"
-            onClick={closeMenu}
-            className={({ isActive }) => (isActive ? "active" : "")}
-          >
+          <NavLink to="/tickets" onClick={closeMenu} className={({ isActive }) => (isActive ? "active" : "")}>
             🎫 Support Tickets
           </NavLink>
 
@@ -177,7 +137,6 @@ export default function App() {
           </RequireAuth>
         }
       />
-      <Route path="/message" element={<Navigate to="/outreach" replace />} />
       <Route
         path="/message"
         element={<Navigate to="/outreach" replace />}
@@ -202,7 +161,6 @@ export default function App() {
           </RequireAuth>
         }
       />
-      <Route path="/monitoring" element={<Navigate to="/queue" replace />} />
       <Route
         path="/monitoring"
         element={<Navigate to="/queue" replace />}

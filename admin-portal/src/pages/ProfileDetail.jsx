@@ -588,8 +588,6 @@ export default function ProfileDetail() {
         }}
       >
         <Link to="/queue" className="back-link">
-      <div className="page-header">
-        <Link to="/queue" className="back-link" style={{ marginBottom: 0 }}>
           &larr; Back to Verification Queue
         </Link>
         <div
@@ -600,7 +598,6 @@ export default function ProfileDetail() {
             alignItems: "center",
           }}
         >
-        <div className="page-header-actions">
           <button
             type="button"
             onClick={() => setShowContactModal(true)}

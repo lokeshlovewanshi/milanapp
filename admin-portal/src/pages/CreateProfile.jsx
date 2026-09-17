@@ -217,7 +217,6 @@ export default function CreateProfile() {
 
   return (
     <div style={{ maxWidth: "880px", margin: "0 auto" }}>
-    <div style={{ maxWidth: "880px", margin: "0 auto", width: "100%" }}>
       <div style={{ marginBottom: "1rem" }}>
         <Link to="/queue" className="back-link">
           &larr; Back to Verification Queue
@@ -225,7 +224,6 @@ export default function CreateProfile() {
       </div>
 
       <div className="card" style={{ padding: "2rem" }}>
-      <div className="card">
         <div
           style={{
             borderBottom: "1px solid #E5E7EB",
@@ -259,7 +257,6 @@ export default function CreateProfile() {
                 gap: "1rem",
               }}
             >
-            <div className="form-grid">
               <label>
                 Full Name <span style={{ color: "#DC2626" }}>*</span>
                 <input
@@ -411,7 +408,6 @@ export default function CreateProfile() {
                 gap: "1rem",
               }}
             >
-            <div className="form-grid">
               <label>
                 Gender <span style={{ color: "#DC2626" }}>*</span>
                 <select
@@ -553,7 +549,6 @@ export default function CreateProfile() {
                 gap: "1rem",
               }}
             >
-            <div className="form-grid">
               <label>
                 State
                 <select
@@ -651,7 +646,6 @@ export default function CreateProfile() {
                 gap: "1rem",
               }}
             >
-            <div className="form-grid">
               <label>
                 Gotra
                 <select
@@ -741,7 +735,6 @@ export default function CreateProfile() {
                 gap: "1rem",
               }}
             >
-            <div className="form-grid">
               <label>
                 Highest Education
                 <select
@@ -840,7 +833,6 @@ export default function CreateProfile() {
                 gap: "1rem",
               }}
             >
-            <div className="form-grid">
               <label>
                 Father's Name
                 <input

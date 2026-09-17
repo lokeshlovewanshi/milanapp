@@ -83,9 +83,6 @@ export default function BroadcastNotifications() {
     setTargetUserId(String(user.id));
     setSearchResults([]);
     setUserSearchQuery(`${user.name || "Member"} (${user.displayId || user.id})`);
-    setUserSearchQuery(
-      `${user.name || "Member"} (${user.displayId || user.id})`,
-    );
   }
 
   async function handleSend(e) {
@@ -121,10 +118,6 @@ export default function BroadcastNotifications() {
           saveToFeed: saveToFeed,
         });
         setMessage(res?.message || "🎉 Broadcast push notification sent successfully to all users!");
-        setMessage(
-          res?.message ||
-            "🎉 Broadcast push notification sent successfully to all users!",
-        );
       } else {
         const uid = parseInt(targetUserId, 10);
         const res = await api.sendSingleUserNotification({
@@ -136,7 +129,6 @@ export default function BroadcastNotifications() {
         setMessage(
           res?.message ||
             `🎉 Push notification sent successfully to ${selectedUser?.name ? selectedUser.name : `User #${uid}`}!`
-            `🎉 Push notification sent successfully to ${selectedUser?.name ? selectedUser.name : `User #${uid}`}!`,
         );
       }
       setShowConfirm(false);
@@ -154,21 +146,11 @@ export default function BroadcastNotifications() {
           <h2>📢 Notifications Center</h2>
           <p className="muted" style={{ margin: 0 }}>
             Send real-time mobile push notifications (FCM) and in-app bell announcements to members.
-            Send real-time mobile push notifications (FCM) and in-app bell
-            announcements to members.
           </p>
         </div>
 
         {/* Tab switcher */}
         <div style={{ display: "flex", background: "#E5E7EB", borderRadius: "8px", padding: "4px" }}>
-        <div
-          style={{
-            display: "flex",
-            background: "#E5E7EB",
-            borderRadius: "8px",
-            padding: "4px",
-          }}
-        >
           <button
             type="button"
             className={activeTab === "broadcast" ? "primary" : "secondary"}
@@ -178,11 +160,6 @@ export default function BroadcastNotifications() {
               setMessage(null);
             }}
             style={{ borderRadius: "6px", padding: "0.5rem 1rem", fontSize: "0.9rem" }}
-            style={{
-              borderRadius: "6px",
-              padding: "0.5rem 1rem",
-              fontSize: "0.9rem",
-            }}
           >
             📢 Broadcast to All
           </button>
@@ -195,11 +172,6 @@ export default function BroadcastNotifications() {
               setMessage(null);
             }}
             style={{ borderRadius: "6px", padding: "0.5rem 1rem", fontSize: "0.9rem" }}
-            style={{
-              borderRadius: "6px",
-              padding: "0.5rem 1rem",
-              fontSize: "0.9rem",
-            }}
           >
             👤 Send to Single User
           </button>
@@ -208,23 +180,10 @@ export default function BroadcastNotifications() {
 
       {message && <div className="success-banner" style={{ marginBottom: "1rem" }}>{message}</div>}
       {error && <div className="error-banner" style={{ marginBottom: "1rem" }}>{error}</div>}
-      {message && (
-        <div className="success-banner" style={{ marginBottom: "1rem" }}>
-          {message}
-        </div>
-      )}
-      {error && (
-        <div className="error-banner" style={{ marginBottom: "1rem" }}>
-          {error}
-        </div>
-      )}
 
       {/* Preset Quick Select */}
       <div className="card" style={{ marginBottom: "1.5rem" }}>
         <h3 style={{ margin: "0 0 0.75rem 0", fontSize: "1rem" }}>⚡ Quick Message Templates</h3>
-        <h3 style={{ margin: "0 0 0.75rem 0", fontSize: "1rem" }}>
-          ⚡ Quick Message Templates
-        </h3>
         <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
           {PRESETS.map((p, i) => (
             <button
@@ -240,7 +199,6 @@ export default function BroadcastNotifications() {
         </div>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 340px", gap: "1.5rem", alignItems: "start" }}>
       <div className="broadcast-layout">
         {/* Form Column */}
         <div className="card">
@@ -261,13 +219,6 @@ export default function BroadcastNotifications() {
                 }}
               >
                 <label style={{ display: "block", fontWeight: "600", marginBottom: "0.4rem" }}>
-                <label
-                  style={{
-                    display: "block",
-                    fontWeight: "600",
-                    marginBottom: "0.4rem",
-                  }}
-                >
                   Target Member <span style={{ color: "#DC2626" }}>*</span>
                 </label>
                 <div style={{ position: "relative" }}>
@@ -287,15 +238,6 @@ export default function BroadcastNotifications() {
                   />
                   {searchingUser && (
                     <div style={{ position: "absolute", right: "12px", top: "10px", fontSize: "0.8rem", color: "#6B7280" }}>
-                    <div
-                      style={{
-                        position: "absolute",
-                        right: "12px",
-                        top: "10px",
-                        fontSize: "0.8rem",
-                        color: "#6B7280",
-                      }}
-                    >
                       Searching...
                     </div>
                   )}
@@ -332,38 +274,16 @@ export default function BroadcastNotifications() {
                           }}
                           onMouseEnter={(e) => (e.currentTarget.style.background = "#F3F4F6")}
                           onMouseLeave={(e) => (e.currentTarget.style.background = "#FFFFFF")}
-                          onMouseEnter={(e) =>
-                            (e.currentTarget.style.background = "#F3F4F6")
-                          }
-                          onMouseLeave={(e) =>
-                            (e.currentTarget.style.background = "#FFFFFF")
-                          }
                         >
                           <img
                             src={u.profileImage || "/placeholder.svg"}
                             alt=""
                             style={{ width: "30px", height: "30px", borderRadius: "50%", objectFit: "cover" }}
-                            style={{
-                              width: "30px",
-                              height: "30px",
-                              borderRadius: "50%",
-                              objectFit: "cover",
-                            }}
                           />
                           <div>
                             <div style={{ fontWeight: "600", fontSize: "0.9rem" }}>{u.name || "Member"}</div>
                             <div style={{ fontSize: "0.78rem", color: "#6B7280" }}>
                               {u.displayId} | {u.mobileNo || u.email || `ID: ${u.id}`}
-                            <div
-                              style={{ fontWeight: "600", fontSize: "0.9rem" }}
-                            >
-                              {u.name || "Member"}
-                            </div>
-                            <div
-                              style={{ fontSize: "0.78rem", color: "#6B7280" }}
-                            >
-                              {u.displayId} |{" "}
-                              {u.mobileNo || u.email || `ID: ${u.id}`}
                             </div>
                           </div>
                         </div>
@@ -389,22 +309,11 @@ export default function BroadcastNotifications() {
                       src={selectedUser.profileImage || "/placeholder.svg"}
                       alt=""
                       style={{ width: "36px", height: "36px", borderRadius: "50%", objectFit: "cover" }}
-                      style={{
-                        width: "36px",
-                        height: "36px",
-                        borderRadius: "50%",
-                        objectFit: "cover",
-                      }}
                     />
                     <div style={{ flex: 1 }}>
                       <div style={{ fontWeight: "600", color: "#065F46" }}>{selectedUser.name}</div>
-                      <div style={{ fontWeight: "600", color: "#065F46" }}>
-                        {selectedUser.name}
-                      </div>
                       <div style={{ fontSize: "0.8rem", color: "#047857" }}>
                         ID: {selectedUser.displayId} | Mobile: {selectedUser.mobileNo || "N/A"}
-                        ID: {selectedUser.displayId} | Mobile:{" "}
-                        {selectedUser.mobileNo || "N/A"}
                       </div>
                     </div>
                     <button
@@ -426,13 +335,6 @@ export default function BroadcastNotifications() {
 
             <div className="form-group" style={{ marginBottom: "1.2rem" }}>
               <label style={{ display: "block", fontWeight: "600", marginBottom: "0.4rem" }}>
-              <label
-                style={{
-                  display: "block",
-                  fontWeight: "600",
-                  marginBottom: "0.4rem",
-                }}
-              >
                 Notification Title <span style={{ color: "#DC2626" }}>*</span>
               </label>
               <input
@@ -449,15 +351,6 @@ export default function BroadcastNotifications() {
             <div className="form-group" style={{ marginBottom: "1.2rem" }}>
               <label style={{ display: "block", fontWeight: "600", marginBottom: "0.4rem" }}>
                 Notification Message Body <span style={{ color: "#DC2626" }}>*</span>
-              <label
-                style={{
-                  display: "block",
-                  fontWeight: "600",
-                  marginBottom: "0.4rem",
-                }}
-              >
-                Notification Message Body{" "}
-                <span style={{ color: "#DC2626" }}>*</span>
               </label>
               <textarea
                 className="input-field"
@@ -467,35 +360,19 @@ export default function BroadcastNotifications() {
                 onChange={(e) => setBody(e.target.value)}
                 required
                 style={{ width: "100%", padding: "0.65rem 0.85rem", resize: "vertical" }}
-                style={{
-                  width: "100%",
-                  padding: "0.65rem 0.85rem",
-                  resize: "vertical",
-                }}
               />
             </div>
 
             <div
               className="form-grid"
               style={{
-                display: "grid",
-                gridTemplateColumns: activeTab === "broadcast" ? "1fr 1fr" : "1fr",
-                gap: "1rem",
-                gridTemplateColumns:
-                  activeTab === "broadcast" ? undefined : "1fr",
+                gridTemplateColumns: activeTab === "broadcast" ? undefined : "1fr",
                 marginBottom: "1.2rem",
               }}
             >
               {activeTab === "broadcast" && (
                 <div>
                   <label style={{ display: "block", fontWeight: "600", marginBottom: "0.4rem" }}>
-                  <label
-                    style={{
-                      display: "block",
-                      fontWeight: "600",
-                      marginBottom: "0.4rem",
-                    }}
-                  >
                     Target Topic Audience
                   </label>
                   <select
@@ -505,9 +382,6 @@ export default function BroadcastNotifications() {
                     style={{ width: "100%", padding: "0.65rem 0.85rem" }}
                   >
                     <option value="all-users">📢 All Registered Users (Default)</option>
-                    <option value="all-users">
-                      📢 All Registered Users (Default)
-                    </option>
                     <option value="android">📱 Android App Users</option>
                     <option value="ios">🍎 iOS App Users</option>
                   </select>
@@ -516,13 +390,6 @@ export default function BroadcastNotifications() {
 
               <div>
                 <label style={{ display: "block", fontWeight: "600", marginBottom: "0.4rem" }}>
-                <label
-                  style={{
-                    display: "block",
-                    fontWeight: "600",
-                    marginBottom: "0.4rem",
-                  }}
-                >
                   In-App Deep Link (Optional)
                 </label>
                 <input
@@ -538,14 +405,6 @@ export default function BroadcastNotifications() {
 
             {activeTab === "broadcast" && (
               <div style={{ marginBottom: "1.5rem", display: "flex", alignItems: "center", gap: "0.6rem" }}>
-              <div
-                style={{
-                  marginBottom: "1.5rem",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "0.6rem",
-                }}
-              >
                 <input
                   type="checkbox"
                   id="saveToFeed"
@@ -554,14 +413,6 @@ export default function BroadcastNotifications() {
                   style={{ width: "18px", height: "18px", cursor: "pointer" }}
                 />
                 <label htmlFor="saveToFeed" style={{ cursor: "pointer", fontWeight: "500", fontSize: "0.92rem" }}>
-                <label
-                  htmlFor="saveToFeed"
-                  style={{
-                    cursor: "pointer",
-                    fontWeight: "500",
-                    fontSize: "0.92rem",
-                  }}
-                >
                   Also save to user in-app Notification Feed (Bell icon)
                 </label>
               </div>
@@ -583,8 +434,6 @@ export default function BroadcastNotifications() {
                 : activeTab === "broadcast"
                 ? "🚀 Send Broadcast Notification Now"
                 : "🚀 Send Push Notification to User"}
-                  ? "🚀 Send Broadcast Notification Now"
-                  : "🚀 Send Push Notification to User"}
             </button>
           </form>
         </div>
@@ -593,15 +442,6 @@ export default function BroadcastNotifications() {
         <div>
           <div className="card">
             <h3 style={{ margin: "0 0 1rem 0", fontSize: "1rem", color: "#374151" }}>📱 Mobile Lockscreen Preview</h3>
-            <h3
-              style={{
-                margin: "0 0 1rem 0",
-                fontSize: "1rem",
-                color: "#374151",
-              }}
-            >
-              📱 Mobile Lockscreen Preview
-            </h3>
 
             <div
               style={{
@@ -613,14 +453,6 @@ export default function BroadcastNotifications() {
               }}
             >
               <div style={{ fontSize: "0.75rem", opacity: 0.7, marginBottom: "0.75rem", textAlign: "center" }}>
-              <div
-                style={{
-                  fontSize: "0.75rem",
-                  opacity: 0.7,
-                  marginBottom: "0.75rem",
-                  textAlign: "center",
-                }}
-              >
                 Lovewanshi Parinay Push Notification
               </div>
 
@@ -634,14 +466,6 @@ export default function BroadcastNotifications() {
                 }}
               >
                 <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.35rem" }}>
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.5rem",
-                    marginBottom: "0.35rem",
-                  }}
-                >
                   <div
                     style={{
                       width: "20px",
@@ -660,35 +484,9 @@ export default function BroadcastNotifications() {
                   </div>
                   <span style={{ fontSize: "0.8rem", fontWeight: "600", opacity: 0.9 }}>Lovewanshi Parinay</span>
                   <span style={{ fontSize: "0.7rem", opacity: 0.5, marginLeft: "auto" }}>now</span>
-                  <span
-                    style={{
-                      fontSize: "0.8rem",
-                      fontWeight: "600",
-                      opacity: 0.9,
-                    }}
-                  >
-                    Lovewanshi Parinay
-                  </span>
-                  <span
-                    style={{
-                      fontSize: "0.7rem",
-                      opacity: 0.5,
-                      marginLeft: "auto",
-                    }}
-                  >
-                    now
-                  </span>
                 </div>
 
                 <div style={{ fontWeight: "700", fontSize: "0.92rem", marginBottom: "0.2rem", color: "#FFFFFF" }}>
-                <div
-                  style={{
-                    fontWeight: "700",
-                    fontSize: "0.92rem",
-                    marginBottom: "0.2rem",
-                    color: "#FFFFFF",
-                  }}
-                >
                   {title || "Notification Title Header"}
                 </div>
 
@@ -701,39 +499,15 @@ export default function BroadcastNotifications() {
                   }}
                 >
                   {body || "Your message text will appear right here on user's phone."}
-                  {body ||
-                    "Your message text will appear right here on user's phone."}
                 </div>
               </div>
             </div>
 
             <div style={{ marginTop: "1.2rem", fontSize: "0.82rem", color: "#6B7280", lineHeight: "1.4" }}>
-            <div
-              style={{
-                marginTop: "1.2rem",
-                fontSize: "0.82rem",
-                color: "#6B7280",
-                lineHeight: "1.4",
-              }}
-            >
               {activeTab === "broadcast" ? (
                 <>💡 <strong>Note:</strong> Sending delivers a real-time FCM push notification to all active devices subscribed to <code>{topic}</code>.</>
-                <>
-                  💡 <strong>Note:</strong> Sending delivers a real-time FCM
-                  push notification to all active devices subscribed to{" "}
-                  <code>{topic}</code>.
-                </>
               ) : (
                 <>💡 <strong>Note:</strong> Delivers directly to {selectedUser ? <strong>{selectedUser.name}</strong> : "the target user's"} device and records in their bell notification feed.</>
-                <>
-                  💡 <strong>Note:</strong> Delivers directly to{" "}
-                  {selectedUser ? (
-                    <strong>{selectedUser.name}</strong>
-                  ) : (
-                    "the target user's"
-                  )}{" "}
-                  device and records in their bell notification feed.
-                </>
               )}
             </div>
           </div>
@@ -755,83 +529,27 @@ export default function BroadcastNotifications() {
           }}
         >
           <div className="card" style={{ maxWidth: "450px", width: "100%", padding: "1.5rem" }}>
-          <div
-            className="card"
-            style={{ maxWidth: "450px", width: "100%", padding: "1.5rem" }}
-          >
             <h3 style={{ margin: "0 0 0.5rem 0", color: "#991B1B" }}>
               ⚠️ Confirm {activeTab === "broadcast" ? "Broadcast" : "Direct Push"}
-              ⚠️ Confirm{" "}
-              {activeTab === "broadcast" ? "Broadcast" : "Direct Push"}
             </h3>
             <p style={{ fontSize: "0.92rem", color: "#374151", marginBottom: "1rem" }}>
-            <p
-              style={{
-                fontSize: "0.92rem",
-                color: "#374151",
-                marginBottom: "1rem",
-              }}
-            >
               {activeTab === "broadcast" ? (
                 <>Are you sure you want to broadcast this notification to <strong>ALL users</strong>?</>
-                <>
-                  Are you sure you want to broadcast this notification to{" "}
-                  <strong>ALL users</strong>?
-                </>
               ) : (
                 <>Are you sure you want to send this notification to <strong>{selectedUser?.name || `User #${targetUserId}`}</strong>?</>
-                <>
-                  Are you sure you want to send this notification to{" "}
-                  <strong>
-                    {selectedUser?.name || `User #${targetUserId}`}
-                  </strong>
-                  ?
-                </>
               )}
             </p>
 
             <div style={{ background: "#F3F4F6", padding: "0.75rem 1rem", borderRadius: "8px", marginBottom: "1.2rem" }}>
               <div style={{ fontWeight: "700", marginBottom: "0.25rem" }}>{title}</div>
               <div style={{ fontSize: "0.85rem", color: "#4B5563" }}>{body}</div>
-            <div
-              style={{
-                background: "#F3F4F6",
-                padding: "0.75rem 1rem",
-                borderRadius: "8px",
-                marginBottom: "1.2rem",
-              }}
-            >
-              <div style={{ fontWeight: "700", marginBottom: "0.25rem" }}>
-                {title}
-              </div>
-              <div style={{ fontSize: "0.85rem", color: "#4B5563" }}>
-                {body}
-              </div>
             </div>
 
             <div style={{ display: "flex", gap: "0.75rem", justifyContent: "flex-end" }}>
               <button type="button" className="secondary" onClick={() => setShowConfirm(false)}>
-            <div
-              style={{
-                display: "flex",
-                gap: "0.75rem",
-                justifyContent: "flex-end",
-              }}
-            >
-              <button
-                type="button"
-                className="secondary"
-                onClick={() => setShowConfirm(false)}
-              >
                 Cancel
               </button>
               <button type="button" className="primary" onClick={handleSend} disabled={loading}>
-              <button
-                type="button"
-                className="primary"
-                onClick={handleSend}
-                disabled={loading}
-              >
                 {loading ? "Sending..." : "Yes, Send Now"}
               </button>
             </div>
