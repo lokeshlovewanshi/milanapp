@@ -13,6 +13,8 @@ import java.security.Signature;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.time.Instant;
 import java.util.Base64;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * Signs CloudFront URLs for member photos.
@@ -83,6 +85,16 @@ public class CloudFrontUrlSigner {
 
     private PrivateKey privateKey;
 
+    /**
+     * A new signed URL has a different query string even when it represents
+     * the same immutable photo. Reusing it until shortly before expiry lets
+     * mobile disk caches recognise the URL and avoids signing/serving the same
+     * image again after every pull-to-refresh.
+     */
+    private final ConcurrentMap<String, CachedUrl> signedUrlCache = new ConcurrentHashMap<>();
+
+    private record CachedUrl(String value, long refreshAfterEpochSecond) {}
+
     @PostConstruct
     void init() {
         String pem = readKeyMaterial();
@@ -151,7 +163,13 @@ public class CloudFrontUrlSigner {
         }
 
         String url = "https://" + domain + "/" + objectKey;
-        long expires = Instant.now().getEpochSecond() + ttlSeconds;
+        long now = Instant.now().getEpochSecond();
+        CachedUrl cached = signedUrlCache.get(objectKey);
+        if (cached != null && cached.refreshAfterEpochSecond() > now) {
+            return cached.value();
+        }
+
+        long expires = now + ttlSeconds;
 
         // The canned policy. CloudFront rebuilds this exact string from the
         // Expires and Resource it receives, so the field order and the absence
@@ -167,9 +185,15 @@ public class CloudFrontUrlSigner {
 
             String signature = toCloudFrontBase64(Base64.getEncoder().encodeToString(rsa.sign()));
 
-            return url + "?Expires=" + expires
+            String signedUrl = url + "?Expires=" + expires
                     + "&Signature=" + signature
                     + "&Key-Pair-Id=" + keyPairId;
+            // Keep a safety margin so no caller receives a URL that expires
+            // while the image request is in flight. For the default one-hour
+            // URL this refreshes at 54 minutes.
+            long safetySeconds = Math.min(60, Math.max(1, ttlSeconds / 10));
+            signedUrlCache.put(objectKey, new CachedUrl(signedUrl, expires - safetySeconds));
+            return signedUrl;
         } catch (Exception e) {
             log.error("Failed to sign CloudFront URL for {}", objectKey, e);
             return null;

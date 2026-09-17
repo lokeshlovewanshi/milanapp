@@ -114,7 +114,9 @@ export default function PhotoCarousel({
       <FlatList
         ref={listRef}
         data={photos}
-        keyExtractor={(uri, i) => `${uri}-${i}`}
+        // A signing query can change without the photo changing. Keep cells
+        // mounted by their gallery position so a refresh does not flash them.
+        keyExtractor={(_uri, i) => `photo-${i}`}
         horizontal
         pagingEnabled
         showsHorizontalScrollIndicator={false}
@@ -235,7 +237,7 @@ function PhotoViewer({
         <FlatList
           ref={listRef}
           data={photos}
-          keyExtractor={(uri, i) => `full-${uri}-${i}`}
+          keyExtractor={(_uri, i) => `full-photo-${i}`}
           horizontal
           pagingEnabled
           decelerationRate="fast"

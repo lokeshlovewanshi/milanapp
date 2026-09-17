@@ -1,10 +1,10 @@
 import { useCallback, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useFocusEffect } from 'expo-router';
 import AvatarFallback from './AvatarFallback';
+import StableImage from './StableImage';
 import { storyAPI } from '../utils/api';
 import {
   colors,
@@ -47,19 +47,15 @@ export default function TopStories({
         .then((res) => {
           const raw = res.data?.content ?? res.data ?? [];
           const list = (Array.isArray(raw) ? raw : []).map(unwrapProfile);
-          if (alive) {
-            setProfiles(list.length > 0 ? list : fallbackProfiles);
-          }
+          if (alive && list.length > 0) setProfiles(list);
         })
-        .catch(() => {
-          if (alive) {
-            setProfiles(fallbackProfiles);
-          }
-        });
+        // The parent already supplies a current feed fallback. Do not replace
+        // it with a second request's newly-signed URLs on each Home rerender.
+        .catch(() => {});
       return () => {
         alive = false;
       };
-    }, [fallbackProfiles])
+    }, [])
   );
 
   const isMe = (p: Profile) => {
@@ -99,8 +95,8 @@ export default function TopStories({
         >
           <View style={styles.myAvatarWrap}>
             {myImage ? (
-              <Image
-                source={{ uri: myImage }}
+              <StableImage
+                uri={myImage}
                 style={styles.avatar}
                 contentFit="cover"
                 contentPosition="top"
@@ -145,8 +141,8 @@ export default function TopStories({
               >
                 <View style={styles.inset}>
                   {uri ? (
-                    <Image
-                      source={{ uri }}
+                    <StableImage
+                      uri={uri}
                       style={styles.avatar}
                       contentFit="cover"
                       contentPosition="top"

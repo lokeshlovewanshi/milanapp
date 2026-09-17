@@ -154,7 +154,6 @@ export default function HomeScreen() {
       setFeedError(error?.message || 'Failed to load feed');
     } finally {
       setLoading(false);
-      setRefreshing(false);
     }
 
     // Both rails are decoration around the feed, so they are fetched after it
@@ -208,6 +207,41 @@ export default function HomeScreen() {
       .catch(() => {});
   }, []);
 
+  /** Refreshes the signed-in member after an admin approval changes `verified`. */
+  const applyCurrentMember = useCallback((me: any) => {
+    setMyId(profileId(me) ?? me?.id ?? me?.userProfileId ?? me?.displayId ?? null);
+    setMyName(profileName(me));
+    setMyMemberId(profileCode(me));
+    setMyImage(profileImage(me));
+    setCompletion(Number(me?.profileCompletion ?? 0));
+    setIsVerified(me?.verified === true);
+
+    const filled = (v: any) => v !== null && v !== undefined && String(v).trim() !== '';
+    const basic =
+      filled(me.name) &&
+      filled(me.gender) &&
+      filled(me.dateOfBirth) &&
+      filled(me.maritalStatus) &&
+      filled(me.mobileNo);
+    const hasPhoto =
+      (me.profileImageDetails?.length ?? 0) > 0 ||
+      (me.profileImages?.length ?? 0) > 0 ||
+      filled(me.profileImage);
+
+    setBasicDone(basic);
+    setNeedsSetup(!basic || !hasPhoto);
+  }, []);
+
+  const refreshCurrentMember = useCallback(async () => {
+    try {
+      const res = await profileAPI.getMe();
+      applyCurrentMember(res.data ?? {});
+    } catch (error: any) {
+      console.log('Failed to refresh current profile:', error?.message);
+      setNeedsSetup(false);
+    }
+  }, [applyCurrentMember]);
+
   useEffect(() => {
     // 1. Instant cached feed display if available
     AsyncStorage.getItem('cached_feed_profiles')
@@ -226,36 +260,7 @@ export default function HomeScreen() {
 
     // 2. Fetch fresh feed and user details
     bootstrap();
-    profileAPI
-      .getMe()
-      .then((res) => {
-        const me = res.data ?? {};
-        setMyId(profileId(me) ?? me?.id ?? me?.userProfileId ?? me?.displayId ?? null);
-        setMyName(profileName(me));
-        setMyMemberId(profileCode(me));
-        setMyImage(profileImage(me));
-        setCompletion(Number(me?.profileCompletion ?? 0));
-        setIsVerified(me?.verified === true);
-
-        const filled = (v: any) => v !== null && v !== undefined && String(v).trim() !== '';
-        // Mirrors the required fields in sectionSchema's basic section - name,
-        // gender, date of birth, marital status, mobile number. Height is
-        // deliberately left out, same as there.
-        const basic =
-          filled(me.name) &&
-          filled(me.gender) &&
-          filled(me.dateOfBirth) &&
-          filled(me.maritalStatus) &&
-          filled(me.mobileNo);
-        const hasPhoto =
-          (me.profileImageDetails?.length ?? 0) > 0 ||
-          (me.profileImages?.length ?? 0) > 0 ||
-          filled(me.profileImage);
-
-        setBasicDone(basic);
-        setNeedsSetup(!basic || !hasPhoto);
-      })
-      .catch(() => setNeedsSetup(false));
+    refreshCurrentMember();
     AsyncStorage.getItem('user_data').catch(() => {});
 
     // Home is the first authenticated screen, so this is where the device
@@ -265,14 +270,23 @@ export default function HomeScreen() {
 
     // Bump the badge the moment a push lands while the app is open.
     return onNotificationReceived(refreshUnread);
-  }, [bootstrap, refreshUnread]);
+  }, [bootstrap, refreshCurrentMember, refreshUnread]);
 
   // Coming back from the notifications screen should clear the badge.
-  useFocusEffect(useCallback(() => refreshUnread(), [refreshUnread]));
+  useFocusEffect(
+    useCallback(() => {
+      refreshUnread();
+      refreshCurrentMember();
+    }, [refreshCurrentMember, refreshUnread]),
+  );
 
-  const onRefresh = () => {
+  const onRefresh = async () => {
     setRefreshing(true);
-    bootstrap();
+    try {
+      await Promise.all([bootstrap(), refreshCurrentMember(), refreshUnread()]);
+    } finally {
+      setRefreshing(false);
+    }
   };
 
   const onEndReached = async () => {
@@ -531,8 +545,8 @@ export default function HomeScreen() {
           data={profiles}
           keyExtractor={(item, index) => `${profileId(item) ?? 'p'}-${index}`}
           renderItem={renderFeedItem}
-          ListHeaderComponent={renderHeader}
-          ListFooterComponent={renderFooter}
+          ListHeaderComponent={renderHeader()}
+          ListFooterComponent={renderFooter()}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scroll}
           onEndReached={onEndReached}

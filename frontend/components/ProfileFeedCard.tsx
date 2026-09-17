@@ -229,7 +229,11 @@ function ProfileFeedCard({
           >
             {photos.map((photoUri, index) => (
               <TouchableOpacity
-                key={`${photoUri}-${index}`}
+                // Signed URLs gain a new query string on refresh. The photo's
+                // place in this ordered gallery is stable, while the URL is
+                // not; using the URL as the key unmounted and flashed every
+                // photo even when its bytes had not changed.
+                key={`photo-${index}`}
                 activeOpacity={1}
                 onPress={handlePhotoPress}
                 style={styles.photoTouchable}
