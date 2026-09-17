@@ -579,10 +579,27 @@ export default function ProfileDetail() {
 
   return (
     <div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "1rem",
+        }}
+      >
+        <Link to="/queue" className="back-link">
       <div className="page-header">
         <Link to="/queue" className="back-link" style={{ marginBottom: 0 }}>
           &larr; Back to Verification Queue
         </Link>
+        <div
+          style={{
+            display: "flex",
+            gap: "0.5rem",
+            flexWrap: "wrap",
+            alignItems: "center",
+          }}
+        >
         <div className="page-header-actions">
           <button
             type="button"

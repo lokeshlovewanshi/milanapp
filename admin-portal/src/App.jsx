@@ -179,6 +179,10 @@ export default function App() {
       />
       <Route path="/message" element={<Navigate to="/outreach" replace />} />
       <Route
+        path="/message"
+        element={<Navigate to="/outreach" replace />}
+      />
+      <Route
         path="/plans"
         element={
           <RequireAuth>
@@ -199,6 +203,10 @@ export default function App() {
         }
       />
       <Route path="/monitoring" element={<Navigate to="/queue" replace />} />
+      <Route
+        path="/monitoring"
+        element={<Navigate to="/queue" replace />}
+      />
       <Route
         path="/profiles/new"
         element={

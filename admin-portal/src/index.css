@@ -13,9 +13,7 @@
   --success-light: #dcfce7;
   --info: #2563eb;
   --info-light: #eff6ff;
-  --font:
-    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
-    sans-serif;
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 * {
@@ -46,9 +44,7 @@ button {
   align-items: center;
   justify-content: center;
   gap: 0.35rem;
-  transition:
-    background 0.15s ease,
-    transform 0.1s ease;
+  transition: background 0.15s ease, transform 0.1s ease;
   white-space: nowrap;
 }
 
@@ -112,9 +108,7 @@ textarea {
   color: var(--text);
   width: 100%;
   box-sizing: border-box;
-  transition:
-    border-color 0.15s ease,
-    box-shadow 0.15s ease;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 input:focus,
@@ -652,11 +646,9 @@ h1 {
 .plan-card {
   display: flex;
   flex-direction: column;
-  justifycontent: space-between;
+  justifyContent: space-between;
   border-width: 2px;
-  transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .plan-card:hover {

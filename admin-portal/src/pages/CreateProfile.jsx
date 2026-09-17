@@ -216,6 +216,7 @@ export default function CreateProfile() {
   }
 
   return (
+    <div style={{ maxWidth: "880px", margin: "0 auto" }}>
     <div style={{ maxWidth: "880px", margin: "0 auto", width: "100%" }}>
       <div style={{ marginBottom: "1rem" }}>
         <Link to="/queue" className="back-link">
@@ -223,6 +224,7 @@ export default function CreateProfile() {
         </Link>
       </div>
 
+      <div className="card" style={{ padding: "2rem" }}>
       <div className="card">
         <div
           style={{
@@ -250,6 +252,13 @@ export default function CreateProfile() {
           {/* Section 1: Account / Credentials */}
           <fieldset className="edit-section" style={{ marginBottom: "1.5rem" }}>
             <legend>1. Account &amp; Identity</legend>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: "1rem",
+              }}
+            >
             <div className="form-grid">
               <label>
                 Full Name <span style={{ color: "#DC2626" }}>*</span>
@@ -395,6 +404,13 @@ export default function CreateProfile() {
           {/* Section 3: Personal Details */}
           <fieldset className="edit-section" style={{ marginBottom: "1.5rem" }}>
             <legend>3. Personal Details</legend>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: "1rem",
+              }}
+            >
             <div className="form-grid">
               <label>
                 Gender <span style={{ color: "#DC2626" }}>*</span>
@@ -530,6 +546,13 @@ export default function CreateProfile() {
           {/* Section 4: Location & Contact */}
           <fieldset className="edit-section" style={{ marginBottom: "1.5rem" }}>
             <legend>4. Location &amp; Contact</legend>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: "1rem",
+              }}
+            >
             <div className="form-grid">
               <label>
                 State
@@ -621,6 +644,13 @@ export default function CreateProfile() {
           {/* Section 5: Religion & Astrology */}
           <fieldset className="edit-section" style={{ marginBottom: "1.5rem" }}>
             <legend>5. Religion &amp; Astrology</legend>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: "1rem",
+              }}
+            >
             <div className="form-grid">
               <label>
                 Gotra
@@ -704,6 +734,13 @@ export default function CreateProfile() {
           {/* Section 6: Education & Career */}
           <fieldset className="edit-section" style={{ marginBottom: "1.5rem" }}>
             <legend>6. Education &amp; Career</legend>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: "1rem",
+              }}
+            >
             <div className="form-grid">
               <label>
                 Highest Education
@@ -796,6 +833,13 @@ export default function CreateProfile() {
           {/* Section 7: Family Details & Assets */}
           <fieldset className="edit-section" style={{ marginBottom: "1.5rem" }}>
             <legend>7. Family &amp; Assets</legend>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: "1rem",
+              }}
+            >
             <div className="form-grid">
               <label>
                 Father's Name
