@@ -105,9 +105,9 @@ public class AuthenticationServiceImpl implements AuthenticationServiceInterface
                             new UsernamePasswordAuthenticationToken(input.getEmail(), input.getPassword())
                     );
 
-                    if (user.getDeletedAt() != null) {
+                    if (user.getDeletedAt() != null || Boolean.TRUE.equals(user.getBlocked())) {
                         throw new ClientException(HttpStatus.GONE,
-                                "This account was deleted. You can restore it.");
+                                "This account is unavailable. You can request restoration.");
                     }
 
                     return user;
@@ -124,12 +124,15 @@ public class AuthenticationServiceImpl implements AuthenticationServiceInterface
                 new UsernamePasswordAuthenticationToken(input.getEmail(), input.getPassword())
         );
 
-        if (user.getDeletedAt() == null) {
-            throw new ClientException(HttpStatus.CONFLICT, "This account was never deleted.");
+        if (user.getDeletedAt() == null && !Boolean.TRUE.equals(user.getBlocked())) {
+            throw new ClientException(HttpStatus.CONFLICT, "This account does not need restoration.");
         }
 
         user.setDeletedAt(null);
+        user.setBlocked(false);
         user.setHidden(false);
+        user.setVerified(false);
+        user.setStatus(Status.PENDING);
         return userRepository.save(user);
     }
 

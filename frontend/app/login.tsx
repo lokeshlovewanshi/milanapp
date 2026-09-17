@@ -63,13 +63,13 @@ export default function LoginScreen() {
     } catch (error: any) {
       console.error("Google Auth Error:", error);
 
-      // 410 Gone means the token verified fine but the account was deleted -
-      // same distinction /login makes, and the same self-service fix applies.
+      // 410 Gone means the account was deleted or blocked. Both states can be
+      // restored, but must return to admin review before becoming active.
       if (error.response?.status === 410) {
         setLoading(false);
         Alert.alert(
-          "Account deleted",
-          "This account was deleted. Would you like to restore it?",
+          "Account unavailable",
+          "This account was deleted or blocked. Restore it for admin review?",
           [
             { text: "Cancel", style: "cancel" },
             { text: "Restore my account", onPress: () => restoreGoogleAccount() },
@@ -138,13 +138,12 @@ export default function LoginScreen() {
     } catch (error: any) {
       console.error("Login Error:", error);
 
-      // 410 Gone means the password was correct but the account was deleted -
-      // a different situation from a wrong password, and one this person can
-      // fix themselves rather than being told to contact support.
+      // 410 Gone means the password was correct but the account is deleted or
+      // blocked. Restoration sends it back to admin review.
       if (error.response?.status === 410) {
         Alert.alert(
-          "Account deleted",
-          "This account was deleted. Would you like to restore it?",
+          "Account unavailable",
+          "This account was deleted or blocked. Restore it for admin review?",
           [
             { text: "Cancel", style: "cancel" },
             { text: "Restore my account", onPress: () => restoreAccount() },

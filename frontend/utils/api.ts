@@ -175,6 +175,10 @@ api.interceptors.response.use(
  */
 function isExpiredSession(error: any): boolean {
   const status = error?.response?.status;
+  // 410 Gone is the backend's explicit answer for an account that was
+  // soft-deleted. It is not a screen-level error the member can fix, so end
+  // the saved login session immediately.
+  if (status === 410) return true;
   if (status !== 401 && status !== 403) return false;
   if (status === 401) return true;
 
@@ -184,7 +188,8 @@ function isExpiredSession(error: any): boolean {
 }
 
 /**
- * Drop the dead session and send the user back to sign in.
+ * Drop an invalid, deleted-account, or blocked-account session and send the
+ * user back to sign in.
  *
  * Without this an expired token - which happens to everyone every 24h, since
  * security.jwt.expiration-time is 86400000 - left the app sitting on a screen
@@ -202,6 +207,8 @@ async function onSessionExpired(): Promise<void> {
   redirecting = true;
 
   try {
+    // This is logout only. It does not delete or alter the member's profile,
+    // photos, or any backend data; the server has already made that decision.
     await AsyncStorage.multiRemove(["auth_token", "token_expiry"]);
   } catch {
     // Storage failing here must not swallow the redirect - a user stuck on a

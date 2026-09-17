@@ -1,6 +1,7 @@
 package com.match.partner.common.filter;
 
 import com.match.partner.common.service.JwtServiceInterface;
+import com.match.partner.openapi.user.repository.UserProfileRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,19 +27,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final UserDetailsService userDetailsService;
     private final com.match.partner.openapi.user.service.TokenBlacklistService tokenBlacklistService;
     private final com.match.partner.common.service.UserPresenceService userPresenceService;
+    private final UserProfileRepository userProfileRepository;
 
     public JwtAuthenticationFilter(
             JwtServiceInterface jwtService,
             UserDetailsService userDetailsService,
             HandlerExceptionResolver handlerExceptionResolver,
             com.match.partner.openapi.user.service.TokenBlacklistService tokenBlacklistService,
-            com.match.partner.common.service.UserPresenceService userPresenceService
+            com.match.partner.common.service.UserPresenceService userPresenceService,
+            UserProfileRepository userProfileRepository
     ) {
         this.jwtService = jwtService;
         this.userDetailsService = userDetailsService;
         this.handlerExceptionResolver = handlerExceptionResolver;
         this.tokenBlacklistService = tokenBlacklistService;
         this.userPresenceService = userPresenceService;
+        this.userProfileRepository = userProfileRepository;
     }
 
     @Override
@@ -94,6 +98,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
 
             final String userEmail = jwtService.extractUsername(jwt);
+
+            // Admin deletion is a soft delete, and an admin block leaves the
+            // profile row intact. Neither state may keep a previously issued
+            // JWT signed in. Reject it before any controller can return data
+            // or accept a change; the mobile interceptor then logs out only
+            // this device session and sends the member to Login.
+            if (userEmail != null && userProfileRepository.findByEmail(userEmail)
+                    .map(profile -> profile.getDeletedAt() != null || Boolean.TRUE.equals(profile.getBlocked()))
+                    .orElse(true)) {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "This account has been deleted or blocked");
+                return;
+            }
 
             if (userEmail != null) {
                 userPresenceService.recordActive(userEmail);

@@ -143,9 +143,9 @@ public class AdminProfileService {
     }
 
     /**
-     * The account stays fully live - the owner can still sign in and use it
-     * normally - it just stops appearing to other members anywhere (browse,
-     * recent visitors, shortlist, likes, Connected). See UserProfile.blocked.
+     * Blocked accounts cannot keep an active session. If the member later
+     * requests restoration, the restore flow clears this flag and submits the
+     * profile for admin review again.
      */
     public AdminProfileSummaryDTO block(int id) {
         UserProfile profile = userProfileRepository.findById(id)

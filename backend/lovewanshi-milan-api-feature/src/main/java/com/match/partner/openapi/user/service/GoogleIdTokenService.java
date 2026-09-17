@@ -86,12 +86,15 @@ public class GoogleIdTokenService {
         UserProfile user = userProfileRepository.findByEmail(email)
                 .orElseThrow(() -> new ClientException(HttpStatus.NOT_FOUND, "No account for this Google email"));
 
-        if (user.getDeletedAt() == null) {
-            throw new ClientException(HttpStatus.CONFLICT, "This account was never deleted.");
+        if (user.getDeletedAt() == null && !Boolean.TRUE.equals(user.getBlocked())) {
+            throw new ClientException(HttpStatus.CONFLICT, "This account does not need restoration.");
         }
 
         user.setDeletedAt(null);
+        user.setBlocked(false);
         user.setHidden(false);
+        user.setVerified(false);
+        user.setStatus(Status.PENDING);
         return userProfileRepository.save(user);
     }
 
@@ -152,9 +155,9 @@ public class GoogleIdTokenService {
     private UserProfile findOrCreateUser(String email, String name) {
         Optional<UserProfile> existing = userProfileRepository.findByEmail(email);
         if (existing.isPresent()) {
-            if (existing.get().getDeletedAt() != null) {
+            if (existing.get().getDeletedAt() != null || Boolean.TRUE.equals(existing.get().getBlocked())) {
                 throw new ClientException(HttpStatus.GONE,
-                        "This account was deleted. You can restore it.");
+                        "This account is unavailable. You can request restoration.");
             }
             return existing.get();
         }

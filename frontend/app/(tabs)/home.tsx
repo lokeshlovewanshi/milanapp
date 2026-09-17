@@ -67,6 +67,10 @@ export default function HomeScreen() {
   const [myName, setMyName] = useState<string | null>(null);
   const [myMemberId, setMyMemberId] = useState<string | null>(null);
   const [isVerified, setIsVerified] = useState<boolean | null>(null);
+  // `verified: false` is also the default for a newly created account. The
+  // moderation status distinguishes an unsubmitted profile (created) from one
+  // that an admin is actually reviewing (pending).
+  const [profileStatus, setProfileStatus] = useState<string | null>(null);
   // Null until /user answers, so neither hero flashes before we know which one
   // this member should be seeing.
   const [completion, setCompletion] = useState<number | null>(null);
@@ -141,7 +145,12 @@ export default function HomeScreen() {
     return list;
   }, []);
 
-  const bootstrap = useCallback(async () => {
+  /**
+   * Loads the feed. Rails are loaded on initial entry only: refreshing them
+   * alongside the feed makes four independent responses redraw the same Home
+   * header and repeatedly restart image views.
+   */
+  const bootstrap = useCallback(async (includeRails = true) => {
     let feed: Profile[] = [];
     try {
       setFeedError(null);
@@ -155,6 +164,8 @@ export default function HomeScreen() {
     } finally {
       setLoading(false);
     }
+
+    if (!includeRails) return;
 
     // Both rails are decoration around the feed, so they are fetched after it
     // and each failure is swallowed separately. A rail that will not load
@@ -214,7 +225,12 @@ export default function HomeScreen() {
     setMyMemberId(profileCode(me));
     setMyImage(profileImage(me));
     setCompletion(Number(me?.profileCompletion ?? 0));
-    setIsVerified(me?.verified === true);
+    const moderationStatus = me?.status == null ? null : String(me.status).toLowerCase();
+    // The admin approval transaction writes both values. Accept either one on
+    // the client so a delayed/read-replica response with only APPROVED never
+    // leaves a genuinely approved member behind the review banner.
+    setIsVerified(me?.verified === true || moderationStatus === 'approved');
+    setProfileStatus(moderationStatus);
 
     const filled = (v: any) => v !== null && v !== undefined && String(v).trim() !== '';
     const basic =
@@ -283,7 +299,10 @@ export default function HomeScreen() {
   const onRefresh = async () => {
     setRefreshing(true);
     try {
-      await Promise.all([bootstrap(), refreshCurrentMember(), refreshUnread()]);
+      // A pull refresh needs current profiles and approval state. Stories and
+      // recent visitors stay on-screen; re-fetching all of them is what caused
+      // four or five separate image redraws per one pull gesture.
+      await Promise.all([bootstrap(false), refreshCurrentMember(), refreshUnread()]);
     } finally {
       setRefreshing(false);
     }
@@ -350,7 +369,7 @@ export default function HomeScreen() {
           onPressMine={() => router.push('/profile-setup?step=photos')}
         />
 
-        {isVerified === false && basicDone && (
+        {isVerified === false && profileStatus === 'pending' && (
           <View style={styles.reviewBanner}>
             <Ionicons name="information-circle" size={18} color="#2563EB" />
             <Text style={styles.reviewText}>Profile Under Review</Text>
@@ -409,6 +428,7 @@ export default function HomeScreen() {
       openProfile,
       router,
       isVerified,
+      profileStatus,
       basicDone,
       needsSetup,
       completion,

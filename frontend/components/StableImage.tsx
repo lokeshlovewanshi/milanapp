@@ -1,13 +1,19 @@
-import { useEffect, useMemo, useState, type ComponentProps } from 'react';
-import { ActivityIndicator, StyleSheet, View, type ImageStyle, type StyleProp } from 'react-native';
-import { Image } from 'expo-image';
-import { auth, colors } from './theme';
+import { useEffect, useMemo, useState, type ComponentProps } from "react";
+import {
+  ActivityIndicator,
+  StyleSheet,
+  View,
+  type ImageStyle,
+  type StyleProp,
+} from "react-native";
+import { Image } from "expo-image";
+import { auth, colors } from "./theme";
 
 type Props = {
   uri: string;
   style: StyleProp<ImageStyle>;
-  contentFit?: ComponentProps<typeof Image>['contentFit'];
-  contentPosition?: ComponentProps<typeof Image>['contentPosition'];
+  contentFit?: ComponentProps<typeof Image>["contentFit"];
+  contentPosition?: ComponentProps<typeof Image>["contentPosition"];
 };
 
 // Expo may emit onLoadStart again when a parent list is refreshed, even though
@@ -26,7 +32,7 @@ const imageIdentity = (uri: string): string => {
     const parsed = new URL(uri);
     return `${parsed.origin}${parsed.pathname}`;
   } catch {
-    return uri.split('?')[0];
+    return uri.split("?")[0];
   }
 };
 
@@ -40,7 +46,7 @@ const imageIdentity = (uri: string): string => {
 export default function StableImage({
   uri,
   style,
-  contentFit = 'cover',
+  contentFit = "cover",
   contentPosition,
 }: Props) {
   const identity = useMemo(() => imageIdentity(uri), [uri]);
@@ -68,9 +74,9 @@ export default function StableImage({
         contentPosition={contentPosition}
         cachePolicy="memory-disk"
         transition={180}
-        onLoadStart={() => {
-          if (!loadedUris.has(displayUri)) setLoading(true);
-        }}
+        // onLoadStart={() => {
+        //   if (!loadedUris.has(displayUri)) setLoading(true);
+        // }}
         onLoadEnd={() => {
           loadedUris.add(displayUri);
           workingUriByImage.set(identity, displayUri);
@@ -99,6 +105,10 @@ export default function StableImage({
 }
 
 const styles = StyleSheet.create({
-  frame: { overflow: 'hidden', backgroundColor: colors.surface },
-  loader: { ...StyleSheet.absoluteFillObject, alignItems: 'center', justifyContent: 'center' },
+  frame: { overflow: "hidden", backgroundColor: colors.surface },
+  loader: {
+    ...StyleSheet.absoluteFillObject,
+    alignItems: "center",
+    justifyContent: "center",
+  },
 });
