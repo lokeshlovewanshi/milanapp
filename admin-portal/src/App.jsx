@@ -44,6 +44,8 @@ function Layout({ children }) {
 
   return (
     <div className="app-shell">
+      {mobileOpen && <div className="mobile-backdrop" onClick={closeMenu} />}
+
       <nav className="topnav">
         <div className="topnav-header">
           <Link to="/queue" className="topnav-brand" onClick={closeMenu}>
@@ -132,8 +134,6 @@ function Layout({ children }) {
           </button>
         </div>
       </nav>
-
-      {mobileOpen && <div className="mobile-backdrop" onClick={closeMenu} />}
 
       <main className="content">{children}</main>
     </div>
