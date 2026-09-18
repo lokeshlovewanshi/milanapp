@@ -100,6 +100,13 @@ export default function ProfileDetailScreen() {
 
   const toggleShortlist = async () => {
     if (!id) return;
+    if (isViewerVerified === false) {
+      Alert.alert(
+        'Profile Under Review',
+        'Your profile is under review. Please wait for admin approval before adding profiles to your shortlist.'
+      );
+      return;
+    }
     const was = shortlisted;
     setShortlisted(!was);
     try {
@@ -107,7 +114,15 @@ export default function ProfileDetailScreen() {
       else await shortlistAPI.add(id);
     } catch (error: any) {
       setShortlisted(was);
-      Alert.alert('Error', error?.response?.data?.detail || 'Failed to update shortlist');
+      const message =
+        error?.response?.data?.message ||
+        error?.response?.data?.detail ||
+        error?.message ||
+        'Failed to update shortlist';
+      const underReview = /under verification|under review|admin approval/i.test(String(message));
+      Alert.alert(underReview ? 'Profile Under Review' : 'Error', underReview
+        ? 'Your profile is under review. Please wait for admin approval before adding profiles to your shortlist.'
+        : message);
     }
   };
 
@@ -151,14 +166,16 @@ export default function ProfileDetailScreen() {
   const state = stateOf(id);
   const action = connectionAction(state);
   const connected = state === 'CONNECTED';
+  // The API sets this only for the profile owner or an accepted connection.
+  const contactDetailsVisible = isMine || Boolean(profile.contactDetailsVisible);
   const age = profileAge(profile);
 
   const onAction = () => {
     if (!id) return;
     if (isViewerVerified === false && state !== 'SENT' && state !== 'RECEIVED') {
       Alert.alert(
-        'Complete Your Profile',
-        'Please complete your profile first to send connection requests.'
+        'Profile Under Review',
+        'Your profile is under review. Please wait for admin approval before sending connection requests.'
       );
       return;
     }
@@ -171,7 +188,7 @@ export default function ProfileDetailScreen() {
    * The member's WhatsApp number, digits only, or '' when there is none.
    *
    * Redacted by the API for anyone not entitled to it - a viewer who is
-   * verified with an active membership, or already connected - so the button
+   * connected - so the button
    * below simply does not render, with no permission rule duplicated here to
    * fall out of step with the server.
    */
@@ -293,22 +310,26 @@ rows={rowsFor('religion', profile, label)}
           {/* Contact details require an active membership plan — the backend
               redacts them if the viewer has no plan, so we check if any contact
               field is actually present in the response. */}
-          {isMine || Boolean(profile.mobileNo || profile.fathersContactNo || profile.whatsappNo || profile.email) ? (
+          {contactDetailsVisible ? (
             <DetailCard
               title="Contact Details"
               subtitle={
                 isMine
                   ? "Your contact details"
-                  : "Unlocked with your Membership Plan"
+                  : "Shared after your connection was accepted"
               }
               rows={rowsFor('contact', profile, label)}
             />
           ) : (
             <View style={styles.locked}>
               <Ionicons name="lock-closed-outline" size={22} color={colors.fieldLabel} />
-              <Text style={styles.lockedText}>
-                Contact details are available with an active Membership Plan (Bronze, Silver, or Gold)
-              </Text>
+              <View style={styles.lockedContent}>
+                <Text style={styles.lockedTitle}>Contact Details</Text>
+                <Text style={styles.blurredContact}>••••• •••••   •••••••••••••••</Text>
+                <Text style={styles.lockedText}>
+                  Phone number and address are shared after this profile accepts your connection request.
+                </Text>
+              </View>
             </View>
           )}
 
@@ -393,7 +414,10 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     padding: spacing.lg,
   },
-  lockedText: { flex: 1, fontSize: font.body, color: colors.textMuted, lineHeight: 19 },
+  lockedContent: { flex: 1, gap: 4 },
+  lockedTitle: { fontSize: font.body, fontWeight: '700', color: colors.textMuted },
+  blurredContact: { fontSize: 15, letterSpacing: 2, color: colors.textFaint, opacity: 0.55 },
+  lockedText: { fontSize: font.body, color: colors.textMuted, lineHeight: 19 },
 
   footer: {
     flexDirection: 'row',

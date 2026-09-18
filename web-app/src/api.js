@@ -17,6 +17,11 @@ export function clearSession() {
   localStorage.removeItem("memberToken");
 }
 
+function isBlockedOrDeletedAccount(status, body) {
+  if (status !== 401 && status !== 403 && status !== 410) return false;
+  return /\b(account|profile)\b[^.]*\b(deleted|blocked)\b|\b(deleted|blocked)\b[^.]*\b(account|profile)\b/i.test(body || "");
+}
+
 export function toBackendId(id) {
   if (id == null) return "";
   const str = String(id).trim();
@@ -38,13 +43,14 @@ async function request(path, options = {}) {
     },
   });
 
-  // Every 401, 403, or 410 from an authenticated member request ends the
-  // browser session. This covers expired/invalid tokens and accounts that an
-  // admin blocked or deleted. Login/signup do not carry a member token.
-  if ((res.status === 401 || res.status === 403 || res.status === 410) && getToken()) {
+  // An under-review member gets a normal 403 for actions such as Like and
+  // Shortlist. Keep that session active. Only an explicit blocked/deleted
+  // account response ends the saved login session.
+  const errorBody = !res.ok ? await res.clone().text().catch(() => "") : "";
+  if (isBlockedOrDeletedAccount(res.status, errorBody) && getToken()) {
     clearSession();
     window.location.href = "/login";
-    throw new Error(res.status === 410 ? "Account is no longer available" : "Session expired");
+    throw new Error("Account is no longer available");
   }
 
   if (!res.ok) {

@@ -62,9 +62,6 @@ public class UserProfileServiceImpl implements UserProfileServiceInterface {
     private ProfileLikeRepository profileLikeRepository;
     @Autowired
     private ShortlistRepository shortlistRepository;
-    /** Decides whether a viewer has paid to see other members' contact details. */
-    @Autowired
-    private com.match.partner.openapi.billing.repository.MembershipRepository membershipRepository;
     @Autowired
     private com.match.partner.openapi.reference.repository.LookupOptionRepository lookupOptionRepository;
     /**
@@ -495,6 +492,7 @@ public class UserProfileServiceImpl implements UserProfileServiceInterface {
             publicDto.setEmail(null);
             publicDto.setPresentAddress(null);
             publicDto.setPermanentAddress(null);
+            publicDto.setContactDetailsVisible(false);
             publicDto.setIsLiked(false);
             publicDto.setIsShortlisted(false);
             return publicDto;
@@ -535,33 +533,19 @@ public class UserProfileServiceImpl implements UserProfileServiceInterface {
         // Contact details are only visible to users with an active membership
         // plan. Being connected alone is not enough — the plan is the gate.
         // Your own profile is always exempt.
-        if (profileId != id && !maySeeContactDetails(viewer)) {
+        // Contact values are a server-side privacy boundary. An owner always
+        // sees their own details; another member sees them only after an
+        // accepted connection, regardless of which person sent the request.
+        boolean connected = profileLike
+                .map(like -> like.getStatus() == com.match.partner.openapi.likes.model.Status.ACCEPTED)
+                .orElse(false);
+        boolean contactDetailsVisible = profileId == id || connected;
+        dto.setContactDetailsVisible(contactDetailsVisible);
+        if (!contactDetailsVisible) {
             redactContactDetails(dto);
         }
 
         return dto;
-    }
-
-    /**
-     * Whether this member has paid for, and is entitled to, other members'
-     * contact details.
-     *
-     * Verification is required as well as the membership: an unverified
-     * profile is one nobody has confirmed belongs to a real person, and
-     * selling that account a directory of phone numbers is precisely the
-     * failure this gate exists to prevent.
-     */
-    private boolean maySeeContactDetails(UserProfile viewer) {
-        if (viewer == null || viewer.getId() == null) {
-            return false;
-        }
-
-        // Any member with an active membership plan is entitled to view contact details
-        LocalDateTime now = LocalDateTime.now();
-        return membershipRepository
-                .findByUserProfileIdAndStatusOrderByStartsAtDesc(viewer.getId(), "ACTIVE")
-                .stream()
-                .anyMatch(m -> m.getExpiresAt() == null || m.getExpiresAt().isAfter(now));
     }
 
     /**

@@ -140,9 +140,9 @@ public class UserProfileMapper {
         userDto.setName(userProfile.getName());
         userDto.setGender(userProfile.getGender());
         userDto.setHeight(userProfile.getHeight());
-        userDto.setEmail(userProfile.getEmail());
-        userDto.setPresentAddress(userProfile.getPresentAddress());
-        userDto.setPermanentAddress(userProfile.getPermanentAddress());
+        // Listing cards must never carry contact data. Detailed profiles add
+        // those fields only after UserProfileServiceImpl confirms an accepted
+        // connection, so an intercepted feed response cannot reveal them.
         userDto.setDateOfBirth(userProfile.getDateOfBirth());
         userDto.setProfession(userProfile.getProfession());
         userDto.setId(commonUtils.convertToJMFormat(userProfile.getId()));

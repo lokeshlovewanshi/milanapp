@@ -109,6 +109,8 @@ public class UserProfileDTO {
     private Boolean isLiked;
     private String likeStatus; // PENDING / ACCEPTED / REJECTED / null
     private Boolean isShortlisted;
+    /** True only for the owner or an accepted connection; controls contact UI. */
+    private Boolean contactDetailsVisible;
     private Boolean isOnline;
     private Boolean online;
 

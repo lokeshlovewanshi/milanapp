@@ -110,8 +110,10 @@ export default function HomeScreen() {
     (id: string | number) => {
       if (isVerified === false) {
         Alert.alert(
-          'Complete Your Profile',
-          'Please complete your profile first to send connection requests.'
+          profileStatus === 'pending' ? 'Profile Under Review' : 'Complete Your Profile',
+          profileStatus === 'pending'
+            ? 'Your profile is under review. Please wait for admin approval before sending connection requests.'
+            : 'Please complete your profile first to send connection requests.'
         );
         return;
       }
@@ -121,7 +123,7 @@ export default function HomeScreen() {
       if (state === 'CONNECTED') return;
       return connect(id);
     },
-    [isVerified, stateOf, connect, withdraw, accept]
+    [isVerified, profileStatus, stateOf, connect, withdraw, accept]
   );
 
   // Optimistic set - the feed reflects the tap immediately rather than waiting
@@ -333,6 +335,14 @@ export default function HomeScreen() {
   shortlistedRef.current = shortlisted;
 
   const handleShortlist = useCallback(async (id: string | number) => {
+    if (isVerified === false && profileStatus === 'pending') {
+      Alert.alert(
+        'Profile Under Review',
+        'Your profile is under review. Please wait for admin approval before adding profiles to your shortlist.'
+      );
+      return;
+    }
+
     const key = String(id);
     const isOn = shortlistedRef.current.has(key);
 
@@ -353,9 +363,17 @@ export default function HomeScreen() {
         else next.delete(key);
         return next;
       });
-      Alert.alert('Error', error.response?.data?.detail || 'Failed to update shortlist');
+      const message =
+        error.response?.data?.message ||
+        error.response?.data?.detail ||
+        error.message ||
+        'Failed to update shortlist';
+      const underReview = /under verification|under review|admin approval/i.test(String(message));
+      Alert.alert(underReview ? 'Profile Under Review' : 'Error', underReview
+        ? 'Your profile is under review. Please wait for admin approval before adding profiles to your shortlist.'
+        : message);
     }
-  }, []);
+  }, [isVerified, profileStatus]);
 
   const renderHeader = useCallback(
     () => (
