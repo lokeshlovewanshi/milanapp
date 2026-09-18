@@ -24,7 +24,6 @@ import HomeBanner from '../../components/HomeBanner';
 import BrowseProfilesBanner from '../../components/BrowseProfilesBanner';
 import HomeRail from '../../components/HomeRail';
 import TrustRow from '../../components/TrustRow';
-import PlanPicker from '../../components/PlanPicker';
 import TopStories from '../../components/TopStories';
 import ProfileFeedCard from '../../components/ProfileFeedCard';
 import FeedSkeleton from '../../components/FeedSkeleton';
@@ -66,6 +65,7 @@ export default function HomeScreen() {
   const [myImage, setMyImage] = useState<string | null>(null);
   const [myName, setMyName] = useState<string | null>(null);
   const [myMemberId, setMyMemberId] = useState<string | null>(null);
+  const [myGender, setMyGender] = useState<string | null>(null);
   const [isVerified, setIsVerified] = useState<boolean | null>(null);
   // `verified: false` is also the default for a newly created account. The
   // moderation status distinguishes an unsubmitted profile (created) from one
@@ -226,6 +226,7 @@ export default function HomeScreen() {
     setMyName(profileName(me));
     setMyMemberId(profileCode(me));
     setMyImage(profileImage(me));
+    setMyGender(me?.gender ?? null);
     setCompletion(Number(me?.profileCompletion ?? 0));
     const moderationStatus = me?.status == null ? null : String(me.status).toLowerCase();
     // The admin approval transaction writes both values. Accept either one on
@@ -477,18 +478,7 @@ export default function HomeScreen() {
             />
           )}
 
-          {/* Insert Membership Plan section before 3rd card */}
-          {index === 2 && (
-            <View>
-              <View style={styles.plansHeader}>
-                <Text style={styles.plansTitle}>Choose your plan</Text>
-                <Text style={styles.plansBody}>
-                  Unlock premium features and find your perfect match
-                </Text>
-              </View>
-              <PlanPicker />
-            </View>
-          )}
+          {/* Membership-plan promotion intentionally hidden until plans are re-enabled. */}
 
           <ProfileFeedCard
             profile={item}
@@ -609,6 +599,7 @@ export default function HomeScreen() {
         name={myName}
         memberId={myMemberId}
         avatarUrl={myImage}
+        gender={myGender}
         items={defaultDrawerItems(router.push)}
       />
     </View>
@@ -616,9 +607,6 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  plansHeader: { paddingHorizontal: spacing.md, paddingTop: spacing.xl, paddingBottom: spacing.sm },
-  plansTitle: { fontSize: font.title, fontWeight: '700', color: colors.text },
-  plansBody: { fontSize: font.small, color: '#6B7280', marginTop: 2 },
 
   reviewBanner: {
     flexDirection: 'row',

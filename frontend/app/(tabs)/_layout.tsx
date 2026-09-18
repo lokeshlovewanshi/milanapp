@@ -5,11 +5,12 @@ import { Image } from 'expo-image';
 import { useEffect, useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { profileAPI } from '../../utils/api';
-import { auth, colors } from '../../components/theme';
+import AvatarFallback from '../../components/AvatarFallback';
 
 export default function TabsLayout() {
   const insets = useSafeAreaInsets();
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [avatarGender, setAvatarGender] = useState<string | null>(null);
 
   useEffect(() => {
     profileAPI
@@ -17,6 +18,7 @@ export default function TabsLayout() {
       .then((res) => {
         const uri = res.data?.profileImage || res.data?.profileImages?.[0];
         if (uri) setAvatarUrl(uri);
+        setAvatarGender(res.data?.gender ?? null);
       })
       .catch(() => {});
   }, []);
@@ -113,11 +115,9 @@ export default function TabsLayout() {
                   <Image source={{ uri: avatarUrl }} style={styles.avatarImage} contentFit="cover" contentPosition="top" />
                 </View>
               ) : (
-                <Ionicons
-                  name={focused ? 'person-circle' : 'person-circle-outline'}
-                  size={26}
-                  color={focused ? '#B3122E' : '#262626'}
-                />
+                <View style={[styles.avatarRing, focused && styles.avatarRingActive]}>
+                  <AvatarFallback profile={{ gender: avatarGender }} glyphSize={22} />
+                </View>
               )}
               {focused && <View style={styles.activeDot} />}
             </View>

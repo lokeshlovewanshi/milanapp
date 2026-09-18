@@ -13,6 +13,7 @@ import { Image } from 'expo-image';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors, font, spacing } from './theme';
+import AvatarFallback from './AvatarFallback';
 import { downloadBiodata } from '../utils/biodata';
 
 /**
@@ -43,6 +44,7 @@ type Props = {
   name?: string | null;
   memberId?: string | null;
   avatarUrl?: string | null;
+  gender?: string | null;
   items: DrawerItem[];
 };
 
@@ -52,6 +54,7 @@ export default function AppDrawer({
   name,
   memberId,
   avatarUrl,
+  gender,
   items,
 }: Props) {
   const insets = useSafeAreaInsets();
@@ -105,7 +108,7 @@ export default function AppDrawer({
               <Image source={{ uri: avatarUrl }} style={styles.avatar} contentFit="cover" contentPosition="top" />
             ) : (
               <View style={[styles.avatar, styles.avatarFallback]}>
-                <Ionicons name="person" size={26} color={colors.textFaint} />
+                <AvatarFallback profile={{ gender }} glyphSize={26} />
               </View>
             )}
             <View style={styles.headerText}>
@@ -231,7 +234,7 @@ export function defaultDrawerItems(push: (href: string) => void): DrawerItem[] {
     // something the app produces for you - and because the sheet it builds
     // includes that very chart.
     { icon: 'document-text-outline', label: 'Generate Biodata', onPress: generateBiodata },
-    { icon: 'diamond-outline', label: 'Membership Plans', onPress: () => push('/subscription') },
+    // Membership-plan entry intentionally hidden until plans are re-enabled.
     { icon: 'settings-outline', label: 'Account & Settings', onPress: () => push('/account-settings') },
     { icon: 'headset-outline', label: 'Help & Support', onPress: () => push('/help-support') },
   ];

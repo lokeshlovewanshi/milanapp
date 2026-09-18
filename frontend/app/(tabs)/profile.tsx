@@ -5,7 +5,6 @@
   ScrollView,
   TouchableOpacity,
   Dimensions,
-  Linking,
 } from 'react-native';
 import { useState, useCallback } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -198,30 +197,7 @@ export default function ProfileScreen() {
         {/* Kundali and biodata, as two rows rather than two cards further down */}
         <EnhanceProfileCard />
 
-        {/* Membership opens web portal directly to comply with Google Play individual account policy */}
-        <TouchableOpacity
-          style={styles.membership}
-          activeOpacity={0.85}
-          onPress={() => Linking.openURL('https://www.lovewanshisamaj.in/membership').catch(() => router.push('/subscription'))}
-          accessibilityRole="button"
-          accessibilityLabel="Membership"
-        >
-          <LinearGradient
-            colors={['#EC4899', '#8B5CF6']}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={styles.membershipIconWrap}
-          >
-            <Ionicons name="diamond" size={17} color={colors.white} />
-          </LinearGradient>
-          <View style={styles.membershipText}>
-            <Text style={styles.membershipTitle}>Membership / सदस्यता</Text>
-            <Text style={styles.membershipBody}>
-              Visit website to explore plans &amp; benefits ↗
-            </Text>
-          </View>
-          <Ionicons name="open-outline" size={18} color={colors.textMuted} />
-        </TouchableOpacity>
+        {/* Membership-plan button intentionally hidden until plans are re-enabled. */}
 
         <DetailCard
           title="Basic Details"
@@ -322,6 +298,7 @@ export default function ProfileScreen() {
         name={user?.name}
         memberId={user?.id}
         avatarUrl={photos?.[0] ?? null}
+        gender={user?.gender}
         items={defaultDrawerItems(router.push)}
       />
 

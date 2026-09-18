@@ -90,13 +90,7 @@ function Layout({ children }) {
           >
             ➕ Create Profile
           </NavLink>
-          <NavLink
-            to="/plans"
-            onClick={closeMenu}
-            className={({ isActive }) => (isActive ? "active" : "")}
-          >
-            💳 Plans &amp; Offers
-          </NavLink>
+          {/* Plans & Offers navigation intentionally hidden until membership plans are re-enabled. */}
           <NavLink
             to="/featured"
             onClick={closeMenu}
