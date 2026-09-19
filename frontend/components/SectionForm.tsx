@@ -83,6 +83,27 @@ export default function SectionForm({ spec, values, onChange, errors }: Props) {
   const [picker, setPicker] = useState<FieldSpec | null>(null);
 
   /**
+   * A city name is not globally unique: Adampur, for example, exists in more
+   * than one state. The profile stores the city name, not a city id, so showing
+   * identical values in the picker only creates duplicate rows that cannot be
+   * distinguished after selection. Show one row per name and prefer Madhya
+   * Pradesh, the app's chosen fallback for equal names.
+   */
+  const uniqueCityOptions = (rows: any[]): Option[] => {
+    const byName = new Map<string, { option: Option; state: string }>();
+    for (const city of rows) {
+      const state = String(city.state ?? '');
+      const option = { code: city.name, label: state ? `${city.name}, ${state}` : city.name };
+      const key = String(city.name).trim().toLocaleLowerCase();
+      const existing = byName.get(key);
+      if (!existing || (state === 'Madhya Pradesh' && existing.state !== 'Madhya Pradesh')) {
+        byName.set(key, { option, state });
+      }
+    }
+    return [...byName.values()].map((entry) => entry.option);
+  };
+
+  /**
    * Birth place searches the server rather than a list held on the device.
    *
    * There are over a thousand cities. Shipping them all so the app can filter
@@ -95,16 +116,8 @@ export default function SectionForm({ spec, values, onChange, errors }: Props) {
    */
   const searchCities = useCallback(async (query: string): Promise<Option[]> => {
     const res = await referenceAPI.cities({ search: query });
-    return (res.data ?? []).map((c: any) => ({
-      code: c.name,
-      label: c.state ? `${c.name}, ${c.state}` : c.name,
-    }));
+    return uniqueCityOptions(res.data ?? []);
   }, []);
-
-  const cityOption = (c: any): Option => ({
-    code: c.name,
-    label: c.state ? `${c.name}, ${c.state}` : c.name,
-  });
 
   /**
    * A-Z browse for the same picker, one page at a time.
@@ -125,7 +138,7 @@ export default function SectionForm({ spec, values, onChange, errors }: Props) {
     setCityBrowse((prev) => ({ ...prev, loading: true }));
     try {
       const res = await referenceAPI.cities({ alphabetical: true, page, size: 50 });
-      const rows = (res.data ?? []).map(cityOption);
+      const rows = uniqueCityOptions(res.data ?? []);
       setCityBrowse((prev) => ({
         items: page === 0 ? rows : [...prev.items, ...rows],
         page,

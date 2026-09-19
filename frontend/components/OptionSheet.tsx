@@ -85,7 +85,9 @@ export default function OptionSheet({
   const covered = useCoveredHeight(viewport);
   const [query, setQuery] = useState('');
   const [selected, setSelected] = useState<string[]>([]);
-  const [remote, setRemote] = useState<Option[] | null>(null);
+  // Tie results to the query that produced them. Without this, typing another
+  // letter briefly rendered the previous/default list above the new match.
+  const [remote, setRemote] = useState<{ query: string; results: Option[] } | null>(null);
   const [searching, setSearching] = useState(false);
 
   // Re-seed on open so a cancelled edit never leaks into the next one.
@@ -120,10 +122,10 @@ export default function OptionSheet({
     const timer = setTimeout(() => {
       onSearch(q)
         .then((results) => {
-          if (!stale) setRemote(results);
+          if (!stale) setRemote({ query: q, results });
         })
         .catch(() => {
-          if (!stale) setRemote([]);
+          if (!stale) setRemote({ query: q, results: [] });
         })
         .finally(() => {
           if (!stale) setSearching(false);
@@ -139,9 +141,11 @@ export default function OptionSheet({
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (onSearch) {
-      // Below the minimum query length the starting list is the right thing to
-      // show - it is the popular cities, not an empty screen.
-      return remote ?? options;
+      // Browse suggestions belong only to an empty/one-letter field. Once the
+      // member starts typing, never mix those defaults with a remote result:
+      // "top four cities + one matching city" looks like a broken filter.
+      if (q.length < 2) return options;
+      return remote?.query === query.trim() ? remote.results : [];
     }
     if (!q) return options;
     return options.filter((o) => o.label.toLowerCase().includes(q));
