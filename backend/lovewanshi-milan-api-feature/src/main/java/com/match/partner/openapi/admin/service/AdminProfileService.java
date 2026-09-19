@@ -93,6 +93,11 @@ public class AdminProfileService {
         return userProfileRepository.findVerified(searchTerm, idNum, pageable).map(this::toSummary);
     }
 
+    /** Audit-only list; deleted members never return to the normal queues. */
+    public Page<AdminProfileSummaryDTO> deleted(int page, int size) {
+        return userProfileRepository.findDeletedForAdmin(PageRequest.of(page, size)).map(this::toSummary);
+    }
+
     /** One profile by raw id, with enough detail to actually verify a person is real. */
     public AdminProfileDetailDTO find(int id) {
         UserProfile profile = userProfileRepository.findById(id)

@@ -49,6 +49,9 @@ export const api = {
       `/api/v1/admin/profiles/verified?search=${encodeURIComponent(search)}&page=${page}&size=${size}`
     ),
 
+  deletedProfiles: (page = 0, size = 20) =>
+    request(`/api/v1/admin/profiles/deleted?page=${page}&size=${size}`),
+
   allProfiles: (search = "", page = 0, size = 20) =>
     request(
       `/api/v1/admin/profiles?search=${encodeURIComponent(search)}&page=${page}&size=${size}`

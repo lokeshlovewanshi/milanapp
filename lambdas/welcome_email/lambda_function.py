@@ -32,7 +32,7 @@ SMTP_FROM_NAME = os.environ.get("SMTP_FROM_NAME", "Lovewanshi Parinay")
 
 APP_URL = os.environ.get("APP_URL", "https://www.lovewanshisamaj.in")
 BANNER_IMAGE_URL = os.environ.get("BANNER_IMAGE_URL", "https://www.lovewanshisamaj.in/assets/welcome-banner.jpg")
-SUPPORT_PHONE = os.environ.get("SUPPORT_PHONE", "7676554631")
+SUPPORT_PHONE = os.environ.get("SUPPORT_PHONE", "7440814972")
 SUPPORT_EMAIL = os.environ.get("SUPPORT_EMAIL", "support@lovewanshisamaj.in")
 
 

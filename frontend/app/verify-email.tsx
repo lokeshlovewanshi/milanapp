@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { useCallback, useEffect, useState } from 'react';
+import { BackHandler, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { useLocalSearchParams } from 'expo-router';
+import { useFocusEffect, useLocalSearchParams } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useGuardedRouter } from '../utils/useGuardedRouter';
 import { otpAPI, profileAPI } from '../utils/api';
 import AuthHero from '../components/AuthHero';
@@ -54,6 +55,32 @@ export default function VerifyEmailScreen() {
   const message = (e: any, fallback: string) =>
     e?.response?.data?.detail || e?.response?.data?.message || fallback;
 
+  /**
+   * Leaving confirmation must never reveal the signed-in app underneath it.
+   * The account remains registered but cannot be used again until its email
+   * has been verified; signing out here is the safe way to return to Welcome.
+   */
+  const leaveVerification = useCallback(async () => {
+    if (done) {
+      router.replace('/(tabs)/home');
+      return;
+    }
+    await AsyncStorage.multiRemove(['auth_token', 'token_expiry', 'user_data', 'user_email']);
+    router.replace('/');
+  }, [done, router]);
+
+  // Android's hardware Back button bypasses AuthHero's visible arrow, so it
+  // must follow the same controlled exit instead of popping Home from history.
+  useFocusEffect(
+    useCallback(() => {
+      const subscription = BackHandler.addEventListener('hardwareBackPress', () => {
+        void leaveVerification();
+        return true;
+      });
+      return () => subscription.remove();
+    }, [leaveVerification]),
+  );
+
   const send = async () => {
     setError(null);
     setBusy(true);
@@ -83,14 +110,14 @@ export default function VerifyEmailScreen() {
 
   if (done) {
     return (
-      <AuthHero title="Email Confirmed" subtitle="Your address is verified" onBack={() => router.back()}>
+      <AuthHero title="Email Confirmed" subtitle="Your address is verified" onBack={leaveVerification}>
         <View style={styles.doneBox}>
           <Ionicons name="checkmark-circle" size={20} color="#166534" />
           <Text style={styles.doneText}>
             {email ? `${email} is confirmed.` : 'Your email address is confirmed.'}
           </Text>
         </View>
-        <PrimaryButton label="Done" icon="checkmark-outline" onPress={() => router.back()} />
+        <PrimaryButton label="Done" icon="checkmark-outline" onPress={leaveVerification} />
       </AuthHero>
     );
   }
@@ -99,7 +126,7 @@ export default function VerifyEmailScreen() {
     <AuthHero
       title="Confirm Email"
       subtitle={sent ? `Enter the 4-digit code sent to ${email}` : 'We will email you a 4-digit verification code'}
-      onBack={() => router.back()}
+      onBack={leaveVerification}
     >
       {sent ? (
         <>

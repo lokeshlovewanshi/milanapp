@@ -23,7 +23,7 @@ import java.util.Map;
 @RequestMapping("/api/v1")
 public class SupportContactController {
 
-    @Value("${support.contact.phone:7676554631}")
+    @Value("${support.contact.phone:7440814972}")
     private String phone;
 
     @Value("${support.contact.email:lovewanshisamaj@gmail.com}")

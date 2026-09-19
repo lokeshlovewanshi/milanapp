@@ -142,8 +142,9 @@ export default function LoginScreen() {
         const me = await profileAPI.getMe();
         needsEmailVerification = me.data?.emailVerified === false;
       } catch {
-        // A temporary profile refresh failure must not turn a successful login
-        // into a false "Login Failed" message. The launch guard will retry.
+        // Fail closed: a successful password check is not permission to enter
+        // the app until the verification state has been read from the server.
+        needsEmailVerification = true;
       }
       router.replace(needsEmailVerification ? "/verify-email" : destinationFor(response.data));
     } catch (error: any) {

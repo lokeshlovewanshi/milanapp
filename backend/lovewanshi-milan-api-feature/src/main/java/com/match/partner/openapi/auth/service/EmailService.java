@@ -637,7 +637,7 @@ public class EmailService {
                                   <td style="font-size:12px;color:#4B5563;line-height:1.5;">
                                     <strong>Have questions or need assistance?</strong><br>
                                     Our support team is happy to help you:<br>
-                                    📞 Phone / WhatsApp: <a href="tel:7676554631" style="color:#7B1220;font-weight:600;text-decoration:none;">7676554631</a> &nbsp;|&nbsp; 
+                                    📞 Phone / WhatsApp: <a href="tel:7440814972" style="color:#7B1220;font-weight:600;text-decoration:none;">7440814972</a> &nbsp;|&nbsp; 
                                     ✉️ Email: <a href="mailto:noreply@lovewanshisamaj.in" style="color:#7B1220;font-weight:600;text-decoration:none;">noreply@lovewanshisamaj.in</a>
                                   </td>
                                 </tr>

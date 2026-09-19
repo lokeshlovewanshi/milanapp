@@ -19,6 +19,7 @@ import BroadcastNotifications from "./pages/BroadcastNotifications";
 import CreateProfile from "./pages/CreateProfile";
 import DirectMessage from "./pages/DirectMessage";
 import VerifiedProfiles from "./pages/VerifiedProfiles";
+import DeletedProfiles from "./pages/DeletedProfiles";
 
 function isLoggedIn() {
   return Boolean(localStorage.getItem("adminToken"));
@@ -75,6 +76,13 @@ function Layout({ children }) {
             className={({ isActive }) => (isActive ? "active" : "")}
           >
             ✅ Verified Profiles
+          </NavLink>
+          <NavLink
+            to="/deleted"
+            onClick={closeMenu}
+            className={({ isActive }) => (isActive ? "active" : "")}
+          >
+            Deleted Accounts
           </NavLink>
           <NavLink
             to="/outreach"
@@ -157,6 +165,16 @@ export default function App() {
           <RequireAuth>
             <Layout>
               <VerifiedProfiles />
+            </Layout>
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/deleted"
+        element={
+          <RequireAuth>
+            <Layout>
+              <DeletedProfiles />
             </Layout>
           </RequireAuth>
         }

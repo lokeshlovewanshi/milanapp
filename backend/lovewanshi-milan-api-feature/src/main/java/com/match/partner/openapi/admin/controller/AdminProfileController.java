@@ -35,6 +35,13 @@ public class AdminProfileController {
         return adminProfileService.verified(search, page, size);
     }
 
+    /** Soft-deleted accounts, retained for audit and support purposes. */
+    @GetMapping("/deleted")
+    public Page<AdminProfileSummaryDTO> deleted(@RequestParam(defaultValue = "0") int page,
+                                                @RequestParam(defaultValue = "20") int size) {
+        return adminProfileService.deleted(page, size);
+    }
+
     /** Every live profile, for picking one to feature - not just the unverified queue. */
     @GetMapping
     public Page<AdminProfileSummaryDTO> all(@RequestParam(required = false) String search,

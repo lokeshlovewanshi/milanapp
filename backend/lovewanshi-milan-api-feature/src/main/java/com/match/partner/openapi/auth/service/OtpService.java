@@ -78,7 +78,7 @@ public class OtpService {
 
         if (!emailService.isEnabled()) {
             throw new ClientException(HttpStatus.SERVICE_UNAVAILABLE,
-                    "Email is not set up on this server yet. Please contact support on 7676554631.");
+                    "Email is not set up on this server yet. Please contact support on 7440814972.");
         }
 
         LocalDateTime now = LocalDateTime.now();

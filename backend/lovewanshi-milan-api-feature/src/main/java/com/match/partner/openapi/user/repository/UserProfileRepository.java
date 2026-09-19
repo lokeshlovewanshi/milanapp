@@ -254,4 +254,12 @@ public interface UserProfileRepository extends JpaRepository<UserProfile, Intege
             ORDER BY u.createdAt DESC
             """)
     Page<UserProfile> findVerified(@Param("search") String search, @Param("idNum") Integer idNum, Pageable pageable);
+
+    /** Soft-deleted accounts are kept here for the admin audit trail only. */
+    @Query("""
+            SELECT u FROM UserProfile u
+            WHERE u.deletedAt IS NOT NULL
+            ORDER BY u.deletedAt DESC
+            """)
+    Page<UserProfile> findDeletedForAdmin(Pageable pageable);
 }

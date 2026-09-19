@@ -58,10 +58,12 @@ export default function WelcomeScreen() {
             if (!active) return;
             router.replace(me.data?.emailVerified === false ? '/verify-email' : '/(tabs)/home');
           } catch {
-            // Keep the prior session behavior if a transient network failure
-            // prevents the profile lookup; the server remains authoritative.
-            if (!active) return;
-            router.replace('/(tabs)/home');
+            // Do not grant Home access merely because the verification lookup
+            // failed. The verification route will retry the request; if the
+            // account was deleted/blocked its interceptor has already removed
+            // the token and sent the member to Login.
+            if (!active || !(await AsyncStorage.getItem('auth_token'))) return;
+            router.replace('/verify-email');
           }
         } else {
           setSignedIn(false);

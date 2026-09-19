@@ -204,7 +204,14 @@ async function onSessionExpired(): Promise<void> {
     // broken screen is worse than a stale key.
   }
 
-  // router.replace, not push: the dead session must not be reachable with Back.
+  // Remove every protected screen before redirecting. replace() alone changes
+  // only the top route, leaving Home/Profile beneath it for Android Back.
+  try {
+    router.dismissAll();
+  } catch {
+    // The router may not be mounted during a cold-start request; replace below
+    // still gives the next mounted screen the correct destination.
+  }
   router.replace("/login");
 
   // Cleared on the next tick rather than never, so a later expiry in the same
