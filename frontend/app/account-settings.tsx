@@ -1,13 +1,12 @@
 import { useCallback, useState } from 'react';
 import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useFocusEffect } from 'expo-router';
 import { useGuardedRouter } from '../utils/useGuardedRouter';
 import { profileAPI } from '../utils/api';
 import { unregisterPush } from '../utils/notifications';
-import { clearConnections } from '../utils/useConnections';
+import { clearLocalSession, resetToSignedOut } from '../utils/session';
 import ConfirmSheet from '../components/ConfirmSheet';
 import { colors, font, spacing } from '../components/theme';
 
@@ -96,12 +95,8 @@ export default function AccountSettingsScreen() {
     // Detach this device first, or the next person to sign in here keeps
     // receiving the previous member's notifications.
     await unregisterPush();
-    await AsyncStorage.clear();
-    // Connection state is held in memory, not in storage, so clearing storage
-    // does not touch it. Without this the next person to sign in on this phone
-    // would briefly see the previous member's Connect/Withdraw buttons.
-    clearConnections();
-    router.replace('/');
+    await clearLocalSession();
+    resetToSignedOut('/');
   };
 
   const renderRow = (row: Row) => (

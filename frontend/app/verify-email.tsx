@@ -2,9 +2,9 @@ import { useCallback, useEffect, useState } from 'react';
 import { BackHandler, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useFocusEffect, useLocalSearchParams } from 'expo-router';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useGuardedRouter } from '../utils/useGuardedRouter';
 import { otpAPI, profileAPI } from '../utils/api';
+import { clearLocalSession, resetToSignedOut } from '../utils/session';
 import AuthHero from '../components/AuthHero';
 import OtpInput from '../components/OtpInput';
 import { PrimaryButton } from '../components/AuthButtons';
@@ -65,8 +65,8 @@ export default function VerifyEmailScreen() {
       router.replace('/(tabs)/home');
       return;
     }
-    await AsyncStorage.multiRemove(['auth_token', 'token_expiry', 'user_data', 'user_email']);
-    router.replace('/');
+    await clearLocalSession();
+    resetToSignedOut('/');
   }, [done, router]);
 
   // Android's hardware Back button bypasses AuthHero's visible arrow, so it

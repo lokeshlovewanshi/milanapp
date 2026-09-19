@@ -9,13 +9,12 @@ import {
   Alert,
 } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useGuardedRouter } from '../utils/useGuardedRouter';
 import { profileAPI } from '../utils/api';
 import { unregisterPush } from '../utils/notifications';
-import { clearConnections } from '../utils/useConnections';
+import { clearLocalSession, resetToSignedOut } from '../utils/session';
 import ConfirmSheet from '../components/ConfirmSheet';
 import { colors, font, spacing } from '../components/theme';
 import Loader from '../components/Loader';
@@ -86,9 +85,8 @@ export default function HideDeleteProfileScreen() {
       // Detach the device before clearing storage, or this phone keeps
       // receiving pushes for an account that no longer exists.
       await unregisterPush();
-      await AsyncStorage.clear();
-      clearConnections();
-      router.replace('/');
+      await clearLocalSession();
+      resetToSignedOut('/');
     } catch (error: any) {
       Alert.alert('Could not delete', error?.response?.data?.detail || 'Please try again.');
       setBusy(false);

@@ -2,9 +2,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Platform } from "react-native";
 import Constants from "expo-constants";
-// The imperative router, because this runs in an interceptor rather than a
-// component - there is no hook context here.
-import { router } from "expo-router";
+import { clearLocalSession, resetToSignedOut } from "./session";
 
 const BACKEND_PORT = 8080;
 const PROD_BACKEND_URL = "https://api.lovewanshisamaj.in";
@@ -198,21 +196,14 @@ async function onSessionExpired(): Promise<void> {
   try {
     // This is logout only. It does not delete or alter the member's profile,
     // photos, or any backend data; the server has already made that decision.
-    await AsyncStorage.multiRemove(["auth_token", "token_expiry"]);
+    await clearLocalSession();
   } catch {
     // Storage failing here must not swallow the redirect - a user stuck on a
     // broken screen is worse than a stale key.
   }
 
-  // Remove every protected screen before redirecting. replace() alone changes
-  // only the top route, leaving Home/Profile beneath it for Android Back.
-  try {
-    router.dismissAll();
-  } catch {
-    // The router may not be mounted during a cold-start request; replace below
-    // still gives the next mounted screen the correct destination.
-  }
-  router.replace("/login");
+  // This also removes Home/Profile from Android's Back stack.
+  resetToSignedOut("/login");
 
   // Cleared on the next tick rather than never, so a later expiry in the same
   // app run still redirects.

@@ -5,21 +5,27 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import WebShell from '../components/WebShell';
 import UpdateGate from '../components/UpdateGate';
 import { onNotificationTapped } from '../utils/notifications';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function RootLayout() {
   const router = useRouter();
 
   useEffect(() => {
     const unsub = onNotificationTapped((data) => {
-      if (data?.link) {
-        router.push(data.link as any);
-      } else if (data?.profileId) {
-        router.push(`/profile-detail/${data.profileId}` as any);
-      } else if (data?.actorId) {
-        router.push(`/profile-detail/${data.actorId}` as any);
-      } else if (data?.type === 'PROFILE_VERIFIED' || data?.type === 'NEW_PROFILE_VERIFIED') {
-        router.push('/notifications' as any);
-      }
+      void (async () => {
+        // A queued notification must not reopen a private page after logout.
+        if (!(await AsyncStorage.getItem('auth_token'))) return;
+
+        if (data?.link) {
+          router.push(data.link as any);
+        } else if (data?.profileId) {
+          router.push(`/profile-detail/${data.profileId}` as any);
+        } else if (data?.actorId) {
+          router.push(`/profile-detail/${data.actorId}` as any);
+        } else if (data?.type === 'PROFILE_VERIFIED' || data?.type === 'NEW_PROFILE_VERIFIED') {
+          router.push('/notifications' as any);
+        }
+      })();
     });
     return unsub;
   }, [router]);
