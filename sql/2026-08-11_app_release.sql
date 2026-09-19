@@ -76,5 +76,5 @@ SELECT platform, version_code, version_name, min_supported_version_code, is_acti
 --     (platform, version_code, version_name, download_url, release_notes)
 --   VALUES
 --     ('android', 2, '1.1.0',
---      'https://play.google.com/store/apps/details?id=com.jeevanmilansathi.frontend',
+--      'https://play.google.com/store/apps/details?id=com.lovewanshi.jeevanmilansathi',
 --      'Filters on See all profiles, and a few bug fixes.');

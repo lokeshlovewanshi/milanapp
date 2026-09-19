@@ -6,11 +6,11 @@ import { auth as authTheme } from '../components/theme';
 
 import { useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { authAPI } from '../utils/api';
+import { authAPI, otpAPI } from '../utils/api';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useGuardedRouter } from '../utils/useGuardedRouter';
 import { isGoogleConfigured, signInWithGoogle } from '../utils/googleSignIn';
-import { persistSession, destinationFor, SETUP } from '../utils/afterAuth';
+import { persistSession, destinationFor } from '../utils/afterAuth';
 
 export default function RegisterScreen() {
   const router = useGuardedRouter();
@@ -90,8 +90,19 @@ export default function RegisterScreen() {
       }
       await AsyncStorage.setItem('user_data', JSON.stringify(user));
 
-      // The mobile-number screen, which continues into the wizard.
-      router.replace(SETUP);
+      // A password registration is not usable until its address is confirmed.
+      // Google registration bypasses this because Google has already verified
+      // the email in its ID token.
+      try {
+        await otpAPI.request(email.trim(), 'VERIFY_EMAIL');
+        router.replace('/verify-email?sent=1');
+      } catch (otpError: any) {
+        Alert.alert(
+          'Email confirmation required',
+          otpError?.response?.data?.detail || 'We could not send the code. Please try again from the confirmation screen.'
+        );
+        router.replace('/verify-email');
+      }
     } catch (error: any) {
       console.error('Caught error in handleRegister:', error);
       if (error.response?.status === 409) {

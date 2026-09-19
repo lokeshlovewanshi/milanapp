@@ -4,17 +4,17 @@ A matrimonial (matchmaking) mobile app for the LOVEWANSHI community. Members cre
 detailed profile, browse and search other members, express interest, and connect
 once interest is mutual.
 
-| | |
-|---|---|
-| Platform | Android (primary), iOS (project exists, unreleased) |
-| Frontend | Expo / React Native 0.81, expo-router, TypeScript |
-| Backend | Spring Boot 3 (Java 17), Gradle, REST at `/api/v1` |
-| Database | MySQL 8 (`marriage_portal`) |
-| Photo storage | AWS S3 (`lovewanshi-milan-photos`, ap-south-1) |
-| Push | Firebase Cloud Messaging (optional — degrades to in-app only) |
-| Auth | Email + password (JWT), or Google Sign-In |
-| Production API | `https://api.lovewanshisamaj.in` |
-| Package / bundle id | `com.jeevanmilansathi.frontend` |
+|                     |                                                               |
+| ------------------- | ------------------------------------------------------------- |
+| Platform            | Android (primary), iOS (project exists, unreleased)           |
+| Frontend            | Expo / React Native 0.81, expo-router, TypeScript             |
+| Backend             | Spring Boot 3 (Java 17), Gradle, REST at `/api/v1`            |
+| Database            | MySQL 8 (`marriage_portal`)                                   |
+| Photo storage       | AWS S3 (`lovewanshi-milan-photos`, ap-south-1)                |
+| Push                | Firebase Cloud Messaging (optional — degrades to in-app only) |
+| Auth                | Email + password (JWT), or Google Sign-In                     |
+| Production API      | `https://api.lovewanshisamaj.in`                              |
+| Package / bundle id | `com.lovewanshi.jeevanmilansathi`                             |
 
 ---
 
@@ -46,10 +46,10 @@ contact happens only after both sides agree.
 
 ## 4. Users
 
-| Role | Description |
-|---|---|
-| Member | The person seeking a match. Usually the candidate; often a parent or sibling operating the account on their behalf. |
-| Admin | Operates the community. Broadcasts announcements via `POST /api/v1/notifications/broadcast`, guarded by the `X-Admin-Secret` header. No admin UI — API only. |
+| Role   | Description                                                                                                                                                  |
+| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Member | The person seeking a match. Usually the candidate; often a parent or sibling operating the account on their behalf.                                          |
+| Admin  | Operates the community. Broadcasts announcements via `POST /api/v1/notifications/broadcast`, guarded by the `X-Admin-Secret` header. No admin UI — API only. |
 
 Assume mixed technical confidence and mid-range Android devices. Screens are
 form-heavy, so field validation must be forgiving and errors must be readable.
@@ -80,13 +80,13 @@ Screens: [login.tsx](frontend/app/login.tsx),
 A profile is split into five groups, each with its own GET and PATCH endpoint so
 a single section can be edited without resubmitting the whole record:
 
-| Group | Endpoint | Holds |
-|---|---|---|
-| Basic | `/user/profile/basic` | name, DOB, gender, height, marital status, about |
-| Contact | `/user/profile/contact` | mobile, email, state, city, address |
-| Religion | `/user/profile/religion` | religion, caste, gotra, manglik |
-| Education | `/user/profile/education` | qualification, occupation, income |
-| Family | `/user/profile/family` | father, mother, siblings, family type/status |
+| Group     | Endpoint                  | Holds                                            |
+| --------- | ------------------------- | ------------------------------------------------ |
+| Basic     | `/user/profile/basic`     | name, DOB, gender, height, marital status, about |
+| Contact   | `/user/profile/contact`   | mobile, email, state, city, address              |
+| Religion  | `/user/profile/religion`  | religion, caste, gotra, manglik                  |
+| Education | `/user/profile/education` | qualification, occupation, income                |
+| Family    | `/user/profile/family`    | father, mother, siblings, family type/status     |
 
 - **First-time setup** is a guided multi-step flow
   ([profile-setup.tsx](frontend/app/profile-setup.tsx)); later changes go
@@ -104,7 +104,7 @@ a single section can be edited without resubmitting the whole record:
 
 ### 5.3 Discovery
 
-- **Home** ([(tabs)/home.tsx](frontend/app/(tabs)/home.tsx)) — recommended
+- **Home** ([(tabs)/home.tsx](<frontend/app/(tabs)/home.tsx>)) — recommended
   profiles, paginated (`GET /users?page&size`).
 - **All profiles** ([all-profiles.tsx](frontend/app/all-profiles.tsx)) — the
   full browsable directory.
@@ -128,9 +128,9 @@ The core loop, deliberately two-sided:
 - A duplicate like returns `400 "…already liked…"`. The client treats this as
   success (`isAlreadyLiked` in [api.ts](frontend/utils/api.ts:138)) rather than
   rolling the button back — the user's intended state is already true.
-- **Likes** tab ([(tabs)/likes.tsx](frontend/app/(tabs)/likes.tsx)) shows both
+- **Likes** tab ([(tabs)/likes.tsx](<frontend/app/(tabs)/likes.tsx>)) shows both
   received (`GET /likes`) and sent (`GET /likes/me`).
-- **Shortlist** ([(tabs)/shortlist.tsx](frontend/app/(tabs)/shortlist.tsx)) is a
+- **Shortlist** ([(tabs)/shortlist.tsx](<frontend/app/(tabs)/shortlist.tsx>)) is a
   private bookmark. The other member is never told.
 - **Recent visitors** ([recent-visitors.tsx](frontend/app/recent-visitors.tsx))
   lists who opened your profile.
@@ -153,19 +153,19 @@ The core loop, deliberately two-sided:
 
 Tables in `marriage_portal`:
 
-| Table | Purpose |
-|---|---|
-| `user_profile` | The member and every profile field. Also the auth record. |
-| `attachment` | Uploaded photos, S3 keys, primary flag |
-| `profile_likes` | Interest, with accepted/rejected state |
-| `shortlist` | Private bookmarks |
-| `views` | Profile view history |
-| `notifications` | Notification feed, read state |
-| `device_tokens` | FCM tokens per user per device |
-| `token_blacklist` | Revoked JWTs (logout) |
-| `lookup_option` | Every dropdown list, keyed by category |
-| `state`, `city` | Location reference data |
-| `profile_completion_weight` | Per-field weighting for the completion score |
+| Table                       | Purpose                                                   |
+| --------------------------- | --------------------------------------------------------- |
+| `user_profile`              | The member and every profile field. Also the auth record. |
+| `attachment`                | Uploaded photos, S3 keys, primary flag                    |
+| `profile_likes`             | Interest, with accepted/rejected state                    |
+| `shortlist`                 | Private bookmarks                                         |
+| `views`                     | Profile view history                                      |
+| `notifications`             | Notification feed, read state                             |
+| `device_tokens`             | FCM tokens per user per device                            |
+| `token_blacklist`           | Revoked JWTs (logout)                                     |
+| `lookup_option`             | Every dropdown list, keyed by category                    |
+| `state`, `city`             | Location reference data                                   |
+| `profile_completion_weight` | Per-field weighting for the completion score              |
 
 Schema is **not** managed by Hibernate. Local/dev uses
 `ddl-auto=validate` (refuses to start on a schema mismatch — a startup failure
@@ -177,6 +177,7 @@ ship as SQL under `src/main/resources/db/`.
 ## 7. Non-functional requirements
 
 **Security**
+
 - Every endpoint requires a JWT except `/auth/**` and `/actuator/health`.
 - Google ID tokens are verified server-side against the allowed `aud` list.
 - Broadcast requires `X-Admin-Secret`; blank config disables the endpoint.
@@ -184,17 +185,20 @@ ship as SQL under `src/main/resources/db/`.
   debug builds permit it, so the emulator can reach `http://10.0.2.2:8080`.
 
 **Privacy**
+
 - No profile data is reachable without authentication.
 - Contact details are meaningful only after a mutual accept.
 - Shortlisting is invisible to the person shortlisted; viewing is not.
 
 **Performance**
+
 - Listings are paginated; default page size 20.
 - API client timeout is 10s.
 - Photos are resized client-side before upload
   ([usePhotoUpload.ts](frontend/utils/usePhotoUpload.ts)).
 
 **Operational**
+
 - `/actuator/health` is public so the deploy gate can reach it.
 - Deploys are health-gated with automatic rollback to the previous jar.
 - The prod profile reads one JSON secret from AWS Secrets Manager
@@ -211,7 +215,7 @@ Carried forward from [DEPLOY.md](DEPLOY.md) and the current code:
 - The AWS key in the committed `application.properties` was exposed in git
   history and needs rotating; the instance role has already replaced it in prod.
 - **Failed login returns `500 Internal Server Error` with `"detail":"User not
-  found"`**, where it should return `401 Unauthorized`. Two problems: the client
+found"`**, where it should return `401 Unauthorized`. Two problems: the client
   cannot distinguish bad credentials from a server fault, and the response
   discloses whether an email is registered.
 - No admin UI. Broadcast is a raw API call.

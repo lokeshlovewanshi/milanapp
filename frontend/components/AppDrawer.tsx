@@ -100,7 +100,15 @@ export default function AppDrawer({
         <Animated.View
           style={[
             styles.panel,
-            { width: WIDTH, paddingTop: insets.top + spacing.lg, transform: [{ translateX: slide }] },
+            {
+              width: WIDTH,
+              paddingTop: insets.top + spacing.lg,
+              // A transparent Modal reaches behind Android's navigation area.
+              // Reserve that safe area here so the branded footer never sits
+              // under the phone's bottom buttons/gesture bar.
+              paddingBottom: Math.max(insets.bottom, spacing.lg),
+              transform: [{ translateX: slide }],
+            },
           ]}
         >
           <View style={styles.header}>
@@ -186,7 +194,6 @@ const styles = StyleSheet.create({
   rowLabel: { flex: 1, fontSize: font.body, color: colors.text, fontWeight: '500' },
   drawerFooter: {
     marginTop: 'auto',
-    marginBottom: spacing.xl,
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.md,

@@ -10,7 +10,7 @@
     "newArchEnabled": false,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.jeevanmilansathi.frontend"
+      "bundleIdentifier": "com.lovewanshi.jeevanmilansathi"
     },
     "android": {
       "adaptiveIcon": {
@@ -26,7 +26,7 @@
         "android.permission.RECORD_AUDIO",
         "android.permission.SYSTEM_ALERT_WINDOW"
       ],
-      "package": "com.jeevanmilansathi.frontend",
+      "package": "com.lovewanshi.jeevanmilansathi",
       "versionCode": 25,
       "googleServicesFile": "./google-services.json"
     },
@@ -63,7 +63,7 @@
             "enableMinifyInReleaseBuilds": true,
             "enableShrinkResourcesInReleaseBuilds": true,
             "enableBundleCompression": true,
-            "extraProguardRules": "-dontwarn okhttp3.internal.platform.**\n-dontwarn org.conscrypt.**\n-dontwarn org.bouncycastle.**\n-dontwarn org.openjsse.**\n-dontwarn java.lang.invoke.**\n-dontwarn javax.annotation.**\n-keep class okhttp3.** { *; }\n-keep interface okhttp3.** { *; }\n-dontwarn okio.**\n-keep class okio.** { *; }\n-keepattributes *Annotation*,Signature,InnerClasses,EnclosingMethod\n-keep class com.jeevanmilansathi.frontend.BuildConfig { *; }\n"
+            "extraProguardRules": "-dontwarn okhttp3.internal.platform.**\n-dontwarn org.conscrypt.**\n-dontwarn org.bouncycastle.**\n-dontwarn org.openjsse.**\n-dontwarn java.lang.invoke.**\n-dontwarn javax.annotation.**\n-keep class okhttp3.** { *; }\n-keep interface okhttp3.** { *; }\n-dontwarn okio.**\n-keep class okio.** { *; }\n-keepattributes *Annotation*,Signature,InnerClasses,EnclosingMethod\n-keep class com.lovewanshi.jeevanmilansathi.BuildConfig { *; }\n"
           }
         }
       ],

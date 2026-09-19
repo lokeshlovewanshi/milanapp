@@ -31,7 +31,7 @@ VALUES
    '1.2.1',
    24, -- Set to 24 for MANDATORY update. Set to 23 if you want to allow 'Later' dismiss.
    '• Matches & Shortlisted UI Enhancement: Clear text hierarchy, full relative timestamps ("Sent 2 weeks ago"), and status chips.\n• Location Visibility: Distinct red location pin icon for candidate city & state.\n• Enhanced 3 Membership Plans: Bronze, Silver, and Gold with welcome offers.\n• Performance and UI improvements.',
-   'https://play.google.com/store/apps/details?id=com.jeevanmilansathi.frontend',
+   'https://play.google.com/store/apps/details?id=com.lovewanshi.jeevanmilansathi',
    1)
 ON DUPLICATE KEY UPDATE
   version_name               = VALUES(version_name),

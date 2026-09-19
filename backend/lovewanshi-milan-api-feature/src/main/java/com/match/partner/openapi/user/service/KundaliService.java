@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.match.partner.common.configuration.ClientException;
 import com.match.partner.openapi.reference.model.dao.City;
 import com.match.partner.openapi.reference.repository.CityRepository;
+import com.match.partner.openapi.reference.service.BirthCityResolver;
 import com.match.partner.openapi.user.model.dao.Kundali;
 import com.match.partner.openapi.user.model.dao.UserProfile;
 import com.match.partner.openapi.user.repository.KundaliRepository;
@@ -59,6 +60,7 @@ public class KundaliService {
     private final UserProfileRepository userProfileRepository;
     private final KundaliRepository kundaliRepository;
     private final CityRepository cityRepository;
+    private final BirthCityResolver birthCityResolver;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Value("${kundali.function-name:lovewanshi-milan-kundali}")
@@ -417,21 +419,7 @@ public class KundaliService {
      * completely normal.
      */
     private City resolveCity(String placeOfBirth) {
-        List<City> hits = cityRepository.findByNameIgnoreCaseOrderByTierAsc(placeOfBirth.trim());
-
-        if (hits.isEmpty()) {
-            throw new ClientException(HttpStatus.BAD_REQUEST,
-                    "We do not recognise '" + placeOfBirth + "' as a city. Please pick your "
-                            + "birth place from the list in your profile.");
-        }
-
-        City city = hits.get(0);
-        if (city.getLatitude() == null || city.getLongitude() == null) {
-            throw new ClientException(HttpStatus.BAD_REQUEST,
-                    "We do not have the location of " + city.getName() + " yet, so a kundali "
-                            + "cannot be calculated. Please contact support.");
-        }
-        return city;
+        return birthCityResolver.resolve(placeOfBirth);
     }
 
     private LambdaClient client() {

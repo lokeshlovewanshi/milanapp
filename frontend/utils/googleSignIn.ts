@@ -21,7 +21,7 @@
  *    `aud`, which is what the backend verifies. It is not a web login.
  */
 
-import Constants, { ExecutionEnvironment } from 'expo-constants';
+import Constants, { ExecutionEnvironment } from "expo-constants";
 
 const WEB_CLIENT_ID = process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID;
 
@@ -51,9 +51,12 @@ export const isExpoGo =
  */
 function loadGoogleSignin(): { mod: any; error: Error | null } {
   try {
-    return { mod: require('@react-native-google-signin/google-signin'), error: null };
+    return {
+      mod: require("@react-native-google-signin/google-signin"),
+      error: null,
+    };
   } catch (e: any) {
-    console.log('[GoogleSignIn] require failed:', e?.message);
+    console.log("[GoogleSignIn] require failed:", e?.message);
     return { mod: null, error: e instanceof Error ? e : new Error(String(e)) };
   }
 }
@@ -68,12 +71,12 @@ export class GoogleSignInUnavailableError extends Error {}
 export async function signInWithGoogle(): Promise<string | null> {
   if (isExpoGo) {
     throw new GoogleSignInUnavailableError(
-      'Google Sign-In does not work in Expo Go.\n\n' +
-        'Expo Go is a prebuilt sandbox app - it cannot contain this project\'s\n' +
-        'native modules. Close Expo Go and launch the dev build instead:\n\n' +
-        '  npx expo run:android\n\n' +
-        'After the first run, `npx expo start` will attach to that build; open\n' +
-        'the app from the launcher rather than scanning the QR into Expo Go.'
+      "Google Sign-In does not work in Expo Go.\n\n" +
+        "Expo Go is a prebuilt sandbox app - it cannot contain this project's\n" +
+        "native modules. Close Expo Go and launch the dev build instead:\n\n" +
+        "  npx expo run:android\n\n" +
+        "After the first run, `npx expo start` will attach to that build; open\n" +
+        "the app from the launcher rather than scanning the QR into Expo Go.",
     );
   }
 
@@ -82,27 +85,28 @@ export async function signInWithGoogle(): Promise<string | null> {
     // "Cannot find native module" / "could not be found" means the JS package is
     // bundled but the binary on the device predates it - a rebuild fixes that.
     // Anything else usually means the package itself is missing from node_modules.
-    const msg = loadError?.message ?? '';
-    const nativeMissing = /native module|getEnforcing|RNGoogleSignin|could not be found/i.test(msg);
+    const msg = loadError?.message ?? "";
+    const nativeMissing =
+      /native module|getEnforcing|RNGoogleSignin|could not be found/i.test(msg);
 
     throw new GoogleSignInUnavailableError(
       nativeMissing
-        ? 'The Google Sign-In native module is not in the app currently installed\n' +
-          'on this device. The JS bundle has it, the binary does not - which means\n' +
-          'the installed build predates the package being added.\n\n' +
-          'Rebuild and reinstall:\n' +
-          '  npx expo prebuild --clean\n' +
-          '  npx expo run:android\n\n' +
-          `Underlying error: ${msg}`
-        : 'Google Sign-In package could not be loaded. Run:\n' +
-          '  npx expo install @react-native-google-signin/google-signin\n' +
-          '  npx expo prebuild --clean && npx expo run:android\n\n' +
-          `Underlying error: ${msg}`
+        ? "The Google Sign-In native module is not in the app currently installed\n" +
+            "on this device. The JS bundle has it, the binary does not - which means\n" +
+            "the installed build predates the package being added.\n\n" +
+            "Rebuild and reinstall:\n" +
+            "  npx expo prebuild --clean\n" +
+            "  npx expo run:android\n\n" +
+            `Underlying error: ${msg}`
+        : "Google Sign-In package could not be loaded. Run:\n" +
+            "  npx expo install @react-native-google-signin/google-signin\n" +
+            "  npx expo prebuild --clean && npx expo run:android\n\n" +
+            `Underlying error: ${msg}`,
     );
   }
   if (!WEB_CLIENT_ID) {
     throw new GoogleSignInUnavailableError(
-      'EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID is not set. Add it to .env and rebuild.'
+      "EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID is not set. Add it to .env and rebuild.",
     );
   }
 
@@ -112,7 +116,7 @@ export async function signInWithGoogle(): Promise<string | null> {
     GoogleSignin.configure({
       webClientId: WEB_CLIENT_ID,
       offlineAccess: false,
-      scopes: ['profile', 'email'],
+      scopes: ["profile", "email"],
     });
     configured = true;
   }
@@ -121,7 +125,7 @@ export async function signInWithGoogle(): Promise<string | null> {
   // against the Google Cloud Console. Client IDs are public, not secrets.
   // If this does not match the Web client you expect, the build predates your
   // last .env edit and needs rebuilding.
-  console.log('[GoogleSignIn] webClientId in this build =', WEB_CLIENT_ID);
+  console.log("[GoogleSignIn] webClientId in this build =", WEB_CLIENT_ID);
 
   try {
     await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
@@ -139,13 +143,12 @@ export async function signInWithGoogle(): Promise<string | null> {
 
     const result = await GoogleSignin.signIn();
 
-
     // v13 returns { idToken }, v14+ returns { type, data: { idToken } }.
     const idToken = result?.data?.idToken ?? result?.idToken ?? null;
     if (!idToken) {
       // v14+ reports a cancel as { type: 'cancelled' } instead of throwing.
-      if (result?.type === 'cancelled') return null;
-      throw new Error('Google did not return an ID token.');
+      if (result?.type === "cancelled") return null;
+      throw new Error("Google did not return an ID token.");
     }
     return idToken;
   } catch (error: any) {
@@ -157,7 +160,7 @@ export async function signInWithGoogle(): Promise<string | null> {
     }
     if (error?.code === statusCodes?.PLAY_SERVICES_NOT_AVAILABLE) {
       throw new Error(
-        'Google Play Services is unavailable on this device. Use an emulator image that includes the Play Store.'
+        "Google Play Services is unavailable on this device. Use an emulator image that includes the Play Store.",
       );
     }
 
@@ -165,35 +168,42 @@ export async function signInWithGoogle(): Promise<string | null> {
     // client. The credentials in .env are fine on their own - the mismatch is
     // almost always the signing certificate or package name registered on the
     // Android OAuth client, which cannot be detected from JS.
-    const code = String(error?.code ?? '');
-    const rawMsg = error?.message ? `\n\nRaw Error: [Code ${code}] ${error.message}` : '';
+    const code = String(error?.code ?? "");
+    const rawMsg = error?.message
+      ? `\n\nRaw Error: [Code ${code}] ${error.message}`
+      : "";
     if (
-      code === '10' ||
-      code === 'DEVELOPER_ERROR' ||
-      (statusCodes?.DEVELOPER_ERROR != null && error?.code === statusCodes.DEVELOPER_ERROR)
+      code === "10" ||
+      code === "DEVELOPER_ERROR" ||
+      (statusCodes?.DEVELOPER_ERROR != null &&
+        error?.code === statusCodes.DEVELOPER_ERROR)
     ) {
-      console.log('[GoogleSignIn] DEVELOPER_ERROR details:', { code: error?.code, message: error?.message, error });
+      console.log("[GoogleSignIn] DEVELOPER_ERROR details:", {
+        code: error?.code,
+        message: error?.message,
+        error,
+      });
       throw new Error(
-        'DEVELOPER_ERROR - Google rejected the app configuration. Check, in order:\n\n' +
-          '1. SHA-1: run `cd android && ./gradlew signingReport` and add the\n' +
+        "DEVELOPER_ERROR - Google rejected the app configuration. Check, in order:\n\n" +
+          "1. SHA-1: run `cd android && ./gradlew signingReport` and add the\n" +
           '   "Variant: debug" SHA1 to your ANDROID OAuth client in Google Cloud\n' +
-          '   Console. A debug build is signed with the debug keystore, so the\n' +
-          '   release SHA-1 will not work here.\n' +
-          '2. Package name on that client must be exactly:\n' +
-          '   com.jeevanmilansathi.frontend\n' +
-          '3. webClientId must be the WEB client ID, not the Android one.\n' +
+          "   Console. A debug build is signed with the debug keystore, so the\n" +
+          "   release SHA-1 will not work here.\n" +
+          "2. Package name on that client must be exactly:\n" +
+          "   com.lovewanshi.jeevanmilansathi\n" +
+          "3. webClientId must be the WEB client ID, not the Android one.\n" +
           `   Currently using: ...${String(WEB_CLIENT_ID).slice(-34)}\n` +
-          '4. Credential changes can take a few minutes to propagate.\n\n' +
-          `Raw Error: [Code ${code}] ${error?.message || 'DEVELOPER_ERROR'}\n\n` +
-          'Note: .env is inlined at build time - rebuild after editing it.'
+          "4. Credential changes can take a few minutes to propagate.\n\n" +
+          `Raw Error: [Code ${code}] ${error?.message || "DEVELOPER_ERROR"}\n\n` +
+          "Note: .env is inlined at build time - rebuild after editing it.",
       );
     }
 
     // Surface the raw native error so logcat/Metro shows something specific
     // rather than the library's generic "follow troubleshooting" text.
     console.log(
-      '[GoogleSignIn] raw error =',
-      JSON.stringify({ code: error?.code, message: error?.message }, null, 2)
+      "[GoogleSignIn] raw error =",
+      JSON.stringify({ code: error?.code, message: error?.message }, null, 2),
     );
     throw error;
   }

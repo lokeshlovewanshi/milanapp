@@ -26,20 +26,20 @@ is worth deciding before you pay the \$25.
 
 ## Technical state
 
-| | Status |
-| --- | --- |
-| `targetSdk` 36 | ✅ Play requires 35+ for new apps |
-| `minSdk` 24 | ✅ covers ~99% of devices |
-| AAB output | ✅ the `production` profile builds `app-bundle` |
-| Cleartext HTTP blocked in release | ✅ enforced by `app.config.js` |
-| Permissions justifiable | ✅ fixed - see below |
-| App icon square | ✅ fixed - was 512x513 |
-| R8 minification | ⚠️ enabled but never runtime-tested |
-| Play App Signing vs Google Sign-In | ⚠️ **will break sign-in if ignored** |
-| Privacy policy | ❌ mandatory, does not exist |
-| Web account-deletion page | ❌ mandatory, does not exist |
-| Data Safety form | ❌ not filled |
-| Store listing assets | ❌ not produced |
+|                                    | Status                                          |
+| ---------------------------------- | ----------------------------------------------- |
+| `targetSdk` 36                     | ✅ Play requires 35+ for new apps               |
+| `minSdk` 24                        | ✅ covers ~99% of devices                       |
+| AAB output                         | ✅ the `production` profile builds `app-bundle` |
+| Cleartext HTTP blocked in release  | ✅ enforced by `app.config.js`                  |
+| Permissions justifiable            | ✅ fixed - see below                            |
+| App icon square                    | ✅ fixed - was 512x513                          |
+| R8 minification                    | ⚠️ enabled but never runtime-tested             |
+| Play App Signing vs Google Sign-In | ⚠️ **will break sign-in if ignored**            |
+| Privacy policy                     | ❌ mandatory, does not exist                    |
+| Web account-deletion page          | ❌ mandatory, does not exist                    |
+| Data Safety form                   | ❌ not filled                                   |
+| Store listing assets               | ❌ not produced                                 |
 
 ### Permissions - fixed
 
@@ -52,14 +52,14 @@ Google asks why.
 Blocked via `android.blockedPermissions` in `app.json` and verified gone from the
 merged release manifest. What remains, and the answer for each if asked:
 
-| Permission | Why |
-| --- | --- |
-| `INTERNET`, `ACCESS_NETWORK_STATE` | talks to the API |
-| `CAMERA` | profile photo capture (`expo-image-picker`) |
-| `READ/WRITE_EXTERNAL_STORAGE` | choosing an existing photo on API < 33 |
-| `POST_NOTIFICATIONS` | match and connection-request alerts |
-| `VIBRATE`, `WAKE_LOCK`, `RECEIVE_BOOT_COMPLETED` | FCM delivery |
-| `READ_APP_BADGE` | unread count on the launcher icon |
+| Permission                                       | Why                                         |
+| ------------------------------------------------ | ------------------------------------------- |
+| `INTERNET`, `ACCESS_NETWORK_STATE`               | talks to the API                            |
+| `CAMERA`                                         | profile photo capture (`expo-image-picker`) |
+| `READ/WRITE_EXTERNAL_STORAGE`                    | choosing an existing photo on API < 33      |
+| `POST_NOTIFICATIONS`                             | match and connection-request alerts         |
+| `VIBRATE`, `WAKE_LOCK`, `RECEIVE_BOOT_COMPLETED` | FCM delivery                                |
+| `READ_APP_BADGE`                                 | unread count on the launcher icon           |
 
 ### Play App Signing will break Google Sign-In
 
@@ -74,10 +74,10 @@ Play install, with `DEVELOPER_ERROR`.
 
 **Fix, after your first upload:**
 
-1. Play Console → *Setup → App signing* → copy the **SHA-1 of the app signing
+1. Play Console → _Setup → App signing_ → copy the **SHA-1 of the app signing
    certificate** (not the upload certificate)
-2. Firebase Console → *Project settings* → `com.jeevanmilansathi.frontend` →
-   *Add fingerprint*
+2. Firebase Console → _Project settings_ → `com.lovewanshi.jeevanmilansathi` →
+   _Add fingerprint_
 3. No re-download of `google-services.json` needed - Google Sign-In matches
    server-side and never reads that file
 
@@ -113,8 +113,8 @@ retention, and how to request deletion.
 Play requires **two** routes for any app with accounts:
 
 1. **In app** - ✅ built. Profile tab → "Delete my account".
-2. **A public web URL** where someone can request deletion *without installing
-   the app* - ❌ missing. A simple page on `lovewanshisamaj.in` with a form or an
+2. **A public web URL** where someone can request deletion _without installing
+   the app_ - ❌ missing. A simple page on `lovewanshisamaj.in` with a form or an
    email address satisfies this.
 
 Note your deletion is a soft delete: `deleted_at` is stamped, the row survives
@@ -129,7 +129,7 @@ address, and "other personal info" (gotra, family details). Mark data as
 encrypted in transit (true - HTTPS enforced) and state that users can request
 deletion (true).
 
-Getting this wrong is a common cause of removal *after* a successful launch,
+Getting this wrong is a common cause of removal _after_ a successful launch,
 because Google compares your declaration against what the app actually does.
 
 ### Dating and matrimony category
@@ -156,13 +156,13 @@ thing to explain in your appeal.
 
 ## Store listing assets - none exist yet
 
-| Asset | Requirement |
-| --- | --- |
-| App icon | 512x512 PNG, 32-bit. ✅ fixed today |
-| Feature graphic | 1024x500 PNG/JPG, no alpha. ❌ |
-| Phone screenshots | 2-8, min 320px, 16:9 or 9:16. ❌ |
-| Short description | 80 chars |
-| Full description | 4000 chars |
+| Asset             | Requirement                         |
+| ----------------- | ----------------------------------- |
+| App icon          | 512x512 PNG, 32-bit. ✅ fixed today |
+| Feature graphic   | 1024x500 PNG/JPG, no alpha. ❌      |
+| Phone screenshots | 2-8, min 320px, 16:9 or 9:16. ❌    |
+| Short description | 80 chars                            |
+| Full description  | 4000 chars                          |
 
 Screenshots are worth doing properly - they are most of the install decision.
 Home feed, a profile, search, and the kundali chart would tell the story well.

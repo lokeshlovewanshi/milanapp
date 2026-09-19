@@ -1,7 +1,7 @@
-const fs = require('fs');
-const path = require('path');
-const withSideloadApkAbis = require('./plugins/withSideloadApkAbis');
-const withScreenshotBlocked = require('./plugins/withScreenshotBlocked');
+const fs = require("fs");
+const path = require("path");
+const withSideloadApkAbis = require("./plugins/withSideloadApkAbis");
+const withScreenshotBlocked = require("./plugins/withScreenshotBlocked");
 
 /**
  * Dynamic Expo config.
@@ -17,7 +17,7 @@ const withScreenshotBlocked = require('./plugins/withScreenshotBlocked');
  *      - with it    -> push notifications work
  *      - without it -> the app builds and runs, push is simply inactive
  *    Download from Firebase console -> Project settings -> Your apps ->
- *    Android (package com.jeevanmilansathi.frontend), next to this file.
+ *    Android (package com.lovewanshi.jeevanmilansathi), next to this file.
  *
  * 2. Cleartext HTTP. Local development talks to http://10.0.2.2:8080, which
  *    Android blocks unless usesCleartextTraffic is on. Leaving it on in a
@@ -49,7 +49,8 @@ module.exports = ({ config }) => {
   // secret that materialises as a path at build time; the local file stays the
   // fallback for `expo run:android`.
   const googleServices =
-    process.env.GOOGLE_SERVICES_FILE || path.join(__dirname, 'google-services.json');
+    process.env.GOOGLE_SERVICES_FILE ||
+    path.join(__dirname, "google-services.json");
 
   // The RESOLVED path, not the literal './google-services.json'. This config is
   // evaluated on the developer's machine as well as the builder, so hardcoding
@@ -59,24 +60,27 @@ module.exports = ({ config }) => {
   // exists lets the EAS file secret satisfy it in the cloud and the local copy
   // satisfy it here.
   if (fs.existsSync(googleServices)) {
-    config.android = { ...(config.android || {}), googleServicesFile: googleServices };
+    config.android = {
+      ...(config.android || {}),
+      googleServicesFile: googleServices,
+    };
   } else {
     console.warn(
-      '[expo config] google-services.json not found - building without FCM. ' +
-        'Push notifications will not be delivered until you add it.'
+      "[expo config] google-services.json not found - building without FCM. " +
+        "Push notifications will not be delivered until you add it.",
     );
   }
 
   // Falls back to allowing cleartext when the URL is unset, because that is
   // the local-development case; a release build always sets it via eas.json.
-  const apiUrl = process.env.EXPO_PUBLIC_BACKEND_URL || '';
-  const needsCleartext = !apiUrl || apiUrl.startsWith('http://');
+  const apiUrl = process.env.EXPO_PUBLIC_BACKEND_URL || "";
+  const needsCleartext = !apiUrl || apiUrl.startsWith("http://");
 
-  const sideloadApk = process.env.ANDROID_SIDELOAD_APK === '1';
-  const abis = ['armeabi-v7a', 'arm64-v8a'];
+  const sideloadApk = process.env.ANDROID_SIDELOAD_APK === "1";
+  const abis = ["armeabi-v7a", "arm64-v8a"];
 
   config.plugins = (config.plugins || []).map((plugin) => {
-    if (Array.isArray(plugin) && plugin[0] === 'expo-build-properties') {
+    if (Array.isArray(plugin) && plugin[0] === "expo-build-properties") {
       return [
         plugin[0],
         {
@@ -93,9 +97,9 @@ module.exports = ({ config }) => {
   });
 
   console.log(
-    `[expo config] API ${apiUrl || '(unset - local dev)'} | ` +
-      `cleartext HTTP ${needsCleartext ? 'ALLOWED' : 'blocked'} | ` +
-      `native libs ${sideloadApk ? `compressed, ${abis.join('+')} only` : 'uncompressed, all ABIs'}`
+    `[expo config] API ${apiUrl || "(unset - local dev)"} | ` +
+      `cleartext HTTP ${needsCleartext ? "ALLOWED" : "blocked"} | ` +
+      `native libs ${sideloadApk ? `compressed, ${abis.join("+")} only` : "uncompressed, all ABIs"}`,
   );
 
   // Members' photos and contact details are the whole content here, so the

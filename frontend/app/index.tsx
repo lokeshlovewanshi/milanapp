@@ -6,7 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import AuthHero from '../components/AuthHero';
 import { PrimaryButton, SecondaryButton, GoogleButton, OrRule } from '../components/AuthButtons';
 import { useGuardedRouter } from '../utils/useGuardedRouter';
-import { authAPI } from '../utils/api';
+import { authAPI, profileAPI } from '../utils/api';
 import { isGoogleConfigured, signInWithGoogle } from '../utils/googleSignIn';
 import { persistSession, destinationFor } from '../utils/afterAuth';
 import { auth as authTheme } from '../components/theme';
@@ -50,7 +50,19 @@ export default function WelcomeScreen() {
 
         if (token) {
           setSignedIn(true);
-          router.replace('/(tabs)/home');
+          // Do this on cold start too. Without it, a newly registered member
+          // could close the OTP screen, reopen the app, and bypass email
+          // confirmation using the stored session token.
+          try {
+            const me = await profileAPI.getMe();
+            if (!active) return;
+            router.replace(me.data?.emailVerified === false ? '/verify-email' : '/(tabs)/home');
+          } catch {
+            // Keep the prior session behavior if a transient network failure
+            // prevents the profile lookup; the server remains authoritative.
+            if (!active) return;
+            router.replace('/(tabs)/home');
+          }
         } else {
           setSignedIn(false);
         }

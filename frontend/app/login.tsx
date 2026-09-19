@@ -13,7 +13,7 @@ import { auth as authTheme } from "../components/theme";
 
 import { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { authAPI } from "../utils/api";
+import { authAPI, profileAPI } from "../utils/api";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useGuardedRouter } from "../utils/useGuardedRouter";
 import { isGoogleConfigured, signInWithGoogle } from "../utils/googleSignIn";
@@ -134,7 +134,18 @@ export default function LoginScreen() {
       await persistSession(response.data);
       await AsyncStorage.setItem("user_email", trimmedEmail);
 
-      router.replace("/(tabs)/home");
+      // Password accounts that have not confirmed their address must finish
+      // OTP verification before they can enter the app. Google login does not
+      // use this path because its identity token already verifies the email.
+      let needsEmailVerification = false;
+      try {
+        const me = await profileAPI.getMe();
+        needsEmailVerification = me.data?.emailVerified === false;
+      } catch {
+        // A temporary profile refresh failure must not turn a successful login
+        // into a false "Login Failed" message. The launch guard will retry.
+      }
+      router.replace(needsEmailVerification ? "/verify-email" : destinationFor(response.data));
     } catch (error: any) {
       console.error("Login Error:", error);
 

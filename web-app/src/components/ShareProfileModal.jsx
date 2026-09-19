@@ -12,7 +12,10 @@ function calculateAge(dob) {
 function formatProfileCode(id) {
   if (!id) return "";
   const raw = String(id);
-  const digits = raw.startsWith("JM") || raw.startsWith("GM") ? raw.slice(2) : raw.padStart(5, "0");
+  const digits =
+    raw.startsWith("JM") || raw.startsWith("GM")
+      ? raw.slice(2)
+      : raw.padStart(5, "0");
   return `GM${digits}`;
 }
 
@@ -30,7 +33,10 @@ async function loadCandidateImageElement(url) {
     });
     if (res.ok) {
       const rawBlob = await res.blob();
-      const mime = rawBlob.type && rawBlob.type.startsWith("image/") ? rawBlob.type : "image/jpeg";
+      const mime =
+        rawBlob.type && rawBlob.type.startsWith("image/")
+          ? rawBlob.type
+          : "image/jpeg";
       const imageBlob = new Blob([rawBlob], { type: mime });
       const objectUrl = URL.createObjectURL(imageBlob);
       const img = new Image();
@@ -42,7 +48,10 @@ async function loadCandidateImageElement(url) {
       return { img, objectUrl };
     }
   } catch (err) {
-    console.warn("loadCandidateImageElement: reload fetch failed, trying standard fetch:", err);
+    console.warn(
+      "loadCandidateImageElement: reload fetch failed, trying standard fetch:",
+      err,
+    );
   }
 
   // 2. Standard fetch with mode 'cors'
@@ -53,7 +62,10 @@ async function loadCandidateImageElement(url) {
     });
     if (res.ok) {
       const rawBlob = await res.blob();
-      const mime = rawBlob.type && rawBlob.type.startsWith("image/") ? rawBlob.type : "image/jpeg";
+      const mime =
+        rawBlob.type && rawBlob.type.startsWith("image/")
+          ? rawBlob.type
+          : "image/jpeg";
       const imageBlob = new Blob([rawBlob], { type: mime });
       const objectUrl = URL.createObjectURL(imageBlob);
       const img = new Image();
@@ -65,7 +77,10 @@ async function loadCandidateImageElement(url) {
       return { img, objectUrl };
     }
   } catch (err) {
-    console.warn("loadCandidateImageElement: standard fetch failed, trying direct Image:", err);
+    console.warn(
+      "loadCandidateImageElement: standard fetch failed, trying direct Image:",
+      err,
+    );
   }
 
   // 3. Direct new Image with crossOrigin
@@ -98,7 +113,9 @@ export default function ShareProfileModal({ profile, photos = [], onClose }) {
   const heightStr = formatHeight(profile?.height);
   const educationStr = formatEducation(profile?.education);
   const professionStr = formatProfession(profile?.profession);
-  const cityStr = [profile?.city || profile?.town, profile?.state].filter(Boolean).join(", ");
+  const cityStr = [profile?.city || profile?.town, profile?.state]
+    .filter(Boolean)
+    .join(", ");
   const gotraStr = profile?.gotra || "LOVEWANSHI";
 
   const candidatePhotos = Array.from(
@@ -110,12 +127,13 @@ export default function ShareProfileModal({ profile, photos = [], onClose }) {
       ...(profile?.profileImages || []),
       profile?.imageUrl,
       ...(profile?.profileImageDetails || []).map((p) => p?.url),
-    ])
+    ]),
   ).filter(Boolean);
 
   const primaryPhoto = candidatePhotos[0] || null;
   const shareUrl = `https://www.lovewanshisamaj.in/profiles/${code}`;
-  const playStoreUrl = "https://play.google.com/store/apps/details?id=com.jeevanmilansathi.frontend";
+  const playStoreUrl =
+    "https://play.google.com/store/apps/details?id=com.lovewanshi.jeevanmilansathi";
 
   // Build clean quick details line
   const quickDetails = [
@@ -171,7 +189,8 @@ export default function ShareProfileModal({ profile, photos = [], onClose }) {
       }
 
       if (!alive) {
-        if (loadedResult?.objectUrl) URL.revokeObjectURL(loadedResult.objectUrl);
+        if (loadedResult?.objectUrl)
+          URL.revokeObjectURL(loadedResult.objectUrl);
         return;
       }
 
@@ -198,7 +217,9 @@ export default function ShareProfileModal({ profile, photos = [], onClose }) {
 
         ctx.drawImage(img, offsetX, offsetY, renderW, renderH);
       } else {
-        console.warn("Could not load any candidate photo on canvas, using fallback gradient");
+        console.warn(
+          "Could not load any candidate photo on canvas, using fallback gradient",
+        );
         // Draw elegant gradient background
         const bgGrad = ctx.createLinearGradient(0, 0, width, height);
         bgGrad.addColorStop(0, "#8A1538");
@@ -248,8 +269,14 @@ export default function ShareProfileModal({ profile, photos = [], onClose }) {
       // 4. Age & Height line
       ctx.fillStyle = "#E2E8F0";
       ctx.font = "600 22px 'Nunito Sans', -apple-system, sans-serif";
-      const metricsText = [age ? `${age} Yrs` : "", heightStr ? heightStr : ""].filter(Boolean).join(" • ");
-      ctx.fillText(metricsText || "LOVEWANSHI Community Member", 40, height - 220);
+      const metricsText = [age ? `${age} Yrs` : "", heightStr ? heightStr : ""]
+        .filter(Boolean)
+        .join(" • ");
+      ctx.fillText(
+        metricsText || "LOVEWANSHI Community Member",
+        40,
+        height - 220,
+      );
 
       // 5. Gotra Badge Pill
       const gotraBadgeY = height - 190;
@@ -264,7 +291,9 @@ export default function ShareProfileModal({ profile, photos = [], onClose }) {
       // 6. Career & Education line
       ctx.fillStyle = "#F8FAFC";
       ctx.font = "600 20px 'Nunito Sans', -apple-system, sans-serif";
-      const careerText = [professionStr, educationStr].filter(Boolean).join(" • ");
+      const careerText = [professionStr, educationStr]
+        .filter(Boolean)
+        .join(" • ");
       if (careerText) {
         ctx.fillText(`💼 ${careerText}`, 40, height - 120);
       }
@@ -277,19 +306,27 @@ export default function ShareProfileModal({ profile, photos = [], onClose }) {
       // 8. Branding Footer Bar
       ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
       ctx.font = "600 15px 'Nunito Sans', -apple-system, sans-serif";
-      ctx.fillText(`Lovewanshi Parinay (lovewanshisamaj.in) • ID: ${code}`, 40, height - 35);
+      ctx.fillText(
+        `Lovewanshi Parinay (lovewanshisamaj.in) • ID: ${code}`,
+        40,
+        height - 35,
+      );
 
       // Convert to blob
-      canvas.toBlob((b) => {
-        if (alive) {
-          setCardBlob(b);
-          setGeneratingCard(false);
-          if (currentObjectUrl) {
-            URL.revokeObjectURL(currentObjectUrl);
-            currentObjectUrl = null;
+      canvas.toBlob(
+        (b) => {
+          if (alive) {
+            setCardBlob(b);
+            setGeneratingCard(false);
+            if (currentObjectUrl) {
+              URL.revokeObjectURL(currentObjectUrl);
+              currentObjectUrl = null;
+            }
           }
-        }
-      }, "image/jpeg", 0.95);
+        },
+        "image/jpeg",
+        0.95,
+      );
     }
 
     renderCard();
@@ -297,15 +334,36 @@ export default function ShareProfileModal({ profile, photos = [], onClose }) {
       alive = false;
       if (currentObjectUrl) URL.revokeObjectURL(currentObjectUrl);
     };
-  }, [profile, primaryPhoto, name, code, age, heightStr, educationStr, professionStr, cityStr, gotraStr]);
+  }, [
+    profile,
+    primaryPhoto,
+    name,
+    code,
+    age,
+    heightStr,
+    educationStr,
+    professionStr,
+    cityStr,
+    gotraStr,
+  ]);
 
   // Handle Share to WhatsApp
   async function handleShareWhatsApp() {
     setSharing(true);
     try {
       // 1. Mobile Web Share API with image attachment (produces exact photo + caption on WhatsApp)
-      if (cardBlob && navigator.canShare && navigator.canShare({ files: [new File([cardBlob], `${code}_card.jpg`, { type: "image/jpeg" })] })) {
-        const file = new File([cardBlob], `${code}_card.jpg`, { type: "image/jpeg" });
+      if (
+        cardBlob &&
+        navigator.canShare &&
+        navigator.canShare({
+          files: [
+            new File([cardBlob], `${code}_card.jpg`, { type: "image/jpeg" }),
+          ],
+        })
+      ) {
+        const file = new File([cardBlob], `${code}_card.jpg`, {
+          type: "image/jpeg",
+        });
         await navigator.share({
           files: [file],
           title: `${name} - Lovewanshi Parinay Matrimony`,
@@ -373,37 +431,65 @@ export default function ShareProfileModal({ profile, photos = [], onClose }) {
   return (
     <div className="share-modal-overlay" onClick={onClose}>
       <div className="share-modal-card" onClick={(e) => e.stopPropagation()}>
-        
         {/* Top Header */}
         <div className="share-modal-header">
           <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
-            <div style={{ width: 36, height: 36, borderRadius: "50%", background: "#ECFDF5", color: "#059669", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <div
+              style={{
+                width: 36,
+                height: 36,
+                borderRadius: "50%",
+                background: "#ECFDF5",
+                color: "#059669",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
               <Icon name="share" size={18} />
             </div>
             <div>
-              <h3 style={{ margin: 0, fontSize: "1.2rem", fontWeight: 800, color: "var(--dark-navy)" }}>
+              <h3
+                style={{
+                  margin: 0,
+                  fontSize: "1.2rem",
+                  fontWeight: 800,
+                  color: "var(--dark-navy)",
+                }}
+              >
                 Share Matrimonial Profile
               </h3>
-              <span style={{ fontSize: "0.82rem", color: "var(--secondary-text)" }}>
+              <span
+                style={{ fontSize: "0.82rem", color: "var(--secondary-text)" }}
+              >
                 Share with family and friends on WhatsApp
               </span>
             </div>
           </div>
-          <button type="button" className="modal-close-btn" onClick={onClose} title="Close">
+          <button
+            type="button"
+            className="modal-close-btn"
+            onClick={onClose}
+            title="Close"
+          >
             ✕
           </button>
         </div>
 
         {/* Modal Body */}
         <div className="share-modal-body">
-          
           {/* Card Preview Column */}
           <div className="share-preview-col">
             <div className="share-card-visual-frame">
               {/* Visible Live HTML Preview */}
               <div className="share-card-inner">
                 {primaryPhoto ? (
-                  <img src={primaryPhoto} alt={name} className="share-card-bg-img" crossOrigin="anonymous" />
+                  <img
+                    src={primaryPhoto}
+                    alt={name}
+                    className="share-card-bg-img"
+                    crossOrigin="anonymous"
+                  />
                 ) : (
                   <div className="share-card-bg-placeholder" />
                 )}
@@ -415,13 +501,20 @@ export default function ShareProfileModal({ profile, photos = [], onClose }) {
                   </div>
                   <h4 className="share-card-name">{name}</h4>
                   <div className="share-card-metrics">
-                    {[age ? `${age} Yrs` : "", heightStr].filter(Boolean).join(" • ")}
+                    {[age ? `${age} Yrs` : "", heightStr]
+                      .filter(Boolean)
+                      .join(" • ")}
                   </div>
                   <div className="share-card-gotra-pill">
                     गोत्र: {gotraStr} • LOVEWANSHI
                   </div>
                   <div className="share-card-sub-info">
-                    <span>💼 {[professionStr, educationStr].filter(Boolean).join(" • ")}</span>
+                    <span>
+                      💼{" "}
+                      {[professionStr, educationStr]
+                        .filter(Boolean)
+                        .join(" • ")}
+                    </span>
                     <span>📍 {cityStr || "India"}</span>
                   </div>
                 </div>
@@ -434,7 +527,15 @@ export default function ShareProfileModal({ profile, photos = [], onClose }) {
 
           {/* Proposal Message Text Preview */}
           <div className="share-text-col">
-            <label style={{ fontSize: "0.86rem", fontWeight: 700, color: "var(--dark-navy)", display: "block", marginBottom: "0.4rem" }}>
+            <label
+              style={{
+                fontSize: "0.86rem",
+                fontWeight: 700,
+                color: "var(--dark-navy)",
+                display: "block",
+                marginBottom: "0.4rem",
+              }}
+            >
               Proposal Message Preview:
             </label>
             <div className="share-message-preview-box">
@@ -458,10 +559,22 @@ export default function ShareProfileModal({ profile, photos = [], onClose }) {
                 disabled={sharing || generatingCard}
               >
                 <WhatsAppIcon size={22} color="#FFFFFF" />
-                <span>{generatingCard ? "Preparing photo card..." : sharing ? "Opening WhatsApp..." : "Share to WhatsApp"}</span>
+                <span>
+                  {generatingCard
+                    ? "Preparing photo card..."
+                    : sharing
+                      ? "Opening WhatsApp..."
+                      : "Share to WhatsApp"}
+                </span>
               </button>
 
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.6rem" }}>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr",
+                  gap: "0.6rem",
+                }}
+              >
                 {/* Download Photo Card */}
                 <button
                   type="button"
@@ -471,7 +584,9 @@ export default function ShareProfileModal({ profile, photos = [], onClose }) {
                   title="Download photo card as an image"
                 >
                   <Icon name="download" size={16} />
-                  <span>{generatingCard ? "Preparing..." : "Download Card"}</span>
+                  <span>
+                    {generatingCard ? "Preparing..." : "Download Card"}
+                  </span>
                 </button>
 
                 {/* Copy Text */}
@@ -486,9 +601,7 @@ export default function ShareProfileModal({ profile, photos = [], onClose }) {
               </div>
             </div>
           </div>
-
         </div>
-
       </div>
     </div>
   );

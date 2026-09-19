@@ -14,6 +14,7 @@ import com.match.partner.openapi.user.model.dto.FamilyInfoDTO;
 import com.match.partner.openapi.user.model.dto.ReligionInfoDTO;
 import com.match.partner.openapi.user.model.dto.ProfileFilter;
 import com.match.partner.openapi.profile.service.ProfileCompletionCalculator;
+import com.match.partner.openapi.reference.service.BirthCityResolver;
 import com.match.partner.openapi.user.repository.UserProfileRepository;
 import com.match.partner.openapi.views.service.ViewsServiceInterface;
 import java.time.LocalDate;
@@ -70,6 +71,8 @@ public class UserProfileServiceImpl implements UserProfileServiceInterface {
      */
     @Autowired
     private ProfileCompletionCalculator completionCalculator;
+    @Autowired
+    private BirthCityResolver birthCityResolver;
 
 
     public UserProfile updateUserProfile(UserProfileDTO dto, UserProfile userProfile) {
@@ -148,7 +151,7 @@ public class UserProfileServiceImpl implements UserProfileServiceInterface {
             userProfile.setTimeOfBirth(dto.getTimeOfBirth());
         }
         if (dto.getPlaceOfBirth() != null) {
-            userProfile.setPlaceOfBirth(dto.getPlaceOfBirth());
+            userProfile.setPlaceOfBirth(birthCityResolver.resolve(dto.getPlaceOfBirth()).getName());
         }
         if (dto.getZodiac() != null) {
             userProfile.setZodiac(dto.getZodiac());
@@ -635,7 +638,7 @@ public class UserProfileServiceImpl implements UserProfileServiceInterface {
         if (dto.getAakna() != null) userProfile.setAakna(dto.getAakna());
         if (dto.getMotherTongue() != null) userProfile.setMotherTongue(dto.getMotherTongue());
         if (dto.getTimeOfBirth() != null) userProfile.setTimeOfBirth(dto.getTimeOfBirth());
-        if (dto.getPlaceOfBirth() != null) userProfile.setPlaceOfBirth(dto.getPlaceOfBirth());
+        if (dto.getPlaceOfBirth() != null) userProfile.setPlaceOfBirth(birthCityResolver.resolve(dto.getPlaceOfBirth()).getName());
         if (dto.getZodiac() != null) userProfile.setZodiac(dto.getZodiac());
         if (dto.getManglik() != null) userProfile.setManglik(dto.getManglik());
         if (dto.getNakshatra() != null) userProfile.setNakshatra(dto.getNakshatra());

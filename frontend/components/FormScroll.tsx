@@ -90,14 +90,20 @@ export const useCoveredHeight = (measured: number): number => {
 };
 
 const FormScroll = forwardRef<FormScrollHandle, Props>(
-  ({ children, gap = 24, contentContainerStyle, onScroll, onTouchStart, ...rest }, ref) => {
+  ({ children, gap = 24, contentContainerStyle, onScroll, onTouchStart, onScrollBeginDrag, ...rest }, ref) => {
     const scrollRef = useRef<ScrollView>(null);
     const offset = useRef(0);
+    const userIsDragging = useRef(false);
 
     // Measured, not assumed: inside a Modal the OS has usually shrunk this view
     // already, and padding again would move the content twice.
     const [viewport, setViewport] = useState(0);
-    const covered = useCoveredHeight(viewport);
+    // Keep the full, keyboard-closed viewport. Comparing the current viewport
+    // directly to Dimensions.get('window') was wrong for screens with a fixed
+    // header and footer: that permanent chrome was mistaken for keyboard
+    // resizing, so Android added too little space and lower inputs stayed
+    // behind the keyboard.
+    const [closedViewport, setClosedViewport] = useState(0);
 
     // The raw height as well, because the two answer different questions.
     // `covered` says how much padding to add - zero is the right answer when
@@ -109,6 +115,8 @@ const FormScroll = forwardRef<FormScrollHandle, Props>(
     // by scrolling by hand, which is precisely what this component exists to
     // spare people.
     const rawKeyboard = useKeyboardHeight();
+    const alreadyHandled = Math.max(0, closedViewport - viewport);
+    const covered = rawKeyboard === 0 ? 0 : Math.max(0, rawKeyboard - alreadyHandled);
 
     useImperativeHandle(ref, () => ({
       scrollToEnd: () => scrollRef.current?.scrollToEnd({ animated: true }),
@@ -122,13 +130,17 @@ const FormScroll = forwardRef<FormScrollHandle, Props>(
       [onScroll],
     );
 
-    const scrollFocusedInputIntoView = useCallback(() => {
+    const scrollFocusedInputIntoView = useCallback((skipWhileDragging = false) => {
       if (rawKeyboard === 0) return;
 
       // Run whenever a field is tapped as well as when the keyboard opens.
       // Otherwise moving from one field to a lower one keeps that input below
       // an already-open keyboard.
       setTimeout(() => {
+        // A touch on an input should position it above the keyboard. A drag on
+        // the form is different: it is an intentional manual scroll and must
+        // never be overwritten by the delayed focus-positioning callback.
+        if (skipWhileDragging && userIsDragging.current) return;
         const input = TextInput.State.currentlyFocusedInput?.();
         const scroller = scrollRef.current;
         if (!input || !scroller) return;
@@ -169,11 +181,23 @@ const FormScroll = forwardRef<FormScrollHandle, Props>(
     return (
       <ScrollView
         ref={scrollRef}
-        onLayout={(e) => setViewport(e.nativeEvent.layout.height)}
+        onLayout={(e) => {
+          const height = e.nativeEvent.layout.height;
+          setViewport(height);
+          // The keyboard can make Android report a smaller layout before its
+          // did-show event arrives. Retaining the largest measured size gives
+          // us the true keyboard-closed viewport in either event order.
+          setClosedViewport((previous) => Math.max(previous, height));
+        }}
         onScroll={handleScroll}
         onTouchStart={(event) => {
           onTouchStart?.(event);
-          scrollFocusedInputIntoView();
+          userIsDragging.current = false;
+          scrollFocusedInputIntoView(true);
+        }}
+        onScrollBeginDrag={(event) => {
+          userIsDragging.current = true;
+          onScrollBeginDrag?.(event);
         }}
         scrollEventThrottle={16}
         keyboardShouldPersistTaps="handled"

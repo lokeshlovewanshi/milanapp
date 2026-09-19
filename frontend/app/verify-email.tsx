@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useLocalSearchParams } from 'expo-router';
 import { useGuardedRouter } from '../utils/useGuardedRouter';
 import { otpAPI, profileAPI } from '../utils/api';
 import AuthHero from '../components/AuthHero';
@@ -20,11 +21,14 @@ const RESEND_AFTER = 30;
  */
 export default function VerifyEmailScreen() {
   const router = useGuardedRouter();
+  const { sent: sentParam } = useLocalSearchParams<{ sent?: string }>();
 
   const [email, setEmail] = useState('');
   const [code, setCode] = useState('');
   const [busy, setBusy] = useState(false);
-  const [sent, setSent] = useState(false);
+  // The sign-up screen has already sent the first code. Opening this screen
+  // from Account Settings starts with the explicit Send Code button instead.
+  const [sent, setSent] = useState(sentParam === '1');
   const [done, setDone] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [cooldown, setCooldown] = useState(0);

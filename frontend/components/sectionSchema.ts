@@ -134,9 +134,11 @@ export const SECTIONS: Record<string, SectionSpec> = {
         kind: "text",
         keyboard: "phone-pad",
       },
-      // state/city are special-cased in the screen: city options depend on state.
+      // State remains a normal picker. City uses the same searchable city
+      // picker as birth place, so a member is not restricted to the small
+      // dropdown for the selected state and can add a missing city themselves.
       { key: "state", label: "State", kind: "select" },
-      { key: "city", label: "City", kind: "select", suggest: 5 },
+      { key: "city", label: "City", kind: "select", remote: "city", suggest: 5 },
       { key: "country", label: "Country", kind: "text", placeholder: "India" },
       { key: "presentAddress", label: "Present address", kind: "textarea" },
       { key: "permanentAddress", label: "Permanent address", kind: "textarea" },

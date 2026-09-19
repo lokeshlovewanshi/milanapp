@@ -150,7 +150,9 @@ export default function SectionForm({ spec, values, onChange, errors }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [picker]);
 
-  // City options depend on the chosen state.
+  // The legacy contact-city picker still uses the selected state to warm its
+  // local list. Remote city fields (contact city and place of birth) use the
+  // searchable all-city list below, so typing is never restricted by state.
   useEffect(() => {
     if (spec.key === 'contact') loadCities(values.state);
   }, [spec.key, values.state, loadCities]);
@@ -158,8 +160,8 @@ export default function SectionForm({ spec, values, onChange, errors }: Props) {
   const optionsFor = useCallback(
     (field: FieldSpec): Option[] => {
       if (field.key === 'state') return states.map((s) => ({ code: s.name, label: s.name }));
-      if (field.key === 'city') return cities.map((c) => ({ code: c.name, label: c.name }));
       if (field.remote === 'city') return cityBrowse.items;
+      if (field.key === 'city') return cities.map((c) => ({ code: c.name, label: c.name }));
       return field.lookup ? list(field.lookup) : [];
     },
     [states, cities, list, cityBrowse.items]

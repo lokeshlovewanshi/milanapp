@@ -106,6 +106,7 @@ export default function EditProfileScreen() {
           scrolls for it; every other form screen already used it and this one
           was missed. */}
       <FormScroll
+        style={{ flex: 1 }}
         contentContainerStyle={styles.scroll}
         showsVerticalScrollIndicator={false}
       >

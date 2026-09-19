@@ -80,18 +80,14 @@ export default function AccountSettingsScreen() {
             label: passwordSet ? 'Change Password' : 'Create Password',
             href: '/change-password',
           },
-          // Only shown when there is something to do. A permanent "Confirm
-          // Email" row on an account that is already confirmed is a chore that
-          // never goes away.
-          ...(emailVerified
-            ? []
-            : [
-                {
-                  icon: 'mail-unread-outline' as const,
-                  label: 'Confirm Email',
-                  href: '/verify-email',
-                },
-              ]),
+          // Keep this visible even after confirmation. Previously a confirmed
+          // address made the whole feature disappear, so members could not
+          // tell that email verification exists or check their status.
+          {
+            icon: emailVerified ? 'checkmark-circle-outline' : 'mail-unread-outline',
+            label: emailVerified ? 'Email Verified' : 'Verify Email',
+            href: '/verify-email',
+          },
           ...MANAGE_ACCOUNT,
         ];
 
