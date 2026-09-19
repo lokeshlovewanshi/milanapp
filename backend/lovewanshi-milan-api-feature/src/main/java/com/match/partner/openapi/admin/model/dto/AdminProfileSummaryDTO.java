@@ -20,5 +20,10 @@ public class AdminProfileSummaryDTO {
     private LocalDateTime createdAt;
     private Boolean verified;
     private Boolean blocked;
+    /** Whether the member proved they control the login email using the OTP. */
+    private Boolean emailVerified;
+    /** Soft-deleted profiles are retained for audit purposes, never browsable. */
+    private Boolean deleted;
+    private LocalDateTime deletedAt;
     private Boolean isPhoto;
 }

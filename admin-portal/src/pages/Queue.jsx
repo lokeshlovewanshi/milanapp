@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { api } from "../api";
+import AccountStatus from "../components/AccountStatus";
 import ContactMessageModal from "../components/ContactMessageModal";
 import EditProfileModal from "../components/EditProfileModal";
 
@@ -165,6 +166,7 @@ export default function Queue() {
               <tr style={{ background: "#F9FAFB", borderBottom: "1px solid #E5E7EB" }}>
                 <th style={{ padding: "0.75rem 1rem", fontWeight: "600", fontSize: "0.85rem", color: "#374151" }}>ID</th>
                 <th style={{ padding: "0.75rem 1rem", fontWeight: "600", fontSize: "0.85rem", color: "#374151" }}>Name</th>
+                <th style={{ padding: "0.75rem 1rem", fontWeight: "600", fontSize: "0.85rem", color: "#374151" }}>Account status</th>
                 <th style={{ padding: "0.75rem 1rem", fontWeight: "600", fontSize: "0.85rem", color: "#374151" }}>Mobile No</th>
                 <th style={{ padding: "0.75rem 1rem", fontWeight: "600", fontSize: "0.85rem", color: "#374151" }}>Is Photo</th>
                 <th style={{ padding: "0.75rem 1rem", fontWeight: "600", fontSize: "0.85rem", color: "#374151" }}>Registered</th>
@@ -207,6 +209,10 @@ export default function Queue() {
                         {p.blocked && <span className="badge badge-blocked">Blocked</span>}
                       </div>
                       {p.email && <div className="muted small">{p.email}</div>}
+                    </td>
+
+                    <td style={{ padding: "0.85rem 1rem" }}>
+                      <AccountStatus profile={p} />
                     </td>
 
                     {/* Mobile No */}

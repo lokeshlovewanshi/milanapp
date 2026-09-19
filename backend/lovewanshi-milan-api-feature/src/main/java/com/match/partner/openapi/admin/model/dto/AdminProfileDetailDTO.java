@@ -38,6 +38,9 @@ public class AdminProfileDetailDTO {
     private LocalDateTime createdAt;
     private Boolean verified;
     private Boolean blocked;
+    private Boolean emailVerified;
+    private Boolean deleted;
+    private LocalDateTime deletedAt;
     private Boolean hidden;
 
     @Data

@@ -205,6 +205,9 @@ public class AdminProfileService {
         dto.setCreatedAt(profile.getCreatedAt());
         dto.setVerified(Boolean.TRUE.equals(profile.getVerified()));
         dto.setBlocked(Boolean.TRUE.equals(profile.getBlocked()));
+        dto.setEmailVerified(profile.isEmailVerified());
+        dto.setDeleted(profile.getDeletedAt() != null);
+        dto.setDeletedAt(profile.getDeletedAt());
 
         List<AttachmentDao> attachments = attachmentRepository.findByUserId(profile.getId());
         dto.setIsPhoto(attachments != null && !attachments.isEmpty());
@@ -238,6 +241,9 @@ public class AdminProfileService {
         dto.setCreatedAt(profile.getCreatedAt());
         dto.setVerified(Boolean.TRUE.equals(profile.getVerified()));
         dto.setBlocked(Boolean.TRUE.equals(profile.getBlocked()));
+        dto.setEmailVerified(profile.isEmailVerified());
+        dto.setDeleted(profile.getDeletedAt() != null);
+        dto.setDeletedAt(profile.getDeletedAt());
 
         dto.setComplexion(profile.getComplexion());
         dto.setWeight(profile.getWeight());
