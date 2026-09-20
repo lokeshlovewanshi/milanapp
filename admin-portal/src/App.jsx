@@ -20,6 +20,8 @@ import CreateProfile from "./pages/CreateProfile";
 import DirectMessage from "./pages/DirectMessage";
 import VerifiedProfiles from "./pages/VerifiedProfiles";
 import DeletedProfiles from "./pages/DeletedProfiles";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import DeleteAccount from "./pages/DeleteAccount";
 
 function isLoggedIn() {
   return Boolean(localStorage.getItem("adminToken"));
@@ -260,7 +262,12 @@ export default function App() {
             </Layout>
           </RequireAuth>
         }
-      />
+      {/* Public Pages for Google Play Compliance */}
+      <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+      <Route path="/privacy-policy.html" element={<PrivacyPolicy />} />
+      <Route path="/privacy/privacy-policy.html" element={<PrivacyPolicy />} />
+      <Route path="/delete-account" element={<DeleteAccount />} />
+      <Route path="/delete-account.html" element={<DeleteAccount />} />
       <Route path="*" element={<Navigate to="/queue" replace />} />
     </Routes>
   );
