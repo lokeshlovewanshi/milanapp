@@ -102,10 +102,8 @@ module.exports = ({ config }) => {
       `native libs ${sideloadApk ? `compressed, ${abis.join("+")} only` : "uncompressed, all ABIs"}`,
   );
 
-  // Members' photos and contact details are the whole content here, so the
-  // window is marked FLAG_SECURE on every build - see the plugin for what that
-  // does and does not stop.
-  config = withScreenshotBlocked(config);
+  // TEMPORARILY DISABLED: Allow screenshots for Play Store assets
+  // config = withScreenshotBlocked(config);
 
   return sideloadApk ? withSideloadApkAbis(config, { abis }) : config;
 };
