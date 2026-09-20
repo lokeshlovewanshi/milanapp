@@ -191,7 +191,30 @@ export default function PrivacyPolicy() {
             fontSize: "22px",
           }}
         >
-          5. Contact & Support
+          5. Child Safety Standards (CSAE Prevention)
+        </h2>
+        <p>
+          LOVEWANSHI Milan is strictly an 18+ platform for adult matrimonial
+          alliances. We have zero tolerance for Child Sexual Abuse Material (CSAM)
+          and exploitation. Review our dedicated standards and reporting
+          procedures at{" "}
+          <a href="/child-safety" style={{ color: "#8B1E2F" }}>
+            https://admin.lovewanshisamaj.in/child-safety
+          </a>
+          .
+        </p>
+      </section>
+
+      <section style={{ marginBottom: "28px" }}>
+        <h2
+          style={{
+            color: "#8B1E2F",
+            borderBottom: "1px solid #e8dfe0",
+            paddingBottom: "6px",
+            fontSize: "22px",
+          }}
+        >
+          6. Contact & Support
         </h2>
         <p>
           If you have any questions or grievance requests regarding your

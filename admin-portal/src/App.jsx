@@ -22,6 +22,7 @@ import VerifiedProfiles from "./pages/VerifiedProfiles";
 import DeletedProfiles from "./pages/DeletedProfiles";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import DeleteAccount from "./pages/DeleteAccount";
+import ChildSafety from "./pages/ChildSafety";
 
 function isLoggedIn() {
   return Boolean(localStorage.getItem("adminToken"));
@@ -269,6 +270,8 @@ export default function App() {
       <Route path="/privacy/privacy-policy.html" element={<PrivacyPolicy />} />
       <Route path="/delete-account" element={<DeleteAccount />} />
       <Route path="/delete-account.html" element={<DeleteAccount />} />
+      <Route path="/child-safety" element={<ChildSafety />} />
+      <Route path="/child-safety.html" element={<ChildSafety />} />
       <Route path="*" element={<Navigate to="/queue" replace />} />
     </Routes>
   );
