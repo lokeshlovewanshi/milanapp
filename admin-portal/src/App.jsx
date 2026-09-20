@@ -262,6 +262,7 @@ export default function App() {
             </Layout>
           </RequireAuth>
         }
+      />
       {/* Public Pages for Google Play Compliance */}
       <Route path="/privacy-policy" element={<PrivacyPolicy />} />
       <Route path="/privacy-policy.html" element={<PrivacyPolicy />} />
