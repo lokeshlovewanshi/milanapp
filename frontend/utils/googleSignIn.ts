@@ -185,10 +185,11 @@ export async function signInWithGoogle(): Promise<string | null> {
       });
       throw new Error(
         "DEVELOPER_ERROR - Google rejected the app configuration. Check, in order:\n\n" +
-          "1. SHA-1: run `cd android && ./gradlew signingReport` and add the\n" +
-          '   "Variant: debug" SHA1 to your ANDROID OAuth client in Google Cloud\n' +
-          "   Console. A debug build is signed with the debug keystore, so the\n" +
-          "   release SHA-1 will not work here.\n" +
+          "1. SHA-1: add the certificate for the exact build you installed to\n" +
+          "   the ANDROID OAuth client in Firebase / Google Cloud:\n" +
+          "   - EAS production or preview APK: use that EAS keystore SHA-1.\n" +
+          "   - Local `expo run:android`: run `cd android && ./gradlew signingReport`\n" +
+          '     and use the "Variant: debug" SHA-1.\n' +
           "2. Package name on that client must be exactly:\n" +
           "   com.lovewanshi.jeevanmilansathi\n" +
           "3. webClientId must be the WEB client ID, not the Android one.\n" +

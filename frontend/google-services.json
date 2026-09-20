@@ -1,41 +1,33 @@
 {
   "project_info": {
-    "project_number": "60164489360",
-    "project_id": "lovewanshi-milan-8672a",
-    "storage_bucket": "lovewanshi-milan-8672a.firebasestorage.app"
+    "project_number": "406753347579",
+    "project_id": "lovewanshi-milan",
+    "storage_bucket": "lovewanshi-milan.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:60164489360:android:ccc76307ba5dc61abf1815",
+        "mobilesdk_app_id": "1:406753347579:android:628a982c481bc26a0b6d5e",
         "android_client_info": {
           "package_name": "com.lovewanshi.jeevanmilansathi"
         }
       },
       "oauth_client": [
         {
-          "client_id": "60164489360-55betojkvetvikg5du6boogjgeu6uhk7.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.lovewanshi.jeevanmilansathi",
-            "certificate_hash": "9ca4f6205d2f066f74912ffb1515185b0d0ae28f"
-          }
-        },
-        {
-          "client_id": "60164489360-1pkt5m1o5anp6iervgjc3pug1qadrosa.apps.googleusercontent.com",
-          "client_type": 3
+          "client_id": "406753347579-m6lrjt7sqarvqg745dt7avfqi3m0nv3a.apps.googleusercontent.com",
+          "client_type": 1
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyC26aOs4ybPNZMiqN1C4y35XMjA8OeQv-k"
+          "current_key": "AIzaSyA1Ht6CXD7IP6CHw7Zb83AijMMsFqShGVw"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "60164489360-1pkt5m1o5anp6iervgjc3pug1qadrosa.apps.googleusercontent.com",
+              "client_id": "406753347579-m6lrjt7sqarvqg745dt7avfqi3m0nv3a.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

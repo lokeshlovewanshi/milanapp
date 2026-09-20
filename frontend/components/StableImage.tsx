@@ -74,9 +74,9 @@ export default function StableImage({
         contentPosition={contentPosition}
         cachePolicy="memory-disk"
         transition={180}
-        // onLoadStart={() => {
-        //   if (!loadedUris.has(displayUri)) setLoading(true);
-        // }}
+        onLoadStart={() => {
+          if (!loadedUris.has(displayUri)) setLoading(true);
+        }}
         onLoadEnd={() => {
           loadedUris.add(displayUri);
           workingUriByImage.set(identity, displayUri);
