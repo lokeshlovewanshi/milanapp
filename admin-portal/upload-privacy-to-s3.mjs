@@ -1,7 +1,4 @@
-import {
-  S3Client,
-  PutObjectCommand,
-} from "@aws-sdk/client-s3";
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import {
   CloudFrontClient,
   CreateInvalidationCommand,
@@ -42,7 +39,7 @@ async function uploadFile(bucket, key, filePath) {
       Key: key,
       Body: fileContent,
       ContentType: "text/html",
-    })
+    }),
   );
   console.log(`✓ Uploaded successfully to s3://${bucket}/${key}`);
 }
@@ -57,7 +54,8 @@ async function main() {
   }
 
   // 1. Upload to Admin Portal Bucket (serves via admin.lovewanshisamaj.in CloudFront)
-  const adminBucket = process.env.ADMIN_PORTAL_BUCKET || "lovewanshi-parinay-admin";
+  const adminBucket =
+    process.env.ADMIN_PORTAL_BUCKET || "lovewanshi-parinay-admin";
   try {
     await uploadFile(adminBucket, "privacy-policy.html", policyFile);
     await uploadFile(adminBucket, "privacy/privacy-policy.html", policyFile);
@@ -91,7 +89,7 @@ async function main() {
               Items: ["/privacy-policy.html", "/privacy/privacy-policy.html"],
             },
           },
-        })
+        }),
       );
       console.log("✓ CloudFront cache invalidated.");
     } catch (err) {
@@ -101,7 +99,9 @@ async function main() {
 
   console.log("\nURLs available once deployed / uploaded:");
   console.log("👉 https://admin.lovewanshisamaj.in/privacy-policy.html");
-  console.log("👉 https://admin.lovewanshisamaj.in/privacy/privacy-policy.html");
+  console.log(
+    "👉 https://admin.lovewanshisamaj.in/privacy/privacy-policy.html",
+  );
 }
 
 main().catch((err) => {
