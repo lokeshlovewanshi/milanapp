@@ -14,8 +14,24 @@
       },
       "oauth_client": [
         {
-          "client_id": "406753347579-m6lrjt7sqarvqg745dt7avfqi3m0nv3a.apps.googleusercontent.com",
-          "client_type": 1
+          "client_id": "406753347579-dn2bo7purucl1hugnqe6tuj5p31legtr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.lovewanshi.jeevanmilansathi",
+            "certificate_hash": "3a03ca52d2ba83578f63d8a734f4a320203263d3"
+          }
+        },
+        {
+          "client_id": "406753347579-pbdk873u5vkv57vin3v9kg6jao4km2m8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.lovewanshi.jeevanmilansathi",
+            "certificate_hash": "d2ae38fa3f0a66a06e6f5bce316f9de9010aaefc"
+          }
+        },
+        {
+          "client_id": "406753347579-s68ienk5h6q9idq6fo277qqf80pq7ua0.apps.googleusercontent.com",
+          "client_type": 3
         }
       ],
       "api_key": [
