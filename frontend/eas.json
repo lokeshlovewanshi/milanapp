@@ -13,7 +13,7 @@
       },
       "env": {
         "EXPO_PUBLIC_BACKEND_URL": "https://api.lovewanshisamaj.in",
-        "EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID": "406753347579-m6lrjt7sqarvqg745dt7avfqi3m0nv3a.apps.googleusercontent.com"
+        "EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID": "406753347579-s68ienk5h6q9idq6fo277qqf80pq7ua0.apps.googleusercontent.com"
       }
     },
     "preview": {
@@ -25,7 +25,7 @@
       "env": {
         "EXPO_PUBLIC_BACKEND_URL": "https://api.lovewanshisamaj.in",
         "ANDROID_SIDELOAD_APK": "1",
-        "EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID": "406753347579-m6lrjt7sqarvqg745dt7avfqi3m0nv3a.apps.googleusercontent.com"
+        "EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID": "406753347579-s68ienk5h6q9idq6fo277qqf80pq7ua0.apps.googleusercontent.com"
       }
     },
     "production-apk": {
@@ -37,7 +37,7 @@
       "env": {
         "EXPO_PUBLIC_BACKEND_URL": "https://api.lovewanshisamaj.in",
         "ANDROID_SIDELOAD_APK": "1",
-        "EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID": "406753347579-m6lrjt7sqarvqg745dt7avfqi3m0nv3a.apps.googleusercontent.com"
+        "EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID": "406753347579-s68ienk5h6q9idq6fo277qqf80pq7ua0.apps.googleusercontent.com"
       }
     },
     "production": {
@@ -48,7 +48,7 @@
       },
       "env": {
         "EXPO_PUBLIC_BACKEND_URL": "https://api.lovewanshisamaj.in",
-        "EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID": "406753347579-m6lrjt7sqarvqg745dt7avfqi3m0nv3a.apps.googleusercontent.com"
+        "EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID": "406753347579-s68ienk5h6q9idq6fo277qqf80pq7ua0.apps.googleusercontent.com"
       }
     }
   },
