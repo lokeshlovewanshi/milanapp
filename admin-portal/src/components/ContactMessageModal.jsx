@@ -10,7 +10,7 @@ export default function ContactMessageModal({ profile, onClose }) {
   // WhatsApp / Email state
   const [messageText, setMessageText] = useState("");
   const [mailSubject, setMailSubject] = useState(
-    `Important update regarding your Lovewanshi Parinay profile (${profile?.displayId || `GM${profile?.id}`})`
+    `Important update regarding your Lodha Parinay profile (${profile?.displayId || `GM${profile?.id}`})`,
   );
   const [copied, setCopied] = useState(false);
   const [sendingMail, setSendingMail] = useState(false);
@@ -19,7 +19,11 @@ export default function ContactMessageModal({ profile, onClose }) {
 
   // Manage templates state
   const [editingTemplate, setEditingTemplate] = useState(null); // null or { id, title, content, templateType }
-  const [templateForm, setTemplateForm] = useState({ title: "", content: "", templateType: "WHATSAPP" });
+  const [templateForm, setTemplateForm] = useState({
+    title: "",
+    content: "",
+    templateType: "WHATSAPP",
+  });
   const [templateSaving, setTemplateSaving] = useState(false);
   const [templateError, setTemplateError] = useState("");
 
@@ -36,10 +40,14 @@ export default function ContactMessageModal({ profile, onClose }) {
   function interpolate(text) {
     if (!text) return "";
     const name = profile?.name || "Member";
-    const profileId = profile?.displayId || (profile?.id ? `GM${String(profile.id).padStart(5, "0")}` : "");
+    const profileId =
+      profile?.displayId ||
+      (profile?.id ? `GM${String(profile.id).padStart(5, "0")}` : "");
     const mobileNo = profile?.mobileNo || profile?.whatsappNo || "";
     const email = profile?.email || "";
-    const profileUrl = profile?.id ? `https://www.lovewanshisamaj.in/profiles/${profile.id}` : "https://www.lovewanshisamaj.in";
+    const profileUrl = profile?.id
+      ? `https://www.lovewanshisamaj.in/profiles/${profile.id}`
+      : "https://www.lovewanshisamaj.in";
 
     return text
       .replace(/{name}/g, name)
@@ -114,9 +122,14 @@ export default function ContactMessageModal({ profile, onClose }) {
         subject: mailSubject,
         content: messageText,
         recipientName: profile?.name || "Member",
-        profileId: profile?.displayId || (profile?.id ? `GM${String(profile.id).padStart(5, "0")}` : ""),
+        profileId:
+          profile?.displayId ||
+          (profile?.id ? `GM${String(profile.id).padStart(5, "0")}` : ""),
       });
-      setMailSuccess(res?.message || "Email sent successfully from noreply@lovewanshisamaj.in!");
+      setMailSuccess(
+        res?.message ||
+          "Email sent successfully from noreply@lovewanshisamaj.in!",
+      );
     } catch (err) {
       setMailError(err?.message || "Failed to send email");
     } finally {
@@ -178,7 +191,9 @@ export default function ContactMessageModal({ profile, onClose }) {
         setMessageText(interpolate(created.content));
       } else {
         const updated = await api.updateTemplate(editingTemplate, templateForm);
-        setTemplates((prev) => prev.map((t) => (t.id === updated.id ? updated : t)));
+        setTemplates((prev) =>
+          prev.map((t) => (t.id === updated.id ? updated : t)),
+        );
         if (selectedTemplateId === String(updated.id)) {
           setMessageText(interpolate(updated.content));
         }
@@ -192,7 +207,8 @@ export default function ContactMessageModal({ profile, onClose }) {
   }
 
   async function handleDeleteTemplate(id) {
-    if (!window.confirm("Are you sure you want to delete this template?")) return;
+    if (!window.confirm("Are you sure you want to delete this template?"))
+      return;
     try {
       await api.deleteTemplate(id);
       setTemplates((prev) => prev.filter((t) => t.id !== id));
@@ -232,14 +248,28 @@ export default function ContactMessageModal({ profile, onClose }) {
         }}
       >
         {/* Header */}
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-start",
+          }}
+        >
           <div>
-            <h2 style={{ margin: "0 0 0.25rem 0", fontSize: "1.25rem", color: "#111827" }}>
+            <h2
+              style={{
+                margin: "0 0 0.25rem 0",
+                fontSize: "1.25rem",
+                color: "#111827",
+              }}
+            >
               Message &amp; Outreach
             </h2>
             <div style={{ fontSize: "0.88rem", color: "#4B5563" }}>
               Recipient: <strong>{profile?.name || "(No Name)"}</strong>{" "}
-              <span style={{ color: "#A5122F", fontWeight: 600 }}>({profile?.displayId || `GM${profile?.id}`})</span>
+              <span style={{ color: "#A5122F", fontWeight: 600 }}>
+                ({profile?.displayId || `GM${profile?.id}`})
+              </span>
             </div>
           </div>
           <button
@@ -253,12 +283,25 @@ export default function ContactMessageModal({ profile, onClose }) {
         </div>
 
         {/* Channel Navigation Pills */}
-        <div style={{ display: "flex", gap: "0.5rem", borderBottom: "1px solid #E5E7EB", paddingBottom: "0.6rem" }}>
+        <div
+          style={{
+            display: "flex",
+            gap: "0.5rem",
+            borderBottom: "1px solid #E5E7EB",
+            paddingBottom: "0.6rem",
+          }}
+        >
           <button
             type="button"
-            className={channel === "whatsapp" ? "primary small" : "secondary small"}
+            className={
+              channel === "whatsapp" ? "primary small" : "secondary small"
+            }
             onClick={() => setChannel("whatsapp")}
-            style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem" }}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.35rem",
+            }}
           >
             <span>💬</span> WhatsApp
           </button>
@@ -266,7 +309,11 @@ export default function ContactMessageModal({ profile, onClose }) {
             type="button"
             className={channel === "call" ? "primary small" : "secondary small"}
             onClick={() => setChannel("call")}
-            style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem" }}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.35rem",
+            }}
           >
             <span>📞</span> Direct Call
           </button>
@@ -274,15 +321,26 @@ export default function ContactMessageModal({ profile, onClose }) {
             type="button"
             className={channel === "mail" ? "primary small" : "secondary small"}
             onClick={() => setChannel("mail")}
-            style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem" }}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.35rem",
+            }}
           >
             <span>✉️</span> Mail
           </button>
           <button
             type="button"
-            className={channel === "manage" ? "primary small" : "secondary small"}
+            className={
+              channel === "manage" ? "primary small" : "secondary small"
+            }
             onClick={() => setChannel("manage")}
-            style={{ marginLeft: "auto", display: "inline-flex", alignItems: "center", gap: "0.35rem" }}
+            style={{
+              marginLeft: "auto",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.35rem",
+            }}
           >
             <span>⚙️</span> Manage Templates
           </button>
@@ -291,13 +349,26 @@ export default function ContactMessageModal({ profile, onClose }) {
         {/* 1. WHATSAPP TAB */}
         {channel === "whatsapp" && (
           <div>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: "0.75rem",
+              }}
+            >
               <div style={{ fontSize: "0.85rem", color: "#4B5563" }}>
                 Target Number:{" "}
                 <strong style={{ fontFamily: "monospace", color: "#111827" }}>
-                  {profile?.mobileNo || profile?.whatsappNo || "No number saved"}
+                  {profile?.mobileNo ||
+                    profile?.whatsappNo ||
+                    "No number saved"}
                 </strong>
-                {recipientPhone && <span style={{ color: "#059669", marginLeft: "0.4rem" }}>({recipientPhone})</span>}
+                {recipientPhone && (
+                  <span style={{ color: "#059669", marginLeft: "0.4rem" }}>
+                    ({recipientPhone})
+                  </span>
+                )}
               </div>
               <button
                 type="button"
@@ -311,13 +382,25 @@ export default function ContactMessageModal({ profile, onClose }) {
 
             {/* Template Selector */}
             <div style={{ marginBottom: "0.75rem" }}>
-              <label style={{ display: "block", fontSize: "0.85rem", fontWeight: 600, marginBottom: "0.3rem" }}>
+              <label
+                style={{
+                  display: "block",
+                  fontSize: "0.85rem",
+                  fontWeight: 600,
+                  marginBottom: "0.3rem",
+                }}
+              >
                 Select Predefined Template
               </label>
               <select
                 value={selectedTemplateId}
                 onChange={handleSelectTemplate}
-                style={{ width: "100%", padding: "0.5rem", borderRadius: "6px", border: "1px solid #D1D5DB" }}
+                style={{
+                  width: "100%",
+                  padding: "0.5rem",
+                  borderRadius: "6px",
+                  border: "1px solid #D1D5DB",
+                }}
               >
                 <option value="">-- Custom / Blank Message --</option>
                 {templates.map((tpl) => (
@@ -329,9 +412,25 @@ export default function ContactMessageModal({ profile, onClose }) {
             </div>
 
             {/* Variable Pills */}
-            <div style={{ marginBottom: "0.5rem", display: "flex", gap: "0.35rem", flexWrap: "wrap", alignItems: "center" }}>
-              <span style={{ fontSize: "0.75rem", color: "#6B7280" }}>Insert dynamic tag:</span>
-              {["{name}", "{profileId}", "{mobileNo}", "{email}", "{profileUrl}"].map((tag) => (
+            <div
+              style={{
+                marginBottom: "0.5rem",
+                display: "flex",
+                gap: "0.35rem",
+                flexWrap: "wrap",
+                alignItems: "center",
+              }}
+            >
+              <span style={{ fontSize: "0.75rem", color: "#6B7280" }}>
+                Insert dynamic tag:
+              </span>
+              {[
+                "{name}",
+                "{profileId}",
+                "{mobileNo}",
+                "{email}",
+                "{profileUrl}",
+              ].map((tag) => (
                 <button
                   key={tag}
                   type="button"
@@ -370,13 +469,26 @@ export default function ContactMessageModal({ profile, onClose }) {
                   fontFamily: "inherit",
                 }}
               />
-              <div style={{ textAlign: "right", fontSize: "11px", color: "#6B7280", marginTop: "2px" }}>
+              <div
+                style={{
+                  textAlign: "right",
+                  fontSize: "11px",
+                  color: "#6B7280",
+                  marginTop: "2px",
+                }}
+              >
                 {messageText.length} / 5000 characters
               </div>
             </div>
 
             {/* Action Bar */}
-            <div style={{ display: "flex", justifyContent: "flex-end", gap: "0.75rem" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                gap: "0.75rem",
+              }}
+            >
               <button type="button" className="secondary" onClick={onClose}>
                 Cancel
               </button>
@@ -394,7 +506,10 @@ export default function ContactMessageModal({ profile, onClose }) {
                   display: "inline-flex",
                   alignItems: "center",
                   gap: "0.4rem",
-                  cursor: !recipientPhone || !messageText.trim() ? "not-allowed" : "pointer",
+                  cursor:
+                    !recipientPhone || !messageText.trim()
+                      ? "not-allowed"
+                      : "pointer",
                   opacity: !recipientPhone || !messageText.trim() ? 0.6 : 1,
                 }}
               >
@@ -408,9 +523,18 @@ export default function ContactMessageModal({ profile, onClose }) {
         {channel === "call" && (
           <div style={{ textAlign: "center", padding: "1.5rem 1rem" }}>
             <div style={{ fontSize: "2.5rem", marginBottom: "0.5rem" }}>📞</div>
-            <h3 style={{ margin: "0 0 0.5rem 0", color: "#111827" }}>Call Member Directly</h3>
-            <p style={{ color: "#4B5563", fontSize: "0.9rem", marginBottom: "1.5rem" }}>
-              Connect with <strong>{profile?.name || "Member"}</strong> via phone call.
+            <h3 style={{ margin: "0 0 0.5rem 0", color: "#111827" }}>
+              Call Member Directly
+            </h3>
+            <p
+              style={{
+                color: "#4B5563",
+                fontSize: "0.9rem",
+                marginBottom: "1.5rem",
+              }}
+            >
+              Connect with <strong>{profile?.name || "Member"}</strong> via
+              phone call.
             </p>
 
             <div
@@ -427,10 +551,18 @@ export default function ContactMessageModal({ profile, onClose }) {
                 letterSpacing: "0.05em",
               }}
             >
-              {profile?.mobileNo || profile?.whatsappNo || "No phone number available"}
+              {profile?.mobileNo ||
+                profile?.whatsappNo ||
+                "No phone number available"}
             </div>
 
-            <div style={{ display: "flex", justifyContent: "center", gap: "0.75rem" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                gap: "0.75rem",
+              }}
+            >
               <button
                 type="button"
                 className="secondary"
@@ -483,10 +615,24 @@ export default function ContactMessageModal({ profile, onClose }) {
               }}
             >
               <div>
-                <div style={{ fontSize: "0.78rem", color: "#6B7280", textTransform: "uppercase", fontWeight: 600 }}>
+                <div
+                  style={{
+                    fontSize: "0.78rem",
+                    color: "#6B7280",
+                    textTransform: "uppercase",
+                    fontWeight: 600,
+                  }}
+                >
                   From (Official Matrimony Outreach)
                 </div>
-                <div style={{ fontSize: "0.95rem", fontWeight: 700, color: "#7B1220", fontFamily: "monospace" }}>
+                <div
+                  style={{
+                    fontSize: "0.95rem",
+                    fontWeight: 700,
+                    color: "#7B1220",
+                    fontFamily: "monospace",
+                  }}
+                >
                   noreply@lovewanshisamaj.in
                 </div>
               </div>
@@ -509,8 +655,11 @@ export default function ContactMessageModal({ profile, onClose }) {
             <div style={{ marginBottom: "0.75rem" }}>
               <div style={{ fontSize: "0.85rem", color: "#4B5563" }}>
                 Target Recipient:{" "}
-                <strong style={{ color: recipientEmail ? "#111827" : "#DC2626" }}>
-                  {recipientEmail || "⚠️ No email address saved for this profile"}
+                <strong
+                  style={{ color: recipientEmail ? "#111827" : "#DC2626" }}
+                >
+                  {recipientEmail ||
+                    "⚠️ No email address saved for this profile"}
                 </strong>
               </div>
             </div>
@@ -562,13 +711,25 @@ export default function ContactMessageModal({ profile, onClose }) {
 
             {/* Template Selector */}
             <div style={{ marginBottom: "0.75rem" }}>
-              <label style={{ display: "block", fontSize: "0.85rem", fontWeight: 600, marginBottom: "0.3rem" }}>
+              <label
+                style={{
+                  display: "block",
+                  fontSize: "0.85rem",
+                  fontWeight: 600,
+                  marginBottom: "0.3rem",
+                }}
+              >
                 Select Predefined Template
               </label>
               <select
                 value={selectedTemplateId}
                 onChange={handleSelectTemplate}
-                style={{ width: "100%", padding: "0.5rem", borderRadius: "6px", border: "1px solid #D1D5DB" }}
+                style={{
+                  width: "100%",
+                  padding: "0.5rem",
+                  borderRadius: "6px",
+                  border: "1px solid #D1D5DB",
+                }}
               >
                 <option value="">-- Custom / Blank Message --</option>
                 {templates.map((tpl) => (
@@ -580,9 +741,25 @@ export default function ContactMessageModal({ profile, onClose }) {
             </div>
 
             {/* Dynamic Tag Pills */}
-            <div style={{ marginBottom: "0.5rem", display: "flex", gap: "0.35rem", flexWrap: "wrap", alignItems: "center" }}>
-              <span style={{ fontSize: "0.75rem", color: "#6B7280" }}>Insert dynamic tag:</span>
-              {["{name}", "{profileId}", "{mobileNo}", "{email}", "{profileUrl}"].map((tag) => (
+            <div
+              style={{
+                marginBottom: "0.5rem",
+                display: "flex",
+                gap: "0.35rem",
+                flexWrap: "wrap",
+                alignItems: "center",
+              }}
+            >
+              <span style={{ fontSize: "0.75rem", color: "#6B7280" }}>
+                Insert dynamic tag:
+              </span>
+              {[
+                "{name}",
+                "{profileId}",
+                "{mobileNo}",
+                "{email}",
+                "{profileUrl}",
+              ].map((tag) => (
                 <button
                   key={tag}
                   type="button"
@@ -604,19 +781,38 @@ export default function ContactMessageModal({ profile, onClose }) {
             </div>
 
             <div style={{ marginBottom: "0.75rem" }}>
-              <label style={{ display: "block", fontSize: "0.85rem", fontWeight: 600, marginBottom: "0.3rem" }}>
+              <label
+                style={{
+                  display: "block",
+                  fontSize: "0.85rem",
+                  fontWeight: 600,
+                  marginBottom: "0.3rem",
+                }}
+              >
                 Subject
               </label>
               <input
                 type="text"
                 value={mailSubject}
                 onChange={(e) => setMailSubject(e.target.value)}
-                style={{ width: "100%", padding: "0.5rem", borderRadius: "6px", border: "1px solid #D1D5DB" }}
+                style={{
+                  width: "100%",
+                  padding: "0.5rem",
+                  borderRadius: "6px",
+                  border: "1px solid #D1D5DB",
+                }}
               />
             </div>
 
             <div style={{ marginBottom: "1rem" }}>
-              <label style={{ display: "block", fontSize: "0.85rem", fontWeight: 600, marginBottom: "0.3rem" }}>
+              <label
+                style={{
+                  display: "block",
+                  fontSize: "0.85rem",
+                  fontWeight: 600,
+                  marginBottom: "0.3rem",
+                }}
+              >
                 Message Body
               </label>
               <textarea
@@ -635,7 +831,14 @@ export default function ContactMessageModal({ profile, onClose }) {
                   fontFamily: "inherit",
                 }}
               />
-              <div style={{ textAlign: "right", fontSize: "11px", color: "#6B7280", marginTop: "2px" }}>
+              <div
+                style={{
+                  textAlign: "right",
+                  fontSize: "11px",
+                  color: "#6B7280",
+                  marginTop: "2px",
+                }}
+              >
                 {messageText.length} / 5000 characters
               </div>
             </div>
@@ -664,13 +867,20 @@ export default function ContactMessageModal({ profile, onClose }) {
                 )}
               </div>
               <div style={{ display: "flex", gap: "0.75rem" }}>
-                <button type="button" className="secondary" onClick={onClose} disabled={sendingMail}>
+                <button
+                  type="button"
+                  className="secondary"
+                  onClick={onClose}
+                  disabled={sendingMail}
+                >
                   Cancel
                 </button>
                 <button
                   type="button"
                   onClick={handleSendServerMail}
-                  disabled={!recipientEmail || !messageText.trim() || sendingMail}
+                  disabled={
+                    !recipientEmail || !messageText.trim() || sendingMail
+                  }
                   style={{
                     background: "#7B1220",
                     color: "#FFFFFF",
@@ -681,12 +891,20 @@ export default function ContactMessageModal({ profile, onClose }) {
                     display: "inline-flex",
                     alignItems: "center",
                     gap: "0.4rem",
-                    cursor: !recipientEmail || !messageText.trim() || sendingMail ? "not-allowed" : "pointer",
-                    opacity: !recipientEmail || !messageText.trim() || sendingMail ? 0.6 : 1,
+                    cursor:
+                      !recipientEmail || !messageText.trim() || sendingMail
+                        ? "not-allowed"
+                        : "pointer",
+                    opacity:
+                      !recipientEmail || !messageText.trim() || sendingMail
+                        ? 0.6
+                        : 1,
                   }}
                 >
                   <span>{sendingMail ? "⏳" : "✉️"}</span>
-                  {sendingMail ? "Sending via noreply@lovewanshisamaj.in..." : "Send Email from noreply@lovewanshisamaj.in"}
+                  {sendingMail
+                    ? "Sending via noreply@lovewanshisamaj.in..."
+                    : "Send Email from noreply@lovewanshisamaj.in"}
                 </button>
               </div>
             </div>
@@ -696,65 +914,144 @@ export default function ContactMessageModal({ profile, onClose }) {
         {/* 4. MANAGE TEMPLATES TAB */}
         {channel === "manage" && (
           <div>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem" }}>
-              <h3 style={{ margin: 0, fontSize: "1rem" }}>Database Message Templates</h3>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: "0.75rem",
+              }}
+            >
+              <h3 style={{ margin: 0, fontSize: "1rem" }}>
+                Database Message Templates
+              </h3>
               {!editingTemplate && (
-                <button type="button" className="primary small" onClick={startNewTemplate}>
+                <button
+                  type="button"
+                  className="primary small"
+                  onClick={startNewTemplate}
+                >
                   ➕ New Template
                 </button>
               )}
             </div>
 
             {templateError && (
-              <div className="error-banner" style={{ marginBottom: "0.75rem", fontSize: "0.85rem" }}>
+              <div
+                className="error-banner"
+                style={{ marginBottom: "0.75rem", fontSize: "0.85rem" }}
+              >
                 {templateError}
               </div>
             )}
 
             {/* Template Editor Form */}
             {editingTemplate && (
-              <form onSubmit={handleSaveTemplate} style={{ background: "#F9FAFB", padding: "1rem", borderRadius: "8px", marginBottom: "1rem", border: "1px solid #E5E7EB" }}>
+              <form
+                onSubmit={handleSaveTemplate}
+                style={{
+                  background: "#F9FAFB",
+                  padding: "1rem",
+                  borderRadius: "8px",
+                  marginBottom: "1rem",
+                  border: "1px solid #E5E7EB",
+                }}
+              >
                 <h4 style={{ margin: "0 0 0.5rem 0", fontSize: "0.95rem" }}>
-                  {editingTemplate === "new" ? "Create New Template" : "Edit Template"}
+                  {editingTemplate === "new"
+                    ? "Create New Template"
+                    : "Edit Template"}
                 </h4>
 
                 <div style={{ marginBottom: "0.6rem" }}>
-                  <label style={{ display: "block", fontSize: "0.8rem", fontWeight: 600, marginBottom: "0.2rem" }}>
+                  <label
+                    style={{
+                      display: "block",
+                      fontSize: "0.8rem",
+                      fontWeight: 600,
+                      marginBottom: "0.2rem",
+                    }}
+                  >
                     Title *
                   </label>
                   <input
                     type="text"
                     required
                     value={templateForm.title}
-                    onChange={(e) => setTemplateForm((p) => ({ ...p, title: e.target.value }))}
+                    onChange={(e) =>
+                      setTemplateForm((p) => ({ ...p, title: e.target.value }))
+                    }
                     placeholder="e.g. Incomplete Profile Alert"
-                    style={{ width: "100%", padding: "0.4rem", borderRadius: "4px", border: "1px solid #D1D5DB" }}
+                    style={{
+                      width: "100%",
+                      padding: "0.4rem",
+                      borderRadius: "4px",
+                      border: "1px solid #D1D5DB",
+                    }}
                   />
                 </div>
 
                 <div style={{ marginBottom: "0.6rem" }}>
-                  <label style={{ display: "block", fontSize: "0.8rem", fontWeight: 600, marginBottom: "0.2rem" }}>
-                    Content * (Supports tags: {"{name}"}, {"{profileId}"}, {"{mobileNo}"}, {"{profileUrl}"})
+                  <label
+                    style={{
+                      display: "block",
+                      fontSize: "0.8rem",
+                      fontWeight: 600,
+                      marginBottom: "0.2rem",
+                    }}
+                  >
+                    Content * (Supports tags: {"{name}"}, {"{profileId}"},{" "}
+                    {"{mobileNo}"}, {"{profileUrl}"})
                   </label>
                   <textarea
                     rows={6}
                     required
                     maxLength={5000}
                     value={templateForm.content}
-                    onChange={(e) => setTemplateForm((p) => ({ ...p, content: e.target.value }))}
+                    onChange={(e) =>
+                      setTemplateForm((p) => ({
+                        ...p,
+                        content: e.target.value,
+                      }))
+                    }
                     placeholder="Enter template message text..."
-                    style={{ width: "100%", padding: "0.5rem", borderRadius: "4px", border: "1px solid #D1D5DB" }}
+                    style={{
+                      width: "100%",
+                      padding: "0.5rem",
+                      borderRadius: "4px",
+                      border: "1px solid #D1D5DB",
+                    }}
                   />
-                  <div style={{ textAlign: "right", fontSize: "11px", color: "#6B7280" }}>
+                  <div
+                    style={{
+                      textAlign: "right",
+                      fontSize: "11px",
+                      color: "#6B7280",
+                    }}
+                  >
                     {templateForm.content.length} / 5000 chars
                   </div>
                 </div>
 
-                <div style={{ display: "flex", justifyContent: "flex-end", gap: "0.5rem" }}>
-                  <button type="button" className="secondary small" onClick={() => setEditingTemplate(null)}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    gap: "0.5rem",
+                  }}
+                >
+                  <button
+                    type="button"
+                    className="secondary small"
+                    onClick={() => setEditingTemplate(null)}
+                  >
                     Cancel
                   </button>
-                  <button type="submit" className="primary small" disabled={templateSaving}>
+                  <button
+                    type="submit"
+                    className="primary small"
+                    disabled={templateSaving}
+                  >
                     {templateSaving ? "Saving..." : "Save Template"}
                   </button>
                 </div>
@@ -762,10 +1059,23 @@ export default function ContactMessageModal({ profile, onClose }) {
             )}
 
             {/* List of Templates */}
-            <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-              {loadingTemplates && <p className="muted small">Loading templates from database...</p>}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "0.5rem",
+              }}
+            >
+              {loadingTemplates && (
+                <p className="muted small">
+                  Loading templates from database...
+                </p>
+              )}
               {!loadingTemplates && templates.length === 0 && (
-                <p className="muted small">No templates stored in DB yet. Click "New Template" above to create one.</p>
+                <p className="muted small">
+                  No templates stored in DB yet. Click "New Template" above to
+                  create one.
+                </p>
               )}
               {templates.map((t) => (
                 <div
@@ -777,13 +1087,25 @@ export default function ContactMessageModal({ profile, onClose }) {
                     background: "#FFFFFF",
                   }}
                 >
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.3rem" }}>
-                    <strong style={{ fontSize: "0.9rem", color: "#111827" }}>{t.title}</strong>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      marginBottom: "0.3rem",
+                    }}
+                  >
+                    <strong style={{ fontSize: "0.9rem", color: "#111827" }}>
+                      {t.title}
+                    </strong>
                     <div style={{ display: "flex", gap: "0.35rem" }}>
                       <button
                         type="button"
                         className="secondary small"
-                        style={{ padding: "0.2rem 0.5rem", fontSize: "0.75rem" }}
+                        style={{
+                          padding: "0.2rem 0.5rem",
+                          fontSize: "0.75rem",
+                        }}
                         onClick={() => startEditTemplate(t)}
                       >
                         ✏️ Edit
@@ -791,14 +1113,27 @@ export default function ContactMessageModal({ profile, onClose }) {
                       <button
                         type="button"
                         className="secondary small"
-                        style={{ padding: "0.2rem 0.5rem", fontSize: "0.75rem", color: "#DC2626" }}
+                        style={{
+                          padding: "0.2rem 0.5rem",
+                          fontSize: "0.75rem",
+                          color: "#DC2626",
+                        }}
                         onClick={() => handleDeleteTemplate(t.id)}
                       >
                         🗑️ Delete
                       </button>
                     </div>
                   </div>
-                  <p style={{ margin: 0, fontSize: "0.8rem", color: "#4B5563", whiteSpace: "pre-wrap", maxHeight: "80px", overflow: "hidden" }}>
+                  <p
+                    style={{
+                      margin: 0,
+                      fontSize: "0.8rem",
+                      color: "#4B5563",
+                      whiteSpace: "pre-wrap",
+                      maxHeight: "80px",
+                      overflow: "hidden",
+                    }}
+                  >
                     {t.content}
                   </p>
                 </div>

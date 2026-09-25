@@ -848,7 +848,7 @@ export default function MyProfile() {
           <p className="profile-greeting-sub">
             {profile.email ||
               profile.mobileNo ||
-              "Lovewanshi Parinay Community Member"}
+              "Lodha Parinay Community Member"}
           </p>
         </div>
       </div>
@@ -1027,7 +1027,7 @@ export default function MyProfile() {
           type="button"
           className="profile-action-card"
           onClick={() => setShowMembershipModal(true)}
-          title="View Lovewanshi Parinay membership plan"
+          title="View Lodha Parinay membership plan"
         >
           <div className="action-card-icon icon-membership">
             <Icon name="award" size={20} />
@@ -1464,7 +1464,7 @@ export default function MyProfile() {
                           Community / Religion
                         </span>
                         <span className="jeevansathi-attr-val">
-                          LOVEWANSHI Vaishya
+                          Lodha Vaishya
                         </span>
                       </div>
                     </div>
@@ -1932,7 +1932,7 @@ export default function MyProfile() {
                 >
                   {profile.hidden
                     ? "Your profile is currently hidden from search listings."
-                    : "Your profile is visible to all verified LOVEWANSHI members."}
+                    : "Your profile is visible to all verified Lodha members."}
                 </span>
               </div>
               <button
@@ -2068,7 +2068,7 @@ export default function MyProfile() {
                   fontWeight: 800,
                 }}
               >
-                Lovewanshi Parinay Community Membership
+                Lodha Parinay Community Membership
               </h3>
               <span
                 style={{
@@ -2103,7 +2103,7 @@ export default function MyProfile() {
               >
                 <span style={{ color: "#166534", fontWeight: 800 }}>✓</span>
                 <span>
-                  Unlimited profile browsing across all 20 LOVEWANSHI Gotras
+                  Unlimited profile browsing across all 20 Lodha Gotras
                 </span>
               </div>
               <div

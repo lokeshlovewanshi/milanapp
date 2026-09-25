@@ -40,7 +40,11 @@ export default function DirectMessage() {
   // Manage templates state
   const [showManageTemplates, setShowManageTemplates] = useState(false);
   const [editingTemplate, setEditingTemplate] = useState(null);
-  const [templateForm, setTemplateForm] = useState({ title: "", content: "", templateType: "WHATSAPP" });
+  const [templateForm, setTemplateForm] = useState({
+    title: "",
+    content: "",
+    templateType: "WHATSAPP",
+  });
   const [templateSaving, setTemplateSaving] = useState(false);
   const [templateError, setTemplateError] = useState("");
 
@@ -55,7 +59,7 @@ export default function DirectMessage() {
   function interpolate(text, customName, customId, customPhone, customEmail) {
     if (!text) return "";
     const name = customName || recipientName.trim() || "Member";
-    const id = customId || profileId.trim() || "Lovewanshi Parinay";
+    const id = customId || profileId.trim() || "Lodha Parinay";
     const mobile = customPhone || phoneNumber.trim() || "";
     const mail = customEmail || email.trim() || "";
     const profileUrl = matchedProfile?.id
@@ -108,7 +112,11 @@ export default function DirectMessage() {
         api
           .allProfiles(raw, 0, 5)
           .then((res) => {
-            const found = res?.content?.find((p) => cleanDigits(p.mobileNo).includes(raw) || raw.includes(cleanDigits(p.mobileNo)));
+            const found = res?.content?.find(
+              (p) =>
+                cleanDigits(p.mobileNo).includes(raw) ||
+                raw.includes(cleanDigits(p.mobileNo)),
+            );
             if (found) {
               setMatchedProfile(found);
               if (!recipientName) setRecipientName(found.name || "");
@@ -143,9 +151,19 @@ export default function DirectMessage() {
       // Re-interpolate template with selected contact's details
       const tpl = templates.find((t) => String(t.id) === selectedTemplateId);
       if (tpl) {
-        setMessageText(interpolate(tpl.content, contact.name, profileId, contact.phoneNumber, contact.email));
+        setMessageText(
+          interpolate(
+            tpl.content,
+            contact.name,
+            profileId,
+            contact.phoneNumber,
+            contact.email,
+          ),
+        );
       }
-      setActionSuccess(`Selected contact: ${contact.name} (${contact.phoneNumber})`);
+      setActionSuccess(
+        `Selected contact: ${contact.name} (${contact.phoneNumber})`,
+      );
       setTimeout(() => setActionSuccess(""), 3000);
     }
   }
@@ -287,8 +305,13 @@ export default function DirectMessage() {
         setRecipientName(created.name);
         setActionSuccess(`✓ Contact "${created.name}" added to Database.`);
       } else {
-        const updated = await api.updateOutreachContact(editingContact, contactForm);
-        setContacts((prev) => prev.map((c) => (c.id === updated.id ? updated : c)));
+        const updated = await api.updateOutreachContact(
+          editingContact,
+          contactForm,
+        );
+        setContacts((prev) =>
+          prev.map((c) => (c.id === updated.id ? updated : c)),
+        );
         if (selectedContactId === String(updated.id)) {
           setPhoneNumber(updated.phoneNumber);
           setRecipientName(updated.name);
@@ -305,7 +328,12 @@ export default function DirectMessage() {
   }
 
   async function handleDeleteContact(id) {
-    if (!window.confirm("Are you sure you want to delete this contact from the database?")) return;
+    if (
+      !window.confirm(
+        "Are you sure you want to delete this contact from the database?",
+      )
+    )
+      return;
     try {
       await api.deleteOutreachContact(id);
       setContacts((prev) => prev.filter((c) => c.id !== id));
@@ -357,7 +385,9 @@ export default function DirectMessage() {
         setMessageText(interpolate(created.content));
       } else {
         const updated = await api.updateTemplate(editingTemplate, templateForm);
-        setTemplates((prev) => prev.map((t) => (t.id === updated.id ? updated : t)));
+        setTemplates((prev) =>
+          prev.map((t) => (t.id === updated.id ? updated : t)),
+        );
         if (selectedTemplateId === String(updated.id)) {
           setMessageText(interpolate(updated.content));
         }
@@ -371,7 +401,8 @@ export default function DirectMessage() {
   }
 
   async function handleDeleteTemplate(id) {
-    if (!window.confirm("Are you sure you want to delete this template?")) return;
+    if (!window.confirm("Are you sure you want to delete this template?"))
+      return;
     try {
       await api.deleteTemplate(id);
       setTemplates((prev) => prev.filter((t) => t.id !== id));
@@ -390,7 +421,7 @@ export default function DirectMessage() {
           c.name?.toLowerCase().includes(contactSearch.toLowerCase()) ||
           c.phoneNumber?.includes(contactSearch) ||
           c.category?.toLowerCase().includes(contactSearch.toLowerCase()) ||
-          c.notes?.toLowerCase().includes(contactSearch.toLowerCase())
+          c.notes?.toLowerCase().includes(contactSearch.toLowerCase()),
       )
     : contacts;
 
@@ -399,9 +430,12 @@ export default function DirectMessage() {
       {/* Page Header */}
       <div className="page-header" style={{ marginBottom: "1.25rem" }}>
         <div>
-          <h1 style={{ margin: "0 0 0.25rem 0" }}>Direct Outreach &amp; Quick Messaging</h1>
+          <h1 style={{ margin: "0 0 0.25rem 0" }}>
+            Direct Outreach &amp; Quick Messaging
+          </h1>
           <p className="muted" style={{ margin: 0 }}>
-            Select a saved contact from DB or type any number to dispatch WhatsApp/SMS messages instantly.
+            Select a saved contact from DB or type any number to dispatch
+            WhatsApp/SMS messages instantly.
           </p>
         </div>
         <div style={{ display: "flex", gap: "0.5rem" }}>
@@ -414,7 +448,9 @@ export default function DirectMessage() {
             }}
             style={{ fontWeight: 600 }}
           >
-            {showManageContacts ? "✕ Close Contacts" : `📇 Saved Numbers (${contacts.length})`}
+            {showManageContacts
+              ? "✕ Close Contacts"
+              : `📇 Saved Numbers (${contacts.length})`}
           </button>
           <button
             type="button"
@@ -436,8 +472,22 @@ export default function DirectMessage() {
       )}
 
       {/* 1. Recipient Details Card */}
-      <div className="card" style={{ padding: "1.25rem", marginBottom: "1.25rem", background: "#FFFFFF" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem" }}>
+      <div
+        className="card"
+        style={{
+          padding: "1.25rem",
+          marginBottom: "1.25rem",
+          background: "#FFFFFF",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: "0.75rem",
+          }}
+        >
           <h3 style={{ margin: 0, fontSize: "1.05rem", color: "#111827" }}>
             1. Recipient &amp; Contact Selection
           </h3>
@@ -452,8 +502,24 @@ export default function DirectMessage() {
         </div>
 
         {/* Saved Numbers Dropdown */}
-        <div style={{ marginBottom: "1rem", background: "#F9FAFB", padding: "0.85rem", borderRadius: "8px", border: "1px solid #E5E7EB" }}>
-          <label style={{ display: "block", fontSize: "0.85rem", fontWeight: 700, color: "#374151", marginBottom: "0.35rem" }}>
+        <div
+          style={{
+            marginBottom: "1rem",
+            background: "#F9FAFB",
+            padding: "0.85rem",
+            borderRadius: "8px",
+            border: "1px solid #E5E7EB",
+          }}
+        >
+          <label
+            style={{
+              display: "block",
+              fontSize: "0.85rem",
+              fontWeight: 700,
+              color: "#374151",
+              marginBottom: "0.35rem",
+            }}
+          >
             📇 Select from Saved Numbers (DB Table):
           </label>
           <div style={{ display: "flex", gap: "0.5rem" }}>
@@ -470,10 +536,13 @@ export default function DirectMessage() {
                 background: "#FFFFFF",
               }}
             >
-              <option value="">-- Choose from saved contacts ({contacts.length} available) --</option>
+              <option value="">
+                -- Choose from saved contacts ({contacts.length} available) --
+              </option>
               {contacts.map((c) => (
                 <option key={c.id} value={c.id}>
-                  {c.name} — {c.phoneNumber} [{c.category || "General"}]{c.notes ? ` • ${c.notes}` : ""}
+                  {c.name} — {c.phoneNumber} [{c.category || "General"}]
+                  {c.notes ? ` • ${c.notes}` : ""}
                 </option>
               ))}
             </select>
@@ -496,31 +565,48 @@ export default function DirectMessage() {
         </div>
 
         {/* Manual inputs & quick save */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "1rem" }}>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+            gap: "1rem",
+          }}
+        >
           {/* Phone Number Input */}
           <div>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.3rem" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: "0.3rem",
+              }}
+            >
               <label style={{ fontSize: "0.85rem", fontWeight: 600 }}>
                 Mobile Phone Number <span style={{ color: "#DC2626" }}>*</span>
               </label>
-              {phoneNumber.length >= 10 && !contacts.some((c) => cleanDigits(c.phoneNumber) === cleanDigits(phoneNumber)) && (
-                <button
-                  type="button"
-                  onClick={handleQuickSaveToContacts}
-                  style={{
-                    background: "none",
-                    border: "none",
-                    color: "#A5122F",
-                    fontSize: "0.78rem",
-                    fontWeight: 700,
-                    cursor: "pointer",
-                    padding: 0,
-                  }}
-                  title="Save this phone number to the database table"
-                >
-                  💾 Save to DB
-                </button>
-              )}
+              {phoneNumber.length >= 10 &&
+                !contacts.some(
+                  (c) =>
+                    cleanDigits(c.phoneNumber) === cleanDigits(phoneNumber),
+                ) && (
+                  <button
+                    type="button"
+                    onClick={handleQuickSaveToContacts}
+                    style={{
+                      background: "none",
+                      border: "none",
+                      color: "#A5122F",
+                      fontSize: "0.78rem",
+                      fontWeight: 700,
+                      cursor: "pointer",
+                      padding: 0,
+                    }}
+                    title="Save this phone number to the database table"
+                  >
+                    💾 Save to DB
+                  </button>
+                )}
             </div>
             <input
               type="tel"
@@ -531,14 +617,30 @@ export default function DirectMessage() {
                 setSelectedContactId("");
               }}
               className="input-field"
-              style={{ width: "100%", padding: "0.55rem 0.75rem", fontSize: "1rem", fontFamily: "monospace" }}
+              style={{
+                width: "100%",
+                padding: "0.55rem 0.75rem",
+                fontSize: "1rem",
+                fontFamily: "monospace",
+              }}
             />
-            {searchingProfile && <div className="muted small" style={{ marginTop: "2px" }}>Looking up member...</div>}
+            {searchingProfile && (
+              <div className="muted small" style={{ marginTop: "2px" }}>
+                Looking up member...
+              </div>
+            )}
           </div>
 
           {/* Recipient Name Input */}
           <div>
-            <label style={{ display: "block", fontSize: "0.85rem", fontWeight: 600, marginBottom: "0.3rem" }}>
+            <label
+              style={{
+                display: "block",
+                fontSize: "0.85rem",
+                fontWeight: 600,
+                marginBottom: "0.3rem",
+              }}
+            >
               Recipient Name (Optional)
             </label>
             <input
@@ -553,7 +655,14 @@ export default function DirectMessage() {
 
           {/* Profile ID Input */}
           <div>
-            <label style={{ display: "block", fontSize: "0.85rem", fontWeight: 600, marginBottom: "0.3rem" }}>
+            <label
+              style={{
+                display: "block",
+                fontSize: "0.85rem",
+                fontWeight: 600,
+                marginBottom: "0.3rem",
+              }}
+            >
               Profile ID (Optional)
             </label>
             <input
@@ -581,18 +690,27 @@ export default function DirectMessage() {
               alignItems: "center",
             }}
           >
-            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+            <div
+              style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}
+            >
               <img
                 src={matchedProfile.profileImage || "/placeholder.svg"}
                 alt=""
-                style={{ width: "40px", height: "40px", borderRadius: "50%", objectFit: "cover" }}
+                style={{
+                  width: "40px",
+                  height: "40px",
+                  borderRadius: "50%",
+                  objectFit: "cover",
+                }}
               />
               <div>
                 <div style={{ fontWeight: 600, color: "#065F46" }}>
-                  Registered Member: {matchedProfile.name} ({matchedProfile.displayId})
+                  Registered Member: {matchedProfile.name} (
+                  {matchedProfile.displayId})
                 </div>
                 <div style={{ fontSize: "0.8rem", color: "#047857" }}>
-                  {matchedProfile.gender} • {matchedProfile.city || "India"} • Mobile: {matchedProfile.mobileNo}
+                  {matchedProfile.gender} • {matchedProfile.city || "India"} •
+                  Mobile: {matchedProfile.mobileNo}
                 </div>
               </div>
             </div>
@@ -616,8 +734,22 @@ export default function DirectMessage() {
       </div>
 
       {/* 2. Message Composition Card */}
-      <div className="card" style={{ padding: "1.25rem", marginBottom: "1.25rem", background: "#FFFFFF" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem" }}>
+      <div
+        className="card"
+        style={{
+          padding: "1.25rem",
+          marginBottom: "1.25rem",
+          background: "#FFFFFF",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: "0.75rem",
+          }}
+        >
           <h3 style={{ margin: 0, fontSize: "1.05rem", color: "#111827" }}>
             2. Choose Message Template or Compose
           </h3>
@@ -633,14 +765,25 @@ export default function DirectMessage() {
 
         {/* Template Selector Dropdown */}
         <div style={{ marginBottom: "1rem" }}>
-          <label style={{ display: "block", fontSize: "0.85rem", fontWeight: 600, marginBottom: "0.3rem" }}>
+          <label
+            style={{
+              display: "block",
+              fontSize: "0.85rem",
+              fontWeight: 600,
+              marginBottom: "0.3rem",
+            }}
+          >
             Predefined Template:
           </label>
           <select
             value={selectedTemplateId}
             onChange={handleSelectTemplate}
             className="input-field"
-            style={{ width: "100%", padding: "0.55rem 0.75rem", fontSize: "0.9rem" }}
+            style={{
+              width: "100%",
+              padding: "0.55rem 0.75rem",
+              fontSize: "0.9rem",
+            }}
           >
             <option value="">-- Custom Message (No Template) --</option>
             {templates.map((tpl) => (
@@ -653,14 +796,33 @@ export default function DirectMessage() {
 
         {/* Quick Insert Variable Tags */}
         <div style={{ marginBottom: "0.75rem" }}>
-          <span style={{ fontSize: "0.8rem", color: "#6B7280", marginRight: "0.5rem" }}>Quick Insert Tag:</span>
-          {["{name}", "{profileId}", "{mobileNo}", "{email}", "{profileUrl}"].map((tag) => (
+          <span
+            style={{
+              fontSize: "0.8rem",
+              color: "#6B7280",
+              marginRight: "0.5rem",
+            }}
+          >
+            Quick Insert Tag:
+          </span>
+          {[
+            "{name}",
+            "{profileId}",
+            "{mobileNo}",
+            "{email}",
+            "{profileUrl}",
+          ].map((tag) => (
             <button
               key={tag}
               type="button"
               className="secondary small"
               onClick={() => insertVariable(tag)}
-              style={{ marginRight: "0.4rem", padding: "0.2rem 0.5rem", fontSize: "0.75rem", fontFamily: "monospace" }}
+              style={{
+                marginRight: "0.4rem",
+                padding: "0.2rem 0.5rem",
+                fontSize: "0.75rem",
+                fontFamily: "monospace",
+              }}
             >
               +{tag}
             </button>
@@ -684,8 +846,17 @@ export default function DirectMessage() {
               lineHeight: 1.5,
             }}
           />
-          <div style={{ display: "flex", justifyContent: "space-between", fontSize: "12px", color: "#6B7280" }}>
-            <span>Supports emojis (🙏, 🌸, 💍, ✨, 💐) &amp; multi-line formatting</span>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              fontSize: "12px",
+              color: "#6B7280",
+            }}
+          >
+            <span>
+              Supports emojis (🙏, 🌸, 💍, ✨, 💐) &amp; multi-line formatting
+            </span>
             <span>{messageText.length} characters</span>
           </div>
         </div>
@@ -786,16 +957,35 @@ export default function DirectMessage() {
             border: "2px solid #E5E7EB",
           }}
         >
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: "1rem",
+            }}
+          >
             <div>
-              <h3 style={{ margin: "0 0 0.2rem 0", color: "#111827", fontSize: "1.1rem" }}>
-                📇 Saved Numbers &amp; Contacts Directory (DB Table: <code>outreach_contact</code>)
+              <h3
+                style={{
+                  margin: "0 0 0.2rem 0",
+                  color: "#111827",
+                  fontSize: "1.1rem",
+                }}
+              >
+                📇 Saved Numbers &amp; Contacts Directory (DB Table:{" "}
+                <code>outreach_contact</code>)
               </h3>
               <p className="muted small" style={{ margin: 0 }}>
-                Store phone numbers and names in the database for instant outreach and template messaging.
+                Store phone numbers and names in the database for instant
+                outreach and template messaging.
               </p>
             </div>
-            <button type="button" className="primary small" onClick={startNewContact}>
+            <button
+              type="button"
+              className="primary small"
+              onClick={startNewContact}
+            >
               ➕ Add New Number
             </button>
           </div>
@@ -808,19 +998,39 @@ export default function DirectMessage() {
               value={contactSearch}
               onChange={(e) => setContactSearch(e.target.value)}
               className="input-field"
-              style={{ width: "100%", maxWidth: "400px", padding: "0.45rem 0.75rem", fontSize: "0.85rem" }}
+              style={{
+                width: "100%",
+                maxWidth: "400px",
+                padding: "0.45rem 0.75rem",
+                fontSize: "0.85rem",
+              }}
             />
           </div>
 
           {/* List of Contacts */}
           {loadingContacts ? (
-            <p className="muted small">Loading saved contacts from database...</p>
+            <p className="muted small">
+              Loading saved contacts from database...
+            </p>
           ) : filteredContacts.length === 0 ? (
-            <p className="muted small" style={{ textAlign: "center", padding: "1.5rem" }}>
-              {contactSearch ? "No contacts match search filter." : "No saved contacts yet. Add your first number above!"}
+            <p
+              className="muted small"
+              style={{ textAlign: "center", padding: "1.5rem" }}
+            >
+              {contactSearch
+                ? "No contacts match search filter."
+                : "No saved contacts yet. Add your first number above!"}
             </p>
           ) : (
-            <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", maxHeight: "360px", overflowY: "auto" }}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "0.5rem",
+                maxHeight: "360px",
+                overflowY: "auto",
+              }}
+            >
               {filteredContacts.map((c) => (
                 <div
                   key={c.id}
@@ -828,7 +1038,10 @@ export default function DirectMessage() {
                     border: "1px solid #E5E7EB",
                     borderRadius: "6px",
                     padding: "0.65rem 0.85rem",
-                    background: selectedContactId === String(c.id) ? "#EFF6FF" : "#FFFFFF",
+                    background:
+                      selectedContactId === String(c.id)
+                        ? "#EFF6FF"
+                        : "#FFFFFF",
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "center",
@@ -836,8 +1049,16 @@ export default function DirectMessage() {
                   }}
                 >
                   <div>
-                    <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                      <strong style={{ fontSize: "0.9rem", color: "#111827" }}>{c.name}</strong>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.5rem",
+                      }}
+                    >
+                      <strong style={{ fontSize: "0.9rem", color: "#111827" }}>
+                        {c.name}
+                      </strong>
                       <span
                         style={{
                           fontSize: "11px",
@@ -851,17 +1072,35 @@ export default function DirectMessage() {
                         {c.category}
                       </span>
                     </div>
-                    <div style={{ fontSize: "0.82rem", color: "#4B5563", fontFamily: "monospace" }}>
+                    <div
+                      style={{
+                        fontSize: "0.82rem",
+                        color: "#4B5563",
+                        fontFamily: "monospace",
+                      }}
+                    >
                       📞 {c.phoneNumber} {c.email ? `• ✉️ ${c.email}` : ""}
                     </div>
                     {c.notes && (
-                      <div style={{ fontSize: "0.78rem", color: "#6B7280", marginTop: "2px" }}>
+                      <div
+                        style={{
+                          fontSize: "0.78rem",
+                          color: "#6B7280",
+                          marginTop: "2px",
+                        }}
+                      >
                         📝 {c.notes}
                       </div>
                     )}
                   </div>
 
-                  <div style={{ display: "flex", gap: "0.35rem", whiteSpace: "nowrap" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "0.35rem",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
                     <button
                       type="button"
                       className="primary small"
@@ -872,11 +1111,23 @@ export default function DirectMessage() {
                         setRecipientName(c.name);
                         if (c.email) setEmail(c.email);
                         setShowManageContacts(false);
-                        const tpl = templates.find((t) => String(t.id) === selectedTemplateId);
+                        const tpl = templates.find(
+                          (t) => String(t.id) === selectedTemplateId,
+                        );
                         if (tpl) {
-                          setMessageText(interpolate(tpl.content, c.name, profileId, c.phoneNumber, c.email));
+                          setMessageText(
+                            interpolate(
+                              tpl.content,
+                              c.name,
+                              profileId,
+                              c.phoneNumber,
+                              c.email,
+                            ),
+                          );
                         }
-                        setActionSuccess(`Loaded contact "${c.name}" into composer.`);
+                        setActionSuccess(
+                          `Loaded contact "${c.name}" into composer.`,
+                        );
                         setTimeout(() => setActionSuccess(""), 3000);
                       }}
                     >
@@ -893,7 +1144,11 @@ export default function DirectMessage() {
                     <button
                       type="button"
                       className="secondary small"
-                      style={{ padding: "0.25rem 0.5rem", fontSize: "0.78rem", color: "#DC2626" }}
+                      style={{
+                        padding: "0.25rem 0.5rem",
+                        fontSize: "0.78rem",
+                        color: "#DC2626",
+                      }}
                       onClick={() => handleDeleteContact(c.id)}
                     >
                       🗑️
@@ -917,11 +1172,23 @@ export default function DirectMessage() {
             border: "2px solid #E5E7EB",
           }}
         >
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: "1rem",
+            }}
+          >
             <h3 style={{ margin: 0, color: "#111827", fontSize: "1.1rem" }}>
-              ⚙️ Predefined Message Templates (Database Table: <code>message_template</code>)
+              ⚙️ Predefined Message Templates (Database Table:{" "}
+              <code>message_template</code>)
             </h3>
-            <button type="button" className="primary small" onClick={startNewTemplate}>
+            <button
+              type="button"
+              className="primary small"
+              onClick={startNewTemplate}
+            >
               ➕ Add New Template
             </button>
           </div>
@@ -938,52 +1205,109 @@ export default function DirectMessage() {
               }}
             >
               <h4 style={{ margin: "0 0 0.75rem 0", color: "#111827" }}>
-                {editingTemplate === "new" ? "Create New Template" : "Edit Template"}
+                {editingTemplate === "new"
+                  ? "Create New Template"
+                  : "Edit Template"}
               </h4>
 
               {templateError && (
-                <div style={{ color: "#DC2626", fontSize: "0.85rem", marginBottom: "0.5rem" }}>
+                <div
+                  style={{
+                    color: "#DC2626",
+                    fontSize: "0.85rem",
+                    marginBottom: "0.5rem",
+                  }}
+                >
                   ❌ {templateError}
                 </div>
               )}
 
               <div style={{ marginBottom: "0.6rem" }}>
-                <label style={{ display: "block", fontSize: "0.8rem", fontWeight: 600, marginBottom: "0.2rem" }}>
+                <label
+                  style={{
+                    display: "block",
+                    fontSize: "0.8rem",
+                    fontWeight: 600,
+                    marginBottom: "0.2rem",
+                  }}
+                >
                   Title *
                 </label>
                 <input
                   type="text"
                   required
                   value={templateForm.title}
-                  onChange={(e) => setTemplateForm((p) => ({ ...p, title: e.target.value }))}
+                  onChange={(e) =>
+                    setTemplateForm((p) => ({ ...p, title: e.target.value }))
+                  }
                   placeholder="e.g. Incomplete Profile Notice"
-                  style={{ width: "100%", padding: "0.4rem", borderRadius: "4px", border: "1px solid #D1D5DB" }}
+                  style={{
+                    width: "100%",
+                    padding: "0.4rem",
+                    borderRadius: "4px",
+                    border: "1px solid #D1D5DB",
+                  }}
                 />
               </div>
 
               <div style={{ marginBottom: "0.6rem" }}>
-                <label style={{ display: "block", fontSize: "0.8rem", fontWeight: 600, marginBottom: "0.2rem" }}>
-                  Content * (Supports tags: {"{name}"}, {"{profileId}"}, {"{mobileNo}"}, {"{profileUrl}"})
+                <label
+                  style={{
+                    display: "block",
+                    fontSize: "0.8rem",
+                    fontWeight: 600,
+                    marginBottom: "0.2rem",
+                  }}
+                >
+                  Content * (Supports tags: {"{name}"}, {"{profileId}"},{" "}
+                  {"{mobileNo}"}, {"{profileUrl}"})
                 </label>
                 <textarea
                   rows={6}
                   required
                   maxLength={5000}
                   value={templateForm.content}
-                  onChange={(e) => setTemplateForm((p) => ({ ...p, content: e.target.value }))}
+                  onChange={(e) =>
+                    setTemplateForm((p) => ({ ...p, content: e.target.value }))
+                  }
                   placeholder="Template content with emojis..."
-                  style={{ width: "100%", padding: "0.5rem", borderRadius: "4px", border: "1px solid #D1D5DB" }}
+                  style={{
+                    width: "100%",
+                    padding: "0.5rem",
+                    borderRadius: "4px",
+                    border: "1px solid #D1D5DB",
+                  }}
                 />
-                <div style={{ textAlign: "right", fontSize: "11px", color: "#6B7280" }}>
+                <div
+                  style={{
+                    textAlign: "right",
+                    fontSize: "11px",
+                    color: "#6B7280",
+                  }}
+                >
                   {templateForm.content.length} / 5000 chars
                 </div>
               </div>
 
-              <div style={{ display: "flex", justifyContent: "flex-end", gap: "0.5rem" }}>
-                <button type="button" className="secondary small" onClick={() => setEditingTemplate(null)}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  gap: "0.5rem",
+                }}
+              >
+                <button
+                  type="button"
+                  className="secondary small"
+                  onClick={() => setEditingTemplate(null)}
+                >
                   Cancel
                 </button>
-                <button type="submit" className="primary small" disabled={templateSaving}>
+                <button
+                  type="submit"
+                  className="primary small"
+                  disabled={templateSaving}
+                >
                   {templateSaving ? "Saving..." : "Save Template"}
                 </button>
               </div>
@@ -991,8 +1315,12 @@ export default function DirectMessage() {
           )}
 
           {/* List of Templates */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-            {loadingTemplates && <p className="muted small">Loading templates from database...</p>}
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}
+          >
+            {loadingTemplates && (
+              <p className="muted small">Loading templates from database...</p>
+            )}
             {templates.map((t) => (
               <div
                 key={t.id}
@@ -1003,8 +1331,17 @@ export default function DirectMessage() {
                   background: "#FFFFFF",
                 }}
               >
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.3rem" }}>
-                  <strong style={{ fontSize: "0.9rem", color: "#111827" }}>{t.title}</strong>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    marginBottom: "0.3rem",
+                  }}
+                >
+                  <strong style={{ fontSize: "0.9rem", color: "#111827" }}>
+                    {t.title}
+                  </strong>
                   <div style={{ display: "flex", gap: "0.35rem" }}>
                     <button
                       type="button"
@@ -1017,14 +1354,27 @@ export default function DirectMessage() {
                     <button
                       type="button"
                       className="secondary small"
-                      style={{ padding: "0.2rem 0.5rem", fontSize: "0.75rem", color: "#DC2626" }}
+                      style={{
+                        padding: "0.2rem 0.5rem",
+                        fontSize: "0.75rem",
+                        color: "#DC2626",
+                      }}
                       onClick={() => handleDeleteTemplate(t.id)}
                     >
                       🗑️ Delete
                     </button>
                   </div>
                 </div>
-                <p style={{ margin: 0, fontSize: "0.8rem", color: "#4B5563", whiteSpace: "pre-wrap", maxHeight: "80px", overflow: "hidden" }}>
+                <p
+                  style={{
+                    margin: 0,
+                    fontSize: "0.8rem",
+                    color: "#4B5563",
+                    whiteSpace: "pre-wrap",
+                    maxHeight: "80px",
+                    overflow: "hidden",
+                  }}
+                >
                   {t.content}
                 </p>
               </div>
@@ -1056,14 +1406,31 @@ export default function DirectMessage() {
               width: "100%",
               maxWidth: "520px",
               padding: "1.5rem",
-              boxShadow: "0 20px 25px -5px rgba(0,0,0,0.2), 0 10px 10px -5px rgba(0,0,0,0.1)",
+              boxShadow:
+                "0 20px 25px -5px rgba(0,0,0,0.2), 0 10px 10px -5px rgba(0,0,0,0.1)",
               border: "1px solid #E5E7EB",
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.85rem" }}>
-              <h3 style={{ margin: 0, fontSize: "1.2rem", color: "#111827", fontWeight: 700 }}>
-                {editingContact === "new" ? "➕ Add Number to Database" : "✏️ Edit Saved Contact"}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: "0.85rem",
+              }}
+            >
+              <h3
+                style={{
+                  margin: 0,
+                  fontSize: "1.2rem",
+                  color: "#111827",
+                  fontWeight: 700,
+                }}
+              >
+                {editingContact === "new"
+                  ? "➕ Add Number to Database"
+                  : "✏️ Edit Saved Contact"}
               </h3>
               <button
                 type="button"
@@ -1082,8 +1449,16 @@ export default function DirectMessage() {
               </button>
             </div>
 
-            <p style={{ margin: "0 0 1rem 0", fontSize: "0.83rem", color: "#6B7280" }}>
-              Save this number to the database table (<code>outreach_contact</code>) for quick selection in templates and WhatsApp/SMS dispatch.
+            <p
+              style={{
+                margin: "0 0 1rem 0",
+                fontSize: "0.83rem",
+                color: "#6B7280",
+              }}
+            >
+              Save this number to the database table (
+              <code>outreach_contact</code>) for quick selection in templates
+              and WhatsApp/SMS dispatch.
             </p>
 
             {contactError && (
@@ -1103,47 +1478,111 @@ export default function DirectMessage() {
 
             <form onSubmit={handleSaveContact}>
               <div style={{ marginBottom: "0.85rem" }}>
-                <label style={{ display: "block", fontSize: "0.82rem", fontWeight: 600, color: "#374151", marginBottom: "0.25rem" }}>
+                <label
+                  style={{
+                    display: "block",
+                    fontSize: "0.82rem",
+                    fontWeight: 600,
+                    color: "#374151",
+                    marginBottom: "0.25rem",
+                  }}
+                >
                   Full Name <span style={{ color: "#DC2626" }}>*</span>
                 </label>
                 <input
                   type="text"
                   required
                   value={contactForm.name}
-                  onChange={(e) => setContactForm((p) => ({ ...p, name: e.target.value }))}
-                  placeholder="e.g. Suresh LOVEWANSHI"
-                  style={{ width: "100%", padding: "0.55rem 0.75rem", borderRadius: "6px", border: "1px solid #D1D5DB", fontSize: "0.9rem" }}
+                  onChange={(e) =>
+                    setContactForm((p) => ({ ...p, name: e.target.value }))
+                  }
+                  placeholder="e.g. Suresh Lodha"
+                  style={{
+                    width: "100%",
+                    padding: "0.55rem 0.75rem",
+                    borderRadius: "6px",
+                    border: "1px solid #D1D5DB",
+                    fontSize: "0.9rem",
+                  }}
                   autoFocus
                 />
               </div>
 
               <div style={{ marginBottom: "0.85rem" }}>
-                <label style={{ display: "block", fontSize: "0.82rem", fontWeight: 600, color: "#374151", marginBottom: "0.25rem" }}>
-                  Mobile Phone Number <span style={{ color: "#DC2626" }}>*</span>
+                <label
+                  style={{
+                    display: "block",
+                    fontSize: "0.82rem",
+                    fontWeight: 600,
+                    color: "#374151",
+                    marginBottom: "0.25rem",
+                  }}
+                >
+                  Mobile Phone Number{" "}
+                  <span style={{ color: "#DC2626" }}>*</span>
                 </label>
                 <input
                   type="tel"
                   required
                   value={contactForm.phoneNumber}
-                  onChange={(e) => setContactForm((p) => ({ ...p, phoneNumber: e.target.value }))}
+                  onChange={(e) =>
+                    setContactForm((p) => ({
+                      ...p,
+                      phoneNumber: e.target.value,
+                    }))
+                  }
                   placeholder="e.g. 9876543210"
-                  style={{ width: "100%", padding: "0.55rem 0.75rem", borderRadius: "6px", border: "1px solid #D1D5DB", fontSize: "0.95rem", fontFamily: "monospace" }}
+                  style={{
+                    width: "100%",
+                    padding: "0.55rem 0.75rem",
+                    borderRadius: "6px",
+                    border: "1px solid #D1D5DB",
+                    fontSize: "0.95rem",
+                    fontFamily: "monospace",
+                  }}
                 />
               </div>
 
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem", marginBottom: "0.85rem" }}>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr",
+                  gap: "0.75rem",
+                  marginBottom: "0.85rem",
+                }}
+              >
                 <div>
-                  <label style={{ display: "block", fontSize: "0.82rem", fontWeight: 600, color: "#374151", marginBottom: "0.25rem" }}>
+                  <label
+                    style={{
+                      display: "block",
+                      fontSize: "0.82rem",
+                      fontWeight: 600,
+                      color: "#374151",
+                      marginBottom: "0.25rem",
+                    }}
+                  >
                     Category
                   </label>
                   <select
                     value={contactForm.category}
-                    onChange={(e) => setContactForm((p) => ({ ...p, category: e.target.value }))}
-                    style={{ width: "100%", padding: "0.55rem 0.6rem", borderRadius: "6px", border: "1px solid #D1D5DB", fontSize: "0.85rem", background: "#FFFFFF" }}
+                    onChange={(e) =>
+                      setContactForm((p) => ({
+                        ...p,
+                        category: e.target.value,
+                      }))
+                    }
+                    style={{
+                      width: "100%",
+                      padding: "0.55rem 0.6rem",
+                      borderRadius: "6px",
+                      border: "1px solid #D1D5DB",
+                      fontSize: "0.85rem",
+                      background: "#FFFFFF",
+                    }}
                   >
                     <option value="PROSPECT">Prospect / Lead</option>
                     <option value="INCOMPLETE">Incomplete Profile</option>
-                    <option value="COMMUNITY_LEAD">Lovewanshi Samaj Lead</option>
+                    <option value="COMMUNITY_LEAD">Lodha Samaj Lead</option>
                     <option value="MATCHMAKER">Matchmaker / Pandit</option>
                     <option value="FAMILY_ELDER">Family Elder</option>
                     <option value="GENERAL">General</option>
@@ -1151,33 +1590,72 @@ export default function DirectMessage() {
                 </div>
 
                 <div>
-                  <label style={{ display: "block", fontSize: "0.82rem", fontWeight: 600, color: "#374151", marginBottom: "0.25rem" }}>
+                  <label
+                    style={{
+                      display: "block",
+                      fontSize: "0.82rem",
+                      fontWeight: 600,
+                      color: "#374151",
+                      marginBottom: "0.25rem",
+                    }}
+                  >
                     Email (Optional)
                   </label>
                   <input
                     type="email"
                     value={contactForm.email}
-                    onChange={(e) => setContactForm((p) => ({ ...p, email: e.target.value }))}
+                    onChange={(e) =>
+                      setContactForm((p) => ({ ...p, email: e.target.value }))
+                    }
                     placeholder="e.g. name@example.com"
-                    style={{ width: "100%", padding: "0.55rem 0.6rem", borderRadius: "6px", border: "1px solid #D1D5DB", fontSize: "0.85rem" }}
+                    style={{
+                      width: "100%",
+                      padding: "0.55rem 0.6rem",
+                      borderRadius: "6px",
+                      border: "1px solid #D1D5DB",
+                      fontSize: "0.85rem",
+                    }}
                   />
                 </div>
               </div>
 
               <div style={{ marginBottom: "1.25rem" }}>
-                <label style={{ display: "block", fontSize: "0.82rem", fontWeight: 600, color: "#374151", marginBottom: "0.25rem" }}>
+                <label
+                  style={{
+                    display: "block",
+                    fontSize: "0.82rem",
+                    fontWeight: 600,
+                    color: "#374151",
+                    marginBottom: "0.25rem",
+                  }}
+                >
                   Notes (Optional)
                 </label>
                 <textarea
                   rows={2}
                   value={contactForm.notes}
-                  onChange={(e) => setContactForm((p) => ({ ...p, notes: e.target.value }))}
+                  onChange={(e) =>
+                    setContactForm((p) => ({ ...p, notes: e.target.value }))
+                  }
                   placeholder="e.g. Looking for groom in Jhansi, called on 12 Sep"
-                  style={{ width: "100%", padding: "0.5rem 0.6rem", borderRadius: "6px", border: "1px solid #D1D5DB", fontSize: "0.85rem", fontFamily: "inherit" }}
+                  style={{
+                    width: "100%",
+                    padding: "0.5rem 0.6rem",
+                    borderRadius: "6px",
+                    border: "1px solid #D1D5DB",
+                    fontSize: "0.85rem",
+                    fontFamily: "inherit",
+                  }}
                 />
               </div>
 
-              <div style={{ display: "flex", justifyContent: "flex-end", gap: "0.75rem" }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  gap: "0.75rem",
+                }}
+              >
                 <button
                   type="button"
                   className="secondary"

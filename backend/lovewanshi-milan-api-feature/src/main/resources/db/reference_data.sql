@@ -423,7 +423,7 @@ INSERT IGNORE INTO state (code, name, kind) VALUES
 --   tier 1 - the eight metros
 --   tier 2 - large non-metro cities
 --   tier 3 - district-level cities, weighted toward MP/UP/Rajasthan where the
---            LOVEWANSHI community is concentrated
+--            Lodha community is concentrated
 --
 -- Not exhaustive by design. Add rows as you find gaps; nothing in the app
 -- hardcodes this list, so inserts take effect immediately.

@@ -1,8 +1,8 @@
 ﻿"""
-Lovewanshi Parinay - Asynchronous Welcome Email Lambda Function.
+Lodha Parinay - Asynchronous Welcome Email Lambda Function.
 
 Triggered asynchronously upon member registration (standard signup or Google OAuth).
-Delivers a responsive, professional HTML welcome email featuring the Lovewanshi Parinay
+Delivers a responsive, professional HTML welcome email featuring the Lodha Parinay
 promotional flyer (hosted on S3 & CloudFront CDN), personalized greeting, profile completion
 checklist, and direct portal links.
 
@@ -58,7 +58,7 @@ def build_welcome_html(name: str, profile_id_str: str) -> str:
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Welcome to Lovewanshi Parinay</title>
+  <title>Welcome to Lodha Parinay</title>
 </head>
 <body style="margin:0;padding:0;background-color:#FDF8F9;font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;">
   <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#FDF8F9;padding:24px 12px;">
@@ -72,10 +72,10 @@ def build_welcome_html(name: str, profile_id_str: str) -> str:
             <td align="center" style="background:linear-gradient(135deg, #7B1220 0%, #A5122F 100%);padding:32px 24px 26px;text-align:center;border-bottom:4px solid #D4AF37;">
               <div style="font-size:26px;margin-bottom:6px;">💍✨👑</div>
               <h1 style="color:#FFFFFF;margin:0;font-size:28px;font-weight:700;letter-spacing:0.5px;font-family:Georgia,serif;">
-                Lovewanshi Parinay
+                Lodha Parinay
               </h1>
               <p style="color:#FCE8EE;margin:6px 0 0;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;">
-                Trusted Matrimonial Platform for Lovewanshi Community
+                Trusted Matrimonial Platform for Lodha Community
               </p>
             </td>
           </tr>
@@ -85,7 +85,7 @@ def build_welcome_html(name: str, profile_id_str: str) -> str:
             <td align="center" style="padding:24px 24px 12px;background:#FFFFFF;">
               <a href="{APP_URL}" target="_blank" style="text-decoration:none;display:block;">
                 <img src="{BANNER_IMAGE_URL}" 
-                     alt="Find Your Life Partner - Lovewanshi Parinay" 
+                     alt="Find Your Life Partner - Lodha Parinay" 
                      width="552"
                      style="width:100%;max-width:552px;height:auto;display:block;border-radius:14px;box-shadow:0 4px 16px rgba(0,0,0,0.08);border:1px solid #F0D7DC;" />
               </a>
@@ -105,7 +105,7 @@ def build_welcome_html(name: str, profile_id_str: str) -> str:
                       Namaste {clean_name}, 🙏
                     </h2>
                     <p style="color:#4B5563;font-size:15px;line-height:1.6;margin:0 0 16px;">
-                      Welcome to <strong>Lovewanshi Parinay</strong> – the dedicated matrimonial platform built exclusively to connect Lovewanshi Samaj families worldwide with trust, tradition, and privacy.
+                      Welcome to <strong>Lodha Parinay</strong> – the dedicated matrimonial platform built exclusively to connect Lodha Samaj families worldwide with trust, tradition, and privacy.
                     </p>
                     <p style="color:#4B5563;font-size:15px;line-height:1.6;margin:0 0 20px;">
                       We are thrilled to accompany you on this sacred milestone of finding your ideal life partner within our community.
@@ -182,7 +182,7 @@ def build_welcome_html(name: str, profile_id_str: str) -> str:
                     <a href="{APP_URL}/browse" 
                        target="_blank" 
                        style="display:inline-block;color:#7B1220;font-size:14px;font-weight:600;text-decoration:underline;">
-                      Or browse verified Lovewanshi profiles &gt;
+                      Or browse verified Lodha profiles &gt;
                     </a>
                   </td>
                 </tr>
@@ -207,7 +207,7 @@ def build_welcome_html(name: str, profile_id_str: str) -> str:
                 <tr>
                   <td style="font-size:13px;color:#4B5563;line-height:1.5;">
                     <strong>Need help filling your profile or have questions?</strong><br>
-                    Our Lovewanshi Parinay support team is happy to assist you.<br>
+                    Our Lodha Parinay support team is happy to assist you.<br>
                     📞 Phone / WhatsApp: <a href="tel:{SUPPORT_PHONE}" style="color:#7B1220;font-weight:600;text-decoration:none;">{SUPPORT_PHONE}</a> &nbsp;|&nbsp; 
                     ✉️ Email: <a href="mailto:{SUPPORT_EMAIL}" style="color:#7B1220;font-weight:600;text-decoration:none;">{SUPPORT_EMAIL}</a>
                   </td>
@@ -224,10 +224,10 @@ def build_welcome_html(name: str, profile_id_str: str) -> str:
                 TRADITION &bull; TRUST &bull; BETTER TOMORROW
               </p>
               <p style="color:#6B7280;font-size:12px;margin:0 0 8px;">
-                Where Families Meet &bull; Connecting Lovewanshi Families Worldwide
+                Where Families Meet &bull; Connecting Lodha Families Worldwide
               </p>
               <p style="color:#9CA3AF;font-size:11px;margin:0;">
-                Website: <a href="{APP_URL}" style="color:#7B1220;text-decoration:none;">{APP_URL}</a> &bull; &copy; 2026 Lovewanshi Parinay. All rights reserved.
+                Website: <a href="{APP_URL}" style="color:#7B1220;text-decoration:none;">{APP_URL}</a> &bull; &copy; 2026 Lodha Parinay. All rights reserved.
               </p>
             </td>
           </tr>
@@ -244,9 +244,9 @@ def build_welcome_html(name: str, profile_id_str: str) -> str:
 def build_welcome_text(name: str, profile_id_str: str) -> str:
     return f"""Namaste {name},
 
-Welcome to Lovewanshi Parinay (Profile ID: {profile_id_str})!
+Welcome to Lodha Parinay (Profile ID: {profile_id_str})!
 
-Lovewanshi Parinay is the trusted matrimonial platform built exclusively for the Lovewanshi Samaj community.
+Lodha Parinay is the trusted matrimonial platform built exclusively for the Lodha Samaj community.
 
 To receive up to 5x more suitable proposals, please take 2 minutes to complete your profile:
 1. Upload 1-2 clear portrait photos
@@ -257,7 +257,7 @@ To receive up to 5x more suitable proposals, please take 2 minutes to complete y
 👉 Complete Your Profile Now:
 {APP_URL}/profile
 
-Browse verified Lovewanshi profiles:
+Browse verified Lodha profiles:
 {APP_URL}/browse
 
 If you need any assistance, please feel free to reach out to our support team:
@@ -265,7 +265,7 @@ Phone / WhatsApp: {SUPPORT_PHONE}
 Email: {SUPPORT_EMAIL}
 
 Warm regards,
-Team Lovewanshi Parinay
+Team Lodha Parinay
 Tradition • Trust • Better Tomorrow
 {APP_URL}
 """
@@ -292,7 +292,7 @@ def lambda_handler(event: dict, context=None) -> dict:
     subject = (
         custom_subject.strip()
         if custom_subject and isinstance(custom_subject, str) and custom_subject.strip()
-        else f"🌸 Welcome to Lovewanshi Parinay, {member_name}! Your Journey Begins Here 💍"
+        else f"🌸 Welcome to Lodha Parinay, {member_name}! Your Journey Begins Here 💍"
     )
 
     msg = MIMEMultipart("alternative")

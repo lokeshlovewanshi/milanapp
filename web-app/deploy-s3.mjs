@@ -13,7 +13,7 @@ import path from "path";
 import mime from "mime-types";
 
 const REGION = process.env.AWS_REGION || "ap-south-1";
-const PROFILE = process.env.AWS_PROFILE || "LOVEWANSHI";
+const PROFILE = process.env.AWS_PROFILE || "Lodha";
 
 let credentialsProvider;
 if (process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY) {
@@ -31,7 +31,9 @@ const s3 = new S3Client({
 });
 
 async function main() {
-  console.log(`Connecting to AWS S3 using profile '${PROFILE}' (region: ${REGION})...`);
+  console.log(
+    `Connecting to AWS S3 using profile '${PROFILE}' (region: ${REGION})...`,
+  );
   const bucketsRes = await s3.send(new ListBucketsCommand({}));
   console.log("Available S3 Buckets in account:");
   (bucketsRes.Buckets || []).forEach((b) => console.log(` • ${b.Name}`));
@@ -47,12 +49,14 @@ async function main() {
         b.Name === "LOVEWANSHIparaya-web" ||
         b.Name === "lovewanshisamaj-web" ||
         b.Name === "app.lovewanshisamaj.in" ||
-        b.Name === "lovewanshisamaj.in"
+        b.Name === "lovewanshisamaj.in",
     );
     bucketName = match ? match.Name : "lovewanshi-parinay-web";
   }
 
-  const bucketExists = (bucketsRes.Buckets || []).some((b) => b.Name === bucketName);
+  const bucketExists = (bucketsRes.Buckets || []).some(
+    (b) => b.Name === bucketName,
+  );
 
   if (!bucketExists) {
     console.log(`\nCreating S3 bucket: '${bucketName}' in ${REGION}...`);
@@ -60,8 +64,9 @@ async function main() {
       await s3.send(
         new CreateBucketCommand({
           Bucket: bucketName,
-          CreateBucketConfiguration: REGION === "us-east-1" ? undefined : { LocationConstraint: REGION },
-        })
+          CreateBucketConfiguration:
+            REGION === "us-east-1" ? undefined : { LocationConstraint: REGION },
+        }),
       );
       console.log(`Bucket '${bucketName}' created successfully.`);
     } catch (err) {
@@ -87,7 +92,7 @@ async function main() {
           BlockPublicPolicy: false,
           RestrictPublicBuckets: false,
         },
-      })
+      }),
     );
   } catch (err) {
     console.warn("Warning updating public access block:", err.message);
@@ -102,7 +107,7 @@ async function main() {
         IndexDocument: { Suffix: "index.html" },
         ErrorDocument: { Key: "index.html" }, // SPA client-side routing fallback
       },
-    })
+    }),
   );
 
   // 3. Put Public Read Bucket Policy
@@ -124,7 +129,7 @@ async function main() {
       new PutBucketPolicyCommand({
         Bucket: bucketName,
         Policy: JSON.stringify(policy),
-      })
+      }),
     );
   } catch (err) {
     console.warn("Warning applying bucket policy:", err.message);
@@ -133,7 +138,9 @@ async function main() {
   // 4. Upload dist directory recursively
   const distDir = path.resolve("./dist");
   if (!fs.existsSync(distDir)) {
-    throw new Error("dist directory not found. Please run 'npm run build' first.");
+    throw new Error(
+      "dist directory not found. Please run 'npm run build' first.",
+    );
   }
 
   async function getFiles(dir) {
@@ -141,14 +148,18 @@ async function main() {
     const files = await Promise.all(
       subdirs.map(async (subdir) => {
         const res = path.resolve(dir, subdir);
-        return (await fs.promises.stat(res)).isDirectory() ? getFiles(res) : res;
-      })
+        return (await fs.promises.stat(res)).isDirectory()
+          ? getFiles(res)
+          : res;
+      }),
     );
     return files.reduce((a, f) => a.concat(f), []);
   }
 
   const allFiles = await getFiles(distDir);
-  console.log(`\nUploading ${allFiles.length} files to S3 bucket '${bucketName}'...`);
+  console.log(
+    `\nUploading ${allFiles.length} files to S3 bucket '${bucketName}'...`,
+  );
 
   for (const filePath of allFiles) {
     const relativeKey = path.relative(distDir, filePath).replace(/\\/g, "/");
@@ -167,7 +178,7 @@ async function main() {
         Body: fileBody,
         ContentType: contentType,
         CacheControl: cacheControl,
-      })
+      }),
     );
     console.log(` ✓ Uploaded: ${relativeKey} (${contentType})`);
   }

@@ -155,7 +155,7 @@ export default function AppDrawer({
               contentFit="contain"
             />
             <View>
-              <Text style={{ fontSize: 13, fontWeight: '700', color: colors.text }}>Lovewanshi Parinay</Text>
+              <Text style={{ fontSize: 13, fontWeight: '700', color: colors.text }}>Lodha Parinay</Text>
               <Text style={{ fontSize: 11, color: colors.textMuted }}>Premium Matrimony</Text>
             </View>
           </View>

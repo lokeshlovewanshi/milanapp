@@ -284,7 +284,7 @@ function ProfileFeedCard({
         <View style={styles.mediaTagBadge}>
           <Ionicons name="shield-checkmark" size={12} color={colors.white} />
           <Text style={styles.mediaTagText}>
-            {manglikVal ? manglikVal : 'Verified LOVEWANSHI'}
+            {manglikVal ? manglikVal : 'Verified LODHA'}
           </Text>
         </View>
       </View>
@@ -355,7 +355,7 @@ function ProfileFeedCard({
       <View style={styles.captionBlock}>
         {/* Social Proof Line */}
         <Text style={styles.likedByText}>
-          Liked by <Text style={styles.boldText}>LOVEWANSHI_community</Text> and{' '}
+          Liked by <Text style={styles.boldText}>LODHA_community</Text> and{' '}
           <Text style={styles.boldText}>
             {connected ? connectCount + 1 : connectCount} others
           </Text>
@@ -369,7 +369,7 @@ function ProfileFeedCard({
             </Text>
             <Text style={styles.codeText}>{code} </Text>
             {headline ? headline + ' ' : ''}
-            <Text style={styles.hashtag}>#LOVEWANSHIParinay #Matrimony</Text>
+            <Text style={styles.hashtag}>#LodhaParinay #Matrimony</Text>
           </Text>
         </View>
 
@@ -441,7 +441,7 @@ function ProfileFeedCard({
               {!!gotraVal && (
                 <View style={styles.detailItem}>
                   <Text style={styles.detailLabel}>🏷️ Community & Gotra</Text>
-                  <Text style={styles.detailValue}>LOVEWANSHI Vaishya • Gotra: {gotraVal}</Text>
+                  <Text style={styles.detailValue}>LODHA Vaishya • Gotra: {gotraVal}</Text>
                 </View>
               )}
 

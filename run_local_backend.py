@@ -1,5 +1,5 @@
 """
-Local Backend Runner for Lovewanshi Milan API
+Local Backend Runner for Lodha Milan API
 ---------------------------------------------
 1. Loads configuration from .env file (safely ignored by git)
 2. Opens an SSH Tunnel to Oracle Cloud HeatWave MySQL (local port -> remote DB port)
@@ -34,7 +34,7 @@ def is_port_open(host="127.0.0.1", port=3308):
 
 def main():
     print("=" * 70)
-    print("  Starting Lovewanshi Milan API Backend Locally")
+    print("  Starting Lodha Milan API Backend Locally")
     print("=" * 70)
 
     # 1. Load environment

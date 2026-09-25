@@ -163,7 +163,7 @@ export default function ProfileDetail() {
     const primaryImg =
       photos[0] || profile.profileImage || profile.profileImageFull;
 
-    document.title = `${candidateName} (${code}) - Lovewanshi Parinay Matrimony`;
+    document.title = `${candidateName} (${code}) - Lodha Parinay Matrimony`;
 
     const updateMeta = (prop, content) => {
       if (!content) return;
@@ -181,7 +181,7 @@ export default function ProfileDetail() {
 
     updateMeta(
       "og:title",
-      `${candidateName} (${code})${age ? ` - ${age} Yrs` : ""}${heightFormatted ? `, ${heightFormatted}` : ""} | Lovewanshi Parinay`,
+      `${candidateName} (${code})${age ? ` - ${age} Yrs` : ""}${heightFormatted ? `, ${heightFormatted}` : ""} | Lodha Parinay`,
     );
     updateMeta(
       "og:description",
@@ -523,7 +523,7 @@ export default function ProfileDetail() {
               <div className="biodata-meta-list">
                 <div className="biodata-meta-item">
                   <Icon name="check" size={14} color="#059669" />
-                  <span>100% LOVEWANSHI Vaishya Community</span>
+                  <span>100% Lodha Vaishya Community</span>
                 </div>
                 {profile.profileCreatedBy && (
                   <div className="biodata-meta-item">
@@ -550,7 +550,7 @@ export default function ProfileDetail() {
           {/* Candidate Hero Card */}
           <div className="biodata-hero-card">
             <h1 className="biodata-hero-title">
-              {profile.name || "LOVEWANSHI Member"}
+              {profile.name || "Lodha Member"}
               {profile.verified !== false && <VerifiedBadge size={22} />}
             </h1>
 
@@ -1003,11 +1003,11 @@ export default function ProfileDetail() {
                 <Icon name="lock" size={28} color="#8A1538" />
               </div>
               <h3 className="biodata-guest-title">
-                Connect with {profile.name || "this LOVEWANSHI Member"}
+                Connect with {profile.name || "this Lodha Member"}
               </h3>
               <p className="biodata-guest-sub">
-                Create a free profile on Lovewanshi Parinay to unlock full
-                family details, match Kundali with 36 Gunas, and send marriage
+                Create a free profile on Lodha Parinay to unlock full family
+                details, match Kundali with 36 Gunas, and send marriage
                 proposals.
               </p>
               <div

@@ -77,7 +77,7 @@ class AdminFeaturedStoryServiceTest {
 
         UserProfile profile = new UserProfile();
         profile.setId(101);
-        profile.setName("Aarav LOVEWANSHI");
+        profile.setName("Aarav Lodha");
         profile.setVerified(true);
 
         AttachmentDao attachment = new AttachmentDao();
@@ -99,7 +99,7 @@ class AdminFeaturedStoryServiceTest {
         // 1. Get cached data directly
         List<CachedFeaturedStory> cachedData = featuredStoryService.getActiveStoriesData();
         assertEquals(1, cachedData.size());
-        assertEquals("Aarav LOVEWANSHI", cachedData.get(0).getName());
+        assertEquals("Aarav Lodha", cachedData.get(0).getName());
         assertEquals("photo_101.jpg", cachedData.get(0).getPhotoFileName());
         assertEquals(101, cachedData.get(0).getUserProfileId());
         assertEquals(42L, cachedData.get(0).getViewsCount());

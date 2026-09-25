@@ -312,7 +312,7 @@ export default function Browse() {
         <div className="discovery-loading-box">
           <div className="loading-spinner-ring" />
           <p className="loading-spinner-text">
-            Loading verified LOVEWANSHI matches...
+            Loading verified Lodha matches...
           </p>
         </div>
       )}
@@ -356,7 +356,7 @@ export default function Browse() {
             const heightFormatted = formatHeight(p.height);
             const professionFormatted = formatProfession(p.profession);
             const educationFormatted = formatEducation(p.education);
-            const gotraLabel = p.gotra || "LOVEWANSHI";
+            const gotraLabel = p.gotra || "Lodha";
             const photoSrc = p.profileImageFull || p.profileImage || p.imageUrl;
             const locationText =
               [p.city || p.presentAddress, p.state]
@@ -402,7 +402,7 @@ export default function Browse() {
                     </button>
                   )}
 
-                  {/* Bottom-Left: Verified LOVEWANSHI Member Badge */}
+                  {/* Bottom-Left: Verified Lodha Member Badge */}
                   <div className="card-verified-tag">
                     <span className="verified-blue-shield">
                       <svg
@@ -424,7 +424,7 @@ export default function Browse() {
                         />
                       </svg>
                     </span>
-                    <span>Verified LOVEWANSHI Member</span>
+                    <span>Verified Lodha Member</span>
                   </div>
                 </Link>
 
@@ -435,7 +435,7 @@ export default function Browse() {
                       to={`/profiles/${p.id}`}
                       className="card-profile-name"
                     >
-                      {p.name || "LOVEWANSHI Member"}
+                      {p.name || "Lodha Member"}
                     </Link>
                   </div>
 
@@ -449,7 +449,7 @@ export default function Browse() {
                     <span className="gotra-prefix">गोत्र:</span>
                     <span className="gotra-name">{gotraLabel}</span>
                     <span className="gotra-dot">•</span>
-                    <span className="gotra-community">LOVEWANSHI</span>
+                    <span className="gotra-community">Lodha</span>
                   </div>
 
                   <div
@@ -580,9 +580,7 @@ export default function Browse() {
                 style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
               >
                 <Icon name="filter" size={18} color="#E83A5B" />
-                <h3 className="filter-drawer-title">
-                  Filter LOVEWANSHI Matches
-                </h3>
+                <h3 className="filter-drawer-title">Filter Lodha Matches</h3>
               </div>
               <button
                 type="button"

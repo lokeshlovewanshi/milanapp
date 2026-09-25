@@ -116,7 +116,7 @@ export default function ShareProfileModal({ profile, photos = [], onClose }) {
   const cityStr = [profile?.city || profile?.town, profile?.state]
     .filter(Boolean)
     .join(", ");
-  const gotraStr = profile?.gotra || "LOVEWANSHI";
+  const gotraStr = profile?.gotra || "Lodha";
 
   const candidatePhotos = Array.from(
     new Set([
@@ -259,7 +259,7 @@ export default function ShareProfileModal({ profile, photos = [], onClose }) {
       // Badge text
       ctx.fillStyle = "#1E293B";
       ctx.font = "bold 17px 'Nunito Sans', -apple-system, sans-serif";
-      ctx.fillText("Verified LOVEWANSHI Member", 82, badgeY + 27);
+      ctx.fillText("Verified Lodha Member", 82, badgeY + 27);
 
       // 3. Candidate Name
       ctx.fillStyle = "#FFFFFF";
@@ -272,11 +272,7 @@ export default function ShareProfileModal({ profile, photos = [], onClose }) {
       const metricsText = [age ? `${age} Yrs` : "", heightStr ? heightStr : ""]
         .filter(Boolean)
         .join(" • ");
-      ctx.fillText(
-        metricsText || "LOVEWANSHI Community Member",
-        40,
-        height - 220,
-      );
+      ctx.fillText(metricsText || "Lodha Community Member", 40, height - 220);
 
       // 5. Gotra Badge Pill
       const gotraBadgeY = height - 190;
@@ -286,7 +282,7 @@ export default function ShareProfileModal({ profile, photos = [], onClose }) {
       ctx.fill();
       ctx.fillStyle = "#E83A5B";
       ctx.font = "700 17px 'Nunito Sans', -apple-system, sans-serif";
-      ctx.fillText(`गोत्र: ${gotraStr} • LOVEWANSHI`, 54, gotraBadgeY + 24);
+      ctx.fillText(`गोत्र: ${gotraStr} • Lodha`, 54, gotraBadgeY + 24);
 
       // 6. Career & Education line
       ctx.fillStyle = "#F8FAFC";
@@ -307,7 +303,7 @@ export default function ShareProfileModal({ profile, photos = [], onClose }) {
       ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
       ctx.font = "600 15px 'Nunito Sans', -apple-system, sans-serif";
       ctx.fillText(
-        `Lovewanshi Parinay (lovewanshisamaj.in) • ID: ${code}`,
+        `Lodha Parinay (lovewanshisamaj.in) • ID: ${code}`,
         40,
         height - 35,
       );
@@ -366,7 +362,7 @@ export default function ShareProfileModal({ profile, photos = [], onClose }) {
         });
         await navigator.share({
           files: [file],
-          title: `${name} - Lovewanshi Parinay Matrimony`,
+          title: `${name} - Lodha Parinay Matrimony`,
           text: shareMessage,
         });
         return;
@@ -496,7 +492,7 @@ export default function ShareProfileModal({ profile, photos = [], onClose }) {
                 <div className="share-card-overlay-gradient">
                   <div className="share-card-badge-row">
                     <span className="share-verified-badge">
-                      <VerifiedBadge size={14} /> Verified LOVEWANSHI Member
+                      <VerifiedBadge size={14} /> Verified Lodha Member
                     </span>
                   </div>
                   <h4 className="share-card-name">{name}</h4>
@@ -506,7 +502,7 @@ export default function ShareProfileModal({ profile, photos = [], onClose }) {
                       .join(" • ")}
                   </div>
                   <div className="share-card-gotra-pill">
-                    गोत्र: {gotraStr} • LOVEWANSHI
+                    गोत्र: {gotraStr} • Lodha
                   </div>
                   <div className="share-card-sub-info">
                     <span>

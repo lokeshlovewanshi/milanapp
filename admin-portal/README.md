@@ -1,4 +1,4 @@
-﻿# LOVEWANSHI Milan Admin Portal
+﻿# Lodha Milan Admin Portal
 
 A small React app for the three things an admin actually does: sign in,
 verify member profiles, and manage the highlighted-profiles rail. Talks
@@ -12,7 +12,7 @@ cp .env.example .env.local
 # edit .env.local: VITE_API_BASE_URL should point at your backend
 #   local dev:  http://localhost:8080
 #   Oracle dev: http://<load-balancer-ip> (or https://dev-api... once TLS is set up)
-#   prod:       https://api.lovewanshisamaj.in
+#   prod:       https://api.Lodhasamaj.in
 
 npm install
 npm run dev

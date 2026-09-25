@@ -13,7 +13,9 @@ if (process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY) {
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   };
 } else {
-  credentialsProvider = fromIni({ profile: process.env.AWS_PROFILE || "LOVEWANSHI" });
+  credentialsProvider = fromIni({
+    profile: process.env.AWS_PROFILE || "Lodha",
+  });
 }
 
 const cf = new CloudFrontClient({
@@ -22,15 +24,19 @@ const cf = new CloudFrontClient({
 });
 
 const DISTRIBUTION_ID = "E3GCII599CUC5F";
-const S3_WEBSITE_ORIGIN = "lovewanshi-parinay-web.s3-website.ap-south-1.amazonaws.com";
+const S3_WEBSITE_ORIGIN =
+  "Lodha-parinay-web.s3-website.ap-south-1.amazonaws.com";
 // CloudFront only accepts ACM certificates issued in us-east-1. Supply a new
 // ARN through ACM_CERT_ARN when the certificate is replaced.
-const ACM_CERT_ARN = process.env.ACM_CERT_ARN ||
+const ACM_CERT_ARN =
+  process.env.ACM_CERT_ARN ||
   "arn:aws:acm:us-east-1:104771965660:certificate/b039126a-9573-4995-8e4c-7ec32713d75e";
 
 async function main() {
   console.log(`Fetching CloudFront config for ${DISTRIBUTION_ID}...`);
-  const getRes = await cf.send(new GetDistributionConfigCommand({ Id: DISTRIBUTION_ID }));
+  const getRes = await cf.send(
+    new GetDistributionConfigCommand({ Id: DISTRIBUTION_ID }),
+  );
   const config = getRes.DistributionConfig;
   const eTag = getRes.ETag;
 
@@ -63,7 +69,8 @@ async function main() {
   };
 
   // 2. Set Default Cache Behavior
-  config.DefaultCacheBehavior.TargetOriginId = "lovewanshi-parinay-web-s3-website";
+  config.DefaultCacheBehavior.TargetOriginId =
+    "lovewanshi-parinay-web-s3-website";
   config.DefaultCacheBehavior.ViewerProtocolPolicy = "redirect-to-https";
   config.DefaultCacheBehavior.TrustedKeyGroups = {
     Enabled: false,
@@ -83,13 +90,18 @@ async function main() {
   };
   delete config.DefaultCacheBehavior.ForwardedValues;
   // Managed-CachingOptimized cache policy ID: 658327ea-f89d-4fab-a63d-7e88639e58f6
-  config.DefaultCacheBehavior.CachePolicyId = "658327ea-f89d-4fab-a63d-7e88639e58f6";
+  config.DefaultCacheBehavior.CachePolicyId =
+    "658327ea-f89d-4fab-a63d-7e88639e58f6";
 
   // 3. Set Default Root Object
   config.DefaultRootObject = "index.html";
 
   // 4. Set Aliases to include root and www and app
-  const aliases = ["lovewanshisamaj.in", "www.lovewanshisamaj.in", "app.lovewanshisamaj.in"];
+  const aliases = [
+    "lovewanshisamaj.in",
+    "www.lovewanshisamaj.in",
+    "app.lovewanshisamaj.in",
+  ];
   config.Aliases = {
     Quantity: aliases.length,
     Items: aliases,
@@ -128,7 +140,7 @@ async function main() {
       Id: DISTRIBUTION_ID,
       DistributionConfig: config,
       IfMatch: eTag,
-    })
+    }),
   );
 
   console.log("Creating cache invalidation to clear any stale cache...");
@@ -142,12 +154,14 @@ async function main() {
           Items: ["/*"],
         },
       },
-    })
+    }),
   );
 
   console.log("\n=======================================================");
   console.log("🎉 CLOUDFRONT DISTRIBUTION UPDATED!");
-  console.log(`CloudFront Domain: https://${updateRes.Distribution.DomainName}`);
+  console.log(
+    `CloudFront Domain: https://${updateRes.Distribution.DomainName}`,
+  );
   console.log(`Mapped Domains: ${aliases.join(", ")}`);
   console.log("=======================================================\n");
 }

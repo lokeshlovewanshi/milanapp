@@ -1,4 +1,4 @@
-﻿# Running LOVEWANSHI Milan locally
+﻿# Running Lodha Milan locally
 
 Runs the whole app on your Mac with no AWS involved — the EC2 box can stay
 stopped. Everything below assumes:

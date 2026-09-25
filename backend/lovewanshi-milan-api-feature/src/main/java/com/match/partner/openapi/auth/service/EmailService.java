@@ -82,7 +82,7 @@ public class EmailService {
             MimeMessage message = sender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, "UTF-8");
             helper.setTo(to);
-            helper.setSubject(code + " is your LOVEWANSHI Milan code");
+            helper.setSubject(code + " is your Lodha Milan code");
             helper.setFrom(from, fromName);
             helper.setText(html(code, heading, purposeLine, validMinutes), true);
 
@@ -140,8 +140,8 @@ public class EmailService {
             MimeMessage message = sender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, "UTF-8");
             helper.setTo(to);
-            helper.setSubject("✨ Congratulations! Your Lovewanshi Parinay profile is verified (" + gmId + ")");
-            helper.setFrom(from, "Lovewanshi Parinay");
+            helper.setSubject("✨ Congratulations! Your Lodha Parinay profile is verified (" + gmId + ")");
+            helper.setFrom(from, "Lodha Parinay");
             helper.setText(welcomeVerifiedHtml(fullName != null && !fullName.isBlank() ? fullName : "Member", gmId), true);
 
             sender.send(message);
@@ -171,7 +171,7 @@ public class EmailService {
                 <head>
                   <meta charset="UTF-8">
                   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                  <title>Welcome to Lovewanshi Parinay</title>
+                  <title>Welcome to Lodha Parinay</title>
                 </head>
                 <body style="margin:0;padding:0;background-color:#FAF5F6;font-family:'Segoe UI',Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;">
                   <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#FAF5F6;padding:24px 12px;">
@@ -184,10 +184,10 @@ public class EmailService {
                             <td align="center" style="background:linear-gradient(135deg, #7B1220 0%%, #A5122F 100%%);padding:36px 24px 28px;text-align:center;border-bottom:4px solid #D4AF37;">
                               <div style="font-size:28px;margin-bottom:8px;">💍✨💍</div>
                               <h1 style="color:#FFFFFF;margin:0;font-size:26px;font-weight:700;letter-spacing:0.5px;font-family:Georgia,serif;">
-                                Lovewanshi Parinay
+                                Lodha Parinay
                               </h1>
                               <p style="color:#FCE8EE;margin:4px 0 16px;font-size:13px;letter-spacing:1px;text-transform:uppercase;">
-                                Lovewanshi Samaj Trusted Matrimony
+                                Lodha Samaj Trusted Matrimony
                               </p>
                               
                               <!-- Verified Shield Badge -->
@@ -208,14 +208,14 @@ public class EmailService {
                                 Namaste, %s! 🙏
                               </h2>
                               <p style="color:#333333;font-size:15px;line-height:1.6;margin:0 0 16px;">
-                                We are pleased to inform you that your profile has been <strong>successfully verified</strong> by the Lovewanshi Parinay community moderation team.
+                                We are pleased to inform you that your profile has been <strong>successfully verified</strong> by the Lodha Parinay community moderation team.
                               </p>
                               
                               <!-- ID Card Box -->
                               <table width="100%%" border="0" cellspacing="0" cellpadding="0" style="background:#FFF8FA;border-left:4px solid #A5122F;border-radius:6px;padding:12px 16px;margin:0 0 24px;">
                                 <tr>
                                   <td>
-                                    <span style="color:#6B5C5E;font-size:12px;text-transform:uppercase;font-weight:600;display:block;">Your Lovewanshi Parinay ID</span>
+                                    <span style="color:#6B5C5E;font-size:12px;text-transform:uppercase;font-weight:600;display:block;">Your Lodha Parinay ID</span>
                                     <span style="color:#7B1220;font-size:18px;font-weight:800;letter-spacing:1px;">%s</span>
                                   </td>
                                 </tr>
@@ -230,7 +230,7 @@ public class EmailService {
                                 <tr>
                                   <td width="36" valign="top" style="font-size:20px;">👥</td>
                                   <td style="padding-left:8px;font-size:14px;color:#4A5568;line-height:1.5;">
-                                    <strong style="color:#1A202C;">Browse Verified Profiles:</strong> Connect directly with verified Lovewanshi Samaj brides &amp; grooms across India.
+                                    <strong style="color:#1A202C;">Browse Verified Profiles:</strong> Connect directly with verified Lodha Samaj brides &amp; grooms across India.
                                   </td>
                                 </tr>
                               </table>
@@ -275,7 +275,7 @@ public class EmailService {
                                 Need assistance? Write to our support team at <a href="mailto:lovewanshisamaj@gmail.com" style="color:#A5122F;font-weight:600;">lovewanshisamaj@gmail.com</a>
                               </p>
                               <p style="color:#A0AEC0;font-size:11px;margin:0;">
-                                © Lovewanshi Parinay · Official Community Matrimony Portal · <a href="https://www.lovewanshisamaj.in" style="color:#A5122F;text-decoration:none;">www.lovewanshisamaj.in</a>
+                                © Lodha Parinay · Official Community Matrimony Portal · <a href="https://www.lovewanshisamaj.in" style="color:#A5122F;text-decoration:none;">www.lovewanshisamaj.in</a>
                               </p>
                             </td>
                           </tr>
@@ -296,7 +296,7 @@ public class EmailService {
     private String html(String code, String heading, String purposeLine, int validMinutes) {
         return """
                 <div style="font-family:Helvetica,Arial,sans-serif;max-width:480px;margin:0 auto;padding:24px;color:#1A1A1A">
-                  <h1 style="font-size:22px;color:#7B1220;margin:0 0 4px">Lovewanshi Parinay</h1>
+                  <h1 style="font-size:22px;color:#7B1220;margin:0 0 4px">Lodha Parinay</h1>
                   <p style="font-size:15px;color:#6B7280;margin:0 0 24px">%s</p>
                   <p style="font-size:15px;margin:0 0 8px">%s</p>
                   <div style="font-size:34px;font-weight:bold;letter-spacing:8px;color:#7B1220;
@@ -342,8 +342,8 @@ public class EmailService {
             MimeMessage message = sender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, "UTF-8");
             helper.setTo(to);
-            helper.setSubject("🎉 Welcome to Lovewanshi Parinay! Your " + planName + " Plan (" + durationText + ") is Active");
-            helper.setFrom(from, "Lovewanshi Parinay");
+            helper.setSubject("🎉 Welcome to Lodha Parinay! Your " + planName + " Plan (" + durationText + ") is Active");
+            helper.setFrom(from, "Lodha Parinay");
             helper.setText(planActivationHtml(displayName, planName, durationText, validityDate, isFreeOffer), true);
 
             sender.send(message);
@@ -374,7 +374,7 @@ public class EmailService {
                 <head>
                   <meta charset="UTF-8">
                   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                  <title>Lovewanshi Parinay Plan Activated</title>
+                  <title>Lodha Parinay Plan Activated</title>
                 </head>
                 <body style="margin:0;padding:0;background-color:#FAF5F6;font-family:'Segoe UI',Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;">
                   <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#FAF5F6;padding:24px 12px;">
@@ -387,10 +387,10 @@ public class EmailService {
                             <td align="center" style="background:linear-gradient(135deg, #7B1220 0%%, #A5122F 100%%);padding:36px 24px 28px;text-align:center;border-bottom:4px solid #D4AF37;">
                               <div style="font-size:28px;margin-bottom:8px;">💍✨👑</div>
                               <h1 style="color:#FFFFFF;margin:0;font-size:26px;font-weight:700;letter-spacing:0.5px;font-family:Georgia,serif;">
-                                Lovewanshi Parinay
+                                Lodha Parinay
                               </h1>
                               <p style="color:#FCE8EE;margin:4px 0 16px;font-size:13px;letter-spacing:1px;text-transform:uppercase;">
-                                Lovewanshi Samaj Trusted Matrimony
+                                Lodha Samaj Trusted Matrimony
                               </p>
                               
                               <!-- Plan Badge -->
@@ -411,7 +411,7 @@ public class EmailService {
                                 Welcome, %s! 🙏
                               </h2>
                               <p style="color:#333333;font-size:15px;line-height:1.6;margin:0 0 16px;">
-                                Thank you for joining <strong>Lovewanshi Parinay</strong>. Your <strong>%s Plan (%s)</strong> has been successfully activated on your account.
+                                Thank you for joining <strong>Lodha Parinay</strong>. Your <strong>%s Plan (%s)</strong> has been successfully activated on your account.
                               </p>
                               
                               <!-- Plan Details Card Box -->
@@ -494,7 +494,7 @@ public class EmailService {
                                 Need assistance? Write to our support team at <a href="mailto:lovewanshisamaj@gmail.com" style="color:#A5122F;font-weight:600;">lovewanshisamaj@gmail.com</a>
                               </p>
                               <p style="color:#A0AEC0;font-size:11px;margin:0;">
-                                © Lovewanshi Parinay · Official Community Matrimony Portal · <a href="https://www.lovewanshisamaj.in" style="color:#A5122F;text-decoration:none;">www.lovewanshisamaj.in</a>
+                                © Lodha Parinay · Official Community Matrimony Portal · <a href="https://www.lovewanshisamaj.in" style="color:#A5122F;text-decoration:none;">www.lovewanshisamaj.in</a>
                               </p>
                             </td>
                           </tr>
@@ -532,7 +532,7 @@ public class EmailService {
                 helper.setTo(to.trim());
                 helper.setSubject(finalSubject);
                 String senderEmail = (from != null && !from.isBlank()) ? from.trim() : "noreply@lovewanshisamaj.in";
-                String senderName = (fromName != null && !fromName.isBlank()) ? fromName.trim() : "Lovewanshi Parinay";
+                String senderName = (fromName != null && !fromName.isBlank()) ? fromName.trim() : "Lodha Parinay";
                 helper.setFrom(senderEmail, senderName);
                 helper.setText(htmlBody, true);
 
@@ -580,7 +580,7 @@ public class EmailService {
                 <head>
                   <meta charset="UTF-8">
                   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                  <title>Lovewanshi Parinay</title>
+                  <title>Lodha Parinay</title>
                 </head>
                 <body style="margin:0;padding:0;background-color:#FAF5F6;font-family:'Segoe UI',Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;">
                   <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#FAF5F6;padding:24px 12px;">
@@ -593,10 +593,10 @@ public class EmailService {
                             <td align="center" style="background:linear-gradient(135deg, #7B1220 0%, #A5122F 100%);padding:32px 24px 26px;text-align:center;border-bottom:4px solid #D4AF37;">
                               <div style="font-size:26px;margin-bottom:6px;">💍✨👑</div>
                               <h1 style="color:#FFFFFF;margin:0;font-size:26px;font-weight:700;letter-spacing:0.5px;font-family:Georgia,serif;">
-                                Lovewanshi Parinay
+                                Lodha Parinay
                               </h1>
                               <p style="color:#FCE8EE;margin:4px 0 14px;font-size:13px;letter-spacing:1px;text-transform:uppercase;">
-                                Lovewanshi Samaj Trusted Matrimony
+                                Lodha Samaj Trusted Matrimony
                               </p>
                               
                               <table border="0" cellspacing="0" cellpadding="0" style="background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.35);border-radius:999px;margin:0 auto;">
@@ -621,7 +621,7 @@ public class EmailService {
                                 <tr>
                                   <td align="center">
                                     <a href="https://www.lovewanshisamaj.in/login" style="display:inline-block;background:linear-gradient(135deg, #7B1220 0%, #A5122F 100%);color:#FFFFFF;text-decoration:none;font-size:15px;font-weight:700;padding:13px 32px;border-radius:999px;box-shadow:0 4px 14px rgba(123,18,32,0.3);letter-spacing:0.3px;">
-                                      Open Lovewanshi Parinay Portal →
+                                      Open Lodha Parinay Portal →
                                     </a>
                                   </td>
                                 </tr>
@@ -652,7 +652,7 @@ public class EmailService {
                                 TRADITION &bull; TRUST &bull; BETTER TOMORROW
                               </p>
                               <p style="color:#718096;font-size:11px;margin:0 0 6px;">
-                                Where Families Meet &bull; Connecting LOVEWANSHI Families Worldwide
+                                Where Families Meet &bull; Connecting Lodha Families Worldwide
                               </p>
                               <p style="color:#A0AEC0;font-size:11px;margin:0;">
                                 Website: <a href="https://www.lovewanshisamaj.in" style="color:#7B1220;text-decoration:none;">www.lovewanshisamaj.in</a> &bull; Sent via Official Community Relay

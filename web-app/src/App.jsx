@@ -1,5 +1,13 @@
 ﻿import React, { useEffect, useState } from "react";
-import { Navigate, Route, Routes, Link, NavLink, useNavigate, useLocation } from "react-router-dom";
+import {
+  Navigate,
+  Route,
+  Routes,
+  Link,
+  NavLink,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
 import { isLoggedIn, clearSession, notificationAPI, profileAPI } from "./api";
 import { Icon } from "./components/Icons";
 import AvatarFallback from "./components/AvatarFallback";
@@ -24,7 +32,11 @@ function RequireAuth({ children }) {
   return isLoggedIn() ? (
     children
   ) : (
-    <Navigate to="/login" state={{ from: location.pathname + location.search }} replace />
+    <Navigate
+      to="/login"
+      state={{ from: location.pathname + location.search }}
+      replace
+    />
   );
 }
 
@@ -38,7 +50,7 @@ function Layout({ children }) {
 
   useEffect(() => {
     if (!isLoggedIn()) return;
-    
+
     // Fetch unread count
     notificationAPI
       .unreadCount()
@@ -62,7 +74,11 @@ function Layout({ children }) {
   const myFirstName = myName.split(" ")[0];
   const rawId = String(me?.id || "");
   const digits = rawId.replace(/\D/g, "");
-  const myCode = digits ? `GM${digits.padStart(5, "0")}` : (rawId ? `GM${rawId}` : "");
+  const myCode = digits
+    ? `GM${digits.padStart(5, "0")}`
+    : rawId
+      ? `GM${rawId}`
+      : "";
 
   return (
     <div className="matrimony-app-shell">
@@ -71,27 +87,56 @@ function Layout({ children }) {
         <div className="navbar-container">
           {/* Brand Logo & Wordmark */}
           <Link to="/browse" className="navbar-brand">
-            <img src={logoImg} alt="Lovewanshi Parinay" className="navbar-logo-img" />
+            <img
+              src={logoImg}
+              alt="Lodha Parinay"
+              className="navbar-logo-img"
+            />
             <div className="navbar-brand-text">
-              <span className="navbar-brand-title">Lovewanshi Parinay</span>
+              <span className="navbar-brand-title">Lodha Parinay</span>
             </div>
           </Link>
 
           {/* Desktop Primary Nav Links */}
           <nav className="navbar-links desktop-only">
-            <NavLink to="/browse" className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>
+            <NavLink
+              to="/browse"
+              className={({ isActive }) =>
+                `nav-link ${isActive ? "active" : ""}`
+              }
+            >
               <span>Matches</span>
             </NavLink>
-            <NavLink to="/likes" className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>
+            <NavLink
+              to="/likes"
+              className={({ isActive }) =>
+                `nav-link ${isActive ? "active" : ""}`
+              }
+            >
               <span>Interests</span>
             </NavLink>
-            <NavLink to="/shortlist" className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>
+            <NavLink
+              to="/shortlist"
+              className={({ isActive }) =>
+                `nav-link ${isActive ? "active" : ""}`
+              }
+            >
               <span>Shortlist</span>
             </NavLink>
-            <NavLink to="/kundali" className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>
+            <NavLink
+              to="/kundali"
+              className={({ isActive }) =>
+                `nav-link ${isActive ? "active" : ""}`
+              }
+            >
               <span>Kundali Milan</span>
             </NavLink>
-            <NavLink to="/support" className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>
+            <NavLink
+              to="/support"
+              className={({ isActive }) =>
+                `nav-link ${isActive ? "active" : ""}`
+              }
+            >
               <span>Support</span>
             </NavLink>
           </nav>
@@ -99,15 +144,25 @@ function Layout({ children }) {
           {/* User Controls (Right) */}
           <div className="navbar-user-actions">
             {/* Notifications Bell */}
-            <NavLink to="/notifications" className="navbar-bell-btn" title="Notifications">
+            <NavLink
+              to="/notifications"
+              className="navbar-bell-btn"
+              title="Notifications"
+            >
               <Icon name="bell" size={20} />
               {unreadCount > 0 && (
-                <span className="navbar-badge">{unreadCount > 99 ? "99+" : unreadCount}</span>
+                <span className="navbar-badge">
+                  {unreadCount > 99 ? "99+" : unreadCount}
+                </span>
               )}
             </NavLink>
 
             {/* Profile Dropdown / Pill */}
-            <Link to="/me" className="navbar-profile-pill" title="View & Edit My Profile">
+            <Link
+              to="/me"
+              className="navbar-profile-pill"
+              title="View & Edit My Profile"
+            >
               <div className="navbar-avatar-ring">
                 {avatarUrl ? (
                   <img src={avatarUrl} alt={myName} />
@@ -117,13 +172,25 @@ function Layout({ children }) {
               </div>
               <div className="navbar-profile-info desktop-only">
                 <span className="navbar-profile-name">{myFirstName}</span>
-                {myCode && <span className="navbar-profile-code">{myCode}</span>}
+                {myCode && (
+                  <span className="navbar-profile-code">{myCode}</span>
+                )}
               </div>
-              <Icon name="chevron-down" size={13} color="#6B7280" className="desktop-only" />
+              <Icon
+                name="chevron-down"
+                size={13}
+                color="#6B7280"
+                className="desktop-only"
+              />
             </Link>
 
             {/* Log out */}
-            <button type="button" className="navbar-logout-btn desktop-only" onClick={logout} title="Log out">
+            <button
+              type="button"
+              className="navbar-logout-btn desktop-only"
+              onClick={logout}
+              title="Log out"
+            >
               <Icon name="log-out" size={15} />
               <span>Log out</span>
             </button>
@@ -139,19 +206,31 @@ function Layout({ children }) {
 
       {/* Mobile Bottom Navigation Bar */}
       <nav className="matrimony-mobile-bottom-nav mobile-only">
-        <NavLink to="/browse" className={({ isActive }) => `mobile-tab ${isActive ? "active" : ""}`}>
+        <NavLink
+          to="/browse"
+          className={({ isActive }) => `mobile-tab ${isActive ? "active" : ""}`}
+        >
           <Icon name="search" size={20} />
           <span>Matches</span>
         </NavLink>
-        <NavLink to="/likes" className={({ isActive }) => `mobile-tab ${isActive ? "active" : ""}`}>
+        <NavLink
+          to="/likes"
+          className={({ isActive }) => `mobile-tab ${isActive ? "active" : ""}`}
+        >
           <Icon name="heart" size={20} />
           <span>Interests</span>
         </NavLink>
-        <NavLink to="/shortlist" className={({ isActive }) => `mobile-tab ${isActive ? "active" : ""}`}>
+        <NavLink
+          to="/shortlist"
+          className={({ isActive }) => `mobile-tab ${isActive ? "active" : ""}`}
+        >
           <Icon name="bookmark" size={20} />
           <span>Shortlist</span>
         </NavLink>
-        <NavLink to="/me" className={({ isActive }) => `mobile-tab ${isActive ? "active" : ""}`}>
+        <NavLink
+          to="/me"
+          className={({ isActive }) => `mobile-tab ${isActive ? "active" : ""}`}
+        >
           <Icon name="user" size={20} />
           <span>Profile</span>
         </NavLink>
@@ -181,8 +260,14 @@ function withPublicLayout(Page) {
 export default function App() {
   return (
     <Routes>
-      <Route path="/login" element={isLoggedIn() ? <Navigate to="/browse" replace /> : <Login />} />
-      <Route path="/signup" element={isLoggedIn() ? <Navigate to="/browse" replace /> : <Signup />} />
+      <Route
+        path="/login"
+        element={isLoggedIn() ? <Navigate to="/browse" replace /> : <Login />}
+      />
+      <Route
+        path="/signup"
+        element={isLoggedIn() ? <Navigate to="/browse" replace /> : <Signup />}
+      />
 
       <Route path="/browse" element={withLayout(Browse)} />
       <Route path="/profile/:id" element={withPublicLayout(ProfileDetail)} />
@@ -199,7 +284,10 @@ export default function App() {
       <Route path="/delete-account" element={<DeleteAccount />} />
       <Route path="/delete" element={<DeleteAccount />} />
 
-      <Route path="*" element={<Navigate to={isLoggedIn() ? "/browse" : "/login"} replace />} />
+      <Route
+        path="*"
+        element={<Navigate to={isLoggedIn() ? "/browse" : "/login"} replace />}
+      />
     </Routes>
   );
 }

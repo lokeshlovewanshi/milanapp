@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "406753347579-0ote3350na406thd84ce6cl6g6n2lspv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.lovewanshi.jeevanmilansathi",
+            "certificate_hash": "8262b57b7f319b6f7b84922f52902b75655eed43"
+          }
+        },
+        {
           "client_id": "406753347579-dn2bo7purucl1hugnqe6tuj5p31legtr.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

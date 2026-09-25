@@ -4,8 +4,8 @@ import fs from "fs";
 import path from "path";
 
 const REGION = process.env.AWS_REGION || "ap-south-1";
-const PROFILE = process.env.AWS_PROFILE || "LOVEWANSHI";
-const BUCKET_NAME = process.env.S3_BUCKET_NAME || "lovewanshi-parinay-web";
+const PROFILE = process.env.AWS_PROFILE || "Lodha";
+const BUCKET_NAME = process.env.S3_BUCKET_NAME || "Lodha-parinay-web";
 
 let credentialsProvider;
 if (process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY) {
@@ -67,7 +67,7 @@ async function syncProfile(profileId) {
   const professionStr = cleanStr(data.profession || data.occupationDetails);
   const educationStr = cleanStr(data.education || data.educationDetails);
   const cityStr = [data.city, data.state].filter(Boolean).join(", ");
-  const gotraStr = data.gotra || "LOVEWANSHI";
+  const gotraStr = data.gotra || "Lodha";
 
   // Photo resolution: primary first
   const photo =
@@ -87,9 +87,9 @@ async function syncProfile(profileId) {
     .filter(Boolean)
     .join(" • ");
 
-  const pageTitle = `${name} (${code}) - Lovewanshi Parinay Matrimony`;
-  const ogTitle = `${name} (${code})${age ? ` - ${age} Yrs` : ""}${heightStr ? `, ${heightStr}` : ""} | Lovewanshi Parinay`;
-  const ogDesc = `${quickDetails}${gotraStr ? ` • Gotra: ${gotraStr}` : ""}. View complete verified biodata & family details on Lovewanshi Parinay.`;
+  const pageTitle = `${name} (${code}) - Lodha Parinay Matrimony`;
+  const ogTitle = `${name} (${code})${age ? ` - ${age} Yrs` : ""}${heightStr ? `, ${heightStr}` : ""} | Lodha Parinay`;
+  const ogDesc = `${quickDetails}${gotraStr ? ` • Gotra: ${gotraStr}` : ""}. View complete verified biodata & family details on Lodha Parinay.`;
 
   // Read base index.html from dist/
   const distIndex = path.resolve("./dist/index.html");
@@ -102,27 +102,27 @@ async function syncProfile(profileId) {
   html = html.replace(/<title>.*?<\/title>/, `<title>${pageTitle}</title>`);
   html = html.replace(
     /<meta property="og:title" content=".*?" \/>/,
-    `<meta property="og:title" content="${ogTitle}" />`
+    `<meta property="og:title" content="${ogTitle}" />`,
   );
   html = html.replace(
     /<meta\s+property="og:description"\s+content=".*?"\s*\/>/s,
-    `<meta property="og:description" content="${ogDesc}" />`
+    `<meta property="og:description" content="${ogDesc}" />`,
   );
   html = html.replace(
     /<meta property="og:image" content=".*?" \/>/,
-    `<meta property="og:image" content="${photo}" />\n    <meta property="og:image:secure_url" content="${photo}" />\n    <meta property="og:image:width" content="600" />\n    <meta property="og:image:height" content="600" />`
+    `<meta property="og:image" content="${photo}" />\n    <meta property="og:image:secure_url" content="${photo}" />\n    <meta property="og:image:width" content="600" />\n    <meta property="og:image:height" content="600" />`,
   );
   html = html.replace(
     /<meta name="twitter:title" content=".*?" \/>/,
-    `<meta name="twitter:title" content="${ogTitle}" />`
+    `<meta name="twitter:title" content="${ogTitle}" />`,
   );
   html = html.replace(
     /<meta\s+name="twitter:description"\s+content=".*?"\s*\/>/s,
-    `<meta name="twitter:description" content="${ogDesc}" />`
+    `<meta name="twitter:description" content="${ogDesc}" />`,
   );
   html = html.replace(
     /<meta name="twitter:image" content=".*?" \/>/,
-    `<meta name="twitter:image" content="${photo}" />`
+    `<meta name="twitter:image" content="${photo}" />`,
   );
 
   // Upload to all key variations in S3
@@ -140,7 +140,9 @@ async function syncProfile(profileId) {
   ];
 
   const uniqueKeys = Array.from(new Set(targetKeys));
-  console.log(`Uploading Open Graph HTML for ${name} (${code}) to S3 (${uniqueKeys.length} paths)...`);
+  console.log(
+    `Uploading Open Graph HTML for ${name} (${code}) to S3 (${uniqueKeys.length} paths)...`,
+  );
 
   for (const key of uniqueKeys) {
     await s3.send(
@@ -150,18 +152,25 @@ async function syncProfile(profileId) {
         Body: Buffer.from(html, "utf-8"),
         ContentType: "text/html; charset=utf-8",
         CacheControl: "public, max-age=1800, s-maxage=3600",
-      })
+      }),
     );
     console.log(` ✓ S3 Key: ${key}`);
   }
 
-  console.log(`✅ Profile ${code} Open Graph populated successfully with image: ${photo.substring(0, 60)}...`);
+  console.log(
+    `✅ Profile ${code} Open Graph populated successfully with image: ${photo.substring(0, 60)}...`,
+  );
 }
 
 async function main() {
   const ids = process.argv.slice(2);
-  const targetIds = ids.length > 0 ? ids : ["JM00382", "382", "GM00382", "JM00373", "373", "GM00373"];
-  console.log(`Starting Profile Open Graph pre-renderer for IDs: ${targetIds.join(", ")}`);
+  const targetIds =
+    ids.length > 0
+      ? ids
+      : ["JM00382", "382", "GM00382", "JM00373", "373", "GM00373"];
+  console.log(
+    `Starting Profile Open Graph pre-renderer for IDs: ${targetIds.join(", ")}`,
+  );
   for (const id of targetIds) {
     try {
       await syncProfile(id);
@@ -169,7 +178,9 @@ async function main() {
       console.error(`Error syncing ${id}:`, e);
     }
   }
-  console.log("\n🎉 All target profile Open Graph pages pre-rendered and uploaded to S3!");
+  console.log(
+    "\n🎉 All target profile Open Graph pages pre-rendered and uploaded to S3!",
+  );
 }
 
 main().catch(console.error);

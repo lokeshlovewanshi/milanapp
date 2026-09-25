@@ -22,7 +22,7 @@ export default function ChildSafety() {
         }}
       >
         <h2 style={{ margin: "0 0 8px", color: "#8B1E2F", fontSize: "24px" }}>
-          👑 LOVEWANSHI Milan / Lovewanshi Parinay
+          👑 Lodha Milan / Lodha Parinay
         </h2>
         <h1 style={{ margin: "0 0 8px", fontSize: "32px", fontWeight: "700" }}>
           Child Safety Standards & CSAE Policy
@@ -42,11 +42,11 @@ export default function ChildSafety() {
           marginBottom: "28px",
         }}
       >
-        <strong>Zero Tolerance Policy:</strong> LOVEWANSHI Milan has zero
-        tolerance for Child Sexual Abuse Material (CSAM) and Child Sexual
-        Abuse and Exploitation (CSAE). We are committed to ensuring our platform
-        remains safe, compliant with all national and international child
-        protection laws, and strictly restricted to adult matrimonial searches.
+        <strong>Zero Tolerance Policy:</strong> Lodha Milan has zero tolerance
+        for Child Sexual Abuse Material (CSAM) and Child Sexual Abuse and
+        Exploitation (CSAE). We are committed to ensuring our platform remains
+        safe, compliant with all national and international child protection
+        laws, and strictly restricted to adult matrimonial searches.
       </div>
 
       <section style={{ marginBottom: "28px" }}>
@@ -61,7 +61,7 @@ export default function ChildSafety() {
           1. Strictly 18+ Platform (Prohibition of Minors)
         </h2>
         <p>
-          LOVEWANSHI Milan is an adult-only matrimonial service strictly for
+          Lodha Milan is an adult-only matrimonial service strictly for
           individuals seeking marital alliances who are 18 years of age or
           older.
         </p>
@@ -126,8 +126,8 @@ export default function ChildSafety() {
         <p>To uphold these standards, our platform employs:</p>
         <ul>
           <li>
-            <strong>Mandatory Profile Review:</strong> All new profiles and photo
-            uploads go through admin moderation before becoming publicly
+            <strong>Mandatory Profile Review:</strong> All new profiles and
+            photo uploads go through admin moderation before becoming publicly
             visible in search feeds.
           </li>
           <li>
@@ -156,9 +156,7 @@ export default function ChildSafety() {
           We urge our users and the public to report any suspected child safety
           violations or underage accounts immediately.
         </p>
-        <p>
-          You can report concerns via:
-        </p>
+        <p>You can report concerns via:</p>
         <ul>
           <li>
             <strong>Dedicated Safety Email:</strong>{" "}
@@ -219,7 +217,7 @@ export default function ChildSafety() {
           color: "#6b5c5e",
         }}
       >
-        © 2026 LOVEWANSHI Milan / Lovewanshi Parinay. All rights reserved.
+        © 2026 Lodha Milan / Lodha Parinay. All rights reserved.
       </footer>
     </div>
   );

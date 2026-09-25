@@ -26,7 +26,7 @@ const FALLBACK_PHONE = "7440814972";
 const FALLBACK_EMAIL = "lovewanshisamaj@gmail.com";
 
 /**
- * Contact details for the people running LOVEWANSHI Milan.
+ * Contact details for the people running Lodha Milan.
  *
  * Both rows hand off to the phone's own apps rather than trying to send
  * anything from inside this one: `tel:` opens the dialer with the number
@@ -109,7 +109,7 @@ export default function HelpSupportScreen() {
           style={({ pressed }) => [styles.row, pressed && styles.rowPressed]}
           onPress={() =>
             open(
-              `mailto:${email}?subject=${encodeURIComponent("LOVEWANSHI Milan - support")}`,
+              `mailto:${email}?subject=${encodeURIComponent("Lodha Milan - support")}`,
               email,
             )
           }

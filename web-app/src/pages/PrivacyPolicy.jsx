@@ -31,7 +31,7 @@ export default function PrivacyPolicy() {
         >
           <img
             src={logoImg}
-            alt="Lovewanshi Parinay"
+            alt="Lodha Parinay"
             style={{ width: 34, height: 34, objectFit: "contain" }}
           />
           <span
@@ -42,7 +42,7 @@ export default function PrivacyPolicy() {
               color: "var(--auth-maroon)",
             }}
           >
-            Lovewanshi Parinay
+            Lodha Parinay
           </span>
         </Link>
         <Link
@@ -83,8 +83,8 @@ export default function PrivacyPolicy() {
           className="muted"
           style={{ fontSize: "0.9rem", marginBottom: "1.5rem" }}
         >
-          Last Updated: 22 August 2026 · Effective for Lovewanshi Parinay
-          (Lovewanshi Samaj) Web Portal & Mobile Application
+          Last Updated: 22 August 2026 · Effective for Lodha Parinay (Lodha
+          Samaj) Web Portal & Mobile Application
         </p>
 
         <div
@@ -104,11 +104,11 @@ export default function PrivacyPolicy() {
               lineHeight: 1.6,
             }}
           >
-            <strong>Lovewanshi Parinay</strong> is a dedicated matrimony portal
-            built exclusively for the LOVEWANSHI community to help members
-            connect with verified bride and groom proposals. This Privacy Policy
-            details how we collect, use, protect, and handle your personal and
-            matrimonial data.
+            <strong>Lodha Parinay</strong> is a dedicated matrimony portal built
+            exclusively for the Lodha community to help members connect with
+            verified bride and groom proposals. This Privacy Policy details how
+            we collect, use, protect, and handle your personal and matrimonial
+            data.
           </p>
         </div>
 
@@ -286,7 +286,7 @@ export default function PrivacyPolicy() {
             5. Account Deletion & Data Rights
           </h2>
           <p style={{ lineHeight: 1.7, color: "var(--text)" }}>
-            You maintain full control over your data on Lovewanshi Parinay:
+            You maintain full control over your data on Lodha Parinay:
           </p>
           <ul
             style={{
@@ -356,7 +356,7 @@ export default function PrivacyPolicy() {
                 color: "var(--text)",
               }}
             >
-              Lovewanshi Parinay Support Desk
+              Lodha Parinay Support Desk
             </p>
             <p style={{ margin: "0 0 0.5rem", color: "var(--text)" }}>
               Email:{" "}
@@ -393,8 +393,8 @@ export default function PrivacyPolicy() {
           }}
         >
           <p className="muted" style={{ fontSize: "0.85rem", margin: 0 }}>
-            © {new Date().getFullYear()} Lovewanshi Parinay. Dedicated
-            Matrimonial Platform for the LOVEWANSHI Community.
+            © {new Date().getFullYear()} Lodha Parinay. Dedicated Matrimonial
+            Platform for the Lodha Community.
           </p>
         </div>
       </div>

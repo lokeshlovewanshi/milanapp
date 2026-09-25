@@ -13,7 +13,9 @@ if (process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY) {
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   };
 } else {
-  credentialsProvider = fromIni({ profile: process.env.AWS_PROFILE || "LOVEWANSHI" });
+  credentialsProvider = fromIni({
+    profile: process.env.AWS_PROFILE || "LODHA",
+  });
 }
 
 const cf = new CloudFrontClient({
@@ -25,7 +27,8 @@ const S3_BUCKET_NAME = "lovewanshi-parinay-admin";
 const S3_WEBSITE_ORIGIN = `${S3_BUCKET_NAME}.s3-website.ap-south-1.amazonaws.com`;
 // The ACM certificate must be in us-east-1 for CloudFront. Override this when
 // rotating certificates rather than editing the deployment script.
-const ACM_CERT_ARN = process.env.ACM_CERT_ARN ||
+const ACM_CERT_ARN =
+  process.env.ACM_CERT_ARN ||
   "arn:aws:acm:us-east-1:104771965660:certificate/b039126a-9573-4995-8e4c-7ec32713d75e";
 const ADMIN_ALIAS = "admin.lovewanshisamaj.in";
 
@@ -34,13 +37,16 @@ async function main() {
   const listRes = await cf.send(new ListDistributionsCommand({}));
   const items = listRes.DistributionList?.Items || [];
 
-  let existingAdminDist = items.find((d) =>
-    (d.Aliases?.Items || []).includes(ADMIN_ALIAS) ||
-    d.Origins?.Items?.some((o) => o.DomainName === S3_WEBSITE_ORIGIN)
+  let existingAdminDist = items.find(
+    (d) =>
+      (d.Aliases?.Items || []).includes(ADMIN_ALIAS) ||
+      d.Origins?.Items?.some((o) => o.DomainName === S3_WEBSITE_ORIGIN),
   );
 
   if (existingAdminDist) {
-    console.log(`Found existing Admin CloudFront distribution: ${existingAdminDist.Id} (${existingAdminDist.DomainName})`);
+    console.log(
+      `Found existing Admin CloudFront distribution: ${existingAdminDist.Id} (${existingAdminDist.DomainName})`,
+    );
     console.log("Creating cache invalidation...");
     await cf.send(
       new CreateInvalidationCommand({
@@ -52,9 +58,11 @@ async function main() {
             Items: ["/*"],
           },
         },
-      })
+      }),
     );
-    console.log(`\n🎉 Admin CloudFront live at: https://${existingAdminDist.DomainName}`);
+    console.log(
+      `\n🎉 Admin CloudFront live at: https://${existingAdminDist.DomainName}`,
+    );
     console.log(`🔗 Custom Domain: https://${ADMIN_ALIAS}`);
     return;
   }
@@ -62,7 +70,7 @@ async function main() {
   console.log(`Creating new CloudFront distribution for ${ADMIN_ALIAS}...`);
   const distributionConfig = {
     CallerReference: `admin-portal-${Date.now()}`,
-    Comment: "Lovewanshi Parinay Admin Portal",
+    Comment: "Lodha Parinay Admin Portal",
     Enabled: true,
     DefaultRootObject: "index.html",
     Aliases: {
@@ -134,7 +142,7 @@ async function main() {
   const createRes = await cf.send(
     new CreateDistributionCommand({
       DistributionConfig: distributionConfig,
-    })
+    }),
   );
 
   const newDist = createRes.Distribution;

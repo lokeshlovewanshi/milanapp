@@ -8,7 +8,7 @@ import fs from "fs";
 import path from "path";
 
 const REGION = process.env.AWS_REGION || "ap-south-1";
-const PROFILE = process.env.AWS_PROFILE || "LOVEWANSHI";
+const PROFILE = process.env.AWS_PROFILE || "Lodha";
 
 let credentialsProvider;
 if (process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY) {

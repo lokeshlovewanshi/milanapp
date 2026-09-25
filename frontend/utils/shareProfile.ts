@@ -166,7 +166,7 @@ export function buildProfileShareMessage(
   if (isOwnProfile) {
     return [
       `🙏 Namaste,`,
-      `Check out my marriage profile on Lovewanshi Parinay 🌸`,
+      `Check out my marriage profile on Lodha Parinay 🌸`,
       ``,
       `👤 Name: ${name}`,
       code ? `🆔 Profile ID: ${code}` : "",
@@ -176,7 +176,7 @@ export function buildProfileShareMessage(
       `🔗 View full profile & photos:`,
       `${shareUrl}`,
       ``,
-      `📲 Download Lovewanshi Parinay App:`,
+      `📲 Download Lodha Parinay App:`,
       `${playStoreUrl}`,
     ]
       .filter((line) => line !== "")
@@ -186,7 +186,7 @@ export function buildProfileShareMessage(
   return [
     `Hi 👋 ${name} This Side 🙏`,
     ``,
-    `I saw your profile on Lovewanshi Parinay App and found it interesting 🤩`,
+    `I saw your profile on Lodha Parinay App and found it interesting 🤩`,
     ``,
     `Me & My Family Members 👨‍👩‍👧‍👦 want to discuss further For Marriage. 👫`,
     ``,
@@ -214,11 +214,11 @@ export async function shareProfile(
   if (!profile) return;
 
   const { isOwnProfile = false } = options;
-  const name = profileName(profile) || "Lovewanshi Parinay Profile";
+  const name = profileName(profile) || "Lodha Parinay Profile";
   const message = buildProfileShareMessage(profile, isOwnProfile);
   const title = isOwnProfile
-    ? `${name} - Marriage Profile on Lovewanshi Parinay`
-    : `${name} - Lovewanshi Parinay Marriage Proposal`;
+    ? `${name} - Marriage Profile on Lodha Parinay`
+    : `${name} - Lodha Parinay Marriage Proposal`;
 
   try {
     await Share.share({
@@ -239,7 +239,7 @@ export async function shareKundali(
   profile: any,
   kundaliData?: any,
 ): Promise<void> {
-  const name = profileName(profile) || "Lovewanshi Parinay Member";
+  const name = profileName(profile) || "Lodha Parinay Member";
   const code = profileCode(profile) || profileId(profile) || "";
   const shareUrl = code
     ? `https://www.lovewanshisamaj.in/profile/${code}`
@@ -284,7 +284,7 @@ export async function shareKundali(
     `🔗 View full profile & complete Kundali chart:`,
     `${shareUrl}`,
     ``,
-    `📲 Lovewanshi Parinay App: ${playStoreUrl}`,
+    `📲 Lodha Parinay App: ${playStoreUrl}`,
   ].filter(Boolean);
 
   const message = lines.join("\n");

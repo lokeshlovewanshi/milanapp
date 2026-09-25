@@ -30,9 +30,7 @@ export default function DeleteAccount() {
           marginBottom: "24px",
         }}
       >
-        <h2 style={{ margin: "0 0 8px", color: "#8B1E2F" }}>
-          👑 LOVEWANSHI Milan
-        </h2>
+        <h2 style={{ margin: "0 0 8px", color: "#8B1E2F" }}>👑 Lodha Milan</h2>
         <h1 style={{ margin: 0, fontSize: "28px" }}>
           Request Account Deletion
         </h1>

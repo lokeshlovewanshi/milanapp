@@ -1362,7 +1362,7 @@ export default function ProfileDetail() {
                 <input
                   type="text"
                   className="input-field"
-                  placeholder="e.g. 🌸 Update regarding your Lovewanshi Parinay profile"
+                  placeholder="e.g. 🌸 Update regarding your Lodha Parinay profile"
                   value={notifTitle}
                   onChange={(e) => setNotifTitle(e.target.value)}
                   required

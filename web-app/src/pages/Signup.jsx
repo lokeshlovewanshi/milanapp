@@ -56,7 +56,7 @@ export default function Signup() {
   return (
     <AuthHero
       title="Create Account"
-      subtitle="Find your perfect match with Lovewanshi Parinay"
+      subtitle="Find your perfect match with Lodha Parinay"
       tagline={["Find the one who", "completes your story."]}
       backTo="/login"
     >
@@ -143,18 +143,44 @@ export default function Signup() {
 
           {error && <div className="error">{error}</div>}
 
-          <button type="submit" className="btn-primary" disabled={loading} style={{ marginTop: "0.5rem" }}>
+          <button
+            type="submit"
+            className="btn-primary"
+            disabled={loading}
+            style={{ marginTop: "0.5rem" }}
+          >
             <Icon name="user" size={16} />
-            <span>{loading ? "Creating account..." : "Sign Up / खाता बनाएं"}</span>
+            <span>
+              {loading ? "Creating account..." : "Sign Up / खाता बनाएं"}
+            </span>
           </button>
         </div>
 
         <p className="auth-switch-text">
-          Already have an account? <Link to="/login" state={{ from }}>Log in</Link>
+          Already have an account?{" "}
+          <Link to="/login" state={{ from }}>
+            Log in
+          </Link>
         </p>
 
-        <p style={{ textAlign: "center", fontSize: "0.78rem", color: "var(--text-muted)", marginTop: "1rem" }}>
-          By creating an account, you agree to our <Link to="/privacy" style={{ color: "var(--auth-crimson)", textDecoration: "underline" }}>Privacy Policy</Link>
+        <p
+          style={{
+            textAlign: "center",
+            fontSize: "0.78rem",
+            color: "var(--text-muted)",
+            marginTop: "1rem",
+          }}
+        >
+          By creating an account, you agree to our{" "}
+          <Link
+            to="/privacy"
+            style={{
+              color: "var(--auth-crimson)",
+              textDecoration: "underline",
+            }}
+          >
+            Privacy Policy
+          </Link>
         </p>
       </form>
     </AuthHero>

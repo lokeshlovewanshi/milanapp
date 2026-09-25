@@ -61,7 +61,7 @@ class BiodataServiceTest {
     void rendersHeightLabelFromLookup() {
         UserProfile profile = new UserProfile();
         profile.setId(101);
-        profile.setName("Rahul LOVEWANSHI");
+        profile.setName("Rahul Lodha");
         profile.setEmail("rahul@example.com");
         profile.setHeight("H_53");
         profile.setAnnualIncome("INR_10_15");
@@ -103,7 +103,7 @@ class BiodataServiceTest {
     void rendersHeightFallbackCalculationWhenLookupMissing() {
         UserProfile profile = new UserProfile();
         profile.setId(102);
-        profile.setName("Priya LOVEWANSHI");
+        profile.setName("Priya Lodha");
         profile.setEmail("priya@example.com");
         profile.setHeight("H_63"); // 63 inches = 5' 3" (160 cm)
         profile.setDateOfBirth(LocalDateTime.of(1998, 8, 20, 14, 0));
