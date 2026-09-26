@@ -53,7 +53,7 @@ function Layout({ children }) {
       <nav className="topnav">
         <div className="topnav-header">
           <Link to="/queue" className="topnav-brand" onClick={closeMenu}>
-            👑 Lovewanshi Parinay Admin
+            👑 Lodha Parinay Admin
           </Link>
           <button
             type="button"

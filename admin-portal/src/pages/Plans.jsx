@@ -52,7 +52,8 @@ export default function Plans() {
       durationMonths: plan.durationMonths || 3,
       priceRupees: plan.priceRupees ?? 0,
       discountPriceRupees:
-        plan.discountPriceRupees !== null && plan.discountPriceRupees !== undefined
+        plan.discountPriceRupees !== null &&
+        plan.discountPriceRupees !== undefined
           ? plan.discountPriceRupees
           : "",
       freeOnSignup: Boolean(plan.freeOnSignup),
@@ -78,7 +79,8 @@ export default function Plans() {
         durationMonths: Number(formData.durationMonths),
         priceRupees: Number(formData.priceRupees),
         discountPriceRupees:
-          formData.discountPriceRupees === "" || formData.discountPriceRupees === null
+          formData.discountPriceRupees === "" ||
+          formData.discountPriceRupees === null
             ? -1
             : Number(formData.discountPriceRupees),
         freeOnSignup: Boolean(formData.freeOnSignup),
@@ -103,7 +105,7 @@ export default function Plans() {
   async function handleSetFreeSignup(plan) {
     if (
       !window.confirm(
-        `Are you sure you want to set the ${plan.name} (${plan.durationMonths} Months) plan as the active FREE Signup Offer for new users?`
+        `Are you sure you want to set the ${plan.name} (${plan.durationMonths} Months) plan as the active FREE Signup Offer for new users?`,
       )
     ) {
       return;
@@ -114,7 +116,9 @@ export default function Plans() {
       setError("");
       setSuccessMsg("");
       await api.setFreeSignupOffer(plan.id);
-      setSuccessMsg(`Set ${plan.name} Plan as the active Free Signup welcome offer!`);
+      setSuccessMsg(
+        `Set ${plan.name} Plan as the active Free Signup welcome offer!`,
+      );
       await loadData();
     } catch (err) {
       setError(err.message || "Failed to set free signup offer");
@@ -124,9 +128,24 @@ export default function Plans() {
   }
 
   const tierColors = {
-    bronze: { bg: "#FFF4ED", border: "#FDBA74", text: "#9A3412", badge: "🥉 BRONZE" },
-    silver: { bg: "#F8FAFC", border: "#CBD5E1", text: "#334155", badge: "🥈 SILVER" },
-    gold: { bg: "#FEFCE8", border: "#FDE047", text: "#854D0E", badge: "🥇 GOLD" },
+    bronze: {
+      bg: "#FFF4ED",
+      border: "#FDBA74",
+      text: "#9A3412",
+      badge: "🥉 BRONZE",
+    },
+    silver: {
+      bg: "#F8FAFC",
+      border: "#CBD5E1",
+      text: "#334155",
+      badge: "🥈 SILVER",
+    },
+    gold: {
+      bg: "#FEFCE8",
+      border: "#FDE047",
+      text: "#854D0E",
+      badge: "🥇 GOLD",
+    },
   };
 
   return (
@@ -135,8 +154,8 @@ export default function Plans() {
         <div>
           <h2>Membership Plans & Offers Management</h2>
           <p className="muted">
-            Configure Bronze, Silver, and Gold plans, pricing, promotional discounts, and the active
-            Free Signup Welcome Offer.
+            Configure Bronze, Silver, and Gold plans, pricing, promotional
+            discounts, and the active Free Signup Welcome Offer.
           </p>
         </div>
         <button className="secondary" onClick={loadData} disabled={loading}>
@@ -148,7 +167,9 @@ export default function Plans() {
       {successMsg && <div className="card success-banner">{successMsg}</div>}
 
       {/* 3 Plans Overview Cards */}
-      <h3 style={{ marginTop: "1.5rem", marginBottom: "0.75rem" }}>Available Plans (All grant equal full access)</h3>
+      <h3 style={{ marginTop: "1.5rem", marginBottom: "0.75rem" }}>
+        Available Plans (All grant equal full access)
+      </h3>
 
       {loading && !plans.length ? (
         <div className="card">Loading plans...</div>
@@ -171,30 +192,50 @@ export default function Plans() {
                 <div className="plan-card-header">
                   <span
                     className="tier-badge"
-                    style={{ backgroundColor: tierStyle.bg, color: tierStyle.text, borderColor: tierStyle.border }}
+                    style={{
+                      backgroundColor: tierStyle.bg,
+                      color: tierStyle.text,
+                      borderColor: tierStyle.border,
+                    }}
                   >
                     {tierStyle.badge}
                   </span>
-                  {isFree && <span className="free-signup-badge">🎁 Active Free Signup Offer</span>}
-                  {!plan.active && <span className="inactive-badge">Inactive</span>}
+                  {isFree && (
+                    <span className="free-signup-badge">
+                      🎁 Active Free Signup Offer
+                    </span>
+                  )}
+                  {!plan.active && (
+                    <span className="inactive-badge">Inactive</span>
+                  )}
                 </div>
 
                 <h3 className="plan-name">{plan.name} Plan</h3>
-                <div className="plan-duration">⏱️ {plan.durationMonths} Months Duration</div>
+                <div className="plan-duration">
+                  ⏱️ {plan.durationMonths} Months Duration
+                </div>
 
                 {/* Price block */}
                 <div className="plan-pricing">
                   {isFree ? (
                     <div>
                       <span className="price-free">FREE ₹0</span>
-                      <span className="price-strikethrough">₹{plan.priceRupees}</span>
+                      <span className="price-strikethrough">
+                        ₹{plan.priceRupees}
+                      </span>
                     </div>
                   ) : hasDiscount ? (
                     <div>
-                      <span className="price-current">₹{plan.discountPriceRupees}</span>
-                      <span className="price-strikethrough">₹{plan.priceRupees}</span>
+                      <span className="price-current">
+                        ₹{plan.discountPriceRupees}
+                      </span>
+                      <span className="price-strikethrough">
+                        ₹{plan.priceRupees}
+                      </span>
                       {plan.savingsPercentage > 0 && (
-                        <span className="savings-tag">Save {plan.savingsPercentage}%</span>
+                        <span className="savings-tag">
+                          Save {plan.savingsPercentage}%
+                        </span>
                       )}
                     </div>
                   ) : (
@@ -203,13 +244,21 @@ export default function Plans() {
                     </div>
                   )}
                   <div className="per-month-text">
-                    ₹{Math.round((isFree ? 0 : (plan.discountPriceRupees ?? plan.priceRupees)) / (plan.durationMonths || 1))}/month
+                    ₹
+                    {Math.round(
+                      (isFree
+                        ? 0
+                        : (plan.discountPriceRupees ?? plan.priceRupees)) /
+                        (plan.durationMonths || 1),
+                    )}
+                    /month
                   </div>
                 </div>
 
                 {/* Access privilege note */}
                 <div className="plan-access-note">
-                  ✅ <strong>Full Access:</strong> Direct Mobile & WhatsApp Contact Numbers, 36 Guna Kundali Milan, Unlimited Connections.
+                  ✅ <strong>Full Access:</strong> Direct Mobile & WhatsApp
+                  Contact Numbers, 36 Guna Kundali Milan, Unlimited Connections.
                 </div>
 
                 {/* Actions */}
@@ -222,7 +271,10 @@ export default function Plans() {
                   >
                     {isFree ? "✓ Active Signup Offer" : "Make Free on Signup"}
                   </button>
-                  <button className="secondary" onClick={() => handleEditClick(plan)}>
+                  <button
+                    className="secondary"
+                    onClick={() => handleEditClick(plan)}
+                  >
                     ✏️ Edit Pricing
                   </button>
                 </div>
@@ -237,8 +289,13 @@ export default function Plans() {
         <div className="modal-backdrop">
           <div className="modal-card">
             <div className="modal-header">
-              <h3>Edit {editingPlan.name} Plan ({editingPlan.durationMonths}M)</h3>
-              <button className="close-btn" onClick={() => setEditingPlan(null)}>
+              <h3>
+                Edit {editingPlan.name} Plan ({editingPlan.durationMonths}M)
+              </h3>
+              <button
+                className="close-btn"
+                onClick={() => setEditingPlan(null)}
+              >
                 ✕
               </button>
             </div>
@@ -251,7 +308,9 @@ export default function Plans() {
                     type="text"
                     required
                     value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, name: e.target.value })
+                    }
                   />
                 </label>
 
@@ -263,7 +322,12 @@ export default function Plans() {
                     max="60"
                     required
                     value={formData.durationMonths}
-                    onChange={(e) => setFormData({ ...formData, durationMonths: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        durationMonths: e.target.value,
+                      })
+                    }
                   />
                 </label>
 
@@ -275,7 +339,9 @@ export default function Plans() {
                     step="1"
                     required
                     value={formData.priceRupees}
-                    onChange={(e) => setFormData({ ...formData, priceRupees: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, priceRupees: e.target.value })
+                    }
                   />
                 </label>
 
@@ -287,7 +353,12 @@ export default function Plans() {
                     step="1"
                     placeholder="Leave blank for no discount (0 for Free)"
                     value={formData.discountPriceRupees}
-                    onChange={(e) => setFormData({ ...formData, discountPriceRupees: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        discountPriceRupees: e.target.value,
+                      })
+                    }
                   />
                 </label>
 
@@ -296,7 +367,12 @@ export default function Plans() {
                   <input
                     type="datetime-local"
                     value={formData.offerStartsAt}
-                    onChange={(e) => setFormData({ ...formData, offerStartsAt: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        offerStartsAt: e.target.value,
+                      })
+                    }
                   />
                 </label>
 
@@ -305,7 +381,9 @@ export default function Plans() {
                   <input
                     type="datetime-local"
                     value={formData.offerEndsAt}
-                    onChange={(e) => setFormData({ ...formData, offerEndsAt: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, offerEndsAt: e.target.value })
+                    }
                   />
                 </label>
               </div>
@@ -315,9 +393,18 @@ export default function Plans() {
                   <input
                     type="checkbox"
                     checked={formData.freeOnSignup}
-                    onChange={(e) => setFormData({ ...formData, freeOnSignup: e.target.checked })}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        freeOnSignup: e.target.checked,
+                      })
+                    }
                   />
-                  <span><strong>🎁 Automatically grant Free on New User Signup</strong></span>
+                  <span>
+                    <strong>
+                      🎁 Automatically grant Free on New User Signup
+                    </strong>
+                  </span>
                 </label>
               </div>
 
@@ -326,14 +413,20 @@ export default function Plans() {
                   <input
                     type="checkbox"
                     checked={formData.active}
-                    onChange={(e) => setFormData({ ...formData, active: e.target.checked })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, active: e.target.checked })
+                    }
                   />
                   <span>Active &amp; Offered to Users</span>
                 </label>
               </div>
 
               <div className="modal-actions">
-                <button type="button" className="secondary" onClick={() => setEditingPlan(null)}>
+                <button
+                  type="button"
+                  className="secondary"
+                  onClick={() => setEditingPlan(null)}
+                >
                   Cancel
                 </button>
                 <button type="submit" disabled={saving}>
@@ -346,7 +439,9 @@ export default function Plans() {
       )}
 
       {/* Recent Member Subscriptions Table */}
-      <h3 style={{ marginTop: "2.5rem", marginBottom: "0.75rem" }}>Recent Member Subscriptions &amp; Activations</h3>
+      <h3 style={{ marginTop: "2.5rem", marginBottom: "0.75rem" }}>
+        Recent Member Subscriptions &amp; Activations
+      </h3>
       <div className="card table-container">
         {memberships.length === 0 ? (
           <p className="muted">No recent memberships found.</p>
@@ -354,7 +449,7 @@ export default function Plans() {
           <table className="data-table">
             <thead>
               <tr>
-                <th>LOVEWANSHI ID</th>
+                <th>Lodha ID</th>
                 <th>Member Name</th>
                 <th>Email / Mobile</th>
                 <th>Plan Activated</th>
@@ -367,23 +462,41 @@ export default function Plans() {
             <tbody>
               {memberships.map((m) => (
                 <tr key={m.id}>
-                  <td><strong>{m.userGmId || `GM${m.userProfileId}`}</strong></td>
+                  <td>
+                    <strong>{m.userGmId || `GM${m.userProfileId}`}</strong>
+                  </td>
                   <td>{m.userName || "Member"}</td>
                   <td>
                     <div className="small">{m.userEmail}</div>
-                    {m.userMobile && <div className="small muted">📞 {m.userMobile}</div>}
+                    {m.userMobile && (
+                      <div className="small muted">📞 {m.userMobile}</div>
+                    )}
                   </td>
                   <td>
-                    <span className="tier-tag">{m.planName || "Membership"} ({m.durationMonths || 12}M)</span>
+                    <span className="tier-tag">
+                      {m.planName || "Membership"} ({m.durationMonths || 12}M)
+                    </span>
                   </td>
-                  <td><span className="source-tag">{m.source}</span></td>
                   <td>
-                    <span className={`status-pill ${m.current ? "status-active" : "status-expired"}`}>
+                    <span className="source-tag">{m.source}</span>
+                  </td>
+                  <td>
+                    <span
+                      className={`status-pill ${m.current ? "status-active" : "status-expired"}`}
+                    >
                       {m.current ? "Active" : m.status}
                     </span>
                   </td>
-                  <td className="small">{m.startsAt ? new Date(m.startsAt).toLocaleDateString("en-IN") : "-"}</td>
-                  <td className="small">{m.expiresAt ? new Date(m.expiresAt).toLocaleDateString("en-IN") : "Lifetime"}</td>
+                  <td className="small">
+                    {m.startsAt
+                      ? new Date(m.startsAt).toLocaleDateString("en-IN")
+                      : "-"}
+                  </td>
+                  <td className="small">
+                    {m.expiresAt
+                      ? new Date(m.expiresAt).toLocaleDateString("en-IN")
+                      : "Lifetime"}
+                  </td>
                 </tr>
               ))}
             </tbody>

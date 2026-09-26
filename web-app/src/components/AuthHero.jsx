@@ -20,7 +20,11 @@ export default function AuthHero({
           {/* Left Column: Photographic Hero & Brand */}
           <div className="auth-hero-media">
             <div className="auth-hero-photo-wrap">
-              <img src={authHeroImg} alt="Lovewanshi Parinay Couple" className="auth-hero-photo" />
+              <img
+                src={authHeroImg}
+                alt="Lodha Parinay Couple"
+                className="auth-hero-photo"
+              />
               <div className="auth-hero-photo-fade" />
             </div>
 
@@ -66,7 +70,10 @@ export default function AuthHero({
 
               <div className="auth-card-header">
                 <h2 className="auth-card-title">
-                  {title} {titleAccessory || <HeartIcon filled size={20} color="#A5122F" />}
+                  {title}{" "}
+                  {titleAccessory || (
+                    <HeartIcon filled size={20} color="#A5122F" />
+                  )}
                 </h2>
                 {subtitle && <p className="auth-card-subtitle">{subtitle}</p>}
               </div>

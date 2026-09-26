@@ -34,7 +34,12 @@ export default function TopStories({ fallbackProfiles = [], myId = null }) {
       return null;
     }
   })();
-  const currentUserId = myId || currentUser?.id || currentUser?.profileId || currentUser?.userProfileId || currentUser?.displayId;
+  const currentUserId =
+    myId ||
+    currentUser?.id ||
+    currentUser?.profileId ||
+    currentUser?.userProfileId ||
+    currentUser?.displayId;
 
   const displayList = rawList.filter((p) => {
     if (!currentUserId) return true;
@@ -42,8 +47,10 @@ export default function TopStories({ fallbackProfiles = [], myId = null }) {
     const clean = (v) => (v != null ? String(v).trim().toUpperCase() : "");
     const myIdStr = clean(currentUserId);
     const itemStr = clean(pId);
-    return itemStr !== myIdStr &&
-           itemStr.replace(/^JM0*/, "") !== myIdStr.replace(/^JM0*/, "");
+    return (
+      itemStr !== myIdStr &&
+      itemStr.replace(/^JM0*/, "") !== myIdStr.replace(/^JM0*/, "")
+    );
   });
 
   if (!displayList || displayList.length === 0) return null;
@@ -52,7 +59,7 @@ export default function TopStories({ fallbackProfiles = [], myId = null }) {
     <div className="top-stories-section">
       <div className="section-header-simple">
         <h3 className="section-title">Top Stories</h3>
-        <span className="section-subtitle">Featured by Lovewanshi Parinay</span>
+        <span className="section-subtitle">Featured by Lodha Parinay</span>
       </div>
 
       <div className="stories-rail">
@@ -68,7 +75,12 @@ export default function TopStories({ fallbackProfiles = [], myId = null }) {
                   {img ? (
                     <img src={img} alt={name} className="story-avatar" />
                   ) : (
-                    <AvatarFallback profile={p} name={name} size={64} glyphSize={20} />
+                    <AvatarFallback
+                      profile={p}
+                      name={name}
+                      size={64}
+                      glyphSize={20}
+                    />
                   )}
                 </div>
               </div>

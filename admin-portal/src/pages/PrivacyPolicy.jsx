@@ -22,7 +22,7 @@ export default function PrivacyPolicy() {
         }}
       >
         <h2 style={{ margin: "0 0 8px", color: "#8B1E2F", fontSize: "24px" }}>
-          👑 LOVEWANSHI Milan / Lovewanshi Parinay
+          👑 Lodha Milan / Lodha Parinay
         </h2>
         <h1 style={{ margin: "0 0 8px", fontSize: "32px", fontWeight: "700" }}>
           Privacy Policy
@@ -42,8 +42,8 @@ export default function PrivacyPolicy() {
           marginBottom: "28px",
         }}
       >
-        <strong>Overview:</strong> LOVEWANSHI Milan is a dedicated matrimony app
-        for the community to share verified details to find life partners. This
+        <strong>Overview:</strong> Lodha Milan is a dedicated matrimony app for
+        the community to share verified details to find life partners. This
         policy explains what information we collect, why, who sees it, and how
         to request deletion.
       </div>
@@ -194,9 +194,9 @@ export default function PrivacyPolicy() {
           5. Child Safety Standards (CSAE Prevention)
         </h2>
         <p>
-          LOVEWANSHI Milan is strictly an 18+ platform for adult matrimonial
-          alliances. We have zero tolerance for Child Sexual Abuse Material (CSAM)
-          and exploitation. Review our dedicated standards and reporting
+          Lodha Milan is strictly an 18+ platform for adult matrimonial
+          alliances. We have zero tolerance for Child Sexual Abuse Material
+          (CSAM) and exploitation. Review our dedicated standards and reporting
           procedures at{" "}
           <a href="/child-safety" style={{ color: "#8B1E2F" }}>
             https://admin.lovewanshisamaj.in/child-safety
@@ -249,7 +249,7 @@ export default function PrivacyPolicy() {
           color: "#6b5c5e",
         }}
       >
-        © 2026 LOVEWANSHI Milan / Lovewanshi Parinay. All rights reserved.
+        © 2026 Lodha Milan / Lodha Parinay. All rights reserved.
       </footer>
     </div>
   );

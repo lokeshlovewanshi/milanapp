@@ -6,7 +6,11 @@ export default function HomeBanner() {
   return (
     <div className="home-banner-card">
       <div className="home-banner-photo-wrap">
-        <img src={authHeroImg} alt="Lovewanshi Parinay" className="home-banner-photo" />
+        <img
+          src={authHeroImg}
+          alt="Lodha Parinay"
+          className="home-banner-photo"
+        />
       </div>
       <div className="home-banner-content">
         <div className="banner-rings">
@@ -19,7 +23,9 @@ export default function HomeBanner() {
           <HeartIcon filled size={11} color="#D98A86" />
           <div className="banner-rule-line" />
         </div>
-        <p className="banner-tagline">Find your perfect match in LOVEWANSHI community</p>
+        <p className="banner-tagline">
+          Find your perfect match in Lodha community
+        </p>
       </div>
     </div>
   );
