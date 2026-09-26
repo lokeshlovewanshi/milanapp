@@ -2,7 +2,6 @@ package com.match.partner.openapi.user.controller;
 
 import com.match.partner.common.configuration.ClientException;
 import com.match.partner.common.service.JwtServiceInterface;
-import com.match.partner.openapi.user.model.dao.Status;
 import com.match.partner.openapi.user.model.dao.UserProfile;
 import com.match.partner.openapi.user.model.dto.*;
 import com.match.partner.openapi.user.service.AuthenticationServiceInterface;
@@ -32,22 +31,12 @@ public class UserAuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<LoginResponse> register(@RequestBody RegisterUserDto registerUserDto) {
-        UserProfile registeredUser = authenticationService.signup(registerUserDto);
-        if(registeredUser.getStatus().equals(Status.PENDING)) {
-            LoginUserDto userDto = new LoginUserDto();
-            userDto.setEmail(registerUserDto.getEmail());
-            userDto.setPassword(registerUserDto.getPassword());
-            UserProfile authenticatedUser = authenticationService.authenticate(userDto);
-            String jwtToken = jwtService.generateToken(authenticatedUser);
-            LoginResponse loginResponse = new LoginResponse();
-            loginResponse.setToken(jwtToken);
-            loginResponse.setExpiresIn(jwtService.getExpirationTime());
-            return ResponseEntity.ok(loginResponse);
-
-        }
-        else {
-            throw new ClientException(HttpStatus.BAD_REQUEST,"Some");
-        }
+        // Accounts must never exist until their email address has been proven.
+        // The mobile and web clients first request a SIGNUP OTP, then submit the
+        // registration payload to /signup/verify. Keeping this endpoint as a
+        // hard failure also stops older app builds from bypassing that rule.
+        throw new ClientException(HttpStatus.GONE,
+                "Please verify the email code before creating an account. Update the app and try again.");
     }
 
     /**

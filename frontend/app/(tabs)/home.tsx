@@ -51,6 +51,7 @@ export default function HomeScreen() {
 
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [stories, setStories] = useState<Profile[]>([]);
+  const [storiesRefreshKey, setStoriesRefreshKey] = useState(0);
   const [visitors, setVisitors] = useState<Profile[]>([]);
 
   /**
@@ -147,11 +148,7 @@ export default function HomeScreen() {
     return list;
   }, []);
 
-  /**
-   * Loads the feed. Rails are loaded on initial entry only: refreshing them
-   * alongside the feed makes four independent responses redraw the same Home
-   * header and repeatedly restart image views.
-   */
+  /** Loads the feed and, when requested, the profile rails above it. */
   const bootstrap = useCallback(async (includeRails = true) => {
     let feed: Profile[] = [];
     try {
@@ -179,38 +176,40 @@ export default function HomeScreen() {
     // every deployed one until the backend ships - and an empty ring where a
     // row of faces belongs reads as a broken screen, not a missing feature.
     const fallback = feed.slice(0, 12);
-    profileAPI
-      .getStories(12)
-      .then((res) => {
-        const list = Array.isArray(res.data) ? res.data : [];
-        setStories(list.length ? list : fallback);
-      })
-      .catch(() => setStories(fallback));
+    await Promise.all([
+      profileAPI
+        .getStories(12)
+        .then((res) => {
+          const list = Array.isArray(res.data) ? res.data : [];
+          setStories(list.length ? list : fallback);
+        })
+        .catch(() => setStories(fallback)),
 
-    viewsAPI
-      .getProfileViews(0, 12)
-      .then((res) => {
-        const body = res?.data;
-        const rows = body?.content ?? (Array.isArray(body) ? body : []);
-        // The view rows wrap the profile; older responses used a different key
-        // for the same thing, so both are accepted.
-        const people = (rows as any[])
-          .map((v) => v?.viewerProfile ?? v?.viewedBy ?? v)
-          .filter((p) => p && profileId(p) != null);
+      viewsAPI
+        .getProfileViews(0, 12)
+        .then((res) => {
+          const body = res?.data;
+          const rows = body?.content ?? (Array.isArray(body) ? body : []);
+          // The view rows wrap the profile; older responses used a different key
+          // for the same thing, so both are accepted.
+          const people = (rows as any[])
+            .map((v) => v?.viewerProfile ?? v?.viewedBy ?? v)
+            .filter((p) => p && profileId(p) != null);
 
-        // The same person visiting twice is one suggestion, and the rows come
-        // back newest first, so the first sighting of an id is the one to keep.
-        const seen = new Set<string>();
-        setVisitors(
-          people.filter((p) => {
-            const key = String(profileId(p));
-            if (seen.has(key)) return false;
-            seen.add(key);
-            return true;
-          })
-        );
-      })
-      .catch(() => setVisitors([]));
+          // The same person visiting twice is one suggestion, and the rows come
+          // back newest first, so the first sighting of an id is the one to keep.
+          const seen = new Set<string>();
+          setVisitors(
+            people.filter((p) => {
+              const key = String(profileId(p));
+              if (seen.has(key)) return false;
+              seen.add(key);
+              return true;
+            })
+          );
+        })
+        .catch(() => setVisitors([])),
+    ]);
   }, [loadPage]);
 
   const refreshUnread = useCallback(() => {
@@ -302,10 +301,10 @@ export default function HomeScreen() {
   const onRefresh = async () => {
     setRefreshing(true);
     try {
-      // A pull refresh needs current profiles and approval state. Stories and
-      // recent visitors stay on-screen; re-fetching all of them is what caused
-      // four or five separate image redraws per one pull gesture.
-      await Promise.all([bootstrap(false), refreshCurrentMember(), refreshUnread()]);
+      // Refresh every visible data source, including both story rails. The
+      // refresh key tells TopStories to discard its local cached response.
+      await Promise.all([bootstrap(true), refreshCurrentMember(), refreshUnread()]);
+      setStoriesRefreshKey((current) => current + 1);
     } finally {
       setRefreshing(false);
     }
@@ -384,6 +383,7 @@ export default function HomeScreen() {
           myId={myId}
           myImage={myImage}
           fallbackProfiles={stories.length > 0 ? stories : newest}
+          refreshKey={storiesRefreshKey}
           onPressProfile={openProfile}
           onPressMine={() => router.push('/profile-setup?step=photos')}
         />

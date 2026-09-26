@@ -2,10 +2,10 @@ import { View, Text, StyleSheet, TouchableOpacity, Alert, InteractionManager } f
 import FormField from '../components/FormField';
 import AuthHero from '../components/AuthHero';
 import { PrimaryButton, GoogleButton, OrRule } from '../components/AuthButtons';
+import OtpInput from '../components/OtpInput';
 import { auth as authTheme } from '../components/theme';
 
 import { useState } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { authAPI, otpAPI } from '../utils/api';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useGuardedRouter } from '../utils/useGuardedRouter';
@@ -17,6 +17,8 @@ export default function RegisterScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [otpCode, setOtpCode] = useState('');
+  const [otpSent, setOtpSent] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const onGooglePress = async () => {
@@ -76,33 +78,10 @@ export default function RegisterScreen() {
     }
     setLoading(true);
     try {
-      // Email and password only. Name and mobile are asked for in Basic
-      // Details instead - name is required there, mobile is not. Sign-up is the
-      // worst place to ask for anything optional: every field is a chance to
-      // stop before an account exists at all.
-      const response = await authAPI.register({ email, password });
-
-      const token = response.data?.token || response.data || '';
-      const user = response.data?.user || { email };
-
-      if (typeof token === 'string' && token.length > 0) {
-        await AsyncStorage.setItem('auth_token', token);
-      }
-      await AsyncStorage.setItem('user_data', JSON.stringify(user));
-
-      // A password registration is not usable until its address is confirmed.
-      // Google registration bypasses this because Google has already verified
-      // the email in its ID token.
-      try {
-        await otpAPI.request(email.trim(), 'VERIFY_EMAIL');
-        router.replace('/verify-email?sent=1');
-      } catch (otpError: any) {
-        Alert.alert(
-          'Email confirmation required',
-          otpError?.response?.data?.detail || 'We could not send the code. Please try again from the confirmation screen.'
-        );
-        router.replace('/verify-email');
-      }
+      // Do not create or sign in an account here. The password remains only in
+      // this screen's state until the member proves control of the email.
+      await otpAPI.request(email.trim(), 'SIGNUP');
+      setOtpSent(true);
     } catch (error: any) {
       console.error('Caught error in handleRegister:', error);
       if (error.response?.status === 409) {
@@ -115,6 +94,67 @@ export default function RegisterScreen() {
       setLoading(false);
     }
   };
+
+  const verifySignup = async (code: string) => {
+    if (code.length !== 4 || loading) return;
+    setLoading(true);
+    try {
+      const response = await authAPI.registerAfterOtp({
+        email: email.trim(),
+        password,
+        code,
+      });
+      await persistSession(response.data);
+      router.replace(destinationFor(response.data));
+    } catch (error: any) {
+      Alert.alert(
+        'Verification Failed',
+        error.response?.data?.detail || error.response?.data?.message || 'That code is not correct. Please try again.'
+      );
+      setOtpCode('');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const resendSignupOtp = async () => {
+    setLoading(true);
+    try {
+      await otpAPI.request(email.trim(), 'SIGNUP');
+      Alert.alert('Code Sent', `A new code was sent to ${email.trim()}.`);
+    } catch (error: any) {
+      Alert.alert('Could Not Send Code', error.response?.data?.detail || 'Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (otpSent) {
+    return (
+      <AuthHero
+        title="Verify Your Email"
+        subtitle={`Enter the 4-digit code sent to ${email.trim()}`}
+        onBack={() => {
+          setOtpSent(false);
+          setOtpCode('');
+        }}
+      >
+        <Text style={styles.otpLabel}>Verification code</Text>
+        <OtpInput length={4} value={otpCode} onChange={setOtpCode} onComplete={verifySignup} />
+
+        <TouchableOpacity disabled={loading} onPress={resendSignupOtp} style={styles.resend}>
+          <Text style={styles.resendText}>Resend code</Text>
+        </TouchableOpacity>
+
+        <PrimaryButton
+          label={loading ? 'Verifying…' : 'Verify & Create Account'}
+          icon="checkmark-outline"
+          loading={loading}
+          onPress={() => verifySignup(otpCode)}
+        />
+      </AuthHero>
+    );
+  }
 
   return (
     <AuthHero
@@ -170,7 +210,7 @@ export default function RegisterScreen() {
 
       <PrimaryButton
         testID="register-submit-btn"
-        label={loading ? 'Creating… / बना रहे हैं…' : 'Create Account / अकाउंट बनाएं'}
+        label={loading ? 'Sending code…' : 'Continue'}
         icon="heart-outline"
         loading={loading}
         onPress={handleRegister}
@@ -192,6 +232,9 @@ export default function RegisterScreen() {
 
 const styles = StyleSheet.create({
   googleGap: { marginTop: 2 },
+  otpLabel: { fontSize: 14, fontWeight: '700', color: authTheme.label, marginBottom: 10 },
+  resend: { alignSelf: 'center', paddingVertical: 16 },
+  resendText: { color: authTheme.link, fontWeight: '700', fontSize: 14 },
   footer: {
     flexDirection: 'row',
     justifyContent: 'center',

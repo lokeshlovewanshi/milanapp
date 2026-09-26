@@ -22,6 +22,8 @@ type Props = {
   myId?: string | number | null;
   myImage?: string | null;
   fallbackProfiles?: Profile[];
+  /** Incremented by Home after pull-to-refresh to fetch the latest stories. */
+  refreshKey?: number;
   onPressProfile: (id: string | number) => void;
   onPressMine?: () => void;
 };
@@ -34,6 +36,7 @@ export default function TopStories({
   myId,
   myImage,
   fallbackProfiles = [],
+  refreshKey = 0,
   onPressProfile,
   onPressMine,
 }: Props) {
@@ -55,7 +58,7 @@ export default function TopStories({
       return () => {
         alive = false;
       };
-    }, [])
+    }, [refreshKey])
   );
 
   const isMe = (p: Profile) => {

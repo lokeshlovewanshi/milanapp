@@ -243,6 +243,7 @@ export function defaultDrawerItems(push: (href: string) => void): DrawerItem[] {
     { icon: 'document-text-outline', label: 'Generate Biodata', onPress: generateBiodata },
     // Membership-plan entry intentionally hidden until plans are re-enabled.
     { icon: 'settings-outline', label: 'Account & Settings', onPress: () => push('/account-settings') },
+    { icon: 'information-circle-outline', label: 'About Lodha Parinay', onPress: () => push('/about') },
     { icon: 'headset-outline', label: 'Help & Support', onPress: () => push('/help-support') },
   ];
 }

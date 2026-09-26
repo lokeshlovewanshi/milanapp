@@ -237,6 +237,9 @@ export const authAPI = {
     name?: string;
     mobileNo?: string;
   }) => api.post("/auth/signup", data),
+  /** Creates a password account only after the SIGNUP OTP is redeemed. */
+  registerAfterOtp: (data: { email: string; password: string; code: string }) =>
+    api.post("/auth/signup/verify", data),
   login: (data: { email: string; password: string }) =>
     api.post("/auth/login", data),
   /**
@@ -277,7 +280,7 @@ export const otpAPI = {
    * Send a code. Always succeeds, even for an address with no account - the
    * server deliberately will not say which addresses are registered.
    */
-  request: (email: string, purpose: "VERIFY_EMAIL" | "RESET_PASSWORD") =>
+  request: (email: string, purpose: "SIGNUP" | "VERIFY_EMAIL" | "RESET_PASSWORD") =>
     api.post("/auth/otp/request", { email, purpose }),
 
   /** Confirm an address. Not used for password reset - see resetPassword. */
