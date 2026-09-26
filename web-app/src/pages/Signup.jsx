@@ -1,6 +1,6 @@
 ﻿import React, { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { authAPI, setToken } from "../api";
+import { authAPI, otpAPI, setToken } from "../api";
 import { useGoogleButton } from "../useGoogleButton";
 import AuthHero from "../components/AuthHero";
 import { Icon } from "../components/Icons";
@@ -14,6 +14,9 @@ export default function Signup() {
   const [email, setEmail] = useState("");
   const [mobileNo, setMobileNo] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [otpCode, setOtpCode] = useState("");
+  const [otpSent, setOtpSent] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -34,20 +37,47 @@ export default function Signup() {
   async function handleSubmit(e) {
     e.preventDefault();
     if (!name.trim() || !email.trim() || !password) return;
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
 
     setError("");
     setLoading(true);
     try {
-      const res = await authAPI.signup({
+      // This only sends the confirmation code. No account exists until the
+      // code is successfully redeemed in handleVerifyOtp below.
+      await otpAPI.request(email.trim(), "SIGNUP");
+      setOtpSent(true);
+      setOtpCode("");
+    } catch (err) {
+      setError(err.message || "Could not send the verification code");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleVerifyOtp(e) {
+    e.preventDefault();
+    if (otpCode.trim().length !== 4) {
+      setError("Enter the 4-digit code sent to your email");
+      return;
+    }
+
+    setError("");
+    setLoading(true);
+    try {
+      const res = await authAPI.signupAfterOtp({
         name: name.trim(),
         email: email.trim(),
         mobileNo: mobileNo.trim(),
         password,
+        code: otpCode.trim(),
       });
       setToken(res.token);
       navigate(from, { replace: true });
     } catch (err) {
-      setError(err.message || "Could not create your account");
+      setError(err.message || "Could not verify the code or create your account");
     } finally {
       setLoading(false);
     }
@@ -60,12 +90,12 @@ export default function Signup() {
       tagline={["Find the one who", "completes your story."]}
       backTo="/login"
     >
-      <form className="auth-form" onSubmit={handleSubmit}>
+      <form className="auth-form" onSubmit={otpSent ? handleVerifyOtp : handleSubmit}>
         <div id="google-signin-btn" className="google-btn-wrap" />
 
         <div className="auth-divider">OR</div>
 
-        <div className="auth-fields-stack">
+        {!otpSent ? <div className="auth-fields-stack">
           <label>
             <span>Full Name</span>
             <div className="input-field-wrap">
@@ -141,6 +171,24 @@ export default function Signup() {
             </div>
           </label>
 
+          <label>
+            <span>Confirm Password</span>
+            <div className="input-field-wrap">
+              <span className="input-field-icon">
+                <Icon name="lock" size={17} />
+              </span>
+              <input
+                type={showPassword ? "text" : "password"}
+                required
+                minLength={6}
+                placeholder="Re-enter your password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                autoComplete="new-password"
+              />
+            </div>
+          </label>
+
           {error && <div className="error">{error}</div>}
 
           <button
@@ -151,10 +199,56 @@ export default function Signup() {
           >
             <Icon name="user" size={16} />
             <span>
-              {loading ? "Creating account..." : "Sign Up / खाता बनाएं"}
+              {loading ? "Sending code..." : "Continue / आगे बढ़ें"}
             </span>
           </button>
-        </div>
+        </div> : <div className="auth-fields-stack">
+          <p style={{ margin: 0, color: "var(--text-muted)", lineHeight: 1.5 }}>
+            Enter the 4-digit verification code sent to <strong>{email}</strong>.
+            Your account will be created only after the code is verified.
+          </p>
+
+          <label>
+            <span>Email Verification Code</span>
+            <div className="input-field-wrap">
+              <span className="input-field-icon">
+                <Icon name="mail" size={17} />
+              </span>
+              <input
+                type="text"
+                inputMode="numeric"
+                pattern="[0-9]{4}"
+                required
+                maxLength={4}
+                placeholder="Enter 4-digit code"
+                value={otpCode}
+                onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, ""))}
+                autoComplete="one-time-code"
+                autoFocus
+              />
+            </div>
+          </label>
+
+          {error && <div className="error">{error}</div>}
+
+          <button type="submit" className="btn-primary" disabled={loading} style={{ marginTop: "0.5rem" }}>
+            <Icon name="user" size={16} />
+            <span>{loading ? "Creating account..." : "Verify & Create Account"}</span>
+          </button>
+
+          <button
+            type="button"
+            className="auth-link-button"
+            disabled={loading}
+            onClick={() => {
+              setOtpSent(false);
+              setOtpCode("");
+              setError("");
+            }}
+          >
+            Change details
+          </button>
+        </div>}
 
         <p className="auth-switch-text">
           Already have an account?{" "}

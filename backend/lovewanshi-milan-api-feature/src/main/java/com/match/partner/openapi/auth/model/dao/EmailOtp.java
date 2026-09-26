@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 public class EmailOtp {
 
     public enum Purpose {
+        SIGNUP,
         VERIFY_EMAIL,
         RESET_PASSWORD
     }

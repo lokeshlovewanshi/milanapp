@@ -93,13 +93,18 @@ public class OtpService {
         }
 
         Optional<UserProfile> user = userProfileRepository.findByEmail(email);
-        if (user.isEmpty()) {
+        if (purpose == EmailOtp.Purpose.SIGNUP) {
+            if (user.isPresent()) {
+                throw new ClientException(HttpStatus.CONFLICT,
+                        "An account with this email already exists. Please log in instead.");
+            }
+        } else if (user.isEmpty()) {
             // Same outward behaviour as success. Logged so a support question
             // about a missing mail has an answer.
             log.info("OTP requested for an address with no account; not sending");
             return;
         }
-        if (user.get().getDeletedAt() != null) {
+        if (purpose != EmailOtp.Purpose.SIGNUP && user.get().getDeletedAt() != null) {
             log.info("OTP requested for a deleted account; not sending");
             return;
         }
@@ -154,6 +159,21 @@ public class OtpService {
      */
     @Transactional(noRollbackFor = ClientException.class)
     public UserProfile redeem(String rawEmail, String code, EmailOtp.Purpose purpose) {
+        String email = redeemEmail(rawEmail, code, purpose);
+
+        UserProfile user = userProfileRepository.findByEmail(email)
+                .orElseThrow(this::invalid);
+
+        return user;
+    }
+
+    /** Spends a sign-up code before an account exists. */
+    @Transactional(noRollbackFor = ClientException.class)
+    public void redeemSignup(String rawEmail, String code) {
+        redeemEmail(rawEmail, code, EmailOtp.Purpose.SIGNUP);
+    }
+
+    private String redeemEmail(String rawEmail, String code, EmailOtp.Purpose purpose) {
         String email = normalise(rawEmail);
         if (email == null || code == null || code.isBlank()) {
             throw invalid();
@@ -174,20 +194,13 @@ public class OtpService {
         }
 
         if (!passwordEncoder.matches(code.trim(), row.getCodeHash())) {
-            // Counted and saved before returning, so the cap survives a client
-            // that simply retries in a loop. See noRollbackFor above - without
-            // it this save is rolled back by the throw on the next line.
             row.setAttempts((short) (row.getAttempts() + 1));
             otpRepository.save(row);
             throw invalid();
         }
 
-        UserProfile user = userProfileRepository.findByEmail(email)
-                .orElseThrow(this::invalid);
-
-        // Spent on success, and every sibling with it.
         otpRepository.consumeOutstanding(email, purpose, LocalDateTime.now());
-        return user;
+        return email;
     }
 
     /** Whether this deployment can send mail at all. */

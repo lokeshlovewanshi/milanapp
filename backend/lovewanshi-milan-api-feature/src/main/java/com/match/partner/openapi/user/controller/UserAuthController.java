@@ -6,6 +6,7 @@ import com.match.partner.openapi.user.model.dao.Status;
 import com.match.partner.openapi.user.model.dao.UserProfile;
 import com.match.partner.openapi.user.model.dto.*;
 import com.match.partner.openapi.user.service.AuthenticationServiceInterface;
+import com.match.partner.openapi.auth.service.OtpService;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.*;
@@ -21,6 +22,7 @@ public class UserAuthController {
     private final AuthenticationServiceInterface authenticationService;
     private final com.match.partner.openapi.user.service.TokenBlacklistService tokenBlacklistService;
     private final com.match.partner.openapi.user.service.GoogleIdTokenService googleIdTokenService;
+    private final OtpService otpService;
 
     @GetMapping("/ping")
     public String ping() {
@@ -47,6 +49,34 @@ public class UserAuthController {
             throw new ClientException(HttpStatus.BAD_REQUEST,"Some");
         }
     }
+
+    /**
+     * Web sign-up: an account is created only after the emailed code has been
+     * redeemed successfully. The password stays in the browser until this
+     * request; abandoned sign-up attempts therefore leave no user record.
+     */
+    @PostMapping("/signup/verify")
+    public ResponseEntity<LoginResponse> registerAfterEmailOtp(
+            @RequestBody SignupVerification body) {
+        otpService.redeemSignup(body.email(), body.code());
+
+        RegisterUserDto registration = new RegisterUserDto();
+        registration.setName(body.name());
+        registration.setEmail(body.email());
+        registration.setMobileNo(body.mobileNo());
+        registration.setPassword(body.password());
+
+        UserProfile registeredUser = authenticationService.signup(registration);
+        String jwtToken = jwtService.generateToken(registeredUser);
+        LoginResponse response = new LoginResponse();
+        response.setToken(jwtToken);
+        response.setExpiresIn(jwtService.getExpirationTime());
+        response.setProfileCompletion(registeredUser.getProfileCompletion());
+        return ResponseEntity.ok(response);
+    }
+
+    public record SignupVerification(String name, String email, String mobileNo,
+                                     String password, String code) {}
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDto loginUserDto) {

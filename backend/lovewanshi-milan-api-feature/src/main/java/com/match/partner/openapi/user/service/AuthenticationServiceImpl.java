@@ -54,6 +54,13 @@ public class AuthenticationServiceImpl implements AuthenticationServiceInterface
         if (input.getPassword() == null || input.getPassword().isEmpty()) {
             throw new IllegalArgumentException("Password cannot be null or empty");
         }
+        if (input.getEmail() == null || input.getEmail().isBlank()) {
+            throw new ClientException(HttpStatus.BAD_REQUEST, "Email is required.");
+        }
+        if (userRepository.findByEmail(input.getEmail().trim()).isPresent()) {
+            throw new ClientException(HttpStatus.CONFLICT,
+                    "An account with this email already exists. Please log in instead.");
+        }
         UserProfile user = new UserProfile();
         user.setName(input.getName());
         user.setEmail(input.getEmail());

@@ -78,6 +78,7 @@ async function request(path, options = {}) {
 
 export const authAPI = {
   signup: (data) => request("/auth/signup", { method: "POST", body: JSON.stringify(data) }),
+  signupAfterOtp: (data) => request("/auth/signup/verify", { method: "POST", body: JSON.stringify(data) }),
   login: (email, password) =>
     request("/auth/login", { method: "POST", body: JSON.stringify({ email, password }) }),
   restore: (email, password) =>
