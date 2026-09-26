@@ -26,6 +26,15 @@ spring.mail.properties.mail.smtp.auth=true
 spring.mail.properties.mail.smtp.starttls.enable=true
 spring.mail.properties.mail.smtp.starttls.required=true
 
+# OCI Email Delivery is used only for OTPs. All non-OTP app mail continues
+# through spring.mail above. Do not put the generated SMTP password in Git.
+otp.mail.host=${OTP_MAIL_HOST:}
+otp.mail.port=${OTP_MAIL_PORT:587}
+otp.mail.username=${OTP_MAIL_USERNAME:}
+otp.mail.password=${OTP_MAIL_PASSWORD:}
+otp.mail.from=${OTP_MAIL_FROM:noreply@lovewanshisamaj.in}
+otp.mail.from-name=${OTP_MAIL_FROM_NAME:Lodha Parinay}
+
 # JWT. Must be at least 32 characters. Generate one with:
 #   openssl rand -base64 48
 security.jwt.secret-key=${JWT_SECRET:}

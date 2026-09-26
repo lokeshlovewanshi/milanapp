@@ -5,11 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import jakarta.mail.internet.MimeMessage;
 import java.io.UnsupportedEncodingException;
+import java.util.Properties;
 
 /**
  * Sends the OTP mails.
@@ -50,10 +52,65 @@ public class EmailService {
     @Value("${app.mail.from-name:Lovewanshi Parinay}")
     private String fromName;
 
+    /*
+     * OTP mail deliberately has its own SMTP account.  Transactional OTPs
+     * need the authenticated sending domain/reputation supplied by OCI Email
+     * Delivery, while welcome and other application mail can continue through
+     * the ordinary spring.mail (currently Gmail) sender.
+     */
+    @Value("${otp.mail.host:}")
+    private String otpMailHost;
+
+    @Value("${otp.mail.port:587}")
+    private int otpMailPort;
+
+    @Value("${otp.mail.username:}")
+    private String otpMailUsername;
+
+    @Value("${otp.mail.password:}")
+    private String otpMailPassword;
+
+    @Value("${otp.mail.from:}")
+    private String otpMailFrom;
+
+    @Value("${otp.mail.from-name:Lodha Parinay}")
+    private String otpMailFromName;
+
     public record EmailSendResult(boolean success, String message) {}
 
     public boolean isDirectSmtpConfigured() {
         return smtpUser != null && !smtpUser.isBlank() && mailSenderProvider.getIfAvailable() != null;
+    }
+
+    private boolean isOtpSmtpConfigured() {
+        return otpMailHost != null && !otpMailHost.isBlank()
+                && otpMailUsername != null && !otpMailUsername.isBlank()
+                && otpMailPassword != null && !otpMailPassword.isBlank()
+                && otpMailFrom != null && !otpMailFrom.isBlank();
+    }
+
+    /** Builds the OCI SMTP sender used only for OTP messages. */
+    private JavaMailSender otpMailSender() {
+        if (!isOtpSmtpConfigured()) {
+            return null;
+        }
+
+        JavaMailSenderImpl sender = new JavaMailSenderImpl();
+        sender.setHost(otpMailHost);
+        sender.setPort(otpMailPort);
+        sender.setUsername(otpMailUsername);
+        sender.setPassword(otpMailPassword);
+
+        Properties properties = sender.getJavaMailProperties();
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true");
+        properties.put("mail.smtp.starttls.required", "true");
+        properties.put("mail.smtp.ssl.protocols", "TLSv1.2 TLSv1.3");
+        properties.put("mail.smtp.ssl.trust", "*");
+        properties.put("mail.smtp.connectiontimeout", "10000");
+        properties.put("mail.smtp.timeout", "10000");
+        properties.put("mail.smtp.writetimeout", "10000");
+        return sender;
     }
 
     /**
@@ -67,14 +124,9 @@ public class EmailService {
      * @return true if the message was handed to the SMTP server.
      */
     public boolean sendOtp(String to, String code, String heading, String purposeLine, int validMinutes) {
-        if (!isEnabled()) {
-            log.warn("Mail is not configured; refusing to send OTP to {}", mask(to));
-            return false;
-        }
-
-        JavaMailSender sender = mailSenderProvider.getIfAvailable();
+        JavaMailSender sender = otpMailSender();
         if (sender == null) {
-            log.warn("No JavaMailSender configured; refusing to send OTP to {}", mask(to));
+            log.warn("OCI OTP mail is not configured; refusing to send OTP to {}", mask(to));
             return false;
         }
 
@@ -83,7 +135,7 @@ public class EmailService {
             MimeMessageHelper helper = new MimeMessageHelper(message, "UTF-8");
             helper.setTo(to);
             helper.setSubject(code + " is your Lodha Milan code");
-            helper.setFrom(from, fromName);
+            helper.setFrom(otpMailFrom, otpMailFromName);
             helper.setText(html(code, heading, purposeLine, validMinutes), true);
 
             sender.send(message);
