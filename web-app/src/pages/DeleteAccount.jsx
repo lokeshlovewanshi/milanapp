@@ -1,4 +1,4 @@
-﻿import React, { useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { profileAPI, clearSession, isLoggedIn } from "../api";
 import logoImg from "../assets/logo.png";
@@ -375,7 +375,7 @@ export default function DeleteAccount() {
                 address:
               </p>
               <a
-                href="mailto:lovewanshisamaj@gmail.com?subject=Account%20Deletion%20Request%20-%20LOVEWANSHI%20Parinay&body=Please%20delete%20my%20LOVEWANSHI%20Parinay%20account.%0A%0ARegistered%20Email%3A%20%0ARegistered%20Mobile%20Number%3A%20%0AFull%20Name%3A%20"
+                href="mailto:lovewanshisamaj@gmail.com?subject=Account%20Deletion%20Request%20-%20Lodha%20Parinay&body=Please%20delete%20my%20Lodha%20Parinay%20account.%0A%0ARegistered%20Email%3A%20%0ARegistered%20Mobile%20Number%3A%20%0AFull%20Name%3A%20"
                 style={{
                   display: "inline-flex",
                   alignItems: "center",

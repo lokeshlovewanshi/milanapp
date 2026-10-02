@@ -137,7 +137,7 @@ public class MessageTemplateService {
                 MessageTemplate t4 = new MessageTemplate();
                 t4.setTitle("Profile Verified / प्रोफ़ाइल सत्यापित हो गई है");
                 t4.setTemplateType("WHATSAPP");
-                t4.setContent("Hi {name},\n\nGreetings from Lodha Parinay Team! 🎉💐\n\nGreat news! Your matrimonial profile (Profile ID: {profileId}) has been successfully verified by our admin team. ✅\n\nYou can now:\n🔍 Explore 100% verified Lodha Samaj profiles\n💌 Send and accept connection interests\n🪐 View Astro Kundali Gun Milan compatibility scores\n\n👉 Start discovering matches now:\nhttps://www.lovewanshisamaj.in/browse\n\nBest wishes for your journey ahead! ✨\n\nWarm regards,\nTeam Lovewanshi Parinay 🤝\nhttps://www.lovewanshisamaj.in");
+                t4.setContent("Hi {name},\n\nGreetings from Lodha Parinay Team! 🎉💐\n\nGreat news! Your matrimonial profile (Profile ID: {profileId}) has been successfully verified by our admin team. ✅\n\nYou can now:\n🔍 Explore 100% verified Lodha Samaj profiles\n💌 Send and accept connection interests\n🪐 View Astro Kundali Gun Milan compatibility scores\n\n👉 Start discovering matches now:\nhttps://www.lovewanshisamaj.in/browse\n\nBest wishes for your journey ahead! ✨\n\nWarm regards,\nTeam Lodha Parinay 🤝\nhttps://www.lovewanshisamaj.in");
                 t4.setSortOrder(4);
 
                 messageTemplateRepository.saveAll(List.of(t1, t2, t3, t4));

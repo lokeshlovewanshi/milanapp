@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { profileAPI, referenceAPI, likeAPI, shortlistAPI } from "../api";
 import {
@@ -38,7 +38,7 @@ function formatProfileCode(id) {
   return `GM${digits}`;
 }
 
-const LOVEWANSHI_GOTRAS = [];
+const LODHA_GOTRAS = [];
 
 const EMPTY_FILTER = {
   ageFrom: "",
@@ -604,7 +604,7 @@ export default function Browse() {
                   }
                 >
                   <option value="">All Gotras (सभी गोत्र)</option>
-                  {LOVEWANSHI_GOTRAS.map((g) => (
+                  {LODHA_GOTRAS.map((g) => (
                     <option value={g} key={g}>
                       {g}
                     </option>

@@ -1,4 +1,4 @@
-﻿import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { VerifiedBadge, WhatsAppIcon, Icon } from "./Icons";
 import { formatHeight, formatEducation, formatProfession } from "../formatters";
 
@@ -392,7 +392,7 @@ export default function ShareProfileModal({ profile, photos = [], onClose }) {
       const url = URL.createObjectURL(cardBlob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `${code}_${name.replace(/\s+/g, "_")}_LOVEWANSHIParinay.jpg`;
+      a.download = `${code}_${name.replace(/\s+/g, "_")}_LodhaParinay.jpg`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -404,7 +404,7 @@ export default function ShareProfileModal({ profile, photos = [], onClose }) {
       const dataUrl = canvasRef.current.toDataURL("image/jpeg", 0.95);
       const a = document.createElement("a");
       a.href = dataUrl;
-      a.download = `${code}_${name.replace(/\s+/g, "_")}_LOVEWANSHIParinay.jpg`;
+      a.download = `${code}_${name.replace(/\s+/g, "_")}_LodhaParinay.jpg`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);

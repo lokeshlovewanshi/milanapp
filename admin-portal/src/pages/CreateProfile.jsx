@@ -293,7 +293,7 @@ export default function CreateProfile() {
                 Initial Password (Optional)
                 <input
                   type="text"
-                  placeholder="Defaults to Lovewanshi@2026"
+                  placeholder="Defaults to Lodha@2026"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />

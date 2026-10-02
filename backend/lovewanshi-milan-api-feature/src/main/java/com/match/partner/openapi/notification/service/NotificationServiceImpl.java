@@ -284,7 +284,7 @@ public class NotificationServiceImpl implements NotificationServiceInterface {
         String detailSuffix = details.isEmpty() ? "" : " (" + String.join(", ", details) + ")";
 
         String title = "🌸 New Verified Profile / नया रिश्ता जुड़ा";
-        String body = "✨ " + name + detailSuffix + " joined Lovewanshi Parinay. Tap to view profile.";
+        String body = "✨ " + name + detailSuffix + " joined Lodha Parinay. Tap to view profile.";
 
         Map<String, String> data = new HashMap<>();
         data.put("type", NotificationType.PROFILE_VERIFIED.name());

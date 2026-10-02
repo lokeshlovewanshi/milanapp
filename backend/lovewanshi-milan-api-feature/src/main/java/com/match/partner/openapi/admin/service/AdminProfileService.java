@@ -337,7 +337,7 @@ public class AdminProfileService {
 
         String rawPassword = (dto.getPassword() != null && !dto.getPassword().isBlank())
                 ? dto.getPassword().trim()
-                : "Lovewanshi@2026";
+                : "Lodha@2026";
         user.setPassword(passwordEncoder.encode(rawPassword));
 
         user.setStatus(Status.APPROVED);

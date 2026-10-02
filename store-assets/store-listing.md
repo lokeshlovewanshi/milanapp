@@ -1,25 +1,21 @@
-﻿# Play Store listing copy — LOVEWANSHI Milan
+# Play Store listing copy — Lodha Parinay
 
 Paste directly into Play Console → Store presence → Main store listing.
 
 ## App name
-LOVEWANSHI Milan
-
-(In-app the header currently reads "Lovewanshi Parinay" in a couple of places —
-see the note at the bottom of this file. Pick one before submitting; this
-listing assumes "LOVEWANSHI Milan", matching app.json and the package name.)
+Lodha Parinay
 
 ## Short description (80 char max)
 
 ```
-Trusted matrimony app for the LOVEWANSHI community — verified, kundali match
+Trusted matrimony app for the Lodha community — verified, kundali match
 ```
 71 characters.
 
 ## Full description (4000 char max)
 
 ```
-LOVEWANSHI Milan is a matrimony app built for the LOVEWANSHI community — a focused,
+Lodha Parinay is a matrimony app built for the Lodha community — a focused,
 family-first space to find a life partner, not an endless swipe feed.
 
 VERIFIED, FAMILY-FIRST PROFILES
@@ -61,7 +57,7 @@ WHAT YOU CAN DO
 • See who's recently viewed your profile
 • Get notified the moment someone connects with you
 
-LOVEWANSHI Milan is free to use, with a Silver and Gold membership for members
+Lodha Parinay is free to use, with a Silver and Gold membership for members
 who want unlimited requests, priority visibility and advanced filters.
 
 Questions or feedback: jeevanmilansathi@gmail.com

@@ -49,7 +49,7 @@ public class EmailService {
     @Value("${app.mail.from:}")
     private String from;
 
-    @Value("${app.mail.from-name:Lovewanshi Parinay}")
+    @Value("${app.mail.from-name:Lodha Parinay}")
     private String fromName;
 
     /*
@@ -572,7 +572,7 @@ public class EmailService {
 
         String finalSubject = subject != null && !subject.isBlank()
                 ? subject.trim()
-                : "Important update regarding your Lovewanshi Parinay profile";
+                : "Important update regarding your Lodha Parinay profile";
         String htmlBody = customOutreachHtml(recipientName, profileId, bodyContent);
 
         // 1. Try JavaMailSender direct SMTP

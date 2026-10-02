@@ -1,8 +1,8 @@
 {
   "info": {
     "_postman_id": "5f29abf9-be8c-4b96-a29d-96a295b8f2c6",
-    "name": "LOVEWANSHI Milan - Complete API Collection",
-    "description": "Comprehensive, production-ready Postman collection for LOVEWANSHI Milan Backend & Chat Services.\nIncludes automated JWT token saving, realistic payloads, request parameters, and complete coverage of all User, Admin, Reference, and Chat endpoints.",
+    "name": "Lodha Milan - Complete API Collection",
+    "description": "Comprehensive, production-ready Postman collection for Lodha Milan Backend & Chat Services.\nIncludes automated JWT token saving, realistic payloads, request parameters, and complete coverage of all User, Admin, Reference, and Chat endpoints.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
