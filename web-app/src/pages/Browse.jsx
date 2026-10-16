@@ -54,7 +54,7 @@ const EMPTY_FILTER = {
 
 export default function Browse() {
   const navigate = useNavigate();
-  const [oppositeGender, setOppositeGender] = useState(true);
+  const [oppositeGender, setOppositeGender] = useState(false);
   const [filter, setFilter] = useState(EMPTY_FILTER);
   const [appliedFilter, setAppliedFilter] = useState(EMPTY_FILTER);
   const [page, setPage] = useState(0);

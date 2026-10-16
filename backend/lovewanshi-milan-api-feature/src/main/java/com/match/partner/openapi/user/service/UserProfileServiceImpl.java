@@ -392,10 +392,9 @@ public class UserProfileServiceImpl implements UserProfileServiceInterface {
         UserProfile currentUser = currentUserOptional.get();
         int currentUserId = currentUser.getId();
 
-        // Never list the caller to themselves. In this matrimonial portal, members
-        // are always matched with the opposite gender (male members see female profiles,
-        // and female members see male profiles).
-        String lookingFor = oppositeGenderOf(currentUser.getGender());
+        // Never list the caller to themselves.
+        // Currently do not filter by male/female - show all user ids as requested.
+        String lookingFor = null;
 
         Page<UserProfile> userProfilesPage;
         if (filter == null || filter.isEmpty()) {
@@ -788,9 +787,8 @@ public class UserProfileServiceImpl implements UserProfileServiceInterface {
             return List.of();
         }
 
-        // Null means "do not filter" - same contract as the feed, so a member
-        // who has not recorded a gender gets a populated rail rather than none.
-        String lookingFor = oppositeGenderOf(me.get().getGender());
+        // Currently do not filter by male/female - show all user ids as requested.
+        String lookingFor = null;
         List<Integer> candidates =
                 userProfileRepository.findStoryCandidateIds(me.get().getId(), lookingFor);
 

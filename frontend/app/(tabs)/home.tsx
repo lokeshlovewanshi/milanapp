@@ -1,4 +1,4 @@
-﻿import {
+import {
   View,
   Text,
   StyleSheet,
@@ -139,7 +139,7 @@ export default function HomeScreen() {
 
   const loadPage = useCallback(async (next: number, replace = false) => {
     // The browse feed is gender-filtered; "See all" on the next screen is not.
-    const res = await profileAPI.getProfiles(next, PAGE_SIZE, true);
+    const res = await profileAPI.getProfiles(next, PAGE_SIZE, false);
     const list = readPage(res);
 
     setProfiles((prev) => (replace ? list : [...prev, ...list]));

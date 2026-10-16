@@ -90,7 +90,7 @@ public class UserProfileController {
     public Page<UserDto> getUsers(@RequestAttribute("username") String userName,
                                   @RequestParam(defaultValue = "0") int page,
                                   @RequestParam(defaultValue = "10") int size,
-                                  @RequestParam(defaultValue = "true") boolean oppositeGender,
+                                  @RequestParam(defaultValue = "false") boolean oppositeGender,
                                   @RequestParam(required = false) Integer ageFrom,
                                   @RequestParam(required = false) Integer ageTo,
                                   @RequestParam(required = false) String maritalStatus,
