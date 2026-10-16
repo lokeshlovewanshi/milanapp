@@ -24,6 +24,8 @@ export default function Queue() {
   const [verifyingId, setVerifyingId] = useState(null);
   const [viewMode, setViewMode] = useState("table"); // "table" (default monitoring) or "grid"
   const [searchTerm, setSearchTerm] = useState("");
+  const [blockFilter, setBlockFilter] = useState("all"); // "all", "hide_blocked", "only_blocked"
+  const [updatingBlockId, setUpdatingBlockId] = useState(null);
   const [actionMessage, setActionMessage] = useState(null);
   const [contactingProfile, setContactingProfile] = useState(null);
   const [editingProfileId, setEditingProfileId] = useState(null);
@@ -59,6 +61,45 @@ export default function Queue() {
     }
   }
 
+  async function handleToggleBlock(profile) {
+    if (!profile || !profile.id) return;
+    const isCurrentlyBlocked = Boolean(profile.blocked);
+    const confirmPrompt = isCurrentlyBlocked
+      ? `Are you sure you want to unblock "${profile.name || profile.displayId || profile.id}"?`
+      : `Are you sure you want to block "${profile.name || profile.displayId || profile.id}"?`;
+
+    if (!window.confirm(confirmPrompt)) return;
+
+    setUpdatingBlockId(profile.id);
+    setActionMessage(null);
+    try {
+      const updated = isCurrentlyBlocked
+        ? await api.unblockProfile(profile.id)
+        : await api.blockProfile(profile.id);
+
+      const nextBlocked = updated?.blocked !== undefined ? updated.blocked : !isCurrentlyBlocked;
+      setData((prev) => {
+        if (!prev || !prev.content) return prev;
+        return {
+          ...prev,
+          content: prev.content.map((p) =>
+            p.id === profile.id ? { ...p, blocked: nextBlocked } : p
+          ),
+        };
+      });
+      setActionMessage(
+        `✓ Profile "${profile.name || profile.id}" has been ${nextBlocked ? "blocked" : "unblocked"} successfully.`
+      );
+      setTimeout(() => setActionMessage(null), 4000);
+    } catch (err) {
+      console.error("Failed to toggle block status:", err);
+      setActionMessage(`❌ Failed to ${isCurrentlyBlocked ? "unblock" : "block"} profile.`);
+      setTimeout(() => setActionMessage(null), 4000);
+    } finally {
+      setUpdatingBlockId(null);
+    }
+  }
+
   function handleProfileUpdated(updated) {
     if (!updated || !updated.id) return;
     setData((prev) => {
@@ -83,17 +124,18 @@ export default function Queue() {
   }
 
   const list = data?.content || [];
-  const filteredList = searchTerm.trim()
-    ? list.filter((p) => {
-        const q = searchTerm.toLowerCase();
-        return (
-          p.name?.toLowerCase().includes(q) ||
-          p.displayId?.toLowerCase().includes(q) ||
-          p.mobileNo?.includes(q) ||
-          p.email?.toLowerCase().includes(q)
-        );
-      })
-    : list;
+  const filteredList = list.filter((p) => {
+    if (blockFilter === "hide_blocked" && p.blocked) return false;
+    if (blockFilter === "only_blocked" && !p.blocked) return false;
+    if (!searchTerm.trim()) return true;
+    const q = searchTerm.toLowerCase();
+    return (
+      p.name?.toLowerCase().includes(q) ||
+      p.displayId?.toLowerCase().includes(q) ||
+      p.mobileNo?.includes(q) ||
+      p.email?.toLowerCase().includes(q)
+    );
+  });
 
   return (
     <div>
@@ -137,15 +179,68 @@ export default function Queue() {
       )}
 
       {/* Filter Bar */}
-      <div className="filter-bar">
+      <div className="filter-bar" style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", alignItems: "center" }}>
         <input
           type="text"
           placeholder="Filter by name, mobile, display ID..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="input-field"
+          style={{ flex: "1 1 240px", maxWidth: "380px", padding: "0.52rem 0.85rem", fontSize: "0.88rem" }}
         />
-        <span className="muted small">
+
+        {/* 1-Click Hide/Show Blocked Toggle Button */}
+        <button
+          type="button"
+          onClick={() => setBlockFilter((prev) => (prev === "hide_blocked" ? "all" : "hide_blocked"))}
+          style={{
+            background: blockFilter === "hide_blocked" ? "#FEF3C7" : "#F3F4F6",
+            color: blockFilter === "hide_blocked" ? "#92400E" : "#374151",
+            border: blockFilter === "hide_blocked" ? "1px solid #FCD34D" : "1px solid #D1D5DB",
+            padding: "0.52rem 0.75rem",
+            borderRadius: "6px",
+            fontSize: "0.85rem",
+            fontWeight: 600,
+            cursor: "pointer",
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "0.3rem",
+            whiteSpace: "nowrap",
+          }}
+          title={
+            blockFilter === "hide_blocked"
+              ? "Blocked profiles are currently HIDDEN. Click to show blocked accounts."
+              : "Click to hide blocked accounts from the table"
+          }
+        >
+          <span>{blockFilter === "hide_blocked" ? "🚫" : "👁️"}</span>
+          {blockFilter === "hide_blocked" ? "Blocked: Hidden (Show)" : "Hide Blocked"}
+        </button>
+
+        {/* Detailed Block Status Filter Dropdown */}
+        <select
+          value={blockFilter}
+          onChange={(e) => setBlockFilter(e.target.value)}
+          className="input-field"
+          style={{
+            width: "auto",
+            minWidth: "165px",
+            padding: "0.52rem 0.75rem",
+            borderRadius: "6px",
+            border: "1px solid #D1D5DB",
+            fontSize: "0.85rem",
+            fontWeight: 500,
+            cursor: "pointer",
+            background: blockFilter !== "all" ? "#FFFBEB" : "white",
+          }}
+          title="Filter queue by Block Status"
+        >
+          <option value="all">🛡️ Block: All Profiles</option>
+          <option value="hide_blocked">✅ Hide Blocked (Active only)</option>
+          <option value="only_blocked">🚫 Blocked Only</option>
+        </select>
+
+        <span className="muted small" style={{ marginLeft: "auto", fontWeight: 500 }}>
           {data ? `${filteredList.length} of ${data.totalElements || list.length} pending profiles` : ""}
         </span>
       </div>
@@ -154,7 +249,23 @@ export default function Queue() {
 
       {!loading && filteredList.length === 0 && (
         <div className="card" style={{ padding: "2.5rem", textAlign: "center", color: "#6B7280" }}>
-          {searchTerm ? "No pending profiles match your filter." : "🎉 Great job! The verification queue is currently empty."}
+          {searchTerm || blockFilter !== "all" ? (
+            <>
+              <p style={{ margin: "0 0 0.5rem 0" }}>No pending profiles match your search or filter.</p>
+              <button
+                type="button"
+                className="secondary small"
+                onClick={() => {
+                  setSearchTerm("");
+                  setBlockFilter("all");
+                }}
+              >
+                Reset Filters
+              </button>
+            </>
+          ) : (
+            "🎉 Great job! The verification queue is currently empty."
+          )}
         </div>
       )}
 
@@ -178,7 +289,14 @@ export default function Queue() {
               {filteredList.map((p) => {
                 const hasPhoto = Boolean(p.isPhoto || p.profileImage);
                 return (
-                  <tr key={p.id} style={{ borderBottom: "1px solid #F3F4F6", transition: "background 0.15s" }}>
+                  <tr
+                    key={p.id}
+                    style={
+                      p.blocked
+                        ? { background: "#FFF5F5", borderBottom: "1px solid #FECACA" }
+                        : { borderBottom: "1px solid #F3F4F6", transition: "background 0.15s" }
+                    }
+                  >
                     {/* ID */}
                     <td style={{ padding: "0.85rem 1rem", whiteSpace: "nowrap" }}>
                       <Link to={`/profiles/${p.id}`} style={{ fontWeight: "600", color: "#A5122F" }}>
@@ -206,7 +324,7 @@ export default function Queue() {
                             {p.gender}
                           </span>
                         )}
-                        {p.blocked && <span className="badge badge-blocked">Blocked</span>}
+                        {p.blocked && <span className="badge badge-blocked">🚫 Blocked</span>}
                       </div>
                       {p.email && <div className="muted small">{p.email}</div>}
                     </td>
@@ -337,7 +455,7 @@ export default function Queue() {
                       </div>
                     </td>
 
-                    {/* Last Column: Actions (Edit & Verify) */}
+                    {/* Last Column: Actions (Edit, Block/Unblock & Verify) */}
                     <td style={{ padding: "0.85rem 1rem", textAlign: "center", whiteSpace: "nowrap" }}>
                       <div style={{ display: "inline-flex", gap: "0.35rem", alignItems: "center" }}>
                         <button
@@ -359,6 +477,27 @@ export default function Queue() {
                           }}
                         >
                           <span>✏️</span> Edit
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleToggleBlock(p)}
+                          disabled={updatingBlockId === p.id}
+                          title={p.blocked ? "Click to unblock profile" : "Click to block profile"}
+                          style={{
+                            background: p.blocked ? "#10B981" : "#FEE2E2",
+                            color: p.blocked ? "#FFFFFF" : "#991B1B",
+                            border: p.blocked ? "none" : "1px solid #FCA5A5",
+                            borderRadius: "6px",
+                            padding: "0.45rem 0.65rem",
+                            fontWeight: "600",
+                            fontSize: "0.82rem",
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: "0.2rem",
+                            cursor: "pointer",
+                          }}
+                        >
+                          {updatingBlockId === p.id ? "..." : p.blocked ? "✅ Unblock" : "🚫 Block"}
                         </button>
                         <button
                           type="button"
@@ -398,17 +537,23 @@ export default function Queue() {
           {filteredList.map((p) => {
             const hasPhoto = Boolean(p.isPhoto || p.profileImage);
             return (
-              <div className="card profile-card" key={p.id}>
+              <div
+                className="card profile-card"
+                key={p.id}
+                style={p.blocked ? { border: "1px solid #FECACA", background: "#FFF8F8" } : {}}
+              >
                 <img
                   src={p.profileImage || "/placeholder.svg"}
                   alt=""
                   className="profile-thumb"
                 />
                 <div className="profile-card-body">
-                  <Link to={`/profiles/${p.id}`} className="profile-name">
-                    {p.name || "(no name)"}
-                  </Link>
-                  {p.blocked && <span className="badge badge-blocked">Blocked</span>}
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", flexWrap: "wrap" }}>
+                    <Link to={`/profiles/${p.id}`} className="profile-name">
+                      {p.name || "(no name)"}
+                    </Link>
+                    {p.blocked && <span className="badge badge-blocked">🚫 Blocked</span>}
+                  </div>
                   <div className="muted">{p.displayId}</div>
                   <div className="muted">{p.gender}</div>
                   <div className="muted small">Mobile: {p.mobileNo || "-"}</div>
@@ -452,6 +597,27 @@ export default function Queue() {
                       📞
                     </a>
                   )}
+                </div>
+                <div style={{ display: "flex", gap: "0.4rem", marginTop: "0.4rem" }}>
+                  <button
+                    type="button"
+                    onClick={() => handleToggleBlock(p)}
+                    disabled={updatingBlockId === p.id}
+                    style={{
+                      background: p.blocked ? "#10B981" : "#FEE2E2",
+                      color: p.blocked ? "#FFFFFF" : "#991B1B",
+                      border: p.blocked ? "none" : "1px solid #FCA5A5",
+                      flex: 1,
+                      padding: "0.45rem",
+                      fontSize: "0.82rem",
+                      borderRadius: "6px",
+                      cursor: "pointer",
+                      fontWeight: 600,
+                    }}
+                    title={p.blocked ? "Unblock account" : "Block account"}
+                  >
+                    {updatingBlockId === p.id ? "..." : p.blocked ? "✅ Unblock" : "🚫 Block"}
+                  </button>
                 </div>
                 <div style={{ display: "flex", gap: "0.4rem", marginTop: "0.4rem" }}>
                   <button

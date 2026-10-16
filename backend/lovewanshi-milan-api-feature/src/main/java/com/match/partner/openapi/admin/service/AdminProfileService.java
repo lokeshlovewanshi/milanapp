@@ -210,6 +210,7 @@ public class AdminProfileService {
         dto.setCreatedAt(profile.getCreatedAt());
         dto.setVerified(Boolean.TRUE.equals(profile.getVerified()));
         dto.setBlocked(Boolean.TRUE.equals(profile.getBlocked()));
+        dto.setHidden(Boolean.TRUE.equals(profile.getHidden()));
         dto.setEmailVerified(profile.isEmailVerified());
         dto.setDeleted(profile.getDeletedAt() != null);
         dto.setDeletedAt(profile.getDeletedAt());

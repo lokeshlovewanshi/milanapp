@@ -392,9 +392,10 @@ public class UserProfileServiceImpl implements UserProfileServiceInterface {
         UserProfile currentUser = currentUserOptional.get();
         int currentUserId = currentUser.getId();
 
-        // Never list the caller to themselves. When the caller asked for
-        // matches, narrow further to the gender they are looking for.
-        String lookingFor = oppositeGender ? oppositeGenderOf(currentUser.getGender()) : null;
+        // Never list the caller to themselves. In this matrimonial portal, members
+        // are always matched with the opposite gender (male members see female profiles,
+        // and female members see male profiles).
+        String lookingFor = oppositeGenderOf(currentUser.getGender());
 
         Page<UserProfile> userProfilesPage;
         if (filter == null || filter.isEmpty()) {

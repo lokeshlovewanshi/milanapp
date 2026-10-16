@@ -27,6 +27,15 @@ export default function AccountStatus({ profile }) {
       <span style={emailVerified ? badge("#DCFCE7", "#166534") : badge("#F3F4F6", "#4B5563")}>
         {emailVerified ? "Email verified" : "Email unverified"}
       </span>
+      {profile.hidden ? (
+        <span style={badge("#FEF3C7", "#92400E")}>
+          🙈 Hidden from feeds
+        </span>
+      ) : (
+        <span style={badge("#EFF6FF", "#1E40AF")}>
+          👁️ Visible on app
+        </span>
+      )}
     </div>
   );
 }

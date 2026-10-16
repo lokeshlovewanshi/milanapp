@@ -26,6 +26,14 @@ export default function VerifiedProfiles() {
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [actionMessage, setActionMessage] = useState(null);
 
+  // Filters for table monitoring: Block status and Feed visibility
+  const [blockFilter, setBlockFilter] = useState("all"); // "all", "hide_blocked", "only_blocked"
+  const [visibilityFilter, setVisibilityFilter] = useState("all"); // "all", "visible_only", "hidden_only"
+
+  // In-flight action tracking
+  const [updatingBlockId, setUpdatingBlockId] = useState(null);
+  const [updatingVisibilityId, setUpdatingVisibilityId] = useState(null);
+
   // Modals
   const [contactingProfile, setContactingProfile] = useState(null);
   const [editingProfileId, setEditingProfileId] = useState(null);
@@ -76,6 +84,77 @@ export default function VerifiedProfiles() {
     loadProfiles(page, debouncedSearch);
   }, [page, debouncedSearch, loadProfiles]);
 
+  async function handleToggleBlock(profile) {
+    if (!profile || !profile.id) return;
+    const isCurrentlyBlocked = Boolean(profile.blocked);
+    const confirmPrompt = isCurrentlyBlocked
+      ? `Are you sure you want to unblock "${profile.name || profile.displayId || profile.id}"?`
+      : `Are you sure you want to block "${profile.name || profile.displayId || profile.id}"? The user will be logged out and cannot browse matches.`;
+
+    if (!window.confirm(confirmPrompt)) return;
+
+    setUpdatingBlockId(profile.id);
+    setActionMessage(null);
+    try {
+      const updated = isCurrentlyBlocked
+        ? await api.unblockProfile(profile.id)
+        : await api.blockProfile(profile.id);
+
+      const nextBlocked = updated?.blocked !== undefined ? updated.blocked : !isCurrentlyBlocked;
+      setData((prev) => {
+        if (!prev || !prev.content) return prev;
+        return {
+          ...prev,
+          content: prev.content.map((p) =>
+            p.id === profile.id ? { ...p, blocked: nextBlocked } : p
+          ),
+        };
+      });
+      setActionMessage(
+        `✓ Profile "${profile.name || profile.id}" has been ${nextBlocked ? "blocked" : "unblocked"} successfully.`
+      );
+      setTimeout(() => setActionMessage(null), 4000);
+    } catch (err) {
+      console.error("Failed to toggle block status:", err);
+      setActionMessage(`❌ Failed to ${isCurrentlyBlocked ? "unblock" : "block"} profile.`);
+      setTimeout(() => setActionMessage(null), 4000);
+    } finally {
+      setUpdatingBlockId(null);
+    }
+  }
+
+  async function handleToggleVisibility(profile) {
+    if (!profile || !profile.id) return;
+    const nextHidden = !Boolean(profile.hidden);
+    setUpdatingVisibilityId(profile.id);
+    setActionMessage(null);
+    try {
+      const updated = await api.setProfileVisibility(profile.id, nextHidden);
+      const isHidden = updated?.hidden !== undefined ? updated.hidden : nextHidden;
+      setData((prev) => {
+        if (!prev || !prev.content) return prev;
+        return {
+          ...prev,
+          content: prev.content.map((p) =>
+            p.id === profile.id ? { ...p, hidden: isHidden } : p
+          ),
+        };
+      });
+      setActionMessage(
+        `✓ Profile "${profile.name || profile.id}" is now ${
+          isHidden ? "hidden from member feeds" : "unhidden and visible to members"
+        }.`
+      );
+      setTimeout(() => setActionMessage(null), 4000);
+    } catch (err) {
+      console.error("Failed to toggle visibility:", err);
+      setActionMessage(`❌ Failed to update visibility for "${profile.name || profile.id}".`);
+      setTimeout(() => setActionMessage(null), 4000);
+    } finally {
+      setUpdatingVisibilityId(null);
+    }
+  }
+
   function handleProfileUpdated(updated) {
     if (!updated || !updated.id) return;
     setData((prev) => {
@@ -103,6 +182,13 @@ export default function VerifiedProfiles() {
   }
 
   const list = data?.content || [];
+  const displayedProfiles = list.filter((p) => {
+    if (blockFilter === "hide_blocked" && p.blocked) return false;
+    if (blockFilter === "only_blocked" && !p.blocked) return false;
+    if (visibilityFilter === "visible_only" && p.hidden) return false;
+    if (visibilityFilter === "hidden_only" && !p.hidden) return false;
+    return true;
+  });
 
   return (
     <div>
@@ -164,8 +250,8 @@ export default function VerifiedProfiles() {
       )}
 
       {/* Filter / Search Bar */}
-      <div className="filter-bar">
-        <div style={{ position: "relative", flex: "1 1 320px", maxWidth: "480px" }}>
+      <div className="filter-bar" style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", alignItems: "center" }}>
+        <div style={{ position: "relative", flex: "1 1 240px", maxWidth: "380px" }}>
           <input
             type="text"
             placeholder="Search by Name, Mobile, Email, or Profile ID (GM00382)..."
@@ -174,10 +260,10 @@ export default function VerifiedProfiles() {
             className="input-field"
             style={{
               width: "100%",
-              padding: "0.55rem 2.2rem 0.55rem 0.85rem",
+              padding: "0.52rem 2.2rem 0.52rem 0.85rem",
               borderRadius: "6px",
               border: "1px solid #D1D5DB",
-              fontSize: "0.9rem",
+              fontSize: "0.88rem",
             }}
           />
           {searchTerm && (
@@ -202,35 +288,115 @@ export default function VerifiedProfiles() {
           )}
         </div>
 
+        {/* 1-Click Hide/Show Blocked Toggle Button */}
+        <button
+          type="button"
+          onClick={() => setBlockFilter((prev) => (prev === "hide_blocked" ? "all" : "hide_blocked"))}
+          style={{
+            background: blockFilter === "hide_blocked" ? "#FEF3C7" : "#F3F4F6",
+            color: blockFilter === "hide_blocked" ? "#92400E" : "#374151",
+            border: blockFilter === "hide_blocked" ? "1px solid #FCD34D" : "1px solid #D1D5DB",
+            padding: "0.52rem 0.75rem",
+            borderRadius: "6px",
+            fontSize: "0.85rem",
+            fontWeight: 600,
+            cursor: "pointer",
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "0.3rem",
+            whiteSpace: "nowrap",
+          }}
+          title={
+            blockFilter === "hide_blocked"
+              ? "Blocked profiles are currently HIDDEN. Click to show blocked accounts."
+              : "Click to hide blocked accounts from the table"
+          }
+        >
+          <span>{blockFilter === "hide_blocked" ? "🚫" : "👁️"}</span>
+          {blockFilter === "hide_blocked" ? "Blocked: Hidden (Show)" : "Hide Blocked"}
+        </button>
+
+        {/* Detailed Block Status Filter Dropdown */}
+        <select
+          value={blockFilter}
+          onChange={(e) => setBlockFilter(e.target.value)}
+          className="input-field"
+          style={{
+            width: "auto",
+            minWidth: "165px",
+            padding: "0.52rem 0.75rem",
+            borderRadius: "6px",
+            border: "1px solid #D1D5DB",
+            fontSize: "0.85rem",
+            fontWeight: 500,
+            cursor: "pointer",
+            background: blockFilter !== "all" ? "#FFFBEB" : "white",
+          }}
+          title="Filter table by Block Status"
+        >
+          <option value="all">🛡️ Block: All Profiles</option>
+          <option value="hide_blocked">✅ Hide Blocked (Active only)</option>
+          <option value="only_blocked">🚫 Blocked Only</option>
+        </select>
+
+        {/* Feed Visibility Filter Dropdown */}
+        <select
+          value={visibilityFilter}
+          onChange={(e) => setVisibilityFilter(e.target.value)}
+          className="input-field"
+          style={{
+            width: "auto",
+            minWidth: "160px",
+            padding: "0.52rem 0.75rem",
+            borderRadius: "6px",
+            border: "1px solid #D1D5DB",
+            fontSize: "0.85rem",
+            fontWeight: 500,
+            cursor: "pointer",
+            background: visibilityFilter !== "all" ? "#EFF6FF" : "white",
+          }}
+          title="Filter table by App Feed Visibility"
+        >
+          <option value="all">🌐 Feeds: All Profiles</option>
+          <option value="visible_only">👁️ Visible on App</option>
+          <option value="hidden_only">🙈 Hidden from App</option>
+        </select>
+
         <button
           type="button"
           className="secondary small"
           onClick={() => loadProfiles(page, debouncedSearch)}
           title="Refresh List"
-          style={{ padding: "0.55rem 0.85rem", borderRadius: "6px" }}
+          style={{ padding: "0.52rem 0.75rem", borderRadius: "6px" }}
         >
           🔄 Refresh
         </button>
 
         <span className="muted small" style={{ marginLeft: "auto", fontWeight: 500 }}>
-          {data ? `Showing ${list.length} of ${data.totalElements || list.length} verified profiles` : ""}
+          {data ? `Showing ${displayedProfiles.length} of ${data.totalElements || list.length} verified` : ""}
         </span>
       </div>
 
       {loading && <p className="muted">Loading verified profiles...</p>}
 
-      {!loading && list.length === 0 && (
+      {!loading && displayedProfiles.length === 0 && (
         <div className="card" style={{ padding: "3rem", textAlign: "center", color: "#6B7280" }}>
-          {searchTerm ? (
+          {searchTerm || blockFilter !== "all" || visibilityFilter !== "all" ? (
             <>
-              <p style={{ fontSize: "1.1rem", margin: "0 0 0.5rem 0" }}>No verified profiles match "{searchTerm}"</p>
-              <button
-                type="button"
-                className="secondary small"
-                onClick={() => setSearchTerm("")}
-              >
-                Clear Search
-              </button>
+              <p style={{ fontSize: "1.1rem", margin: "0 0 0.5rem 0" }}>No profiles match current search or filters.</p>
+              <div style={{ display: "flex", gap: "0.5rem", justifyContent: "center" }}>
+                <button
+                  type="button"
+                  className="secondary small"
+                  onClick={() => {
+                    setSearchTerm("");
+                    setBlockFilter("all");
+                    setVisibilityFilter("all");
+                  }}
+                >
+                  Reset All Filters
+                </button>
+              </div>
             </>
           ) : (
             <p style={{ fontSize: "1.1rem", margin: 0 }}>No verified profiles found.</p>
@@ -287,10 +453,17 @@ export default function VerifiedProfiles() {
               </tr>
             </thead>
             <tbody>
-              {list.map((p) => {
+              {displayedProfiles.map((p) => {
                 const hasPhoto = Boolean(p.isPhoto || p.profileImage);
                 return (
-                  <tr key={p.id} style={{ borderBottom: "1px solid #F3F4F6", transition: "background 0.15s" }}>
+                  <tr
+                    key={p.id}
+                    style={
+                      p.blocked
+                        ? { background: "#FFF5F5", borderBottom: "1px solid #FECACA" }
+                        : { borderBottom: "1px solid #F3F4F6", transition: "background 0.15s" }
+                    }
+                  >
                     {/* ID */}
                     <td style={{ padding: "0.85rem 1rem", whiteSpace: "nowrap" }}>
                       <Link to={`/profiles/${p.id}`} style={{ fontWeight: "700", color: "#A5122F" }}>
@@ -300,7 +473,7 @@ export default function VerifiedProfiles() {
 
                     {/* Name & Account Details */}
                     <td style={{ padding: "0.85rem 1rem" }}>
-                      <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: "0.45rem", flexWrap: "wrap" }}>
                         <Link
                           to={`/profiles/${p.id}`}
                           style={{ fontWeight: "600", color: "#111827", textDecoration: "none" }}
@@ -333,7 +506,22 @@ export default function VerifiedProfiles() {
                         >
                           ✓ Verified
                         </span>
-                        {p.blocked && <span className="badge badge-blocked">Blocked</span>}
+                        {p.blocked && <span className="badge badge-blocked">🚫 Blocked</span>}
+                        {p.hidden && (
+                          <span
+                            style={{
+                              fontSize: "10px",
+                              padding: "1px 5px",
+                              borderRadius: "4px",
+                              background: "#FEF3C7",
+                              color: "#92400E",
+                              border: "1px solid #FCD34D",
+                              fontWeight: 700,
+                            }}
+                          >
+                            🙈 Hidden
+                          </span>
+                        )}
                       </div>
                       {p.email && <div className="muted small">{p.email}</div>}
                     </td>
@@ -463,9 +651,9 @@ export default function VerifiedProfiles() {
                       </div>
                     </td>
 
-                    {/* Actions: Edit & View */}
+                    {/* Actions: Edit, Block/Unblock, Hide/Show, View */}
                     <td style={{ padding: "0.85rem 1rem", textAlign: "center", whiteSpace: "nowrap" }}>
-                      <div style={{ display: "inline-flex", gap: "0.4rem", alignItems: "center" }}>
+                      <div style={{ display: "inline-flex", gap: "0.35rem", alignItems: "center" }}>
                         <button
                           type="button"
                           onClick={() => setEditingProfileId(p.id)}
@@ -475,18 +663,79 @@ export default function VerifiedProfiles() {
                             color: "#FFFFFF",
                             border: "none",
                             borderRadius: "6px",
-                            padding: "0.4rem 0.75rem",
+                            padding: "0.38rem 0.65rem",
                             fontWeight: "600",
                             fontSize: "0.82rem",
                             display: "inline-flex",
                             alignItems: "center",
-                            gap: "0.25rem",
+                            gap: "0.2rem",
                             cursor: "pointer",
                             boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
                           }}
                         >
                           <span>✏️</span> Edit
                         </button>
+
+                        {/* Block / Unblock Action Button */}
+                        <button
+                          type="button"
+                          onClick={() => handleToggleBlock(p)}
+                          disabled={updatingBlockId === p.id}
+                          title={p.blocked ? "Click to unblock member account" : "Click to block member account"}
+                          style={{
+                            background: p.blocked ? "#10B981" : "#FEE2E2",
+                            color: p.blocked ? "#FFFFFF" : "#991B1B",
+                            border: p.blocked ? "none" : "1px solid #FCA5A5",
+                            borderRadius: "6px",
+                            padding: "0.38rem 0.6rem",
+                            fontWeight: "600",
+                            fontSize: "0.82rem",
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: "0.2rem",
+                            cursor: "pointer",
+                            transition: "all 0.15s ease",
+                          }}
+                        >
+                          {updatingBlockId === p.id
+                            ? "..."
+                            : p.blocked
+                              ? "✅ Unblock"
+                              : "🚫 Block"}
+                        </button>
+
+                        {/* Hide / Show Visibility Toggle Button */}
+                        <button
+                          type="button"
+                          onClick={() => handleToggleVisibility(p)}
+                          disabled={updatingVisibilityId === p.id}
+                          title={
+                            p.hidden
+                              ? "Profile is currently hidden from app feeds. Click to show/unhide."
+                              : "Profile is currently visible on app feeds. Click to hide."
+                          }
+                          style={{
+                            background: p.hidden ? "#FEF3C7" : "#F3F4F6",
+                            color: p.hidden ? "#92400E" : "#4B5563",
+                            border: p.hidden ? "1px solid #FCD34D" : "1px solid #D1D5DB",
+                            borderRadius: "6px",
+                            padding: "0.38rem 0.6rem",
+                            fontWeight: "600",
+                            fontSize: "0.82rem",
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: "0.2rem",
+                            cursor: "pointer",
+                            transition: "all 0.15s ease",
+                          }}
+                        >
+                          {updatingVisibilityId === p.id
+                            ? "..."
+                            : p.hidden
+                              ? "👁️ Show"
+                              : "🙈 Hide"}
+                        </button>
+
                         <Link
                           to={`/profiles/${p.id}`}
                           title="View complete profile details"
@@ -495,7 +744,7 @@ export default function VerifiedProfiles() {
                             color: "#374151",
                             border: "1px solid #D1D5DB",
                             borderRadius: "6px",
-                            padding: "0.38rem 0.65rem",
+                            padding: "0.38rem 0.6rem",
                             fontWeight: "600",
                             fontSize: "0.82rem",
                             textDecoration: "none",
@@ -517,12 +766,16 @@ export default function VerifiedProfiles() {
       )}
 
       {/* 2. Cards Grid View */}
-      {!loading && viewMode === "grid" && list.length > 0 && (
+      {!loading && viewMode === "grid" && displayedProfiles.length > 0 && (
         <div className="profile-grid">
-          {list.map((p) => {
+          {displayedProfiles.map((p) => {
             const hasPhoto = Boolean(p.isPhoto || p.profileImage);
             return (
-              <div className="card profile-card" key={p.id}>
+              <div
+                className="card profile-card"
+                key={p.id}
+                style={p.blocked ? { border: "1px solid #FECACA", background: "#FFF8F8" } : {}}
+              >
                 <img
                   src={p.profileImage || "/placeholder.svg"}
                   alt=""
@@ -545,8 +798,23 @@ export default function VerifiedProfiles() {
                     >
                       ✓ Verified
                     </span>
+                    {p.blocked && <span className="badge badge-blocked">🚫 Blocked</span>}
+                    {p.hidden && (
+                      <span
+                        style={{
+                          fontSize: "10px",
+                          padding: "1px 5px",
+                          borderRadius: "4px",
+                          background: "#FEF3C7",
+                          color: "#92400E",
+                          border: "1px solid #FCD34D",
+                          fontWeight: 700,
+                        }}
+                      >
+                        🙈 Hidden
+                      </span>
+                    )}
                   </div>
-                  {p.blocked && <span className="badge badge-blocked">Blocked</span>}
                   <div className="muted">{p.displayId}</div>
                   <div className="muted">{p.gender}</div>
                   <div className="muted small">Mobile: {p.mobileNo || "-"}</div>
@@ -591,6 +859,48 @@ export default function VerifiedProfiles() {
                       📞
                     </a>
                   )}
+                </div>
+
+                {/* Block / Unblock and Hide / Show Actions in Card View */}
+                <div style={{ display: "flex", gap: "0.4rem", marginTop: "0.4rem" }}>
+                  <button
+                    type="button"
+                    onClick={() => handleToggleBlock(p)}
+                    disabled={updatingBlockId === p.id}
+                    style={{
+                      background: p.blocked ? "#10B981" : "#FEE2E2",
+                      color: p.blocked ? "#FFFFFF" : "#991B1B",
+                      border: p.blocked ? "none" : "1px solid #FCA5A5",
+                      flex: 1,
+                      padding: "0.4rem",
+                      fontSize: "0.8rem",
+                      borderRadius: "6px",
+                      cursor: "pointer",
+                      fontWeight: 600,
+                    }}
+                    title={p.blocked ? "Unblock account" : "Block account"}
+                  >
+                    {updatingBlockId === p.id ? "..." : p.blocked ? "✅ Unblock" : "🚫 Block"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleToggleVisibility(p)}
+                    disabled={updatingVisibilityId === p.id}
+                    style={{
+                      background: p.hidden ? "#FEF3C7" : "#F3F4F6",
+                      color: p.hidden ? "#92400E" : "#4B5563",
+                      border: p.hidden ? "1px solid #FCD34D" : "1px solid #D1D5DB",
+                      flex: 1,
+                      padding: "0.4rem",
+                      fontSize: "0.8rem",
+                      borderRadius: "6px",
+                      cursor: "pointer",
+                      fontWeight: 600,
+                    }}
+                    title={p.hidden ? "Unhide in feeds" : "Hide from feeds"}
+                  >
+                    {updatingVisibilityId === p.id ? "..." : p.hidden ? "👁️ Show" : "🙈 Hide"}
+                  </button>
                 </div>
 
                 <div style={{ display: "flex", gap: "0.4rem", marginTop: "0.4rem" }}>
