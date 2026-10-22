@@ -60,6 +60,7 @@ type Props = {
 const OPTION_LABEL_HINDI: Record<string, Record<string, string>> = {
   marital_status: {
     NEVER_MARRIED: 'Never Married / अविवाहित',
+    MARRIED: 'Married / विवाहित',
     DIVORCED: 'Divorced / तलाक',
   },
 };

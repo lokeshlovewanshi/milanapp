@@ -21,4 +21,7 @@ public class LoginResponse {
      * is taken there even if they arrived through sign-in.
      */
     private Integer profileCompletion;
+    private Integer userId;
+    private String name;
+    private String email;
 }

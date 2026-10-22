@@ -72,10 +72,11 @@ INSERT IGNORE INTO lookup_option (category, code, label, sort_order) VALUES
 
 INSERT IGNORE INTO lookup_option (category, code, label, sort_order) VALUES
   ('marital_status', 'NEVER_MARRIED', 'Never Married', 0),
-  ('marital_status', 'DIVORCED', 'Divorced', 1),
-  ('marital_status', 'WIDOWED', 'Widowed', 2),
-  ('marital_status', 'AWAITING_DIVORCE', 'Awaiting Divorce', 3),
-  ('marital_status', 'ANNULLED', 'Annulled', 4);
+  ('marital_status', 'MARRIED', 'Married', 1),
+  ('marital_status', 'DIVORCED', 'Divorced', 2),
+  ('marital_status', 'WIDOWED', 'Widowed', 3),
+  ('marital_status', 'AWAITING_DIVORCE', 'Awaiting Divorce', 4),
+  ('marital_status', 'ANNULLED', 'Annulled', 5);
 
 INSERT IGNORE INTO lookup_option (category, code, label, sort_order) VALUES
   ('profile_created_by', 'SELF', 'Self', 0),

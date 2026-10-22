@@ -393,14 +393,26 @@ public class UserProfileServiceImpl implements UserProfileServiceInterface {
         int currentUserId = currentUser.getId();
 
         // Never list the caller to themselves.
-        // Currently do not filter by male/female - show all user ids as requested.
         String lookingFor = null;
+        if (filter != null && filter.gender() != null && !filter.gender().isBlank()) {
+            lookingFor = filter.gender().trim();
+        } else if (oppositeGender && currentUser.getGender() != null && !currentUser.getGender().isBlank()) {
+            String myGender = currentUser.getGender().trim().toLowerCase();
+            if (myGender.startsWith("m")) {
+                lookingFor = "Female";
+            } else if (myGender.startsWith("f")) {
+                lookingFor = "Male";
+            }
+        }
+
+        String maritalStatus = filter != null ? filter.maritalStatus() : null;
+        if (maritalStatus == null && oppositeGender) {
+            maritalStatus = "EXCLUDE_MARRIED";
+        }
 
         Page<UserProfile> userProfilesPage;
-        if (filter == null || filter.isEmpty()) {
-            userProfilesPage = lookingFor == null
-                    ? userProfileRepository.findByIdNot(currentUserId, pageable)
-                    : userProfileRepository.findByIdNotAndGender(currentUserId, lookingFor, pageable);
+        if ((filter == null || filter.isEmpty()) && lookingFor == null && maritalStatus == null) {
+            userProfilesPage = userProfileRepository.findByIdNot(currentUserId, pageable);
         } else {
             // ageFrom/ageTo are years-old bounds; the query wants dates. "At
             // least ageFrom years old" means born on or before today minus
@@ -408,19 +420,21 @@ public class UserProfileServiceImpl implements UserProfileServiceInterface {
             // date, which is why dobBefore comes from ageFrom and dobAfter
             // from ageTo even though that looks backwards at first glance.
             LocalDateTime now = LocalDateTime.now();
-            LocalDateTime dobBefore = filter.ageFrom() != null ? now.minusYears(filter.ageFrom()) : null;
-            LocalDateTime dobAfter = filter.ageTo() != null ? now.minusYears(filter.ageTo() + 1L) : null;
+            LocalDateTime dobBefore = (filter != null && filter.ageFrom() != null) ? now.minusYears(filter.ageFrom()) : null;
+            LocalDateTime dobAfter = (filter != null && filter.ageTo() != null) ? now.minusYears(filter.ageTo() + 1L) : null;
 
             // Height filter arrives as lookup codes ("H_60"); the query wants
             // the height category's sort_order, which is what actually orders
             // short to tall - the code's own numeric suffix is not reliable
             // enough to parse (it drifts from the label past a point).
-            Integer heightFromOrder = heightSortOrder(filter.heightFrom());
-            Integer heightToOrder = heightSortOrder(filter.heightTo());
+            Integer heightFromOrder = filter != null ? heightSortOrder(filter.heightFrom()) : null;
+            Integer heightToOrder = filter != null ? heightSortOrder(filter.heightTo()) : null;
+            String manglik = filter != null ? filter.manglik() : null;
+            String profession = filter != null ? filter.profession() : null;
 
             userProfilesPage = userProfileRepository.findByIdNotFiltered(
                     currentUserId, lookingFor, dobBefore, dobAfter,
-                    filter.maritalStatus(), filter.manglik(), filter.profession(),
+                    maritalStatus, manglik, profession,
                     heightFromOrder, heightToOrder, pageable);
         }
 

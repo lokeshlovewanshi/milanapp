@@ -18,14 +18,15 @@ public record ProfileFilter(
         String manglik,
         /** Height lookup codes ("H_60"), not centimetres - resolved to the height category's sort_order. */
         String heightFrom,
-        String heightTo
+        String heightTo,
+        String gender
 ) {
     public static final ProfileFilter NONE =
-            new ProfileFilter(null, null, null, null, null, null, null);
+            new ProfileFilter(null, null, null, null, null, null, null, null);
 
     public boolean isEmpty() {
         return ageFrom == null && ageTo == null && maritalStatus == null
                 && profession == null && manglik == null
-                && heightFrom == null && heightTo == null;
+                && heightFrom == null && heightTo == null && gender == null;
     }
 }

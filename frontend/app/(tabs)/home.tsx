@@ -7,8 +7,9 @@ import {
   Platform,
   Alert,
   RefreshControl,
+  ActivityIndicator,
 } from 'react-native';
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { Image } from 'expo-image';
 import { useFocusEffect } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -27,6 +28,7 @@ import TrustRow from '../../components/TrustRow';
 import TopStories from '../../components/TopStories';
 import ProfileFeedCard from '../../components/ProfileFeedCard';
 import FeedSkeleton from '../../components/FeedSkeleton';
+import ProfileTopFilter, { type TopFilterType } from '../../components/ProfileTopFilter';
 import {
   colors,
   font,
@@ -62,11 +64,14 @@ export default function HomeScreen() {
    * the same rows over the same wire for the same answer.
    */
   const newest = profiles.slice(0, RAIL_SIZE);
+  const [suggestedProfiles, setSuggestedProfiles] = useState<Profile[]>([]);
   const [myId, setMyId] = useState<string | number | null>(null);
   const [myImage, setMyImage] = useState<string | null>(null);
   const [myName, setMyName] = useState<string | null>(null);
   const [myMemberId, setMyMemberId] = useState<string | null>(null);
   const [myGender, setMyGender] = useState<string | null>(null);
+  const myGenderRef = useRef<string | null>(null);
+  myGenderRef.current = myGender;
   const [isVerified, setIsVerified] = useState<boolean | null>(null);
   // `verified: false` is also the default for a newly created account. The
   // moderation status distinguishes an unsubmitted profile (created) from one
@@ -100,6 +105,11 @@ export default function HomeScreen() {
   const [feedError, setFeedError] = useState<string | null>(null);
   const [unread, setUnread] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [feedFilter, setFeedFilter] = useState<TopFilterType>('women');
+  const feedFilterRef = useRef<TopFilterType>('women');
+  feedFilterRef.current = feedFilter;
+  const [filterLoading, setFilterLoading] = useState(false);
+  const userHasSelectedFilterRef = useRef(false);
 
   // Seeded from the server so profiles already requested in an earlier session
   // render as "Request sent" instead of offering Connect again.
@@ -137,9 +147,46 @@ export default function HomeScreen() {
     return Array.isArray(list) ? list : [];
   };
 
-  const loadPage = useCallback(async (next: number, replace = false) => {
-    // The browse feed is gender-filtered; "See all" on the next screen is not.
-    const res = await profileAPI.getProfiles(next, PAGE_SIZE, false);
+  const loadSuggestions = useCallback(async (genderHint?: string | null) => {
+    try {
+      const activeGender = genderHint ?? myGenderRef.current;
+      let genderParam: string | undefined = undefined;
+      if (activeGender) {
+        const g = activeGender.trim().toLowerCase();
+        if (g.startsWith('m')) genderParam = 'Female';
+        else if (g.startsWith('f')) genderParam = 'Male';
+      }
+      const filterParam: any = { maritalStatus: 'EXCLUDE_MARRIED' };
+      if (genderParam) {
+        filterParam.gender = genderParam;
+      }
+      const res = await profileAPI.getProfiles(0, RAIL_SIZE, true, filterParam);
+      const list = readPage(res);
+      if (list && list.length > 0) {
+        setSuggestedProfiles(list);
+        AsyncStorage.setItem('cached_suggested_profiles', JSON.stringify(list)).catch(() => {});
+      }
+    } catch (error: any) {
+      console.log('Failed to load suggestions:', error?.message);
+    }
+  }, []);
+
+  const loadPage = useCallback(async (next: number, replace = false, filterToUse?: TopFilterType) => {
+    const activeFilter = filterToUse ?? feedFilterRef.current;
+    let oppositeGender = false;
+    let filterParam: any = undefined;
+
+    if (activeFilter === 'opposite') {
+      oppositeGender = true;
+    } else if (activeFilter === 'men') {
+      filterParam = { gender: 'Male' };
+    } else if (activeFilter === 'women') {
+      filterParam = { gender: 'Female' };
+    } else if (activeFilter === 'married') {
+      filterParam = { maritalStatus: 'MARRIED' };
+    }
+
+    const res = await profileAPI.getProfiles(next, PAGE_SIZE, oppositeGender, filterParam);
     const list = readPage(res);
 
     setProfiles((prev) => (replace ? list : [...prev, ...list]));
@@ -147,6 +194,25 @@ export default function HomeScreen() {
     setPage(next);
     return list;
   }, []);
+
+  const handleFilterChange = useCallback(
+    async (nextFilter: TopFilterType) => {
+      if (nextFilter === feedFilterRef.current) return;
+      userHasSelectedFilterRef.current = true;
+      setFeedFilter(nextFilter);
+      feedFilterRef.current = nextFilter;
+      setFilterLoading(true);
+      setPage(0);
+      try {
+        await loadPage(0, true, nextFilter);
+      } catch (error: any) {
+        console.log('Failed to change filter:', error?.message);
+      } finally {
+        setFilterLoading(false);
+      }
+    },
+    [loadPage]
+  );
 
   /** Loads the feed and, when requested, the profile rails above it. */
   const bootstrap = useCallback(async (includeRails = true) => {
@@ -177,6 +243,7 @@ export default function HomeScreen() {
     // row of faces belongs reads as a broken screen, not a missing feature.
     const fallback = feed.slice(0, 12);
     await Promise.all([
+      loadSuggestions(),
       profileAPI
         .getStories(12)
         .then((res) => {
@@ -225,7 +292,20 @@ export default function HomeScreen() {
     setMyName(profileName(me));
     setMyMemberId(profileCode(me));
     setMyImage(profileImage(me));
-    setMyGender(me?.gender ?? null);
+    const userGender = me?.gender ?? null;
+    setMyGender(userGender);
+    myGenderRef.current = userGender;
+    if (userGender) {
+      loadSuggestions(userGender);
+      if (!userHasSelectedFilterRef.current) {
+        const preferred: TopFilterType = userGender.toLowerCase().startsWith('f') ? 'men' : 'women';
+        if (feedFilterRef.current !== preferred) {
+          setFeedFilter(preferred);
+          feedFilterRef.current = preferred;
+          loadPage(0, true, preferred);
+        }
+      }
+    }
     setCompletion(Number(me?.profileCompletion ?? 0));
     const moderationStatus = me?.status == null ? null : String(me.status).toLowerCase();
     // The admin approval transaction writes both values. Accept either one on
@@ -276,6 +356,19 @@ export default function HomeScreen() {
       })
       .catch(() => {});
 
+    AsyncStorage.getItem('cached_suggested_profiles')
+      .then((cached) => {
+        if (cached) {
+          try {
+            const list = JSON.parse(cached);
+            if (Array.isArray(list) && list.length > 0) {
+              setSuggestedProfiles(list);
+            }
+          } catch {}
+        }
+      })
+      .catch(() => {});
+
     // 2. Fetch fresh feed and user details
     bootstrap();
     refreshCurrentMember();
@@ -303,7 +396,7 @@ export default function HomeScreen() {
     try {
       // Refresh every visible data source, including both story rails. The
       // refresh key tells TopStories to discard its local cached response.
-      await Promise.all([bootstrap(true), refreshCurrentMember(), refreshUnread()]);
+      await Promise.all([bootstrap(true), refreshCurrentMember(), refreshUnread(), loadSuggestions()]);
       setStoriesRefreshKey((current) => current + 1);
     } finally {
       setRefreshing(false);
@@ -375,6 +468,26 @@ export default function HomeScreen() {
     }
   }, [isVerified, profileStatus]);
 
+  const displaySuggestions = useMemo(() => {
+    if (suggestedProfiles.length > 0) {
+      return suggestedProfiles;
+    }
+    if (!myGender) {
+      return feedFilter === 'opposite'
+        ? profiles.filter((p) => (p.maritalStatus || '').toUpperCase() !== 'MARRIED').slice(0, RAIL_SIZE)
+        : [];
+    }
+    const isMale = myGender.toLowerCase().startsWith('m');
+    return profiles
+      .filter((p) => {
+        const g = (p.gender || '').toLowerCase();
+        const isOpposite = isMale ? g.startsWith('f') : g.startsWith('m');
+        const isMarried = (p.maritalStatus || '').toUpperCase() === 'MARRIED';
+        return isOpposite && !isMarried;
+      })
+      .slice(0, RAIL_SIZE);
+  }, [suggestedProfiles, myGender, profiles, feedFilter]);
+
   const renderHeader = useCallback(
     () => (
       <View>
@@ -412,31 +525,61 @@ export default function HomeScreen() {
 
         {/* Suggested for you rail */}
         <HomeRail
-          title="Suggested for you"
-          profiles={newest}
+          title={
+            myGender?.toLowerCase().startsWith('m')
+              ? 'Suggested for you (Brides / वधू)'
+              : myGender?.toLowerCase().startsWith('f')
+              ? 'Suggested for you (Grooms / वर)'
+              : 'Suggested for you'
+          }
+          profiles={displaySuggestions}
           variant="filled"
           stateOf={stateOf}
           onConnect={handleConnect}
           onPressProfile={openProfile}
           onShortlist={handleShortlist}
           isShortlisted={(id) => shortlisted.has(String(id))}
-          onSeeAll={() => router.push('/all-profiles')}
+          onSeeAll={() => router.push('/all-profiles?filter=opposite')}
         />
+
+        {/* Top Profiles Filter */}
+        <View style={styles.topFilterWrapper}>
+          <ProfileTopFilter
+            active={feedFilter}
+            onChange={handleFilterChange}
+            myGender={myGender}
+          />
+        </View>
 
         {/* Feed Header */}
         <View style={styles.feedHeader}>
           <View style={styles.feedHeaderTitleRow}>
             <Ionicons name="sparkles" size={18} color={auth.crimsonLight} />
-            <Text style={styles.feedHeading}>Explore Profiles</Text>
+            <Text style={styles.feedHeading}>
+              {feedFilter === 'married'
+                ? 'Married Profiles (विवाहित)'
+                : feedFilter === 'women'
+                ? 'Female Profiles (महिला / वधू)'
+                : feedFilter === 'men'
+                ? 'Male Profiles (पुरुष / वर)'
+                : 'All Community Profiles (सभी सदस्य)'}
+            </Text>
           </View>
           <TouchableOpacity
-            onPress={() => router.push('/all-profiles')}
+            onPress={() => router.push(`/all-profiles?filter=${feedFilter}`)}
             hitSlop={8}
             accessibilityRole="button"
           >
             <Text style={styles.seeAll}>See all</Text>
           </TouchableOpacity>
         </View>
+
+        {filterLoading && (
+          <View style={styles.filterLoaderWrap}>
+            <ActivityIndicator size="small" color={auth.crimson} />
+            <Text style={styles.filterLoaderText}>Updating profiles...</Text>
+          </View>
+        )}
       </View>
     ),
     [
@@ -444,6 +587,11 @@ export default function HomeScreen() {
       myImage,
       stories,
       newest,
+      displaySuggestions,
+      myGender,
+      feedFilter,
+      filterLoading,
+      handleFilterChange,
       openProfile,
       router,
       isVerified,
@@ -462,7 +610,7 @@ export default function HomeScreen() {
     ({ item, index }: { item: Profile; index: number }) => {
       const id = profileId(item);
       return (
-        <View>
+        <View style={{ opacity: filterLoading ? 0.45 : 1 }}>
           {/* Insert Recently visited rail before 2nd card */}
           {index === 1 && visitors.length > 0 && (
             <HomeRail
@@ -492,7 +640,7 @@ export default function HomeScreen() {
         </View>
       );
     },
-    [visitors, stateOf, handleConnect, openProfile, handleShortlist, shortlisted, router]
+    [visitors, stateOf, handleConnect, openProfile, handleShortlist, shortlisted, router, filterLoading]
   );
 
   const renderFooter = useCallback(
@@ -575,6 +723,22 @@ export default function HomeScreen() {
           renderItem={renderFeedItem}
           ListHeaderComponent={renderHeader()}
           ListFooterComponent={renderFooter()}
+          ListEmptyComponent={() =>
+            filterLoading ? (
+              <View style={styles.filterEmptyWrap}>
+                <ActivityIndicator size="large" color={auth.crimson} />
+                <Text style={styles.filterEmptyText}>Loading profiles...</Text>
+              </View>
+            ) : (
+              <View style={styles.filterEmptyWrap}>
+                <Ionicons name="people-outline" size={48} color="#94A3B8" />
+                <Text style={styles.filterEmptyTitle}>No profiles found</Text>
+                <Text style={styles.filterEmptySub}>
+                  No profiles matched this filter at the moment.
+                </Text>
+              </View>
+            )
+          }
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scroll}
           onEndReached={onEndReached}
@@ -699,6 +863,9 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: colors.link,
   },
+  topFilterWrapper: {
+    marginVertical: spacing.xs,
+  },
   feedHeader: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -774,5 +941,41 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '700',
     color: '#FFFFFF',
+  },
+  filterLoaderWrap: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: spacing.md,
+    gap: 8,
+  },
+  filterLoaderText: {
+    fontSize: 13,
+    color: colors.textMuted,
+    fontWeight: '600',
+  },
+  filterEmptyWrap: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 48,
+    paddingHorizontal: spacing.lg,
+  },
+  filterEmptyText: {
+    fontSize: 14,
+    color: colors.textMuted,
+    marginTop: spacing.sm,
+    fontWeight: '500',
+  },
+  filterEmptyTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: colors.text,
+    marginTop: spacing.md,
+  },
+  filterEmptySub: {
+    fontSize: 13,
+    color: colors.textMuted,
+    textAlign: 'center',
+    marginTop: 4,
   },
 });

@@ -1,158 +1,201 @@
-package com.match.partner.openapi.user.service;
-
-import com.match.partner.openapi.auth.service.EmailService;
-import com.match.partner.openapi.auth.service.WelcomeEmailService;
-import com.match.partner.openapi.billing.model.dao.Membership;
-import com.match.partner.openapi.billing.model.dao.SubscriptionPlan;
-import com.match.partner.openapi.billing.repository.SubscriptionPlanRepository;
-import com.match.partner.openapi.billing.service.BillingService;
-import com.match.partner.openapi.user.model.dao.Status;
-import com.match.partner.openapi.user.model.dao.UserProfile;
-import com.match.partner.openapi.user.model.dto.LoginUserDto;
-import com.match.partner.openapi.user.model.dto.RegisterUserDto;
-import com.match.partner.openapi.user.repository.UserProfileRepository;
-import com.match.partner.common.configuration.ClientException;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-
-import java.util.Optional;
-
-@Service
-@Slf4j
-public class AuthenticationServiceImpl implements AuthenticationServiceInterface {
-    private final UserProfileRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final AuthenticationManager authenticationManager;
-    private final BillingService billingService;
-    private final SubscriptionPlanRepository planRepository;
-    private final EmailService emailService;
-    private final WelcomeEmailService welcomeEmailService;
-
-    public AuthenticationServiceImpl(
-        UserProfileRepository userRepository,
-        AuthenticationManager authenticationManager,
-        PasswordEncoder passwordEncoder,
-        BillingService billingService,
-        SubscriptionPlanRepository planRepository,
-        EmailService emailService,
-        WelcomeEmailService welcomeEmailService
-    ) {
-        this.authenticationManager = authenticationManager;
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.billingService = billingService;
-        this.planRepository = planRepository;
-        this.emailService = emailService;
-        this.welcomeEmailService = welcomeEmailService;
-    }
-
-    public UserProfile signup(RegisterUserDto input) {
-        if (input.getPassword() == null || input.getPassword().isEmpty()) {
-            throw new IllegalArgumentException("Password cannot be null or empty");
-        }
-        if (input.getEmail() == null || input.getEmail().isBlank()) {
-            throw new ClientException(HttpStatus.BAD_REQUEST, "Email is required.");
-        }
-        if (userRepository.findByEmail(input.getEmail().trim()).isPresent()) {
-            throw new ClientException(HttpStatus.CONFLICT,
-                    "An account with this email already exists. Please log in instead.");
-        }
-        UserProfile user = new UserProfile();
-        user.setName(input.getName());
-        user.setEmail(input.getEmail());
-        user.setMobileNumber(input.getMobileNo());
-        user.setPassword(passwordEncoder.encode(input.getPassword()));
-        user.setStatus(Status.PENDING);
-
-        UserProfile savedUser = userRepository.save(user);
-
-        // Automatically activate current offer plan (e.g. Gold 12M, Silver 6M, or Bronze 3M)
-        try {
-            Membership membership = billingService.grantSignupOfferMembership(savedUser);
-            if (membership != null) {
-                String planName = planRepository.findById(membership.getPlanId())
-                        .map(SubscriptionPlan::getName)
-                        .orElse("Gold");
-                Integer duration = planRepository.findById(membership.getPlanId())
-                        .map(SubscriptionPlan::getDurationMonths)
-                        .orElse(12);
-
-                emailService.sendPlanActivationEmail(
-                        savedUser.getEmail(),
-                        savedUser.getName(),
-                        planName,
-                        duration,
-                        membership.getExpiresAt(),
-                        true
-                );
-            }
-        } catch (Exception e) {
-            log.error("Failed to grant offer membership or send email on signup for user {}: {}",
-                    savedUser.getEmail(), e.getMessage());
-        }
-
-        // Asynchronously dispatch welcome email via AWS Lambda (fire-and-forget)
-        try {
-            welcomeEmailService.triggerWelcomeEmailAsync(savedUser.getEmail(), savedUser.getName(), savedUser.getId());
-        } catch (Exception e) {
-            log.error("Failed to trigger async welcome email for {}: {}", savedUser.getEmail(), e.getMessage());
-        }
-
-        return savedUser;
-    }
-
-    public UserProfile authenticate(LoginUserDto input) {
-        return userRepository.findByEmail(input.getEmail())
-                .map(user -> {
-                    authenticationManager.authenticate(
-                            new UsernamePasswordAuthenticationToken(input.getEmail(), input.getPassword())
-                    );
-
-                    if (user.getDeletedAt() != null || Boolean.TRUE.equals(user.getBlocked())) {
-                        throw new ClientException(HttpStatus.GONE,
-                                "This account is unavailable. You can request restoration.");
-                    }
-
-                    return user;
-                })
-                .orElseThrow(() -> new RuntimeException("User not found"));
-    }
-
-    /** @see AuthenticationServiceInterface#restoreAccount */
-    public UserProfile restoreAccount(LoginUserDto input) {
-        UserProfile user = userRepository.findByEmail(input.getEmail())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(input.getEmail(), input.getPassword())
-        );
-
-        if (user.getDeletedAt() == null && !Boolean.TRUE.equals(user.getBlocked())) {
-            throw new ClientException(HttpStatus.CONFLICT, "This account does not need restoration.");
-        }
-
-        user.setDeletedAt(null);
-        user.setBlocked(false);
-        user.setHidden(false);
-        user.setVerified(false);
-        user.setStatus(Status.PENDING);
-        return userRepository.save(user);
-    }
-
-    public UserProfile getProfileDetails(String email) {
-        Optional<UserProfile> userProfileOptional = userRepository.findByEmail(email);
-        if (userProfileOptional.isPresent()) {
-            return userProfileOptional.get();
-        } else {
-            UserProfile userProfile = new UserProfile();
-            userProfile.setEmail(email);
-            userProfile.setStatus(Status.PENDING);
-            userRepository.save(userProfile);
-            return userProfile;
-        }
-    }
-}
+package com.match.partner.openapi.user.service;
+
+import com.match.partner.openapi.auth.service.EmailService;
+import com.match.partner.openapi.auth.service.WelcomeEmailService;
+import com.match.partner.openapi.billing.model.dao.Membership;
+import com.match.partner.openapi.billing.model.dao.SubscriptionPlan;
+import com.match.partner.openapi.billing.repository.SubscriptionPlanRepository;
+import com.match.partner.openapi.billing.service.BillingService;
+import com.match.partner.openapi.user.model.dao.Status;
+import com.match.partner.openapi.user.model.dao.UserProfile;
+import com.match.partner.openapi.user.model.dto.LoginUserDto;
+import com.match.partner.openapi.user.model.dto.RegisterUserDto;
+import com.match.partner.openapi.user.repository.UserProfileRepository;
+import com.match.partner.common.configuration.ClientException;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+@Service
+@Slf4j
+public class AuthenticationServiceImpl implements AuthenticationServiceInterface {
+    private final UserProfileRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private final BillingService billingService;
+    private final SubscriptionPlanRepository planRepository;
+    private final EmailService emailService;
+    private final WelcomeEmailService welcomeEmailService;
+
+    public AuthenticationServiceImpl(
+        UserProfileRepository userRepository,
+        AuthenticationManager authenticationManager,
+        PasswordEncoder passwordEncoder,
+        BillingService billingService,
+        SubscriptionPlanRepository planRepository,
+        EmailService emailService,
+        WelcomeEmailService welcomeEmailService
+    ) {
+        this.authenticationManager = authenticationManager;
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.billingService = billingService;
+        this.planRepository = planRepository;
+        this.emailService = emailService;
+        this.welcomeEmailService = welcomeEmailService;
+    }
+
+    private java.time.LocalDateTime parseDate(String dob) {
+        if (dob == null || dob.isBlank()) return null;
+        try {
+            if (dob.contains("T")) {
+                return java.time.LocalDateTime.parse(dob.substring(0, 19));
+            } else {
+                return java.time.LocalDate.parse(dob.trim()).atStartOfDay();
+            }
+        } catch (Exception e) {
+            log.warn("Could not parse date of birth: {}", dob);
+            return null;
+        }
+    }
+
+    public UserProfile signup(RegisterUserDto input) {
+        if (input.getPassword() == null || input.getPassword().isEmpty()) {
+            throw new IllegalArgumentException("Password cannot be null or empty");
+        }
+        if (input.getEmail() == null || input.getEmail().isBlank()) {
+            throw new ClientException(HttpStatus.BAD_REQUEST, "Email is required.");
+        }
+        if (userRepository.findByEmail(input.getEmail().trim()).isPresent()) {
+            throw new ClientException(HttpStatus.CONFLICT,
+                    "An account with this email already exists. Please log in instead.");
+        }
+        UserProfile user = new UserProfile();
+        user.setName(input.getName());
+        user.setEmail(input.getEmail());
+        user.setMobileNumber(input.getMobileNo());
+        user.setPassword(passwordEncoder.encode(input.getPassword()));
+        user.setStatus(Status.PENDING);
+
+        if (input.getGender() != null && !input.getGender().isBlank()) {
+            user.setGender(input.getGender().trim());
+        }
+        if (input.getMaritalStatus() != null && !input.getMaritalStatus().isBlank()) {
+            com.match.partner.openapi.user.model.dao.MaritalStatus.validate(input.getMaritalStatus().trim());
+            user.setMaritalStatus(input.getMaritalStatus().trim());
+        }
+        if (input.getDateOfBirth() != null && !input.getDateOfBirth().isBlank()) {
+            user.setDateOfBirth(parseDate(input.getDateOfBirth()));
+        }
+        if (input.getGotra() != null && !input.getGotra().isBlank()) {
+            user.setGotra(input.getGotra().trim());
+        }
+        if (input.getState() != null && !input.getState().isBlank()) {
+            user.setState(input.getState().trim());
+        }
+        if (input.getCity() != null && !input.getCity().isBlank()) {
+            user.setCity(input.getCity().trim());
+        }
+        if (input.getProfileCreatedBy() != null && !input.getProfileCreatedBy().isBlank()) {
+            user.setProfileCreatedBy(input.getProfileCreatedBy().trim());
+        }
+        if (input.getProfession() != null && !input.getProfession().isBlank()) {
+            user.setProfession(input.getProfession().trim());
+        }
+        if (input.getEducation() != null && !input.getEducation().isBlank()) {
+            user.setEducation(input.getEducation().trim());
+        }
+
+        UserProfile savedUser = userRepository.save(user);
+
+        // Automatically activate current offer plan (e.g. Gold 12M, Silver 6M, or Bronze 3M)
+        try {
+            Membership membership = billingService.grantSignupOfferMembership(savedUser);
+            if (membership != null) {
+                String planName = planRepository.findById(membership.getPlanId())
+                        .map(SubscriptionPlan::getName)
+                        .orElse("Gold");
+                Integer duration = planRepository.findById(membership.getPlanId())
+                        .map(SubscriptionPlan::getDurationMonths)
+                        .orElse(12);
+
+                emailService.sendPlanActivationEmail(
+                        savedUser.getEmail(),
+                        savedUser.getName(),
+                        planName,
+                        duration,
+                        membership.getExpiresAt(),
+                        true
+                );
+            }
+        } catch (Exception e) {
+            log.error("Failed to grant offer membership or send email on signup for user {}: {}",
+                    savedUser.getEmail(), e.getMessage());
+        }
+
+        // Asynchronously dispatch welcome email via AWS Lambda (fire-and-forget)
+        try {
+            welcomeEmailService.triggerWelcomeEmailAsync(savedUser.getEmail(), savedUser.getName(), savedUser.getId());
+        } catch (Exception e) {
+            log.error("Failed to trigger async welcome email for {}: {}", savedUser.getEmail(), e.getMessage());
+        }
+
+        return savedUser;
+    }
+
+    public UserProfile authenticate(LoginUserDto input) {
+        return userRepository.findByEmail(input.getEmail())
+                .map(user -> {
+                    authenticationManager.authenticate(
+                            new UsernamePasswordAuthenticationToken(input.getEmail(), input.getPassword())
+                    );
+
+                    if (user.getDeletedAt() != null || Boolean.TRUE.equals(user.getBlocked())) {
+                        throw new ClientException(HttpStatus.GONE,
+                                "This account is unavailable. You can request restoration.");
+                    }
+
+                    return user;
+                })
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    /** @see AuthenticationServiceInterface#restoreAccount */
+    public UserProfile restoreAccount(LoginUserDto input) {
+        UserProfile user = userRepository.findByEmail(input.getEmail())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(input.getEmail(), input.getPassword())
+        );
+
+        if (user.getDeletedAt() == null && !Boolean.TRUE.equals(user.getBlocked())) {
+            throw new ClientException(HttpStatus.CONFLICT, "This account does not need restoration.");
+        }
+
+        user.setDeletedAt(null);
+        user.setBlocked(false);
+        user.setHidden(false);
+        user.setVerified(false);
+        user.setStatus(Status.PENDING);
+        return userRepository.save(user);
+    }
+
+    public UserProfile getProfileDetails(String email) {
+        Optional<UserProfile> userProfileOptional = userRepository.findByEmail(email);
+        if (userProfileOptional.isPresent()) {
+            return userProfileOptional.get();
+        } else {
+            UserProfile userProfile = new UserProfile();
+            userProfile.setEmail(email);
+            userProfile.setStatus(Status.PENDING);
+            userRepository.save(userProfile);
+            return userProfile;
+        }
+    }
+}

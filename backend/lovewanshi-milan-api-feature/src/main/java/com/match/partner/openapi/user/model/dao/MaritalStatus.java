@@ -19,6 +19,7 @@ import org.springframework.http.HttpStatus;
  */
 public enum MaritalStatus {
     NEVER_MARRIED,
+    MARRIED,
     DIVORCED,
     WIDOWED,
     AWAITING_DIVORCE,

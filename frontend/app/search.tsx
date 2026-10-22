@@ -205,7 +205,7 @@ export default function AdvancedSearchScreen() {
 
           <Label text="Marital Status" />
           <SearchPicker icon="heart" selectedValue={maritalStatus} onValueChange={setMaritalStatus}
-            items={[{ label: 'Any', value: '' }, { label: 'Never Married', value: 'Never Married' }, { label: 'Divorced', value: 'Divorced' }, { label: 'Widowed', value: 'Widowed' }]}
+            items={[{ label: 'Any', value: '' }, { label: 'Never Married', value: 'Never Married' }, { label: 'Married', value: 'Married' }, { label: 'Divorced', value: 'Divorced' }, { label: 'Widowed', value: 'Widowed' }]}
           />
 
           <Label text="State" />

@@ -185,7 +185,9 @@ public interface UserProfileRepository extends JpaRepository<UserProfile, Intege
               AND (:gender IS NULL OR LOWER(TRIM(u.gender)) = LOWER(:gender))
               AND (:dobBefore IS NULL OR u.dateOfBirth <= :dobBefore)
               AND (:dobAfter IS NULL OR u.dateOfBirth >= :dobAfter)
-              AND (:maritalStatus IS NULL OR u.maritalStatus = :maritalStatus)
+              AND (:maritalStatus IS NULL
+                   OR (:maritalStatus = 'EXCLUDE_MARRIED' AND u.maritalStatus <> 'MARRIED')
+                   OR u.maritalStatus = :maritalStatus)
               AND (:manglik IS NULL OR u.manglik = :manglik)
               AND (:profession IS NULL OR LOWER(u.profession) LIKE LOWER(CONCAT('%', :profession, '%')))
               AND (:heightFromOrder IS NULL OR

@@ -91,6 +91,7 @@ public class UserProfileController {
                                   @RequestParam(defaultValue = "0") int page,
                                   @RequestParam(defaultValue = "10") int size,
                                   @RequestParam(defaultValue = "false") boolean oppositeGender,
+                                  @RequestParam(required = false) String gender,
                                   @RequestParam(required = false) Integer ageFrom,
                                   @RequestParam(required = false) Integer ageTo,
                                   @RequestParam(required = false) String maritalStatus,
@@ -99,7 +100,7 @@ public class UserProfileController {
                                   @RequestParam(required = false) String heightFrom,
                                   @RequestParam(required = false) String heightTo) {
         ProfileFilter filter = new ProfileFilter(
-                ageFrom, ageTo, maritalStatus, profession, manglik, heightFrom, heightTo);
+                ageFrom, ageTo, maritalStatus, profession, manglik, heightFrom, heightTo, gender);
         return userProfileService.getUsers(page, size, userName, oppositeGender, filter);
     }
 

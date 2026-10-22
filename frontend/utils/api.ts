@@ -1,4 +1,4 @@
-﻿import axios from "axios";
+import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Platform } from "react-native";
 import Constants from "expo-constants";
@@ -238,8 +238,22 @@ export const authAPI = {
     mobileNo?: string;
   }) => api.post("/auth/signup", data),
   /** Creates a password account only after the SIGNUP OTP is redeemed. */
-  registerAfterOtp: (data: { email: string; password: string; code: string }) =>
-    api.post("/auth/signup/verify", data),
+  registerAfterOtp: (data: {
+    email: string;
+    password: string;
+    code: string;
+    name?: string;
+    mobileNo?: string;
+    gender?: string;
+    maritalStatus?: string;
+    dateOfBirth?: string;
+    gotra?: string;
+    state?: string;
+    city?: string;
+    profileCreatedBy?: string;
+    profession?: string;
+    education?: string;
+  }) => api.post("/auth/signup/verify", data),
   login: (data: { email: string; password: string }) =>
     api.post("/auth/login", data),
   /**
@@ -326,6 +340,7 @@ export const profileAPI = {
     size = 20,
     oppositeGender = false,
     filter?: {
+      gender?: string | null;
       ageFrom?: number | null;
       ageTo?: number | null;
       maritalStatus?: string | null;
@@ -341,6 +356,7 @@ export const profileAPI = {
       size: String(size),
       oppositeGender: String(oppositeGender),
     });
+    if (filter?.gender) params.set('gender', filter.gender);
     if (filter?.ageFrom != null) params.set('ageFrom', String(filter.ageFrom));
     if (filter?.ageTo != null) params.set('ageTo', String(filter.ageTo));
     if (filter?.maritalStatus) params.set('maritalStatus', filter.maritalStatus);
