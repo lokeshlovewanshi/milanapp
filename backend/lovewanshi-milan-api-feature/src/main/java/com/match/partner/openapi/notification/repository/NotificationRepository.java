@@ -13,9 +13,13 @@ import java.time.LocalDateTime;
 
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
 
+    Page<Notification> findByUserIdAndCreatedAtAfterOrderByCreatedAtDesc(Integer userId, LocalDateTime cutoff, Pageable pageable);
+
     Page<Notification> findByUserIdOrderByCreatedAtDesc(Integer userId, Pageable pageable);
 
     long countByUserIdAndReadAtIsNull(Integer userId);
+
+    long countByUserIdAndCreatedAtAfterAndReadAtIsNull(Integer userId, LocalDateTime cutoff);
 
     /**
      * Marks the whole feed read in one statement rather than loading and saving
@@ -27,6 +31,16 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
      */
     @Modifying
     @Transactional
+    @Query("update Notification n set n.readAt = :now where n.userId = :userId and n.readAt is null and n.createdAt >= :cutoff")
+    int markAllRead(@Param("userId") Integer userId, @Param("now") LocalDateTime now, @Param("cutoff") LocalDateTime cutoff);
+
+    @Modifying
+    @Transactional
     @Query("update Notification n set n.readAt = :now where n.userId = :userId and n.readAt is null")
     int markAllRead(@Param("userId") Integer userId, @Param("now") LocalDateTime now);
+
+    @Modifying
+    @Transactional
+    @Query("delete from Notification n where n.createdAt < :cutoff")
+    int deleteStaleNotifications(@Param("cutoff") LocalDateTime cutoff);
 }

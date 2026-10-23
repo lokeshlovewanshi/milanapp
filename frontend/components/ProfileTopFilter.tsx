@@ -14,7 +14,6 @@ type Props = {
 
 export default function ProfileTopFilter({ active, onChange }: Props) {
   const TABS: { id: TopFilterType; label: string; icon: keyof typeof Ionicons.glyphMap }[] = [
-    { id: 'married', label: 'Married / विवाहित', icon: 'heart-circle-outline' },
     { id: 'women', label: 'Female / महिला', icon: 'woman-outline' },
     { id: 'men', label: 'Male / पुरुष', icon: 'man-outline' },
     { id: 'all', label: 'All / सभी', icon: 'people-outline' },

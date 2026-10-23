@@ -236,7 +236,7 @@ export function defaultDrawerItems(push: (href: string) => void): DrawerItem[] {
     // every section (photos, education, religion, ...) the way the first-run
     // setup does, not stop after the first one.
     { icon: 'create-outline', label: 'Edit Profile', onPress: () => push('/profile-setup') },
-    { icon: 'person-add-outline', label: 'Add Another Account / नया अकाउंट', onPress: () => push('/add-user') },
+    { icon: 'people-outline', label: 'Switch or Add Account / अकाउंट बदलें या जोड़ें', onPress: () => push('/add-user') },
     { icon: 'sparkles-outline', label: 'Generate Kundali', onPress: () => push('/kundali') },
     // Sits next to Generate Kundali because it is the same kind of thing -
     // something the app produces for you - and because the sheet it builds

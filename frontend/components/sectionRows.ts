@@ -73,6 +73,8 @@ const ICONS: Record<string, string> = {
 
 /** Fields the card renders with a prefix, because the bare value is ambiguous. */
 const PREFIX: Record<string, string> = {
+  maritalStatus: "Status:",
+  dateOfBirth: "DOB:",
   gotra: "Gotra",
   maternalUnclesGotra: "Maternal uncle's gotra",
   marriedBrothers: "Married brothers:",
@@ -85,6 +87,16 @@ const PREFIX: Record<string, string> = {
 };
 
 const formatDate = (raw: any): string => {
+  if (Array.isArray(raw) && raw.length >= 3) {
+    const d = new Date(raw[0], raw[1] - 1, raw[2]);
+    if (!Number.isNaN(d.getTime())) {
+      return d.toLocaleDateString("en-IN", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      });
+    }
+  }
   const d = new Date(raw);
   if (Number.isNaN(d.getTime())) return String(raw);
   return d.toLocaleDateString("en-IN", {

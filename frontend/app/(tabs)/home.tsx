@@ -178,10 +178,11 @@ export default function HomeScreen() {
 
     if (activeFilter === 'opposite') {
       oppositeGender = true;
+      filterParam = { maritalStatus: 'EXCLUDE_MARRIED' };
     } else if (activeFilter === 'men') {
-      filterParam = { gender: 'Male' };
+      filterParam = { gender: 'Male', maritalStatus: 'EXCLUDE_MARRIED' };
     } else if (activeFilter === 'women') {
-      filterParam = { gender: 'Female' };
+      filterParam = { gender: 'Female', maritalStatus: 'EXCLUDE_MARRIED' };
     } else if (activeFilter === 'married') {
       filterParam = { maritalStatus: 'MARRIED' };
     }
@@ -525,13 +526,7 @@ export default function HomeScreen() {
 
         {/* Suggested for you rail */}
         <HomeRail
-          title={
-            myGender?.toLowerCase().startsWith('m')
-              ? 'Suggested for you (Brides / वधू)'
-              : myGender?.toLowerCase().startsWith('f')
-              ? 'Suggested for you (Grooms / वर)'
-              : 'Suggested for you'
-          }
+          title="Suggested for you"
           profiles={displaySuggestions}
           variant="filled"
           stateOf={stateOf}
@@ -556,13 +551,11 @@ export default function HomeScreen() {
           <View style={styles.feedHeaderTitleRow}>
             <Ionicons name="sparkles" size={18} color={auth.crimsonLight} />
             <Text style={styles.feedHeading}>
-              {feedFilter === 'married'
-                ? 'Married Profiles (विवाहित)'
-                : feedFilter === 'women'
-                ? 'Female Profiles (महिला / वधू)'
+              {feedFilter === 'women'
+                ? 'Female Profiles (महिला)'
                 : feedFilter === 'men'
-                ? 'Male Profiles (पुरुष / वर)'
-                : 'All Community Profiles (सभी सदस्य)'}
+                ? 'Male Profiles (पुरुष)'
+                : 'All Profiles (सभी)'}
             </Text>
           </View>
           <TouchableOpacity

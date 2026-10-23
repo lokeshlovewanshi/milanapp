@@ -105,8 +105,9 @@ public class NotificationServiceImpl implements NotificationServiceInterface {
     @Override
     public Page<NotificationDto> list(String userName, int page, int size) {
         Integer userId = userIdOf(userName);
+        LocalDateTime cutoff = utcNow().minusDays(3);
         Page<Notification> rows = notificationRepository
-                .findByUserIdOrderByCreatedAtDesc(userId, PageRequest.of(page, size));
+                .findByUserIdAndCreatedAtAfterOrderByCreatedAtDesc(userId, cutoff, PageRequest.of(page, size));
 
         // One lookup for the whole page rather than one per row. Building a
         // presigned URL per actor is the expensive part, so distinct ids also
@@ -127,13 +128,30 @@ public class NotificationServiceImpl implements NotificationServiceInterface {
 
     @Override
     public long unreadCount(String userName) {
-        return notificationRepository.countByUserIdAndReadAtIsNull(userIdOf(userName));
+        LocalDateTime cutoff = utcNow().minusDays(3);
+        return notificationRepository.countByUserIdAndCreatedAtAfterAndReadAtIsNull(userIdOf(userName), cutoff);
     }
 
     @Override
     @Transactional
     public void markAllRead(String userName) {
-        notificationRepository.markAllRead(userIdOf(userName), utcNow());
+        LocalDateTime now = utcNow();
+        LocalDateTime cutoff = now.minusDays(3);
+        notificationRepository.markAllRead(userIdOf(userName), now, cutoff);
+    }
+
+    /**
+     * Stale notification cleanup scheduled daily:
+     * Permanently drops notifications older than 3 days so the feed always stays fresh.
+     */
+    @org.springframework.scheduling.annotation.Scheduled(cron = "0 0 2 * * *")
+    @Transactional
+    public void cleanupStaleNotifications() {
+        LocalDateTime cutoff = utcNow().minusDays(3);
+        int deleted = notificationRepository.deleteStaleNotifications(cutoff);
+        if (deleted > 0) {
+            log.info("Daily notification cleanup: deleted {} stale notifications older than 3 days", deleted);
+        }
     }
 
     /**

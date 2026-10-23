@@ -3,6 +3,7 @@ package com.match.partner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * @EnableAsync is required for PushService's @Async methods to actually run off
@@ -12,6 +13,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
  */
 @SpringBootApplication
 @EnableAsync
+@EnableScheduling
 public class PartnerApplication {
 
 	public static void main(String[] args) {
