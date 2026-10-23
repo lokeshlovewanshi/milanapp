@@ -39,6 +39,8 @@ public class AttachmentServiceImpl implements AttachmentServiceInterface {
         attachmentDao.setType(fileType);
         attachmentDao.setPath(s3Response);
         attachmentDao.setUserId(userId);
+        boolean hasPrimary = attachmentRepository.findByUserId(userId).stream().anyMatch(a -> Boolean.TRUE.equals(a.getIsPrimary()));
+        attachmentDao.setIsPrimary(!hasPrimary);
 
         attachmentRepository.save(attachmentDao);
 
@@ -68,6 +70,8 @@ public class AttachmentServiceImpl implements AttachmentServiceInterface {
         attachmentDao.setType(fileType);
         attachmentDao.setPath(path);
         attachmentDao.setUserId(userId);
+        boolean hasPrimary = attachmentRepository.findByUserId(userId).stream().anyMatch(a -> Boolean.TRUE.equals(a.getIsPrimary()));
+        attachmentDao.setIsPrimary(!hasPrimary);
 
         attachmentRepository.save(attachmentDao);
 

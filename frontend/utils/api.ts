@@ -99,7 +99,12 @@ const api = axios.create({
 api.interceptors.request.use(
   async (config) => {
     const token = await AsyncStorage.getItem("auth_token");
-    if (token) {
+    const hasAuth = Boolean(
+      config.headers?.Authorization ||
+      config.headers?.authorization ||
+      (typeof (config.headers as any)?.get === "function" && (config.headers as any).get("Authorization"))
+    );
+    if (token && !hasAuth) {
       config.headers.Authorization = `Bearer ${token}`;
     }
 

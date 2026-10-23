@@ -3,7 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  ScrollView,
   TouchableOpacity,
   TextInput,
   Alert,
@@ -11,13 +10,13 @@ import {
   ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
-  Keyboard,
 } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useGuardedRouter } from '../utils/useGuardedRouter';
-import api, { authAPI, otpAPI, profileAPI } from '../utils/api';
+import axios from 'axios';
+import api, { authAPI, otpAPI, profileAPI, API_URL } from '../utils/api';
 import { persistSession } from '../utils/afterAuth';
 import {
   getSavedAccounts,
@@ -27,21 +26,17 @@ import {
   type SavedAccount,
 } from '../utils/multiAccount';
 import { colors, font, radius, spacing, auth } from '../components/theme';
+import SectionForm from '../components/SectionForm';
+import FormScroll, { useKeyboardHeight } from '../components/FormScroll';
+import {
+  SECTIONS,
+  buildPayload,
+  missingRequiredKeys,
+} from '../components/sectionSchema';
+import ChipRow from '../components/ChipRow';
+import FormField from '../components/FormField';
 
-const MARITAL_STATUS_OPTIONS = [
-  { code: 'NEVER_MARRIED', label: 'Never Married / अविवाहित' },
-  { code: 'MARRIED', label: 'Married / विवाहित' },
-  { code: 'DIVORCED', label: 'Divorced / तलाक' },
-  { code: 'WIDOWED', label: 'Widowed / विधवा/विधुर' },
-  { code: 'AWAITING_DIVORCE', label: 'Awaiting Divorce' },
-];
-
-const GENDER_OPTIONS = [
-  { code: 'Male', label: 'Male / पुरुष' },
-  { code: 'Female', label: 'Female / महिला' },
-];
-
-const CREATED_BY_OPTIONS = [
+const PROFILE_CREATED_BY_OPTIONS = [
   { code: 'SELF', label: 'Self / स्वयं' },
   { code: 'PARENTS', label: 'Parents / माता-पिता' },
   { code: 'SIBLING', label: 'Sibling / भाई-बहन' },
@@ -52,53 +47,48 @@ const CREATED_BY_OPTIONS = [
 export default function AddUserScreen() {
   const router = useGuardedRouter();
   const insets = useSafeAreaInsets();
+  const keyboard = useKeyboardHeight();
 
-  // Mode: 'create' (Register new) by default or 'open' (Log in / Switch to existing)
+  // Mode: 'create' (Register new) or 'open' (Log in / Switch to existing)
   const [activeTab, setActiveTab] = useState<'create' | 'open'>('create');
 
-  // Saved accounts
+  // Saved accounts on device
   const [savedAccounts, setSavedAccounts] = useState<SavedAccount[]>([]);
 
-  // Login form state
+  // Login form state (Tab 1: Open Account)
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
-  const [showLoginPassword, setShowLoginPassword] = useState(false);
   const [loginLoading, setLoginLoading] = useState(false);
 
-  // Keyboard height for dynamic scrolling above keyboard
-  const [keyboardHeight, setKeyboardHeight] = useState(0);
-
-  // Registration details
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [mobileNo, setMobileNo] = useState('');
-  const [password, setPassword] = useState('');
+  // Registration credentials (Tab 2: Create New)
+  const [accEmail, setAccEmail] = useState('');
+  const [accPassword, setAccPassword] = useState('');
+  const [accConfirmPassword, setAccConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [profileCreatedBy, setProfileCreatedBy] = useState('SELF');
 
-  // OTP details
+  // OTP state
   const [otpCode, setOtpCode] = useState('');
   const [otpSent, setOtpSent] = useState(false);
   const [otpSending, setOtpSending] = useState(false);
   const [resendTimer, setResendTimer] = useState(0);
 
-  // Profile details
-  const [gender, setGender] = useState('Male');
-  const [maritalStatus, setMaritalStatus] = useState('MARRIED');
-  const [profileCreatedBy, setProfileCreatedBy] = useState('SELF');
+  // Profile sections form values
+  const [formValues, setFormValues] = useState<Record<string, Record<string, any>>>({
+    basic: { gender: 'MALE', maritalStatus: 'NEVER_MARRIED' },
+    education: {},
+    religion: {},
+    contact: { country: 'India' },
+    family: {},
+    other: {},
+    about: {},
+  });
 
-  // Date of Birth fields
-  const [dobDay, setDobDay] = useState('');
-  const [dobMonth, setDobMonth] = useState('');
-  const [dobYear, setDobYear] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const [errors, setErrors] = useState<Set<string>>(new Set());
 
-  // Other details
-  const [gotra, setGotra] = useState('');
-  const [state, setState] = useState('');
-  const [city, setCity] = useState('');
-  const [profession, setProfession] = useState('');
-  const [education, setEducation] = useState('');
-
-  const [loading, setLoading] = useState(false);
+  // Success modal
   const [successData, setSuccessData] = useState<any>(null);
 
   // Load saved accounts
@@ -113,23 +103,7 @@ export default function AddUserScreen() {
     refreshSavedAccounts();
   }, [refreshSavedAccounts]);
 
-  // Keyboard event listeners
-  useEffect(() => {
-    const showSub = Keyboard.addListener(
-      Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow',
-      (e) => setKeyboardHeight(e.endCoordinates.height)
-    );
-    const hideSub = Keyboard.addListener(
-      Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide',
-      () => setKeyboardHeight(0)
-    );
-    return () => {
-      showSub.remove();
-      hideSub.remove();
-    };
-  }, []);
-
-  // Countdown timer for OTP
+  // Resend OTP countdown timer
   useEffect(() => {
     let interval: any;
     if (resendTimer > 0) {
@@ -173,7 +147,7 @@ export default function AddUserScreen() {
     );
   };
 
-  // Handle Login to an existing account
+  // Login existing account
   const handleLoginExisting = async () => {
     const trimmedEmail = loginEmail.trim();
     const trimmedPass = loginPassword.trim();
@@ -233,12 +207,14 @@ export default function AddUserScreen() {
     }
   };
 
+  // Send OTP
   const handleSendOtp = async () => {
-    const trimmedEmail = email.trim();
+    const trimmedEmail = accEmail.trim();
     if (!trimmedEmail || !trimmedEmail.includes('@')) {
       Alert.alert('Invalid Email', 'Please enter a valid email address first.');
       return;
     }
+
     setOtpSending(true);
     try {
       await otpAPI.request(trimmedEmail, 'SIGNUP');
@@ -247,8 +223,8 @@ export default function AddUserScreen() {
       Alert.alert('OTP Sent', `A 4-digit verification code has been sent to ${trimmedEmail}`);
     } catch (error: any) {
       const msg =
-        error.response?.data?.message ||
         error.response?.data?.detail ||
+        error.response?.data?.message ||
         error.message ||
         'Failed to send OTP code.';
       Alert.alert('Could Not Send OTP', msg);
@@ -257,161 +233,197 @@ export default function AddUserScreen() {
     }
   };
 
+  // Field change handler for SectionForm
+  const handleFieldChange = useCallback((sectionKey: string, key: string, value: any) => {
+    setFormValues((prev) => ({
+      ...prev,
+      [sectionKey]: {
+        ...(prev[sectionKey] ?? {}),
+        [key]: value,
+      },
+    }));
+    setErrors((prev) => {
+      if (!prev.has(key)) return prev;
+      const next = new Set(prev);
+      next.delete(key);
+      return next;
+    });
+  }, []);
+
+  // Validate and Submit Entire Form
   const handleCreateAccount = async () => {
-    const trimmedName = name.trim();
-    const trimmedEmail = email.trim();
-    const trimmedMobile = mobileNo.trim();
-    const trimmedPassword = password.trim();
+    const trimmedEmail = accEmail.trim();
+    const trimmedPassword = accPassword.trim();
+    const trimmedConfirm = accConfirmPassword.trim();
     const trimmedOtp = otpCode.trim();
 
-    if (!trimmedName) {
-      Alert.alert('Required', 'Please enter full name.');
-      return;
-    }
-    if (!trimmedEmail) {
-      Alert.alert('Required', 'Please enter email address.');
+    // Check credentials
+    if (!trimmedEmail || !trimmedEmail.includes('@')) {
+      Alert.alert('Email Required', 'Please enter a valid email address.');
       return;
     }
     if (!otpSent) {
-      Alert.alert('OTP Required', 'Please tap "Send OTP" to verify the email address before creating the account.');
+      Alert.alert('Verification Required', 'Please tap "Send OTP" to verify your email address.');
       return;
     }
     if (!trimmedOtp || trimmedOtp.length < 4) {
-      Alert.alert('OTP Required', 'Please enter the 4-digit verification code sent to your email.');
-      return;
-    }
-    if (!trimmedMobile || trimmedMobile.length < 10) {
-      Alert.alert('Mobile Number Required', 'Please enter a valid 10-digit mobile number.');
+      Alert.alert('OTP Required', 'Please enter the 4-digit code sent to your email.');
       return;
     }
     if (!trimmedPassword || trimmedPassword.length < 6) {
       Alert.alert('Password Required', 'Password must be at least 6 characters.');
       return;
     }
-
-    // Format and validate Date of Birth
-    let formattedDob: string | undefined = undefined;
-    if (dobDay.trim() || dobMonth.trim() || dobYear.trim()) {
-      let dNum = parseInt(dobDay.trim(), 10);
-      let mNum = parseInt(dobMonth.trim(), 10);
-      let yNum = parseInt(dobYear.trim(), 10);
-
-      // Auto-correct if user accidentally swapped day and month (e.g. entered day=12, month=28)
-      if (mNum > 12 && dNum <= 12) {
-        const temp = dNum;
-        dNum = mNum;
-        mNum = temp;
-      }
-
-      const currentYear = new Date().getFullYear();
-      if (
-        isNaN(dNum) ||
-        dNum < 1 ||
-        dNum > 31 ||
-        isNaN(mNum) ||
-        mNum < 1 ||
-        mNum > 12 ||
-        isNaN(yNum) ||
-        yNum < 1920 ||
-        yNum > currentYear
-      ) {
-        Alert.alert(
-          'Invalid Date of Birth',
-          'Please enter a valid Date of Birth:\n• Day (DD): 1 - 31\n• Month (MM): 1 - 12\n• Year (YYYY): e.g. 1998'
-        );
-        return;
-      }
-
-      const y = String(yNum).padStart(4, '2000');
-      const m = String(mNum).padStart(2, '01');
-      const d = String(dNum).padStart(2, '01');
-      formattedDob = `${y}-${m}-${d}T00:00:00`;
-    } else {
-      Alert.alert('Date of Birth Required', 'Please enter your complete Date of Birth (Day, Month, and Year).');
+    if (trimmedPassword !== trimmedConfirm) {
+      Alert.alert('Password Mismatch', 'Password and Confirm Password do not match.');
       return;
     }
 
-    setLoading(true);
+    // Check required fields in Basic details
+    const basicMissing = missingRequiredKeys(SECTIONS.basic, formValues.basic ?? {});
+    if (basicMissing.length > 0) {
+      setErrors(new Set(basicMissing));
+      Alert.alert(
+        'Required Fields',
+        'Please fill in all required basic details (Full Name, Gender, Date of Birth, Marital Status, Mobile Number).'
+      );
+      return;
+    }
+    setErrors(new Set());
+
+    setSubmitting(true);
     try {
-      const payload = {
-        name: trimmedName,
+      const basicValues = formValues.basic ?? {};
+      const regPayload = {
+        name: String(basicValues.name || '').trim(),
         email: trimmedEmail,
-        mobileNo: trimmedMobile,
+        mobileNo: String(basicValues.mobileNo || '').trim(),
         password: trimmedPassword,
         code: trimmedOtp,
-        gender,
-        maritalStatus,
         profileCreatedBy,
-        dateOfBirth: formattedDob,
-        gotra: gotra.trim() || undefined,
-        state: state.trim() || undefined,
-        city: city.trim() || undefined,
-        profession: profession.trim() || undefined,
-        education: education.trim() || undefined,
+        gender: basicValues.gender || 'MALE',
+        maritalStatus: basicValues.maritalStatus || 'NEVER_MARRIED',
+        dateOfBirth: basicValues.dateOfBirth,
+        height: basicValues.height,
+        state: formValues.contact?.state,
+        city: formValues.contact?.city,
+        gotra: formValues.religion?.gotra,
+        profession: formValues.education?.profession,
+        education: formValues.education?.education,
       };
 
-      const res = await authAPI.registerAfterOtp(payload);
-      const resData = res.data;
+      const regRes = await authAPI.registerAfterOtp(regPayload);
+      const resData = regRes.data;
+      const token = resData?.token;
 
-      // Explicitly persist profile fields (DOB, Marital Status, Gender, etc.) to guarantee they are updated
-      if (resData?.token) {
-        const authHeader = { headers: { Authorization: `Bearer ${resData.token}` } };
-        try {
-          await api.patch(
-            '/user/profile',
-            {
-              maritalStatus,
-              gender,
-              dateOfBirth: formattedDob,
-              gotra: gotra.trim() || undefined,
-              state: state.trim() || undefined,
-              city: city.trim() || undefined,
-              profession: profession.trim() || undefined,
-              education: education.trim() || undefined,
-              profileCreatedBy,
-            },
-            authHeader
-          );
-        } catch (patchErr) {
-          console.log('Explicit profile patch fallback error:', patchErr);
+      if (!token) {
+        throw new Error('No authentication token received.');
+      }
+
+      // Dedicated client with new user's Bearer token to prevent any token leaking
+      const dedicatedClient = axios.create({
+        baseURL: API_URL,
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        timeout: 20000,
+      });
+
+      // Patch all sections to guarantee complete profile synchronization and score calculation in backend
+      try {
+        const basicPayload = buildPayload(SECTIONS.basic, basicValues);
+        if (Object.keys(basicPayload).length > 0) {
+          await dedicatedClient.patch('/user/profile/basic', basicPayload);
         }
+      } catch (e) {
+        console.log('Basic patch error:', e);
+      }
 
+      if (formValues.education && Object.keys(formValues.education).length > 0) {
         try {
-          await api.patch(
-            '/user/profile/basic',
-            {
-              name: trimmedName,
-              gender,
-              maritalStatus,
-              dateOfBirth: formattedDob,
-              mobileNo: trimmedMobile,
-              profileCreatedBy,
-            },
-            authHeader
-          );
-        } catch (basicErr) {
-          console.log('Explicit basic patch fallback error:', basicErr);
+          const eduPayload = buildPayload(SECTIONS.education, formValues.education);
+          if (Object.keys(eduPayload).length > 0) {
+            await dedicatedClient.patch('/user/profile/education', eduPayload);
+          }
+        } catch (e) {
+          console.log('Education patch error:', e);
         }
       }
 
-      // Pre-save account in saved accounts with true user ID
-      if (resData?.token) {
-        await saveAccount({
-          id: resData?.userId ?? resData?.id ?? Date.now(),
-          email: trimmedEmail,
-          name: trimmedName,
-          token: resData.token,
-          gender,
-          maritalStatus,
-        });
+      if (formValues.religion && Object.keys(formValues.religion).length > 0) {
+        try {
+          const relPayload = buildPayload(SECTIONS.religion, formValues.religion);
+          if (Object.keys(relPayload).length > 0) {
+            await dedicatedClient.patch('/user/profile/religion', relPayload);
+          }
+        } catch (e) {
+          console.log('Religion patch error:', e);
+        }
       }
 
+      if (formValues.contact && Object.keys(formValues.contact).length > 0) {
+        try {
+          const conPayload = buildPayload(SECTIONS.contact, formValues.contact);
+          if (Object.keys(conPayload).length > 0) {
+            await dedicatedClient.patch('/user/profile/contact', conPayload);
+          }
+        } catch (e) {
+          console.log('Contact patch error:', e);
+        }
+      }
+
+      if (formValues.family && Object.keys(formValues.family).length > 0) {
+        try {
+          const famPayload = buildPayload(SECTIONS.family, formValues.family);
+          if (Object.keys(famPayload).length > 0) {
+            await dedicatedClient.patch('/user/profile/family', famPayload);
+          }
+        } catch (e) {
+          console.log('Family patch error:', e);
+        }
+      }
+
+      if (formValues.other && Object.keys(formValues.other).length > 0) {
+        try {
+          const otherPayload = buildPayload(SECTIONS.other, formValues.other);
+          if (Object.keys(otherPayload).length > 0) {
+            await dedicatedClient.patch('/user/profile/basic', otherPayload);
+          }
+        } catch (e) {
+          console.log('Other patch error:', e);
+        }
+      }
+
+      if (formValues.about && (formValues.about.aboutMyself || formValues.about.partnerPreferences)) {
+        try {
+          const aboutPayload = buildPayload(SECTIONS.about, formValues.about);
+          if (Object.keys(aboutPayload).length > 0) {
+            await dedicatedClient.patch('/user/profile/family', aboutPayload);
+          }
+        } catch (e) {
+          console.log('About patch error:', e);
+        }
+      }
+
+      // Pre-save to saved accounts on this device
+      await saveAccount({
+        id: resData?.userId ?? resData?.id ?? Date.now(),
+        email: trimmedEmail,
+        name: basicValues.name || 'Member',
+        token,
+        gender: basicValues.gender,
+        maritalStatus: basicValues.maritalStatus,
+      });
+
+      // Show success modal
       setSuccessData({
         ...resData,
-        createdName: trimmedName,
+        createdName: basicValues.name || 'Member',
         createdEmail: trimmedEmail,
-        createdGender: gender,
-        createdMaritalStatus: maritalStatus,
+        createdGender: basicValues.gender,
+        createdMaritalStatus: basicValues.maritalStatus,
+        token,
       });
     } catch (error: any) {
       console.error('Failed to create account:', error);
@@ -419,26 +431,29 @@ export default function AddUserScreen() {
         error.response?.data?.detail ||
         error.response?.data?.message ||
         error.message ||
-        'Failed to verify and create account. Please check your OTP code and try again.';
+        'Failed to verify and create account. Please check your OTP and credentials.';
       Alert.alert('Creation Failed', msg);
     } finally {
-      setLoading(false);
+      setSubmitting(false);
     }
   };
 
+  // Open the newly created account immediately
   const handleSwitchAccount = async () => {
     if (successData?.token) {
       await persistSession(successData);
-      await AsyncStorage.setItem('user_email', successData?.createdEmail ?? email);
+      await AsyncStorage.setItem('user_email', successData?.createdEmail ?? accEmail.trim());
       await AsyncStorage.removeItem('cached_feed_profiles');
       await AsyncStorage.removeItem('cached_suggested_profiles');
       router.replace('/(tabs)/home');
     }
   };
 
+  // Stay in current account
   const handleStayCurrent = () => {
     setSuccessData(null);
-    router.back();
+    refreshSavedAccounts();
+    setActiveTab('open');
   };
 
   return (
@@ -448,7 +463,7 @@ export default function AddUserScreen() {
       keyboardVerticalOffset={Platform.OS === 'ios' ? insets.top : 0}
     >
       <View style={[styles.container, { paddingTop: insets.top }]}>
-        {/* Header */}
+        {/* Header Bar */}
         <View style={styles.header}>
           <TouchableOpacity
             style={styles.backBtn}
@@ -456,7 +471,7 @@ export default function AddUserScreen() {
             hitSlop={10}
             accessibilityRole="button"
           >
-            <Ionicons name="arrow-back" size={24} color={colors.text} />
+            <Ionicons name="arrow-back" size={24} color={colors.heading} />
           </TouchableOpacity>
           <View style={styles.headerTextWrap}>
             <Text style={styles.headerTitle}>Add Another Account</Text>
@@ -499,401 +514,384 @@ export default function AddUserScreen() {
           </TouchableOpacity>
         </View>
 
-        <ScrollView
-          style={styles.scrollView}
-          contentContainerStyle={[
-            styles.scrollContent,
-            { paddingBottom: Math.max(keyboardHeight + 80, 240) },
-          ]}
-          showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps="handled"
-          keyboardDismissMode="on-drag"
-        >
-          {activeTab === 'open' ? (
-            /* TAB 1: OPEN EXISTING ACCOUNT */
-            <View>
-              {/* Saved accounts on this device */}
-              {savedAccounts.length > 0 && (
-                <View style={styles.section}>
-                  <View style={styles.sectionHeaderRow}>
-                    <Ionicons name="people" size={20} color={auth.crimson} />
-                    <Text style={styles.sectionTitle}>Accounts on this device / उपलब्ध अकाउंट</Text>
-                  </View>
-                  <Text style={styles.subtext}>
-                    Tap any account below to open it immediately:
-                  </Text>
+        {activeTab === 'open' ? (
+          /* =========================================================================
+             TAB 1: OPEN EXISTING ACCOUNT / LOG IN
+             ========================================================================= */
+          <FormScroll
+            style={{ flex: 1 }}
+            contentContainerStyle={[styles.scrollContent, { paddingBottom: 120 }]}
+            showsVerticalScrollIndicator={false}
+          >
+            {/* Saved Accounts on this Device */}
+            {savedAccounts.length > 0 && (
+              <View style={styles.sectionCard}>
+                <View style={styles.sectionHeaderRow}>
+                  <Ionicons name="people" size={20} color={auth.crimson} />
+                  <Text style={styles.sectionTitle}>Accounts on this device / उपलब्ध अकाउंट</Text>
+                </View>
+                <Text style={styles.sectionSubtitle}>
+                  Tap any account below to open it immediately:
+                </Text>
 
-                  {savedAccounts.map((acc) => (
-                    <View key={String(acc.id || acc.email)} style={styles.accountCard}>
-                      <View style={styles.accountAvatar}>
-                        <Ionicons
-                          name={acc.gender?.toLowerCase().startsWith('f') ? 'woman' : 'person'}
-                          size={22}
-                          color={auth.crimson}
-                        />
-                      </View>
-                      <View style={styles.accountInfo}>
-                        <Text style={styles.accountName} numberOfLines={1}>
-                          {acc.name}
-                        </Text>
-                        <Text style={styles.accountEmail} numberOfLines={1}>
-                          {acc.email}
-                        </Text>
+                {savedAccounts.map((acc) => (
+                  <View key={String(acc.id || acc.email)} style={styles.accountCard}>
+                    <View style={styles.accountAvatar}>
+                      <Ionicons
+                        name={acc.gender?.toLowerCase().startsWith('f') ? 'woman' : 'person'}
+                        size={22}
+                        color={auth.crimson}
+                      />
+                    </View>
+                    <View style={styles.accountInfo}>
+                      <Text style={styles.accountName} numberOfLines={1}>
+                        {acc.name}
+                      </Text>
+                      <Text style={styles.accountEmail} numberOfLines={1}>
+                        {acc.email}
+                      </Text>
+                      <View style={styles.accountMetaRow}>
                         {!!acc.memberId && (
                           <Text style={styles.accountIdText}>ID: {acc.memberId}</Text>
                         )}
+                        {!!acc.maritalStatus && (
+                          <Text style={styles.accountStatusText}>
+                            {acc.maritalStatus.replace('_', ' ')}
+                          </Text>
+                        )}
                       </View>
-
-                      <TouchableOpacity
-                        style={styles.openAccountBtn}
-                        onPress={() => handleOpenAccount(acc)}
-                        activeOpacity={0.8}
-                      >
-                        <Text style={styles.openAccountBtnText}>Open</Text>
-                      </TouchableOpacity>
-
-                      <TouchableOpacity
-                        style={styles.removeAccountBtn}
-                        onPress={() => handleRemoveAccount(acc.id || acc.email)}
-                        hitSlop={8}
-                      >
-                        <Ionicons name="trash-outline" size={18} color="#94A3B8" />
-                      </TouchableOpacity>
                     </View>
-                  ))}
-                </View>
-              )}
 
-              {/* Login with another account */}
-              <View style={styles.section}>
-                <View style={styles.sectionHeaderRow}>
-                  <Ionicons name="key" size={20} color={auth.crimson} />
-                  <Text style={styles.sectionTitle}>
-                    {savedAccounts.length > 0
-                      ? 'Log In to Another Account / अन्य अकाउंट खोलें'
-                      : 'Log In to Open Account / अकाउंट खोलें'}
-                  </Text>
-                </View>
-                <Text style={styles.subtext}>
-                  Enter the email and password of the account you want to open:
-                </Text>
+                    <TouchableOpacity
+                      style={styles.openAccountBtn}
+                      onPress={() => handleOpenAccount(acc)}
+                      activeOpacity={0.8}
+                    >
+                      <Text style={styles.openAccountBtnText}>Open</Text>
+                    </TouchableOpacity>
 
-                <Text style={styles.label}>Email Address / ईमेल *</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="e.g. user@example.com"
-                  placeholderTextColor={colors.textMuted}
-                  value={loginEmail}
-                  onChangeText={setLoginEmail}
-                  keyboardType="email-address"
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                />
-
-                <Text style={styles.label}>Password / पासवर्ड *</Text>
-                <View style={styles.passwordRow}>
-                  <TextInput
-                    style={[styles.input, { flex: 1, marginBottom: 0 }]}
-                    placeholder="Enter password"
-                    placeholderTextColor={colors.textMuted}
-                    value={loginPassword}
-                    onChangeText={setLoginPassword}
-                    secureTextEntry={!showLoginPassword}
-                    autoCapitalize="none"
-                  />
-                  <TouchableOpacity
-                    style={styles.eyeBtn}
-                    onPress={() => setShowLoginPassword((prev) => !prev)}
-                    hitSlop={8}
-                  >
-                    <Ionicons
-                      name={showLoginPassword ? 'eye-off-outline' : 'eye-outline'}
-                      size={20}
-                      color={colors.textMuted}
-                    />
-                  </TouchableOpacity>
-                </View>
-
-                <TouchableOpacity
-                  style={[styles.submitBtn, loginLoading && styles.submitBtnDisabled]}
-                  onPress={handleLoginExisting}
-                  disabled={loginLoading}
-                  activeOpacity={0.85}
-                >
-                  {loginLoading ? (
-                    <ActivityIndicator size="small" color="#fff" />
-                  ) : (
-                    <>
-                      <Ionicons name="log-in" size={20} color="#fff" style={{ marginRight: 8 }} />
-                      <Text style={styles.submitBtnText}>Log In &amp; Open Account</Text>
-                    </>
-                  )}
-                </TouchableOpacity>
-              </View>
-            </View>
-          ) : (
-            /* TAB 2: CREATE NEW ACCOUNT */
-            <View>
-              {/* Info Card */}
-              <View style={styles.infoBox}>
-                <Ionicons name="information-circle" size={20} color="#2563EB" />
-                <Text style={styles.infoText}>
-                  Create a new account for a family member or normal/married user. An email OTP verification is required to confirm their identity.
-                </Text>
-              </View>
-
-              {/* Section 1: Account & Verification */}
-              <View style={styles.section}>
-                <Text style={styles.sectionTitle}>1. Account &amp; Verification / अकाउंट विवरण</Text>
-
-                <Text style={styles.label}>Full Name / पूरा नाम *</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="e.g. Ramesh Lodha"
-                  placeholderTextColor={colors.textMuted}
-                  value={name}
-                  onChangeText={setName}
-                />
-
-                <Text style={styles.label}>Email Address / ईमेल *</Text>
-                <View style={styles.emailRow}>
-                  <TextInput
-                    style={[styles.input, { flex: 1, marginBottom: 0 }]}
-                    placeholder="e.g. name@example.com"
-                    placeholderTextColor={colors.textMuted}
-                    value={email}
-                    onChangeText={(val) => {
-                      setEmail(val);
-                      setOtpSent(false);
-                    }}
-                    keyboardType="email-address"
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                  />
-                  <TouchableOpacity
-                    style={[styles.sendOtpBtn, (otpSending || resendTimer > 0) && styles.sendOtpBtnDisabled]}
-                    onPress={handleSendOtp}
-                    disabled={otpSending || resendTimer > 0}
-                    activeOpacity={0.8}
-                  >
-                    {otpSending ? (
-                      <ActivityIndicator size="small" color="#fff" />
-                    ) : (
-                      <Text style={styles.sendOtpBtnText}>
-                        {resendTimer > 0 ? `${resendTimer}s` : otpSent ? 'Resend' : 'Send OTP'}
-                      </Text>
-                    )}
-                  </TouchableOpacity>
-                </View>
-
-                {otpSent && (
-                  <View style={styles.otpSuccessBox}>
-                    <Ionicons name="checkmark-circle" size={16} color="#10B981" />
-                    <Text style={styles.otpSuccessText}>
-                      OTP sent! Check inbox or spam folder.
-                    </Text>
+                    <TouchableOpacity
+                      style={styles.removeAccountBtn}
+                      onPress={() => handleRemoveAccount(acc.id || acc.email)}
+                      hitSlop={8}
+                    >
+                      <Ionicons name="trash-outline" size={18} color="#94A3B8" />
+                    </TouchableOpacity>
                   </View>
-                )}
-
-                <Text style={styles.label}>Email Verification OTP Code / ओटीपी कोड *</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Enter 4-digit OTP from email"
-                  placeholderTextColor={colors.textMuted}
-                  value={otpCode}
-                  onChangeText={setOtpCode}
-                  keyboardType="number-pad"
-                  maxLength={6}
-                />
-
-                <Text style={styles.label}>Mobile Number / मोबाइल नंबर *</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="10-digit mobile number"
-                  placeholderTextColor={colors.textMuted}
-                  value={mobileNo}
-                  onChangeText={setMobileNo}
-                  keyboardType="phone-pad"
-                  maxLength={12}
-                />
-
-                <Text style={styles.label}>Password / पासवर्ड *</Text>
-                <View style={styles.passwordRow}>
-                  <TextInput
-                    style={[styles.input, { flex: 1, marginBottom: 0 }]}
-                    placeholder="Min 6 characters"
-                    placeholderTextColor={colors.textMuted}
-                    value={password}
-                    onChangeText={setPassword}
-                    secureTextEntry={!showPassword}
-                    autoCapitalize="none"
-                  />
-                  <TouchableOpacity
-                    style={styles.eyeBtn}
-                    onPress={() => setShowPassword((prev) => !prev)}
-                    hitSlop={8}
-                  >
-                    <Ionicons
-                      name={showPassword ? 'eye-off-outline' : 'eye-outline'}
-                      size={20}
-                      color={colors.textMuted}
-                    />
-                  </TouchableOpacity>
-                </View>
+                ))}
               </View>
+            )}
 
-              {/* Section 2: Profile Status & Basics */}
-              <View style={styles.section}>
-                <Text style={styles.sectionTitle}>2. Personal Details / व्यक्तिगत विवरण</Text>
-
-                <Text style={styles.label}>Profile For / यह प्रोफाइल किसके लिए है? *</Text>
-                <View style={styles.chipRow}>
-                  {CREATED_BY_OPTIONS.map((opt) => (
-                    <TouchableOpacity
-                      key={opt.code}
-                      style={[styles.optionChip, profileCreatedBy === opt.code && styles.optionChipActive]}
-                      onPress={() => setProfileCreatedBy(opt.code)}
-                    >
-                      <Text style={[styles.optionChipText, profileCreatedBy === opt.code && styles.optionChipTextActive]}>
-                        {opt.label}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-
-                <Text style={styles.label}>Gender / लिंग *</Text>
-                <View style={styles.chipRow}>
-                  {GENDER_OPTIONS.map((opt) => (
-                    <TouchableOpacity
-                      key={opt.code}
-                      style={[styles.optionChip, gender === opt.code && styles.optionChipActive]}
-                      onPress={() => setGender(opt.code)}
-                    >
-                      <Text style={[styles.optionChipText, gender === opt.code && styles.optionChipTextActive]}>
-                        {opt.label}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-
-                <Text style={styles.label}>Marital Status / वैवाहिक स्थिति *</Text>
-                <View style={styles.chipRow}>
-                  {MARITAL_STATUS_OPTIONS.map((opt) => (
-                    <TouchableOpacity
-                      key={opt.code}
-                      style={[styles.optionChip, maritalStatus === opt.code && styles.optionChipActive]}
-                      onPress={() => setMaritalStatus(opt.code)}
-                    >
-                      <Text style={[styles.optionChipText, maritalStatus === opt.code && styles.optionChipTextActive]}>
-                        {opt.label}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-
-                <Text style={styles.label}>Date of Birth / जन्म तिथि *</Text>
-                <View style={styles.dobRow}>
-                  <TextInput
-                    style={[styles.input, styles.dobInput]}
-                    placeholder="DD"
-                    placeholderTextColor={colors.textMuted}
-                    value={dobDay}
-                    onChangeText={setDobDay}
-                    keyboardType="number-pad"
-                    maxLength={2}
-                  />
-                  <TextInput
-                    style={[styles.input, styles.dobInput]}
-                    placeholder="MM"
-                    placeholderTextColor={colors.textMuted}
-                    value={dobMonth}
-                    onChangeText={setDobMonth}
-                    keyboardType="number-pad"
-                    maxLength={2}
-                  />
-                  <TextInput
-                    style={[styles.input, styles.dobYearInput]}
-                    placeholder="YYYY"
-                    placeholderTextColor={colors.textMuted}
-                    value={dobYear}
-                    onChangeText={setDobYear}
-                    keyboardType="number-pad"
-                    maxLength={4}
-                  />
-                </View>
-
-                <Text style={styles.label}>Gotra / गोत्र</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="e.g. Kashyap"
-                  placeholderTextColor={colors.textMuted}
-                  value={gotra}
-                  onChangeText={setGotra}
-                />
+            {/* Login to Another Account */}
+            <View style={styles.sectionCard}>
+              <View style={styles.sectionHeaderRow}>
+                <Ionicons name="key" size={20} color={auth.crimson} />
+                <Text style={styles.sectionTitle}>
+                  {savedAccounts.length > 0
+                    ? 'Log In to Another Account / अन्य अकाउंट खोलें'
+                    : 'Log In to Open Account / अकाउंट खोलें'}
+                </Text>
               </View>
+              <Text style={styles.sectionSubtitle}>
+                Enter the email and password of the account you want to open:
+              </Text>
 
-              {/* Section 3: Location & Career */}
-              <View style={styles.section}>
-                <Text style={styles.sectionTitle}>3. Location &amp; Profession / स्थान और व्यवसाय</Text>
+              <FormField
+                label="Email"
+                icon="mail-outline"
+                placeholder="Enter your email address"
+                value={loginEmail}
+                onChangeText={setLoginEmail}
+                keyboardType="email-address"
+                autoCapitalize="none"
+              />
 
-                <Text style={styles.label}>State / राज्य</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="e.g. Madhya Pradesh"
-                  placeholderTextColor={colors.textMuted}
-                  value={state}
-                  onChangeText={setState}
-                />
+              <FormField
+                label="Password"
+                icon="lock-closed-outline"
+                placeholder="Enter password"
+                value={loginPassword}
+                onChangeText={setLoginPassword}
+                secure
+              />
 
-                <Text style={styles.label}>City / शहर</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="e.g. Bhopal"
-                  placeholderTextColor={colors.textMuted}
-                  value={city}
-                  onChangeText={setCity}
-                />
-
-                <Text style={styles.label}>Education / शिक्षा</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="e.g. B.Tech, MBA"
-                  placeholderTextColor={colors.textMuted}
-                  value={education}
-                  onChangeText={setEducation}
-                />
-
-                <Text style={styles.label}>Profession / पेशा</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="e.g. Software Engineer, Business"
-                  placeholderTextColor={colors.textMuted}
-                  value={profession}
-                  onChangeText={setProfession}
-                />
-              </View>
-
-              {/* Submit Button */}
               <TouchableOpacity
-                style={[styles.submitBtn, loading && styles.submitBtnDisabled]}
-                onPress={handleCreateAccount}
-                disabled={loading}
+                style={[styles.submitBtn, loginLoading && styles.submitBtnDisabled]}
+                onPress={handleLoginExisting}
+                disabled={loginLoading}
                 activeOpacity={0.85}
               >
-                {loading ? (
+                {loginLoading ? (
                   <ActivityIndicator size="small" color="#fff" />
                 ) : (
                   <>
-                    <Ionicons name="person-add" size={18} color="#fff" style={{ marginRight: 8 }} />
-                    <Text style={styles.submitBtnText}>Verify &amp; Create Account</Text>
+                    <Ionicons name="log-in" size={20} color="#fff" style={{ marginRight: 8 }} />
+                    <Text style={styles.submitBtnText}>Log In &amp; Open Account</Text>
                   </>
                 )}
               </TouchableOpacity>
             </View>
-          )}
+          </FormScroll>
+        ) : (
+          /* =========================================================================
+             TAB 2: CREATE NEW ACCOUNT (ALL FIELDS ONE BY ONE, NO STEP BOXES)
+             ========================================================================= */
+          <FormScroll
+            style={{ flex: 1 }}
+            contentContainerStyle={[
+              styles.scrollContent,
+              { paddingBottom: Math.max(keyboard + 40, 140) },
+            ]}
+            showsVerticalScrollIndicator={false}
+          >
+            {/* 1. Account Credentials & Verification */}
+            <View style={styles.sectionCard}>
+              <View style={styles.sectionHeaderRow}>
+                <Ionicons name="shield-checkmark" size={20} color={auth.crimson} />
+                <Text style={styles.sectionTitle}>Account &amp; Security / अकाउंट और पासवर्ड</Text>
+              </View>
+              <Text style={styles.sectionSubtitle}>
+                Enter email, set your password, and verify with OTP
+              </Text>
 
-          <View style={{ height: 40 }} />
-        </ScrollView>
+              {/* Email with Send OTP button */}
+              <Text style={styles.fieldLabel}>Email Address / ईमेल *</Text>
+              <View style={styles.emailRow}>
+                <TextInput
+                  style={[styles.textInput, { flex: 1 }]}
+                  placeholder="name@example.com"
+                  placeholderTextColor={colors.textMuted}
+                  value={accEmail}
+                  onChangeText={(val) => {
+                    setAccEmail(val);
+                    setOtpSent(false);
+                  }}
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                />
+                <TouchableOpacity
+                  style={[
+                    styles.sendOtpBtn,
+                    (otpSending || resendTimer > 0) && styles.sendOtpBtnDisabled,
+                  ]}
+                  onPress={handleSendOtp}
+                  disabled={otpSending || resendTimer > 0}
+                  activeOpacity={0.8}
+                >
+                  {otpSending ? (
+                    <ActivityIndicator size="small" color="#fff" />
+                  ) : (
+                    <Text style={styles.sendOtpBtnText}>
+                      {resendTimer > 0 ? `${resendTimer}s` : otpSent ? 'Resend' : 'Send OTP'}
+                    </Text>
+                  )}
+                </TouchableOpacity>
+              </View>
+
+              {otpSent && (
+                <View style={styles.otpSuccessBox}>
+                  <Ionicons name="checkmark-circle" size={16} color="#10B981" />
+                  <Text style={styles.otpSuccessText}>
+                    OTP sent! Check your inbox or spam folder.
+                  </Text>
+                </View>
+              )}
+
+              {/* OTP Code */}
+              <Text style={styles.fieldLabel}>Email Verification OTP Code / ओटीपी कोड *</Text>
+              <TextInput
+                style={styles.textInput}
+                placeholder="Enter 4-digit OTP from email"
+                placeholderTextColor={colors.textMuted}
+                value={otpCode}
+                onChangeText={setOtpCode}
+                keyboardType="number-pad"
+                maxLength={6}
+              />
+
+              {/* Password */}
+              <Text style={styles.fieldLabel}>Password / पासवर्ड *</Text>
+              <View style={styles.passwordRow}>
+                <TextInput
+                  style={[styles.textInput, { flex: 1, marginBottom: 0 }]}
+                  placeholder="Min 6 characters"
+                  placeholderTextColor={colors.textMuted}
+                  value={accPassword}
+                  onChangeText={setAccPassword}
+                  secureTextEntry={!showPassword}
+                  autoCapitalize="none"
+                />
+                <TouchableOpacity
+                  style={styles.eyeBtn}
+                  onPress={() => setShowPassword((prev) => !prev)}
+                  hitSlop={8}
+                >
+                  <Ionicons
+                    name={showPassword ? 'eye-off-outline' : 'eye-outline'}
+                    size={20}
+                    color={colors.textMuted}
+                  />
+                </TouchableOpacity>
+              </View>
+
+              {/* Confirm Password */}
+              <Text style={styles.fieldLabel}>Confirm Password / पासवर्ड पुष्टि *</Text>
+              <View style={styles.passwordRow}>
+                <TextInput
+                  style={[styles.textInput, { flex: 1, marginBottom: 0 }]}
+                  placeholder="Re-enter password"
+                  placeholderTextColor={colors.textMuted}
+                  value={accConfirmPassword}
+                  onChangeText={setAccConfirmPassword}
+                  secureTextEntry={!showConfirmPassword}
+                  autoCapitalize="none"
+                />
+                <TouchableOpacity
+                  style={styles.eyeBtn}
+                  onPress={() => setShowConfirmPassword((prev) => !prev)}
+                  hitSlop={8}
+                >
+                  <Ionicons
+                    name={showConfirmPassword ? 'eye-off-outline' : 'eye-outline'}
+                    size={20}
+                    color={colors.textMuted}
+                  />
+                </TouchableOpacity>
+              </View>
+
+              {/* Profile Created By */}
+              <Text style={styles.fieldLabel}>Profile For / यह प्रोफाइल किसके लिए है? *</Text>
+              <ChipRow
+                chips={PROFILE_CREATED_BY_OPTIONS}
+                selected={[profileCreatedBy]}
+                onPress={(code) => setProfileCreatedBy(code)}
+              />
+            </View>
+
+            {/* 2. Basic Details (Full Name, Gender, Date of Birth, Height, Marital Status, Mobile Number) */}
+            <View style={styles.sectionCard}>
+              <View style={styles.sectionHeaderRow}>
+                <Ionicons name="person" size={20} color={auth.crimson} />
+                <Text style={styles.sectionTitle}>{SECTIONS.basic.title}</Text>
+              </View>
+              <Text style={styles.sectionSubtitle}>{SECTIONS.basic.subtitle}</Text>
+
+              <SectionForm
+                spec={SECTIONS.basic}
+                values={formValues.basic ?? {}}
+                onChange={(k, v) => handleFieldChange('basic', k, v)}
+                errors={errors}
+              />
+            </View>
+
+            {/* 3. Education & Profession */}
+            <View style={styles.sectionCard}>
+              <View style={styles.sectionHeaderRow}>
+                <Ionicons name="school" size={20} color={auth.crimson} />
+                <Text style={styles.sectionTitle}>{SECTIONS.education.title}</Text>
+              </View>
+              <Text style={styles.sectionSubtitle}>{SECTIONS.education.subtitle}</Text>
+
+              <SectionForm
+                spec={SECTIONS.education}
+                values={formValues.education ?? {}}
+                onChange={(k, v) => handleFieldChange('education', k, v)}
+                errors={errors}
+              />
+            </View>
+
+            {/* 4. Religion & Astro */}
+            <View style={styles.sectionCard}>
+              <View style={styles.sectionHeaderRow}>
+                <Ionicons name="planet" size={20} color={auth.crimson} />
+                <Text style={styles.sectionTitle}>{SECTIONS.religion.title}</Text>
+              </View>
+              <Text style={styles.sectionSubtitle}>{SECTIONS.religion.subtitle}</Text>
+
+              <SectionForm
+                spec={SECTIONS.religion}
+                values={formValues.religion ?? {}}
+                onChange={(k, v) => handleFieldChange('religion', k, v)}
+                errors={errors}
+              />
+            </View>
+
+            {/* 5. Contact & Location */}
+            <View style={styles.sectionCard}>
+              <View style={styles.sectionHeaderRow}>
+                <Ionicons name="location" size={20} color={auth.crimson} />
+                <Text style={styles.sectionTitle}>{SECTIONS.contact.title}</Text>
+              </View>
+              <Text style={styles.sectionSubtitle}>{SECTIONS.contact.subtitle}</Text>
+
+              <SectionForm
+                spec={SECTIONS.contact}
+                values={formValues.contact ?? {}}
+                onChange={(k, v) => handleFieldChange('contact', k, v)}
+                errors={errors}
+              />
+            </View>
+
+            {/* 6. Family Details */}
+            <View style={styles.sectionCard}>
+              <View style={styles.sectionHeaderRow}>
+                <Ionicons name="people-circle" size={20} color={auth.crimson} />
+                <Text style={styles.sectionTitle}>{SECTIONS.family.title}</Text>
+              </View>
+              <Text style={styles.sectionSubtitle}>{SECTIONS.family.subtitle}</Text>
+
+              <SectionForm
+                spec={SECTIONS.family}
+                values={formValues.family ?? {}}
+                onChange={(k, v) => handleFieldChange('family', k, v)}
+                errors={errors}
+              />
+            </View>
+
+            {/* 7. Other Details & About Me */}
+            <View style={styles.sectionCard}>
+              <View style={styles.sectionHeaderRow}>
+                <Ionicons name="document-text" size={20} color={auth.crimson} />
+                <Text style={styles.sectionTitle}>About Me &amp; Lifestyle / अपने बारे में</Text>
+              </View>
+              <Text style={styles.sectionSubtitle}>Share about yourself, physical details, and partner preferences</Text>
+
+              <SectionForm
+                spec={SECTIONS.other}
+                values={formValues.other ?? {}}
+                onChange={(k, v) => handleFieldChange('other', k, v)}
+                errors={errors}
+              />
+
+              <View style={{ marginTop: spacing.lg }}>
+                <SectionForm
+                  spec={SECTIONS.about}
+                  values={formValues.about ?? {}}
+                  onChange={(k, v) => handleFieldChange('about', k, v)}
+                  errors={errors}
+                />
+              </View>
+            </View>
+
+            {/* Submit Button */}
+            <TouchableOpacity
+              style={[styles.submitBtn, submitting && styles.submitBtnDisabled]}
+              onPress={handleCreateAccount}
+              disabled={submitting}
+              activeOpacity={0.85}
+            >
+              {submitting ? (
+                <ActivityIndicator size="small" color="#fff" />
+              ) : (
+                <>
+                  <Ionicons name="person-add" size={20} color="#fff" style={{ marginRight: 8 }} />
+                  <Text style={styles.submitBtnText}>Verify &amp; Create Account</Text>
+                </>
+              )}
+            </TouchableOpacity>
+          </FormScroll>
+        )}
 
         {/* Success Modal */}
         <Modal visible={!!successData} transparent animationType="fade">
@@ -950,16 +948,16 @@ export default function AddUserScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: colors.bg,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.md,
-    backgroundColor: colors.white,
+    backgroundColor: colors.surface,
     borderBottomWidth: 1,
-    borderBottomColor: '#E2E8F0',
+    borderBottomColor: colors.border,
   },
   backBtn: {
     padding: spacing.xs,
@@ -971,7 +969,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: font.title,
     fontWeight: '700',
-    color: colors.text,
+    color: colors.heading,
   },
   headerSubtitle: {
     fontSize: font.small,
@@ -980,12 +978,12 @@ const styles = StyleSheet.create({
   },
   tabContainer: {
     flexDirection: 'row',
-    backgroundColor: colors.white,
+    backgroundColor: colors.surface,
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm,
     gap: spacing.sm,
     borderBottomWidth: 1,
-    borderBottomColor: '#E2E8F0',
+    borderBottomColor: colors.border,
   },
   tabBtn: {
     flex: 1,
@@ -1008,36 +1006,16 @@ const styles = StyleSheet.create({
     color: colors.white,
     fontWeight: '700',
   },
-  scrollView: {
-    flex: 1,
-  },
   scrollContent: {
-    padding: spacing.md,
+    padding: spacing.lg,
   },
-  infoBox: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    backgroundColor: '#EFF6FF',
-    borderRadius: radius.md,
-    padding: spacing.md,
-    marginBottom: spacing.md,
-    borderWidth: 1,
-    borderColor: '#BFDBFE',
-    gap: spacing.sm,
-  },
-  infoText: {
-    flex: 1,
-    fontSize: font.small,
-    color: '#1E40AF',
-    lineHeight: 18,
-  },
-  section: {
-    backgroundColor: colors.white,
+  sectionCard: {
+    backgroundColor: colors.surface,
     borderRadius: radius.lg,
     padding: spacing.lg,
-    marginBottom: spacing.md,
+    marginBottom: spacing.lg,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: colors.border,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.04,
@@ -1053,9 +1031,9 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: font.body,
     fontWeight: '700',
-    color: colors.text,
+    color: colors.heading,
   },
-  subtext: {
+  sectionSubtitle: {
     fontSize: 13,
     color: colors.textMuted,
     marginBottom: spacing.md,
@@ -1093,11 +1071,25 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
     marginTop: 1,
   },
+  accountMetaRow: {
+    flexDirection: 'row',
+    gap: 8,
+    alignItems: 'center',
+    marginTop: 2,
+  },
   accountIdText: {
     fontSize: 11,
     color: auth.crimson,
     fontWeight: '600',
-    marginTop: 1,
+  },
+  accountStatusText: {
+    fontSize: 10,
+    color: '#64748B',
+    backgroundColor: '#E2E8F0',
+    paddingHorizontal: 6,
+    paddingVertical: 1,
+    borderRadius: 4,
+    textTransform: 'capitalize',
   },
   openAccountBtn: {
     backgroundColor: auth.crimson,
@@ -1113,14 +1105,14 @@ const styles = StyleSheet.create({
   removeAccountBtn: {
     padding: 6,
   },
-  label: {
+  fieldLabel: {
     fontSize: font.small,
     fontWeight: '600',
-    color: colors.text,
+    color: colors.fieldLabel,
     marginBottom: 6,
     marginTop: spacing.sm,
   },
-  input: {
+  textInput: {
     backgroundColor: '#F8FAFC',
     borderWidth: 1,
     borderColor: '#CBD5E1',
@@ -1179,48 +1171,6 @@ const styles = StyleSheet.create({
     right: 12,
     padding: 4,
   },
-  chipRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: spacing.xs,
-    marginBottom: spacing.sm,
-  },
-  optionChip: {
-    paddingVertical: 7,
-    paddingHorizontal: 12,
-    borderRadius: radius.full,
-    borderWidth: 1,
-    borderColor: '#CBD5E1',
-    backgroundColor: '#F8FAFC',
-  },
-  optionChipActive: {
-    backgroundColor: auth.crimson,
-    borderColor: auth.crimson,
-  },
-  optionChipText: {
-    fontSize: font.small,
-    color: colors.text,
-    fontWeight: '500',
-  },
-  optionChipTextActive: {
-    color: colors.white,
-    fontWeight: '700',
-  },
-  dobRow: {
-    flexDirection: 'row',
-    gap: spacing.sm,
-    marginBottom: spacing.sm,
-  },
-  dobInput: {
-    flex: 1,
-    textAlign: 'center',
-    marginBottom: 0,
-  },
-  dobYearInput: {
-    flex: 1.5,
-    textAlign: 'center',
-    marginBottom: 0,
-  },
   submitBtn: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -1228,7 +1178,8 @@ const styles = StyleSheet.create({
     backgroundColor: auth.crimson,
     paddingVertical: 14,
     borderRadius: radius.md,
-    marginTop: spacing.sm,
+    marginTop: spacing.md,
+    marginBottom: spacing.xl,
     shadowColor: auth.crimson,
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.25,
@@ -1245,6 +1196,7 @@ const styles = StyleSheet.create({
     fontSize: font.body,
     fontWeight: '700',
   },
+  /* Modal */
   modalBackdrop: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.5)',
@@ -1253,7 +1205,7 @@ const styles = StyleSheet.create({
     padding: spacing.lg,
   },
   modalCard: {
-    backgroundColor: colors.white,
+    backgroundColor: colors.surface,
     borderRadius: radius.xl,
     padding: spacing.xl,
     width: '100%',
@@ -1271,7 +1223,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: colors.text,
+    color: colors.heading,
     marginBottom: spacing.xs,
   },
   modalSubtitle: {

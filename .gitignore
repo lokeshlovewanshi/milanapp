@@ -180,3 +180,8 @@ terraform-oracle/retry-second-instance*.log
 
 # Claude Code's local session state, including scratch worktrees.
 .claude/
+
+# Local scratch scripts
+test_*.py
+query_*.py
+*.py
