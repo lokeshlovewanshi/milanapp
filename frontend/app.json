@@ -2,7 +2,7 @@
   "expo": {
     "name": "Lodha Parinay",
     "slug": "lovewanshi-milan",
-    "version": "1.2.2",
+    "version": "1.2.3",
     "orientation": "portrait",
     "icon": "./assets/images/lovewanshi-parinay-icon-v3.png",
     "scheme": "LOVEWANSHImilan",
@@ -27,7 +27,7 @@
         "android.permission.SYSTEM_ALERT_WINDOW"
       ],
       "package": "com.lovewanshi.jeevanmilansathi",
-      "versionCode": 25,
+      "versionCode": 43,
       "googleServicesFile": "./google-services.json"
     },
     "web": {
