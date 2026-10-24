@@ -53,7 +53,7 @@ jobs:
             fn_suffix: image-compression
             layer_suffix: sharp
             runtime_type: node
-            runtime: nodejs20.x
+            runtime: nodejs22.x
             arch: arm64
           - name: kundali_match
             fn_suffix: kundali-match
@@ -86,7 +86,7 @@ jobs:
       - uses: actions/setup-node@v4
         if: matrix.runtime_type == 'node'
         with:
-          node-version: 20
+          node-version: 22
 
       - uses: actions/setup-python@v5
         if: matrix.runtime_type == 'python'
